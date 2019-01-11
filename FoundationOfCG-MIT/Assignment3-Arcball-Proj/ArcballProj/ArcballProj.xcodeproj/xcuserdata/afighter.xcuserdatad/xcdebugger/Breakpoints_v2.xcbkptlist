@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ArcballProj/ViewController.mm"
-            timestampString = "568870319.6783201"
+            timestampString = "568886205.327701"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "159"
-            endingLineNumber = "159"
+            startingLineNumber = "162"
+            endingLineNumber = "162"
             landmarkName = "-glkView:drawInRect:"
             landmarkType = "7">
          </BreakpointContent>
@@ -49,6 +49,54 @@
             endingLineNumber = "43"
             landmarkName = "GetBundleFileName( const char *fileName )"
             landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../../BaseFramework/cvec.h"
+            timestampString = "568886205.327786"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "42"
+            endingLineNumber = "42"
+            landmarkName = "Cvec(const T&amp; t0, const T&amp; t1, const T&amp; t2, const T&amp; t3)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Cvec&lt;double, 4&gt;::Cvec(double const&amp;, double const&amp;, double const&amp;, double const&amp;)"
+                  moduleName = "ArcballProj"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/afighter/Documents/Github_Projects/CGLearning/BaseFramework/cvec.h"
+                  timestampString = "568880242.35927"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "43"
+                  endingLineNumber = "43"
+                  offsetFromSymbolStart = "28">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Cvec&lt;float, 4&gt;::Cvec(float const&amp;, float const&amp;, float const&amp;, float const&amp;)"
+                  moduleName = "ArcballProj"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/afighter/Documents/Github_Projects/CGLearning/BaseFramework/cvec.h"
+                  timestampString = "568880242.362179"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "43"
+                  endingLineNumber = "43"
+                  offsetFromSymbolStart = "28">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

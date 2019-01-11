@@ -23,6 +23,7 @@
 
 #include "quat.h"
 #include "rigtform.h"
+#include "arcball.h"
 
 
 
@@ -191,9 +192,9 @@ static const Cvec3 g_light1(2.0, 3.0, 14.0), g_light2(-2, -3.0, -5.0);  // defin
 //static Matrix4 g_skyRbt = Matrix4::makeTranslation(Cvec3(0.0, 0.25, 4.0));
 static RigTForm g_skyRbt = RigTForm(Cvec3(0.0, 0.25, 4.0));
 //static Matrix4 g_objectRbt[2] = {Matrix4::makeTranslation(Cvec3(0,0,0)),Matrix4::makeTranslation(Cvec3(0,0,-2))};
-static RigTForm g_objectRbt[2] = {RigTForm(Cvec3(0,0,0)),RigTForm(Cvec3(0,0,-2))};
+static RigTForm g_objectRbt[2] = {RigTForm(Cvec3(0,0,0)),RigTForm(Cvec3(0,0,0))};
 
-static Cvec3f g_objectColors[2] = {Cvec3f(1, 0, 0),Cvec3f(0.5, 0, 0.5)};
+static Cvec4f g_objectColors[2] = {Cvec4f(1, 0, 0, 1),Cvec4f(0.5, 0, 0.5, 0.3)};
 
 ///////////////// END OF G L O B A L S //////////////////////////////////////////////////
 
@@ -244,7 +245,7 @@ static void initSphere(){
     vector<VertexPN> vtx(vbLen);
     vector<unsigned short> idx(ibLen);
     
-    makeSphere(1, slices, stacks, vtx.begin(), idx.begin());
+    makeSphere(2, slices, stacks, vtx.begin(), idx.begin());
     g_sphere.reset(new Geometry(&vtx[0], &idx[0], vbLen, ibLen));
 }
 
@@ -309,7 +310,7 @@ static void drawStuff() {
     Matrix4 MVM = rigTFormToMatrix(invEyeRbt * groundRbt);
     Matrix4 NMVM = normalMatrix(MVM);
     sendModelViewNormalMatrix(curSS, MVM, NMVM);
-    safe_glUniform3f(curSS.h_uColor, 0.1, 0.95, 0.1); // set color
+    safe_glUniform4f(curSS.h_uColor, 0.1, 0.95, 0.1, 1.0); // set color
     g_ground->draw(curSS);
     
     // draw cube
@@ -318,7 +319,7 @@ static void drawStuff() {
     MVM = rigTFormToMatrix(invEyeRbt * g_objectRbt[0]);
     NMVM = normalMatrix(MVM);
     sendModelViewNormalMatrix(curSS, MVM, NMVM);
-    safe_glUniform3f(curSS.h_uColor, g_objectColors[0][0], g_objectColors[0][1], g_objectColors[0][2]);
+    safe_glUniform4f(curSS.h_uColor, g_objectColors[0][0], g_objectColors[0][1], g_objectColors[0][2], g_objectColors[0][3]);
     g_cube->draw(curSS);
     
     // draw spere
@@ -327,7 +328,7 @@ static void drawStuff() {
     MVM = rigTFormToMatrix(invEyeRbt * g_objectRbt[1]);
     NMVM = normalMatrix(MVM);
     sendModelViewNormalMatrix(curSS, MVM, NMVM);
-    safe_glUniform3f(curSS.h_uColor, g_objectColors[1][0], g_objectColors[1][1], g_objectColors[1][2]);
+    safe_glUniform4f(curSS.h_uColor, g_objectColors[1][0], g_objectColors[1][1], g_objectColors[1][2], g_objectColors[1][3]);
     g_sphere->draw(curSS);
 }
 
@@ -407,22 +408,22 @@ static void motion(const float x, const float y) {
     //--------------------------------------------------------------------------------
     //  Slerp between rotation 1(rotate 5 degree about x axis) and rotation 2(rotate 155 degree about x axis)
     //--------------------------------------------------------------------------------
-    rotation_angle_alpha += .02f;
-    if(rotation_angle_alpha >= 1.f)
-        rotation_angle_alpha = 0.f;
-    
-    RigTForm eyeRbt = g_skyRbt;
-    RigTForm aRbt = makeMixedFrame(g_objectRbt[0],eyeRbt);
-    
-    Quat q1Quat = Quat::makeYRotation(rotation_angle_slerp_start) ;
-    Quat q2Quat = Quat::makeYRotation(rotation_angle_slerp_end) ;
-    //examine orientation interoperation by slerp and lerp
-    Quat slerpQuat = slerp(q1Quat, q2Quat, rotation_angle_alpha);
-    //若要插值动画循环播放，每次施加在base object frame（g_slerpBaseRbt)
-    g_objectRbt[1] = doQtoOwrtA(RigTForm(slerpQuat), g_slerpBaseRbt, aRbt);
-    
-    g_mouseClickX = x;
-    g_mouseClickY = g_windowHeight - y - 1;
+//    rotation_angle_alpha += .02f;
+//    if(rotation_angle_alpha >= 1.f)
+//        rotation_angle_alpha = 0.f;
+//    
+//    RigTForm eyeRbt = g_skyRbt;
+//    RigTForm aRbt = makeMixedFrame(g_objectRbt[0],eyeRbt);
+//    
+//    Quat q1Quat = Quat::makeYRotation(rotation_angle_slerp_start) ;
+//    Quat q2Quat = Quat::makeYRotation(rotation_angle_slerp_end) ;
+//    //examine orientation interoperation by slerp and lerp
+//    Quat slerpQuat = slerp(q1Quat, q2Quat, rotation_angle_alpha);
+//    //若要插值动画循环播放，每次施加在base object frame（g_slerpBaseRbt)
+//    g_objectRbt[1] = doQtoOwrtA(RigTForm(slerpQuat), g_slerpBaseRbt, aRbt);
+//    
+//    g_mouseClickX = x;
+//    g_mouseClickY = g_windowHeight - y - 1;
 }
 
 
@@ -482,6 +483,9 @@ static void initGLState() {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_GREATER);
     //glReadBuffer(GL_BACK);
+    
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
 }
 
