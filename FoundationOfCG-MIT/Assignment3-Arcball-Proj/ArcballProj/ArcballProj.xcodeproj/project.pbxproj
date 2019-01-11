@@ -1,0 +1,401 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5CE2BC2D21E836AB003B5B50 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC2C21E836AB003B5B50 /* AppDelegate.m */; };
+		5CE2BC3021E836AB003B5B50 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC2F21E836AB003B5B50 /* ViewController.mm */; };
+		5CE2BC3521E836AC003B5B50 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CE2BC3421E836AC003B5B50 /* Assets.xcassets */; };
+		5CE2BC3B21E836AC003B5B50 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC3A21E836AC003B5B50 /* main.m */; };
+		5CE2BC4D21E83842003B5B50 /* NativeTemplate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC4921E83842003B5B50 /* NativeTemplate.cpp */; };
+		5CE2BC4E21E83842003B5B50 /* FileWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC4A21E83842003B5B50 /* FileWrapper.mm */; };
+		5CE2BC5921E83895003B5B50 /* perfMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC5721E83895003B5B50 /* perfMonitor.cpp */; };
+		5CE2BC5E21E83A7C003B5B50 /* ppm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC5B21E83A7C003B5B50 /* ppm.cpp */; };
+		5CE2BC5F21E83A7C003B5B50 /* glsupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC5D21E83A7C003B5B50 /* glsupport.cpp */; };
+		5CE2BC6121E83A99003B5B50 /* assignment3.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC6021E83A99003B5B50 /* assignment3.mm */; };
+		5CE2BC6721E83DD9003B5B50 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5CE2BC6521E83DD9003B5B50 /* ViewController.xib */; };
+		5CE2BC6E21E83FDE003B5B50 /* basic-gles3.vshader in Resources */ = {isa = PBXBuildFile; fileRef = 5CE2BC6B21E83FDE003B5B50 /* basic-gles3.vshader */; };
+		5CE2BC6F21E83FDE003B5B50 /* diffuse-gles3.fshader in Resources */ = {isa = PBXBuildFile; fileRef = 5CE2BC6C21E83FDE003B5B50 /* diffuse-gles3.fshader */; };
+		5CE2BC7021E83FDE003B5B50 /* solid-gles3.fshader in Resources */ = {isa = PBXBuildFile; fileRef = 5CE2BC6D21E83FDE003B5B50 /* solid-gles3.fshader */; };
+		5CE2BC7321E84197003B5B50 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5CE2BC7121E84197003B5B50 /* LaunchScreen.storyboard */; };
+		5CE2BC7521E8433B003B5B50 /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 5CE2BC7421E8433B003B5B50 /* readme.md */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		5CE2BC2821E836AB003B5B50 /* ArcballProj.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ArcballProj.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5CE2BC2B21E836AB003B5B50 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		5CE2BC2C21E836AB003B5B50 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		5CE2BC2E21E836AB003B5B50 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		5CE2BC2F21E836AB003B5B50 /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
+		5CE2BC3421E836AC003B5B50 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5CE2BC3921E836AC003B5B50 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5CE2BC3A21E836AC003B5B50 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		5CE2BC4721E83842003B5B50 /* FileWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileWrapper.h; sourceTree = "<group>"; };
+		5CE2BC4821E83842003B5B50 /* NativeTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NativeTemplate.h; sourceTree = "<group>"; };
+		5CE2BC4921E83842003B5B50 /* NativeTemplate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NativeTemplate.cpp; sourceTree = "<group>"; };
+		5CE2BC4A21E83842003B5B50 /* FileWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FileWrapper.mm; sourceTree = "<group>"; };
+		5CE2BC5121E83875003B5B50 /* geometrymaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = geometrymaker.h; path = ../../../../BaseFramework/geometrymaker.h; sourceTree = "<group>"; };
+		5CE2BC5221E83875003B5B50 /* matrix4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = matrix4.h; path = ../../../../BaseFramework/matrix4.h; sourceTree = "<group>"; };
+		5CE2BC5321E83875003B5B50 /* cvec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cvec.h; path = ../../../../BaseFramework/cvec.h; sourceTree = "<group>"; };
+		5CE2BC5421E83881003B5B50 /* arcball.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = arcball.h; path = ../../../../BaseFramework/quat/arcball.h; sourceTree = "<group>"; };
+		5CE2BC5521E83881003B5B50 /* quat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = quat.h; path = ../../../../BaseFramework/quat/quat.h; sourceTree = "<group>"; };
+		5CE2BC5621E83881003B5B50 /* rigtform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rigtform.h; path = ../../../../BaseFramework/quat/rigtform.h; sourceTree = "<group>"; };
+		5CE2BC5721E83895003B5B50 /* perfMonitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = perfMonitor.cpp; path = ../../../../BaseFramework/perfMonitor/perfMonitor.cpp; sourceTree = "<group>"; };
+		5CE2BC5821E83895003B5B50 /* perfMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = perfMonitor.h; path = ../../../../BaseFramework/perfMonitor/perfMonitor.h; sourceTree = "<group>"; };
+		5CE2BC5A21E83A7C003B5B50 /* ppm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ppm.h; path = ../../../Common/gles/ppm.h; sourceTree = "<group>"; };
+		5CE2BC5B21E83A7C003B5B50 /* ppm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ppm.cpp; path = ../../../Common/gles/ppm.cpp; sourceTree = "<group>"; };
+		5CE2BC5C21E83A7C003B5B50 /* glsupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glsupport.h; path = ../../../Common/gles/glsupport.h; sourceTree = "<group>"; };
+		5CE2BC5D21E83A7C003B5B50 /* glsupport.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glsupport.cpp; path = ../../../Common/gles/glsupport.cpp; sourceTree = "<group>"; };
+		5CE2BC6021E83A99003B5B50 /* assignment3.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = assignment3.mm; path = "mit-example/assignment3.mm"; sourceTree = "<group>"; };
+		5CE2BC6521E83DD9003B5B50 /* ViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ViewController.xib; sourceTree = "<group>"; };
+		5CE2BC6B21E83FDE003B5B50 /* basic-gles3.vshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "basic-gles3.vshader"; sourceTree = "<group>"; };
+		5CE2BC6C21E83FDE003B5B50 /* diffuse-gles3.fshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "diffuse-gles3.fshader"; sourceTree = "<group>"; };
+		5CE2BC6D21E83FDE003B5B50 /* solid-gles3.fshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "solid-gles3.fshader"; sourceTree = "<group>"; };
+		5CE2BC7221E84197003B5B50 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		5CE2BC7421E8433B003B5B50 /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = readme.md; path = ../../readme.md; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5CE2BC2521E836AB003B5B50 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5CE2BC1F21E836AB003B5B50 = {
+			isa = PBXGroup;
+			children = (
+				5CE2BC7421E8433B003B5B50 /* readme.md */,
+				5CE2BC2A21E836AB003B5B50 /* ArcballProj */,
+				5CE2BC2921E836AB003B5B50 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5CE2BC2921E836AB003B5B50 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5CE2BC2821E836AB003B5B50 /* ArcballProj.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5CE2BC2A21E836AB003B5B50 /* ArcballProj */ = {
+			isa = PBXGroup;
+			children = (
+				5CE2BC5721E83895003B5B50 /* perfMonitor.cpp */,
+				5CE2BC5821E83895003B5B50 /* perfMonitor.h */,
+				5CE2BC5421E83881003B5B50 /* arcball.h */,
+				5CE2BC5521E83881003B5B50 /* quat.h */,
+				5CE2BC5621E83881003B5B50 /* rigtform.h */,
+				5CE2BC5321E83875003B5B50 /* cvec.h */,
+				5CE2BC5121E83875003B5B50 /* geometrymaker.h */,
+				5CE2BC5221E83875003B5B50 /* matrix4.h */,
+				5CE2BC5D21E83A7C003B5B50 /* glsupport.cpp */,
+				5CE2BC5C21E83A7C003B5B50 /* glsupport.h */,
+				5CE2BC5B21E83A7C003B5B50 /* ppm.cpp */,
+				5CE2BC5A21E83A7C003B5B50 /* ppm.h */,
+				5CE2BC6021E83A99003B5B50 /* assignment3.mm */,
+				5CE2BC6A21E83FDE003B5B50 /* shaders */,
+				5CE2BC2B21E836AB003B5B50 /* AppDelegate.h */,
+				5CE2BC2C21E836AB003B5B50 /* AppDelegate.m */,
+				5CE2BC2E21E836AB003B5B50 /* ViewController.h */,
+				5CE2BC2F21E836AB003B5B50 /* ViewController.mm */,
+				5CE2BC6521E83DD9003B5B50 /* ViewController.xib */,
+				5CE2BC4721E83842003B5B50 /* FileWrapper.h */,
+				5CE2BC4A21E83842003B5B50 /* FileWrapper.mm */,
+				5CE2BC4921E83842003B5B50 /* NativeTemplate.cpp */,
+				5CE2BC4821E83842003B5B50 /* NativeTemplate.h */,
+				5CE2BC3421E836AC003B5B50 /* Assets.xcassets */,
+				5CE2BC3921E836AC003B5B50 /* Info.plist */,
+				5CE2BC3A21E836AC003B5B50 /* main.m */,
+				5CE2BC7121E84197003B5B50 /* LaunchScreen.storyboard */,
+			);
+			path = ArcballProj;
+			sourceTree = "<group>";
+		};
+		5CE2BC6A21E83FDE003B5B50 /* shaders */ = {
+			isa = PBXGroup;
+			children = (
+				5CE2BC6B21E83FDE003B5B50 /* basic-gles3.vshader */,
+				5CE2BC6C21E83FDE003B5B50 /* diffuse-gles3.fshader */,
+				5CE2BC6D21E83FDE003B5B50 /* solid-gles3.fshader */,
+			);
+			path = shaders;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5CE2BC2721E836AB003B5B50 /* ArcballProj */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5CE2BC3E21E836AC003B5B50 /* Build configuration list for PBXNativeTarget "ArcballProj" */;
+			buildPhases = (
+				5CE2BC2421E836AB003B5B50 /* Sources */,
+				5CE2BC2521E836AB003B5B50 /* Frameworks */,
+				5CE2BC2621E836AB003B5B50 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ArcballProj;
+			productName = ArcballProj;
+			productReference = 5CE2BC2821E836AB003B5B50 /* ArcballProj.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5CE2BC2021E836AB003B5B50 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1000;
+				ORGANIZATIONNAME = zxtech;
+				TargetAttributes = {
+					5CE2BC2721E836AB003B5B50 = {
+						CreatedOnToolsVersion = 10.0;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 5CE2BC2321E836AB003B5B50 /* Build configuration list for PBXProject "ArcballProj" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 5CE2BC1F21E836AB003B5B50;
+			productRefGroup = 5CE2BC2921E836AB003B5B50 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5CE2BC2721E836AB003B5B50 /* ArcballProj */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5CE2BC2621E836AB003B5B50 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5CE2BC6721E83DD9003B5B50 /* ViewController.xib in Resources */,
+				5CE2BC6E21E83FDE003B5B50 /* basic-gles3.vshader in Resources */,
+				5CE2BC6F21E83FDE003B5B50 /* diffuse-gles3.fshader in Resources */,
+				5CE2BC7321E84197003B5B50 /* LaunchScreen.storyboard in Resources */,
+				5CE2BC7521E8433B003B5B50 /* readme.md in Resources */,
+				5CE2BC7021E83FDE003B5B50 /* solid-gles3.fshader in Resources */,
+				5CE2BC3521E836AC003B5B50 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5CE2BC2421E836AB003B5B50 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5CE2BC4E21E83842003B5B50 /* FileWrapper.mm in Sources */,
+				5CE2BC3021E836AB003B5B50 /* ViewController.mm in Sources */,
+				5CE2BC3B21E836AC003B5B50 /* main.m in Sources */,
+				5CE2BC5E21E83A7C003B5B50 /* ppm.cpp in Sources */,
+				5CE2BC5921E83895003B5B50 /* perfMonitor.cpp in Sources */,
+				5CE2BC4D21E83842003B5B50 /* NativeTemplate.cpp in Sources */,
+				5CE2BC5F21E83A7C003B5B50 /* glsupport.cpp in Sources */,
+				5CE2BC2D21E836AB003B5B50 /* AppDelegate.m in Sources */,
+				5CE2BC6121E83A99003B5B50 /* assignment3.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		5CE2BC7121E84197003B5B50 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5CE2BC7221E84197003B5B50 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		5CE2BC3C21E836AC003B5B50 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		5CE2BC3D21E836AC003B5B50 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		5CE2BC3F21E836AC003B5B50 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = ArcballProj/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zxtech.ArcballProj;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		5CE2BC4021E836AC003B5B50 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = ArcballProj/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zxtech.ArcballProj;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5CE2BC2321E836AB003B5B50 /* Build configuration list for PBXProject "ArcballProj" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5CE2BC3C21E836AC003B5B50 /* Debug */,
+				5CE2BC3D21E836AC003B5B50 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5CE2BC3E21E836AC003B5B50 /* Build configuration list for PBXNativeTarget "ArcballProj" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5CE2BC3F21E836AC003B5B50 /* Debug */,
+				5CE2BC4021E836AC003B5B50 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5CE2BC2021E836AB003B5B50 /* Project object */;
+}
