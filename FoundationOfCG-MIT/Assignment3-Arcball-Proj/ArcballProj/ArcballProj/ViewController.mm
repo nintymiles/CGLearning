@@ -67,9 +67,6 @@
     GLKView *view = (GLKView *)self.view;
     view.context = self.context;
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
-    view.drawableColorFormat = GLKViewDrawableColorFormatRGBA8888;  //默认格式
-    
-    self.preferredFramesPerSecond = 60;
     
     textField = [[UITextField alloc] initWithFrame:CGRectMake(8, 20, 80, 24)];
     [textField setFont:[UIFont systemFontOfSize:16 weight:UIFontWeightLight]];

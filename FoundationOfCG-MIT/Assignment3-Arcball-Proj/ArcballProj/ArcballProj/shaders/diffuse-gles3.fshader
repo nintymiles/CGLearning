@@ -2,8 +2,7 @@
 
 precision highp float;
 
-uniform vec3 uLight, uLight2;
-uniform vec4 uColor;
+uniform vec3 uLight, uLight2, uColor;
 
 in vec3 vNormal;
 in vec3 vPosition;
@@ -17,7 +16,7 @@ void main() {
 
   float diffuse = max(0.0, dot(normal, tolight));
   diffuse += max(0.0, dot(normal, tolight2));
-  vec4 intensity = uColor * diffuse;
+  vec3 intensity = uColor * diffuse;
 
-  fragColor = vec4(vec3(intensity),uColor.a);
+  fragColor = vec4(intensity, 1.0);
 }

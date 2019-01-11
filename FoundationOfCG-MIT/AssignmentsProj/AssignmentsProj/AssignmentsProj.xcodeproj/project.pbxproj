@@ -65,6 +65,7 @@
 		5C1A973E21E47D4E00C738A4 /* diffuse-gles3.fshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "diffuse-gles3.fshader"; sourceTree = "<group>"; };
 		5C1A973F21E47D4E00C738A4 /* basic-gles3.vshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "basic-gles3.vshader"; sourceTree = "<group>"; };
 		5C1A974521E47D4E00C738A4 /* asst2.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = asst2.mm; sourceTree = "<group>"; };
+		5C1A975421E4826B00C738A4 /* AssignmentsProj-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AssignmentsProj-Prefix.pch"; sourceTree = "<group>"; };
 		5CE2BC0421E82521003B5B50 /* geometrymaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = geometrymaker.h; path = ../../../../BaseFramework/geometrymaker.h; sourceTree = "<group>"; };
 		5CE2BC0521E82521003B5B50 /* matrix4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = matrix4.h; path = ../../../../BaseFramework/matrix4.h; sourceTree = "<group>"; };
 		5CE2BC0621E82521003B5B50 /* cvec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cvec.h; path = ../../../../BaseFramework/cvec.h; sourceTree = "<group>"; };
@@ -141,6 +142,7 @@
 				5C1A972D21E47C6800C738A4 /* ViewController.xib */,
 				5C1A971121E47AA900C738A4 /* Assets.xcassets */,
 				5C1A971621E47AA900C738A4 /* Info.plist */,
+				5C1A975421E4826B00C738A4 /* AssignmentsProj-Prefix.pch */,
 				5C1A971721E47AA900C738A4 /* main.m */,
 			);
 			path = AssignmentsProj;
