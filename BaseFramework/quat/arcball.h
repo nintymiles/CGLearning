@@ -2,8 +2,9 @@
 #define ARCBALL_H
 
 #include <iostream>
+#include <cmath>
 #include "cvec.h"
-#include "matrix4.h"
+#include "quat.h"
 
 // Return the screen space projection in terms of pixels of a 3d point
 // given in eye-frame coordinates. 
@@ -42,6 +43,27 @@ inline double getScreenToEyeScale(double z, double frustFovY, int screenHeight) 
     return 1;
   }
   return -(z * tan(frustFovY * CS175_PI/360.0)) * 2 / screenHeight;
+}
+
+//--------------------------------------------------------------------------------
+//  实现arcball接口/Implement Arcball Interface 
+//--------------------------------------------------------------------------------
+inline Quat arcball(const Cvec3& centerScreenPos,const double onScreenRadius,const Cvec2& startScreenPos,const Cvec2& endScreenPos){
+    //compute z coordinates of selected 3d points on sphere
+    double startScreenZ = sqrt(pow(onScreenRadius,2) - pow((startScreenPos[0] - centerScreenPos[0]),2)  - pow((startScreenPos[1] - centerScreenPos[1]),2));
+    double endScreenZ = sqrt(pow(onScreenRadius,2) - pow((endScreenPos[0] - centerScreenPos[0]),2)  - pow((endScreenPos[1] - centerScreenPos[1]),2));
+    
+    //sphere center point to start point vector
+    Cvec3 startVector = Cvec3(startScreenPos,startScreenZ) - centerScreenPos;
+    Cvec3 endVector = Cvec3(endScreenPos,endScreenZ) - centerScreenPos;
+    //Phi angle between startVector and endVector,using arc cosine function thorough dot production value of start/end vector;
+    double angle = acos(dot(startVector,endVector));
+    //rotation axis, first compute cross product of start/end vectors(not necessarily normalized vector),then normalization
+    Cvec3 axisVector = normalize(cross(startVector,endVector));
+    
+    //construct arcball quat by definition
+    Quat arcball = Quat(cos(2 * angle), axisVector * sin(2*angle));
+    return arcball;
 }
 
 #endif
