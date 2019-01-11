@@ -3,7 +3,7 @@
 //  ArcballProj
 //
 //  Created by SeanRen on 2019/1/11.
-//  Copyright © 2019 zxtech. All rights reserved.
+//  Copyright © 2019 SeanRen. All rights reserved.
 //
 
 #import "ViewController.h"
