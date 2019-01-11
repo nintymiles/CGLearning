@@ -25,29 +25,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ArcballProj/ViewController.mm"
-            timestampString = "568886205.327701"
+            filePath = "ArcballProj/mit-example/assignment3.mm"
+            timestampString = "568909051.601155"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "162"
-            endingLineNumber = "162"
-            landmarkName = "-glkView:drawInRect:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ArcballProj/FileWrapper.mm"
-            timestampString = "568868973.098255"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "43"
-            endingLineNumber = "43"
-            landmarkName = "GetBundleFileName( const char *fileName )"
+            startingLineNumber = "582"
+            endingLineNumber = "582"
+            landmarkName = "TouchEventRelease( float x, float y,unsigned long tapCount,bool pressStatus )"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
@@ -57,46 +41,30 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../../../BaseFramework/cvec.h"
-            timestampString = "568886205.327786"
+            filePath = "ArcballProj/mit-example/assignment3.mm"
+            timestampString = "568909051.601519"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "42"
-            endingLineNumber = "42"
-            landmarkName = "Cvec(const T&amp; t0, const T&amp; t1, const T&amp; t2, const T&amp; t3)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Cvec&lt;double, 4&gt;::Cvec(double const&amp;, double const&amp;, double const&amp;, double const&amp;)"
-                  moduleName = "ArcballProj"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/afighter/Documents/Github_Projects/CGLearning/BaseFramework/cvec.h"
-                  timestampString = "568880242.35927"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "43"
-                  endingLineNumber = "43"
-                  offsetFromSymbolStart = "28">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Cvec&lt;float, 4&gt;::Cvec(float const&amp;, float const&amp;, float const&amp;, float const&amp;)"
-                  moduleName = "ArcballProj"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/afighter/Documents/Github_Projects/CGLearning/BaseFramework/cvec.h"
-                  timestampString = "568880242.362179"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "43"
-                  endingLineNumber = "43"
-                  offsetFromSymbolStart = "28">
-               </Location>
-            </Locations>
+            startingLineNumber = "586"
+            endingLineNumber = "586"
+            landmarkName = "TouchEventRelease( float x, float y,unsigned long tapCount,bool pressStatus )"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../../BaseFramework/quat/arcball.h"
+            timestampString = "568909051.601765"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
+            landmarkName = "arcball(const Cvec3&amp; centerScreenPos,const double onScreenRadius,const Cvec2&amp; startScreenPos,const Cvec2&amp; endScreenPos)"
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

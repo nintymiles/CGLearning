@@ -65,7 +65,7 @@ static const float g_groundSize = 10.0;   // half the ground length
 static int g_windowWidth = 512;
 static int g_windowHeight = 512;
 static bool g_mouseClickDown = false;    // is the mouse button pressed
-static bool g_mouseLClickButton, g_mouseRClickButton, g_mouseMClickButton;
+static bool g_mouseLClickButton, g_mouseRClickButton, g_mouseMClickButton, g_quadTap;
 static int g_mouseClickX, g_mouseClickY; // coordinates for mouse click event
 static int g_activeShader = 0;
 
@@ -192,9 +192,11 @@ static const Cvec3 g_light1(2.0, 3.0, 14.0), g_light2(-2, -3.0, -5.0);  // defin
 //static Matrix4 g_skyRbt = Matrix4::makeTranslation(Cvec3(0.0, 0.25, 4.0));
 static RigTForm g_skyRbt = RigTForm(Cvec3(0.0, 0.25, 4.0));
 //static Matrix4 g_objectRbt[2] = {Matrix4::makeTranslation(Cvec3(0,0,0)),Matrix4::makeTranslation(Cvec3(0,0,-2))};
-static RigTForm g_objectRbt[2] = {RigTForm(Cvec3(0,0,0)),RigTForm(Cvec3(0,0,0))};
+static RigTForm g_objectRbt[2] = {RigTForm(Cvec3(0.5,0.5,0.5)),RigTForm(Cvec3(0,0,0))};
 
 static Cvec4f g_objectColors[2] = {Cvec4f(1, 0, 0, 1),Cvec4f(0.5, 0, 0.5, 0.3)};
+static const Cvec3 g_objectFrameOrigin = Cvec3(0.5,0.5,0.5);
+static const double g_arcballScreenRadius = 0.95 * min(g_windowWidth,g_windowHeight);
 
 ///////////////// END OF G L O B A L S //////////////////////////////////////////////////
 
@@ -371,6 +373,9 @@ static void motion(const float x, const float y) {
         //m = Matrix4::makeTranslation(Cvec3(0, 0, -dy) * 0.01);
         m = RigTForm(Cvec3(0, 0, -dy) * 0.01);
     }
+    else if (g_quadTap){
+        
+    }
     
     if (g_mouseClickDown) {
         g_objectRbt[0] = g_objectRbt[0] * m; // Simply right-multiply is WRONG
@@ -432,15 +437,18 @@ static void mouse(const float x, const float y,u_long tapCount,bool press) {
     g_mouseClickY = g_windowHeight - y - 1;  // conversion from window-coordinate-system to OpenGL window-coordinate-system
     
     //every time initialze all mouse status to false
-    g_mouseLClickButton=g_mouseMClickButton=g_mouseRClickButton=false;
+    g_mouseLClickButton=g_mouseMClickButton=g_mouseRClickButton=g_quadTap=false;
     
     g_mouseLClickButton |= (press && tapCount == 1);
     g_mouseRClickButton |= (press && tapCount == 2);
     g_mouseMClickButton |= (press && tapCount == 3);
+    g_quadTap           |= (press && tapCount == 4);
     
 //    g_mouseLClickButton &= !(!press && tapCount == 1);
 //    g_mouseRClickButton &= !(!press && tapCount == 2);
 //    g_mouseMClickButton &= !(!press && tapCount == 3);
+    if(!press)
+        g_mouseLClickButton=g_mouseMClickButton=g_mouseRClickButton=g_quadTap=false;
     
     
     g_mouseClickDown = g_mouseLClickButton || g_mouseRClickButton || g_mouseMClickButton;
@@ -564,8 +572,20 @@ void TouchEventRelease( float x, float y,unsigned long tapCount,bool pressStatus
     //--------------------------------------------------------------------------------
     //  after touch moving event，touch up event doesn't have correcsponding touch down event tapCount
     //--------------------------------------------------------------------------------
-    //mouse(x,y,tapCount,pressStatus);
+    
     if(tapCount == 5){
         writePpmScreenshot(g_windowWidth, g_windowHeight, "out.ppm");
     }
+    //--------------------------------------------------------------------------------
+    // arcball applying
+    //--------------------------------------------------------------------------------
+    if(g_quadTap){
+        Cvec2 startScreenPos = Cvec2(g_mouseClickX,g_mouseClickY);
+        Cvec2 endScreenPos = Cvec2(x,y);
+        Cvec2 centerScreenPos = getScreenSpaceCoord(g_objectFrameOrigin,makeProjectionMatrix(), 0.0, 0.0, g_windowWidth, g_windowHeight);
+        Quat arcballQuat = arcball(Cvec3(centerScreenPos,0), g_arcballScreenRadius, startScreenPos, endScreenPos);
+        g_skyRbt = g_skyRbt * RigTForm(arcballQuat);
+    }
+    
+    mouse(x,y,tapCount,pressStatus);
 }

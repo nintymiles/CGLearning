@@ -45,13 +45,21 @@ inline double getScreenToEyeScale(double z, double frustFovY, int screenHeight) 
   return -(z * tan(frustFovY * CS175_PI/360.0)) * 2 / screenHeight;
 }
 
+inline double calcSphereScreenZ(const Cvec3& centerScreenPos,const double onScreenRadius,const Cvec2& screenPos){
+    double squareScreenZ = pow(onScreenRadius,2.0) - pow((screenPos[0] - centerScreenPos[0]),2.0)  - pow((screenPos[1] - centerScreenPos[1]),2.0);
+    if(squareScreenZ < 0)
+        return 0;
+    else
+        return sqrt(squareScreenZ);
+}
+
 //--------------------------------------------------------------------------------
 //  实现arcball接口/Implement Arcball Interface 
 //--------------------------------------------------------------------------------
 inline Quat arcball(const Cvec3& centerScreenPos,const double onScreenRadius,const Cvec2& startScreenPos,const Cvec2& endScreenPos){
     //compute z coordinates of selected 3d points on sphere
-    double startScreenZ = sqrt(pow(onScreenRadius,2) - pow((startScreenPos[0] - centerScreenPos[0]),2)  - pow((startScreenPos[1] - centerScreenPos[1]),2));
-    double endScreenZ = sqrt(pow(onScreenRadius,2) - pow((endScreenPos[0] - centerScreenPos[0]),2)  - pow((endScreenPos[1] - centerScreenPos[1]),2));
+    double startScreenZ = calcSphereScreenZ(centerScreenPos, onScreenRadius, startScreenPos);
+    double endScreenZ = calcSphereScreenZ(centerScreenPos, onScreenRadius, endScreenPos);
     
     //compute sphere center point to start/end point vectors,then normalize them
     Cvec3 startVector = normalize(Cvec3(startScreenPos,startScreenZ) - centerScreenPos);
@@ -68,8 +76,8 @@ inline Quat arcball(const Cvec3& centerScreenPos,const double onScreenRadius,con
 
 inline Quat arcballv2(const Cvec3& centerScreenPos,const double onScreenRadius,const Cvec2& startScreenPos,const Cvec2& endScreenPos){
     //compute z coordinates of selected 3d points on sphere
-    double startScreenZ = sqrt(pow(onScreenRadius,2) - pow((startScreenPos[0] - centerScreenPos[0]),2)  - pow((startScreenPos[1] - centerScreenPos[1]),2));
-    double endScreenZ = sqrt(pow(onScreenRadius,2) - pow((endScreenPos[0] - centerScreenPos[0]),2)  - pow((endScreenPos[1] - centerScreenPos[1]),2));
+    double startScreenZ = calcSphereScreenZ(centerScreenPos, onScreenRadius, startScreenPos);
+    double endScreenZ = calcSphereScreenZ(centerScreenPos, onScreenRadius, endScreenPos);
     
     //compute sphere center point to start/end point vectors,then normalize them
     Cvec3 startVector = normalize(Cvec3(startScreenPos,startScreenZ) - centerScreenPos);
