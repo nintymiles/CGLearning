@@ -1,0 +1,11 @@
+//
+// Prefix header for all source files of the 'iOSBlueTriangle' target in the 'iOSBlueTriangle' project
+//
+
+#import <Availability.h>
+
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+#endif
