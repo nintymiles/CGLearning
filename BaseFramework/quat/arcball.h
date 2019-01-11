@@ -53,9 +53,9 @@ inline Quat arcball(const Cvec3& centerScreenPos,const double onScreenRadius,con
     double startScreenZ = sqrt(pow(onScreenRadius,2) - pow((startScreenPos[0] - centerScreenPos[0]),2)  - pow((startScreenPos[1] - centerScreenPos[1]),2));
     double endScreenZ = sqrt(pow(onScreenRadius,2) - pow((endScreenPos[0] - centerScreenPos[0]),2)  - pow((endScreenPos[1] - centerScreenPos[1]),2));
     
-    //sphere center point to start point vector
-    Cvec3 startVector = Cvec3(startScreenPos,startScreenZ) - centerScreenPos;
-    Cvec3 endVector = Cvec3(endScreenPos,endScreenZ) - centerScreenPos;
+    //compute sphere center point to start/end point vectors,then normalize them
+    Cvec3 startVector = normalize(Cvec3(startScreenPos,startScreenZ) - centerScreenPos);
+    Cvec3 endVector = normalize(Cvec3(endScreenPos,endScreenZ) - centerScreenPos);
     //Phi angle between startVector and endVector,using arc cosine function thorough dot production value of start/end vector;
     double angle = acos(dot(startVector,endVector));
     //rotation axis, first compute cross product of start/end vectors(not necessarily normalized vector),then normalization
@@ -64,6 +64,22 @@ inline Quat arcball(const Cvec3& centerScreenPos,const double onScreenRadius,con
     //construct arcball quat by definition
     Quat arcball = Quat(cos(2 * angle), axisVector * sin(2*angle));
     return arcball;
+}
+
+inline Quat arcballv2(const Cvec3& centerScreenPos,const double onScreenRadius,const Cvec2& startScreenPos,const Cvec2& endScreenPos){
+    //compute z coordinates of selected 3d points on sphere
+    double startScreenZ = sqrt(pow(onScreenRadius,2) - pow((startScreenPos[0] - centerScreenPos[0]),2)  - pow((startScreenPos[1] - centerScreenPos[1]),2));
+    double endScreenZ = sqrt(pow(onScreenRadius,2) - pow((endScreenPos[0] - centerScreenPos[0]),2)  - pow((endScreenPos[1] - centerScreenPos[1]),2));
+    
+    //compute sphere center point to start/end point vectors,then normalize them
+    Cvec3 startVector = normalize(Cvec3(startScreenPos,startScreenZ) - centerScreenPos);
+    Cvec3 endVector = normalize(Cvec3(endScreenPos,endScreenZ) - centerScreenPos);
+    
+    //construct two quats based start/end vectors
+    Quat startInvQuat = inv(Quat(0, startVector));
+    Quat endQuat = Quat(0,endVector);
+    
+    return endQuat * startInvQuat;
 }
 
 #endif
