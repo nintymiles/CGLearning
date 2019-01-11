@@ -49,7 +49,7 @@ bool GraphicsRender();
 
 void TouchEventDown( float x, float y,unsigned long tapCount,bool pressStatus );
 
-void TouchEventMove( float x, float y );
+void TouchEventMove( float x, float y,unsigned long touchCount );
 
 void TouchEventRelease( float x, float y,unsigned long tapCount,bool pressStatus );
 

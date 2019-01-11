@@ -49,10 +49,10 @@
     return true;
 }
 
-//iOS在刷新率控制上没有多少自由度。
--(NSInteger)preferredFramesPerSecond{
-    return 60;
-}
+////重载函数的方式无法获得60FPS的frame rate，此设置无效
+//-(NSInteger)preferredFramesPerSecond{
+//    return 60;
+//}
 
 - (void)viewDidLoad
 {
@@ -139,8 +139,7 @@
     for( touch in touches )
         {
         pos = [ touch locationInView:self.view ];
-        TouchEventMove( pos.x, pos.y );
-        
+        TouchEventMove( pos.x, pos.y,touches.count );
         }
 }
 

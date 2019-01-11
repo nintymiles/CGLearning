@@ -557,10 +557,23 @@ void TouchEventDown( float x, float y,unsigned long tapCount,bool pressStatus )
     mouse(x,y,tapCount,pressStatus);
 }
 
-void TouchEventMove( float x, float y )
+void TouchEventMove( float x, float y,unsigned long touchCount )
 {
     touch_location_x = x;
     touch_location_y = y;
+    
+    //--------------------------------------------------------------------------------
+    // arcball applying
+    //--------------------------------------------------------------------------------
+    if(touchCount > 1){
+        
+        Cvec2 startScreenPos = Cvec2(g_mouseClickX,g_mouseClickY);
+        Cvec2 endScreenPos = Cvec2(x,y);
+        Cvec2 centerScreenPos = getScreenSpaceCoord(g_objectFrameOrigin,makeProjectionMatrix(), 0.0, 0.0, g_windowWidth, g_windowHeight);
+        Quat arcballQuat = arcball(Cvec3(centerScreenPos,0), g_arcballScreenRadius, startScreenPos, endScreenPos);
+        g_skyRbt = g_skyRbt * RigTForm(arcballQuat);
+
+    }
 }
 
 void TouchEventRelease( float x, float y,unsigned long tapCount,bool pressStatus )
@@ -575,16 +588,6 @@ void TouchEventRelease( float x, float y,unsigned long tapCount,bool pressStatus
     
     if(tapCount == 5){
         writePpmScreenshot(g_windowWidth, g_windowHeight, "out.ppm");
-    }
-    //--------------------------------------------------------------------------------
-    // arcball applying
-    //--------------------------------------------------------------------------------
-    if(g_quadTap){
-        Cvec2 startScreenPos = Cvec2(g_mouseClickX,g_mouseClickY);
-        Cvec2 endScreenPos = Cvec2(x,y);
-        Cvec2 centerScreenPos = getScreenSpaceCoord(g_objectFrameOrigin,makeProjectionMatrix(), 0.0, 0.0, g_windowWidth, g_windowHeight);
-        Quat arcballQuat = arcball(Cvec3(centerScreenPos,0), g_arcballScreenRadius, startScreenPos, endScreenPos);
-        g_skyRbt = g_skyRbt * RigTForm(arcballQuat);
     }
     
     mouse(x,y,tapCount,pressStatus);
