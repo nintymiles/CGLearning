@@ -17,4 +17,5 @@
 	```
 2. Applying arcball interface on this project??? done(20190111)
 
-3. Make sky camera aroud the origin of sphere? done(20190112)
+3. Make sky camera aroud the origin of arcball sphere? done(20190112)
+        make eye frame rotating around sphere origin by quaternion created arcball interface.
