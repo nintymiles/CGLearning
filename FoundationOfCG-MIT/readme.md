@@ -1,7 +1,9 @@
 #Some involved problems
 - ViewController resolution problem 2019/01/11
+
     When create OpenGL ES project to be run only on iPhone device, if you want viewcontroller to be fit for iPhone device resolution,you need to remove viewcontroller properties "use trait variation" from right pane.
 - Bundle resources cant be found 2019/01/11
+
     When you want to bundle resources (shader files etc.) into packages, You just import files with option "create groups" but instead "create file references".
 - If you want to get 60 FPS on iOS (verified on iOS 9/12), you just set 'self.preferredFramesPerSecond = 60;' on view controller.
 - If you want to receive multitouch event, you need to enable "Multiple Touch" (default disabled)
@@ -18,4 +20,5 @@
 2. Applying arcball interface on this project??? done(20190111)
 
 3. Make sky camera aroud the origin of arcball sphere? done(20190112)
+
         make eye frame rotating around sphere origin by quaternion created arcball interface.
