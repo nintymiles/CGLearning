@@ -22,3 +22,18 @@
 3. Make sky camera aroud the origin of arcball sphere? done(20190112)
 
         make eye frame rotating around sphere origin by quaternion created arcball interface.
+        
+4. How to conditionally import OpenGL and OpenGLES library for Mac and iOS? done(20190112)
+
+        Note: TARGET_OS_MAC includes any apple OS,TARGET_OS_IPHONE includes any device/simulator run on iOS,TARGET_OS_OSX only represents desktop Mac OS X.
+        ```
+        #if defined(__APPLE__) && defined(__MACH__)
+        #include <TargetConditionals.h>
+        #if TARGET_OS_OSX
+        #include <GLFW/glfw3.h>
+        #elif TARGET_OS_IPHONE
+        #include <OpenGLES/ES3/gl.h>
+        #include <OpenGLES/ES3/glext.h>
+        #endif
+        #endif
+        ```

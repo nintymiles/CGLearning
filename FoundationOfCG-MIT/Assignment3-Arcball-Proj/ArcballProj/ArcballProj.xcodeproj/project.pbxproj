@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5C96C94B21EA0CF000223694 /* glsupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C96C94921EA0CF000223694 /* glsupport.cpp */; };
 		5CE2BC2D21E836AB003B5B50 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC2C21E836AB003B5B50 /* AppDelegate.m */; };
 		5CE2BC3021E836AB003B5B50 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC2F21E836AB003B5B50 /* ViewController.mm */; };
 		5CE2BC3521E836AC003B5B50 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CE2BC3421E836AC003B5B50 /* Assets.xcassets */; };
@@ -15,7 +16,6 @@
 		5CE2BC4E21E83842003B5B50 /* FileWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC4A21E83842003B5B50 /* FileWrapper.mm */; };
 		5CE2BC5921E83895003B5B50 /* perfMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC5721E83895003B5B50 /* perfMonitor.cpp */; };
 		5CE2BC5E21E83A7C003B5B50 /* ppm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC5B21E83A7C003B5B50 /* ppm.cpp */; };
-		5CE2BC5F21E83A7C003B5B50 /* glsupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC5D21E83A7C003B5B50 /* glsupport.cpp */; };
 		5CE2BC6121E83A99003B5B50 /* assignment3.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC6021E83A99003B5B50 /* assignment3.mm */; };
 		5CE2BC6721E83DD9003B5B50 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5CE2BC6521E83DD9003B5B50 /* ViewController.xib */; };
 		5CE2BC6E21E83FDE003B5B50 /* basic-gles3.vshader in Resources */ = {isa = PBXBuildFile; fileRef = 5CE2BC6B21E83FDE003B5B50 /* basic-gles3.vshader */; };
@@ -26,6 +26,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5C96C94921EA0CF000223694 /* glsupport.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glsupport.cpp; path = ../../../Common/glsupport.cpp; sourceTree = "<group>"; };
+		5C96C94A21EA0CF000223694 /* glsupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glsupport.h; path = ../../../Common/glsupport.h; sourceTree = "<group>"; };
 		5CE2BC2821E836AB003B5B50 /* ArcballProj.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ArcballProj.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CE2BC2B21E836AB003B5B50 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5CE2BC2C21E836AB003B5B50 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -48,8 +50,6 @@
 		5CE2BC5821E83895003B5B50 /* perfMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = perfMonitor.h; path = ../../../../BaseFramework/perfMonitor/perfMonitor.h; sourceTree = "<group>"; };
 		5CE2BC5A21E83A7C003B5B50 /* ppm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ppm.h; path = ../../../Common/gles/ppm.h; sourceTree = "<group>"; };
 		5CE2BC5B21E83A7C003B5B50 /* ppm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ppm.cpp; path = ../../../Common/gles/ppm.cpp; sourceTree = "<group>"; };
-		5CE2BC5C21E83A7C003B5B50 /* glsupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glsupport.h; path = ../../../Common/gles/glsupport.h; sourceTree = "<group>"; };
-		5CE2BC5D21E83A7C003B5B50 /* glsupport.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glsupport.cpp; path = ../../../Common/gles/glsupport.cpp; sourceTree = "<group>"; };
 		5CE2BC6021E83A99003B5B50 /* assignment3.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = assignment3.mm; path = "mit-example/assignment3.mm"; sourceTree = "<group>"; };
 		5CE2BC6521E83DD9003B5B50 /* ViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ViewController.xib; sourceTree = "<group>"; };
 		5CE2BC6B21E83FDE003B5B50 /* basic-gles3.vshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "basic-gles3.vshader"; sourceTree = "<group>"; };
@@ -98,8 +98,8 @@
 				5CE2BC5321E83875003B5B50 /* cvec.h */,
 				5CE2BC5121E83875003B5B50 /* geometrymaker.h */,
 				5CE2BC5221E83875003B5B50 /* matrix4.h */,
-				5CE2BC5D21E83A7C003B5B50 /* glsupport.cpp */,
-				5CE2BC5C21E83A7C003B5B50 /* glsupport.h */,
+				5C96C94921EA0CF000223694 /* glsupport.cpp */,
+				5C96C94A21EA0CF000223694 /* glsupport.h */,
 				5CE2BC5B21E83A7C003B5B50 /* ppm.cpp */,
 				5CE2BC5A21E83A7C003B5B50 /* ppm.h */,
 				5CE2BC6021E83A99003B5B50 /* assignment3.mm */,
@@ -208,11 +208,11 @@
 			files = (
 				5CE2BC4E21E83842003B5B50 /* FileWrapper.mm in Sources */,
 				5CE2BC3021E836AB003B5B50 /* ViewController.mm in Sources */,
+				5C96C94B21EA0CF000223694 /* glsupport.cpp in Sources */,
 				5CE2BC3B21E836AC003B5B50 /* main.m in Sources */,
 				5CE2BC5E21E83A7C003B5B50 /* ppm.cpp in Sources */,
 				5CE2BC5921E83895003B5B50 /* perfMonitor.cpp in Sources */,
 				5CE2BC4D21E83842003B5B50 /* NativeTemplate.cpp in Sources */,
-				5CE2BC5F21E83A7C003B5B50 /* glsupport.cpp in Sources */,
 				5CE2BC2D21E836AB003B5B50 /* AppDelegate.m in Sources */,
 				5CE2BC6121E83A99003B5B50 /* assignment3.mm in Sources */,
 			);

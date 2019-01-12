@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		5C2FD75821DAF61000E70862 /* asset2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C2FD75121DAF61000E70862 /* asset2.cpp */; };
-		5C2FD75921DAF61000E70862 /* glsupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C2FD75521DAF61000E70862 /* glsupport.cpp */; };
 		5C2FD75A21DAF61000E70862 /* ppm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C2FD75721DAF61000E70862 /* ppm.cpp */; };
 		5C950D0221DCAA1B00C536A0 /* libGLEW.2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C950D0121DCAA1A00C536A0 /* libGLEW.2.1.0.dylib */; };
+		5C96C94E21EA10EC00223694 /* glsupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C96C94C21EA10EC00223694 /* glsupport.cpp */; };
 		5CA9E4B221D9A52800F1BDC3 /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CA9E4B121D9A52800F1BDC3 /* libglfw3.a */; };
 		5CD4E2F721D8D5E600DBFCE3 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD4E2F621D8D5E600DBFCE3 /* IOKit.framework */; };
 		5CD4E2F921D8D5EC00DBFCE3 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD4E2F821D8D5EC00DBFCE3 /* OpenGL.framework */; };
@@ -41,10 +41,10 @@
 		5C1B0E4D21DB1E86005C440E /* basic-gl3.vshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "basic-gl3.vshader"; sourceTree = "<group>"; };
 		5C2FD75121DAF61000E70862 /* asset2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = asset2.cpp; sourceTree = "<group>"; };
 		5C2FD75321DAF61000E70862 /* ppm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ppm.h; sourceTree = "<group>"; };
-		5C2FD75521DAF61000E70862 /* glsupport.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glsupport.cpp; sourceTree = "<group>"; };
-		5C2FD75621DAF61000E70862 /* glsupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glsupport.h; sourceTree = "<group>"; };
 		5C2FD75721DAF61000E70862 /* ppm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ppm.cpp; sourceTree = "<group>"; };
 		5C950D0121DCAA1A00C536A0 /* libGLEW.2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.1.0.dylib; path = ../../../../../usr/local/lib/libGLEW.2.1.0.dylib; sourceTree = "<group>"; };
+		5C96C94C21EA10EC00223694 /* glsupport.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glsupport.cpp; path = "../../../../../FoundationOfCG-MIT/Common/glsupport.cpp"; sourceTree = "<group>"; };
+		5C96C94D21EA10EC00223694 /* glsupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glsupport.h; path = "../../../../../FoundationOfCG-MIT/Common/glsupport.h"; sourceTree = "<group>"; };
 		5CA9E4B121D9A52800F1BDC3 /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglfw3.a; path = ../../../../../usr/local/lib/libglfw3.a; sourceTree = "<group>"; };
 		5CD4E2E921D8D59800DBFCE3 /* HelloWorld3D */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = HelloWorld3D; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CD4E2F421D8D5DF00DBFCE3 /* CoreAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioKit.framework; path = System/Library/Frameworks/CoreAudioKit.framework; sourceTree = SDKROOT; };
@@ -98,8 +98,6 @@
 			children = (
 				5C2FD75121DAF61000E70862 /* asset2.cpp */,
 				5C2FD75321DAF61000E70862 /* ppm.h */,
-				5C2FD75521DAF61000E70862 /* glsupport.cpp */,
-				5C2FD75621DAF61000E70862 /* glsupport.h */,
 				5C2FD75721DAF61000E70862 /* ppm.cpp */,
 			);
 			path = "mit-example";
@@ -134,6 +132,8 @@
 				5CE2BC1C21E82972003B5B50 /* arcball.h */,
 				5CE2BC1D21E82972003B5B50 /* quat.h */,
 				5CE2BC1E21E82972003B5B50 /* rigtform.h */,
+				5C96C94C21EA10EC00223694 /* glsupport.cpp */,
+				5C96C94D21EA10EC00223694 /* glsupport.h */,
 				5C1B0E4721DB1E86005C440E /* shaders */,
 				5C2FD74F21DAF61000E70862 /* mit-example */,
 			);
@@ -212,9 +212,9 @@
 			files = (
 				5CE2BC1821E8295C003B5B50 /* perfMonitor.cpp in Sources */,
 				5CD9B2EA21DE5C6300383882 /* test_main.cpp in Sources */,
+				5C96C94E21EA10EC00223694 /* glsupport.cpp in Sources */,
 				5C2FD75A21DAF61000E70862 /* ppm.cpp in Sources */,
 				5C2FD75821DAF61000E70862 /* asset2.cpp in Sources */,
-				5C2FD75921DAF61000E70862 /* glsupport.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

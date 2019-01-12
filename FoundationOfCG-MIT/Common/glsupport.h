@@ -4,7 +4,18 @@
 #include <iostream>
 #include <stdexcept>
 
+//Note TARGET_OS_MAC includes any apple OS,TARGET_OS_IPHONE includes any device/simulator run on iOS
+#if defined(__APPLE__) && defined(__MACH__)
+#include <TargetConditionals.h>
+#if TARGET_OS_OSX
 #include <GLFW/glfw3.h>
+#elif TARGET_OS_IPHONE
+#include <OpenGLES/ES3/gl.h>
+#include <OpenGLES/ES3/glext.h>
+#endif
+#endif
+
+
 
 // Check if there has been an error inside OpenGL and if yes, print the error and
 // through a runtime_error exception.
@@ -227,10 +238,12 @@ inline void safe_glVertexAttrib4f(const GLint handle, const GLfloat a, const GLf
     glVertexAttrib4f(handle, a, b, c, d);
 }
 
+#if TARGET_OS_OSX
 inline void safe_glVertexAttrib4Nub(const GLint handle, const GLubyte a, const GLubyte b, const GLubyte c, const GLubyte d) {
   if (handle >= 0)
     glVertexAttrib4Nub(handle, a, b, c, d);
 }
+#endif
 
 
 #endif
