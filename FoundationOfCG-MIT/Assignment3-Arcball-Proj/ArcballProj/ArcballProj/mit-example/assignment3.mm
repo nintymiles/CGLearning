@@ -575,7 +575,8 @@ void TouchEventMove( float x, float y,unsigned long touchCount )
         Cvec2 endScreenPos = Cvec2(x,g_windowHeight - y - 1); //convert from window coordnate to OpenGL window coordinate.
         Cvec2 centerScreenPos = getScreenSpaceCoord(g_objectFrameOrigin,makeProjectionMatrix(), 0.0, 0.0, g_windowWidth, g_windowHeight);
         Quat arcballQuat = arcballv2(Cvec3(centerScreenPos,0), g_arcballScreenRadius, startScreenPos, endScreenPos);
-        g_skyRbt = g_skyRbt * RigTForm(arcballQuat);
+        //g_skyRbt = g_skyRbt * RigTForm(arcballQuat);
+        g_skyRbt = doQtoOwrtA(RigTForm(arcballQuat), g_skyRbt, RigTForm(arcballQuat));
 
     }
 }

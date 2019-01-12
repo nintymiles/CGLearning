@@ -15,6 +15,6 @@
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA,GL_SRC_MINUS_ALPHA);
 	```
-2. Applying arcball interface on this project??? done(20190111).
+2. Applying arcball interface on this project??? done(20190111)
 
-3. Make sky camera aroud the origin of sphere?
+3. Make sky camera aroud the origin of sphere? done(20190112)
