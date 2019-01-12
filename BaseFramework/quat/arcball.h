@@ -66,6 +66,8 @@ inline Quat arcball(const Cvec3& centerScreenPos,const double onScreenRadius,con
     Cvec3 endVector = normalize(Cvec3(endScreenPos,endScreenZ) - centerScreenPos);
     //Phi angle between startVector and endVector,using arc cosine function thorough dot production value of start/end vector;
     double angle = acos(dot(startVector,endVector));
+    if(angle == NAN)
+        return Quat::identity();
     //rotation axis, first compute cross product of start/end vectors(not necessarily normalized vector),then normalization
     Cvec3 axisVector = normalize(cross(startVector,endVector));
     

@@ -26,7 +26,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../../BaseFramework/quat/arcball.h"
-            timestampString = "568911907.682848"
+            timestampString = "568976972.560796"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "62"
@@ -41,14 +41,30 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ArcballProj/ViewController.mm"
-            timestampString = "568911907.682923"
+            filePath = "ArcballProj/mit-example/assignment3.mm"
+            timestampString = "568976972.561318"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "142"
-            endingLineNumber = "142"
-            landmarkName = "-touchesMoved:withEvent:"
-            landmarkType = "7">
+            startingLineNumber = "535"
+            endingLineNumber = "535"
+            landmarkName = "GraphicsResize( int width, int height )"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../../BaseFramework/quat/arcball.h"
+            timestampString = "568976972.561621"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "45"
+            endingLineNumber = "45"
+            landmarkName = "getScreenToEyeScale(double z, double frustFovY, int screenHeight)"
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

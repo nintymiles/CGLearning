@@ -64,6 +64,8 @@ static const float g_groundSize = 10.0;   // half the ground length
 
 static int g_windowWidth = 512;
 static int g_windowHeight = 512;
+static float g_arcballScreenRadius = 0.5 * (float)min(g_windowWidth,g_windowHeight);
+
 static bool g_mouseClickDown = false;    // is the mouse button pressed
 static bool g_mouseLClickButton, g_mouseRClickButton, g_mouseMClickButton, g_quadTap;
 static int g_mouseClickX, g_mouseClickY; // coordinates for mouse click event
@@ -195,8 +197,8 @@ static RigTForm g_skyRbt = RigTForm(Cvec3(0.0, 0.25, 4.0));
 static RigTForm g_objectRbt[2] = {RigTForm(Cvec3(0.5,0.5,0.5)),RigTForm(Cvec3(0,0,0))};
 
 static Cvec4f g_objectColors[2] = {Cvec4f(1, 0, 0, 1),Cvec4f(0.5, 0, 0.5, 0.3)};
-static const Cvec3 g_objectFrameOrigin = Cvec3(0.5,0.5,0.5);
-static const double g_arcballScreenRadius = 0.95 * min(g_windowWidth,g_windowHeight);
+static const Cvec3 g_objectFrameOrigin = Cvec3(0,-0.25,-4.0);
+
 
 ///////////////// END OF G L O B A L S //////////////////////////////////////////////////
 
@@ -529,6 +531,8 @@ bool GraphicsResize( int width, int height )
     //    g_windowHeight = height;
     //    glViewport(0, 0, width, height);
     reshape(width, height);
+    double radiusSFactor = getScreenToEyeScale(-4, g_frustFovY, g_windowHeight);
+    g_arcballScreenRadius = 2 / radiusSFactor;
     
     return true;
 }
@@ -563,14 +567,14 @@ void TouchEventMove( float x, float y,unsigned long touchCount )
     touch_location_y = y;
     
     //--------------------------------------------------------------------------------
-    // arcball applying
+    // arcball interface applying
     //--------------------------------------------------------------------------------
     if(touchCount > 1){
         
         Cvec2 startScreenPos = Cvec2(g_mouseClickX,g_mouseClickY);
-        Cvec2 endScreenPos = Cvec2(x,y);
+        Cvec2 endScreenPos = Cvec2(x,g_windowHeight - y - 1); //convert from window coordnate to OpenGL window coordinate.
         Cvec2 centerScreenPos = getScreenSpaceCoord(g_objectFrameOrigin,makeProjectionMatrix(), 0.0, 0.0, g_windowWidth, g_windowHeight);
-        Quat arcballQuat = arcball(Cvec3(centerScreenPos,0), g_arcballScreenRadius, startScreenPos, endScreenPos);
+        Quat arcballQuat = arcballv2(Cvec3(centerScreenPos,0), g_arcballScreenRadius, startScreenPos, endScreenPos);
         g_skyRbt = g_skyRbt * RigTForm(arcballQuat);
 
     }

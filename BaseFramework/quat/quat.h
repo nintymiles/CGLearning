@@ -90,6 +90,10 @@ public:
     const Quat r = *this * (Quat(0, a[0], a[1], a[2]) * inv(*this));
     return Cvec4(r[1], r[2], r[3], a[3]);
   }
+    
+    static Quat identity(){
+        return Quat(1,Cvec3(0));
+    }
 
   static Quat makeXRotation(const double ang) {
     Quat r;
