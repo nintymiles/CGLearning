@@ -262,6 +262,7 @@ static Matrix4 g_skyRbt = Matrix4::makeTranslation(Cvec3(0.0, 0.25, 4.0));
 //初始tramsformation，将object frame的原点保持不动，每个cube使用一个object matrix。由于在shader中使用了offset，故此处对象帧的起点都为原点。
 static Matrix4 g_objectRbt[2] = {Matrix4::makeTranslation(Cvec3(0,0,0)),Matrix4::makeTranslation(Cvec3(0,0,0))};
 static Cvec3f g_objectColors[1] = {Cvec3f(1, 0, 0)};
+static Matrix4 g_auxiliaryRbt;
 
 ///////////////// END OF G L O B A L S //////////////////////////////////////////////////
 
@@ -371,6 +372,7 @@ static void drawStuff() {
     sendModelViewNormalMatrix(curSS, MVM, NMVM);
     safe_glUniform3f(curSS.h_uColor, g_objectColors[0][1], g_objectColors[0][0], g_objectColors[0][1]);
     g_cube->draw(curSS);
+    
 }
 
 static void display() {
@@ -414,11 +416,16 @@ static void motion(const float x, const float y) {
     m = Matrix4::makeTranslation(Cvec3(0, 0, -dy) * 0.01);
   }
 
+    
   if (g_mouseClickDown) {
-      if(g_activeCube == 0)
-          g_objectRbt[0] *= m; // Simply right-multiply is WRONG
-      else
-          g_objectRbt[1] *= m;
+      if(g_activeCube == 0){
+          //g_objectRbt[0] *= m; // Simply right-multiply is WRONG
+          g_auxiliaryRbt = makeMixedFrame(g_objectRbt[0], g_skyRbt);
+          g_objectRbt[0] = doQtoOwrtA(m, g_objectRbt[0], g_auxiliaryRbt);
+      }else{
+          g_auxiliaryRbt = makeMixedFrame(g_objectRbt[1], g_skyRbt);
+          g_objectRbt[1] = doQtoOwrtA(m, g_objectRbt[1], g_auxiliaryRbt);
+      }
   }
 
   g_mouseClickX = x;
