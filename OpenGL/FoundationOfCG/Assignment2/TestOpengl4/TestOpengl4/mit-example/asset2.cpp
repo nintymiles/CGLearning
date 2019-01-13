@@ -50,6 +50,7 @@ static bool g_mouseClickDown = false;    // is the mouse button pressed
 static bool g_mouseLClickButton, g_mouseRClickButton, g_mouseMClickButton;
 static int g_mouseClickX, g_mouseClickY; // coordinates for mouse click event
 static int g_activeShader = 1;
+static int g_activeCube = 1;
 
 static GLFWwindow* window;
 
@@ -125,8 +126,8 @@ const char* basicVert = GLSL
      vPosition = vec3(tPosition);
      gl_Position = uProjMatrix * tPosition; 
      gl_Position.x += uXCoordOffset;
-     
  }
+ 
  );
 
 const char* solidVert = GLSL
@@ -258,8 +259,8 @@ static shared_ptr<Geometry> g_ground, g_cube;
 
 static const Cvec3 g_light1(2.0, 3.0, 14.0), g_light2(-2, -3.0, -5.0);  // define two lights positions in world space
 static Matrix4 g_skyRbt = Matrix4::makeTranslation(Cvec3(0.0, 0.25, 4.0));
-//初始tramsformation，将object frame的原点保持不动，定义时object matrix此处只使用一个
-static Matrix4 g_objectRbt[1] = {Matrix4::makeTranslation(Cvec3(0,0,0))};  // currently only 1 obj is defined
+//初始tramsformation，将object frame的原点保持不动，每个cube使用一个object matrix。由于在shader中使用了offset，故此处对象帧的起点都为原点。
+static Matrix4 g_objectRbt[2] = {Matrix4::makeTranslation(Cvec3(0,0,0)),Matrix4::makeTranslation(Cvec3(0,0,0))};
 static Cvec3f g_objectColors[1] = {Cvec3f(1, 0, 0)};
 
 ///////////////// END OF G L O B A L S //////////////////////////////////////////////////
@@ -365,7 +366,7 @@ static void drawStuff() {
     g_cube->draw(curSS);
     
     safe_glUniform1f(curSS.h_uXCoordOffset, 1.5f);
-    MVM = invEyeRbt * g_objectRbt[0];
+    MVM = invEyeRbt * g_objectRbt[1];
     NMVM = normalMatrix(MVM);
     sendModelViewNormalMatrix(curSS, MVM, NMVM);
     safe_glUniform3f(curSS.h_uColor, g_objectColors[0][1], g_objectColors[0][0], g_objectColors[0][1]);
@@ -414,8 +415,10 @@ static void motion(const float x, const float y) {
   }
 
   if (g_mouseClickDown) {
-    g_objectRbt[0] *= m; // Simply right-multiply is WRONG
-    //glutPostRedisplay(); // we always redraw if we changed the scene
+      if(g_activeCube == 0)
+          g_objectRbt[0] *= m; // Simply right-multiply is WRONG
+      else
+          g_objectRbt[1] *= m;
   }
 
   g_mouseClickX = x;
@@ -460,26 +463,31 @@ static void error_callback(int error, const char* description)
 //}
 
 static void keyboard(GLFWwindow* window, int key, int scancode, int action, int mods) {
-  switch (key) {
-  case GLFW_KEY_ESCAPE:
-    glfwSetWindowShouldClose(window, GLFW_TRUE);//exit(0);   // ESC
-  case GLFW_KEY_H:
-    cout << " ============== H E L P ==============\n\n"
-    << "h\t\thelp menu\n"
-    << "s\t\tsave screenshot\n"
-    << "f\t\tToggle flat shading on/off.\n"
-    << "o\t\tCycle object to edit\n"
-    << "v\t\tCycle view\n"
-    << "drag left mouse to rotate\n" << endl;
-    break;
-  case GLFW_KEY_S:
-    glFlush();
-    writePpmScreenshot(g_windowWidth, g_windowHeight, "out.ppm");
-    break;
-  case GLFW_KEY_F:
-    g_activeShader ^= 1;
-    break;
-  }
+    if(action == GLFW_PRESS){
+        switch (key) {
+            case GLFW_KEY_ESCAPE:
+                glfwSetWindowShouldClose(window, GLFW_TRUE);//exit(0);   // ESC
+            case GLFW_KEY_H:
+                cout << " ============== H E L P ==============\n\n"
+                << "h\t\thelp menu\n"
+                << "s\t\tsave screenshot\n"
+                << "f\t\tToggle flat shading on/off.\n"
+                << "o\t\tCycle object to edit\n"
+                << "v\t\tCycle view\n"
+                << "drag left mouse to rotate\n" << endl;
+                break;
+            case GLFW_KEY_S:
+                glFlush();
+                writePpmScreenshot(g_windowWidth, g_windowHeight, "out.ppm");
+                break;
+            case GLFW_KEY_O:
+                g_activeCube ^= 1;
+                break;
+            case GLFW_KEY_F:
+                g_activeShader ^= 1;
+                break;
+        }
+    }
 }
 
 //static void initGlutState(int argc, char * argv[]) {
