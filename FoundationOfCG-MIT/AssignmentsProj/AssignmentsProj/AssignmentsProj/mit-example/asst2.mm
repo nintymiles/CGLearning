@@ -101,7 +101,7 @@ struct ShaderState {
     h_aPosition = safe_glGetAttribLocation(h, "aPosition");
     h_aNormal = safe_glGetAttribLocation(h, "aNormal");
 
-    checkGlErrors();
+    checkGlError(__FUNCTION__);
   }
 
 };
@@ -351,7 +351,7 @@ static void display() {
     //iOS automatically control swapping buffer
     //no need to swap buffer manually
     
-    checkGlErrors();
+    checkGlError(__FUNCTION__);
 }
 
 static void reshape(const int w, const int h) {

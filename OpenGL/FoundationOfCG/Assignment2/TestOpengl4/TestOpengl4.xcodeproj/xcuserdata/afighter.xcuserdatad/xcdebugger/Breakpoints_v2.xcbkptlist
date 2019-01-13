@@ -122,11 +122,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TestOpengl4/mit-example/asset2.cpp"
-            timestampString = "568994861.083474"
+            timestampString = "569076239.9056979"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "373"
-            endingLineNumber = "373"
+            startingLineNumber = "444"
+            endingLineNumber = "444"
             landmarkName = "mouse(GLFWwindow* window, const int button, const int action, int mods)"
             landmarkType = "9">
          </BreakpointContent>
@@ -138,11 +138,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TestOpengl4/mit-example/asset2.cpp"
-            timestampString = "568994861.084146"
+            timestampString = "569076239.906122"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "365"
-            endingLineNumber = "365"
+            startingLineNumber = "436"
+            endingLineNumber = "436"
             landmarkName = "mouse(GLFWwindow* window, const int button, const int action, int mods)"
             landmarkType = "9">
          </BreakpointContent>
@@ -161,6 +161,22 @@
             endingLineNumber = "54"
             landmarkName = "PerfMonitor::Update(float &amp;fFPS)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TestOpengl4/mit-example/asset2.cpp"
+            timestampString = "569076239.906454"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "100"
+            endingLineNumber = "100"
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

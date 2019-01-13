@@ -29,26 +29,11 @@
 #include "perfMonitor.h"
 
 using namespace std;      // for string, vector, iostream, and other standard C++ stuff
-//using namespace tr1; // for shared_ptr
 
 // G L O B A L S ///////////////////////////////////////////////////
 
-// --------- IMPORTANT --------------------------------------------------------
-// Before you start working on this assignment, set the following variable
-// properly to indicate whether you want to use OpenGL 2.x with GLSL 1.0 or
-// OpenGL 3.x+ with GLSL 1.3.
-//
-// Set g_Gl2Compatible = true to use GLSL 1.0 and g_Gl2Compatible = false to
-// use GLSL 1.3. Make sure that your machine supports the version of GLSL you
-// are using. In particular, on Mac OS X currently there is no way of using
-// OpenGL 3.x with GLSL 1.3 when GLUT is used.
-//
-// If g_Gl2Compatible=true, shaders with -gl2 suffix will be loaded.
-// If g_Gl2Compatible=false, shaders with -gl3 suffix will be loaded.
-// To complete the assignment you only need to edit the shader files that get
-// loaded
-// ----------------------------------------------------------------------------
-static const bool g_Gl2Compatible = false;
+//indict whether to use source directly
+static const bool g_GlSourceFlag = false;
 
 
 static const float g_frustMinFov = 60.0;  // A minimal of 60 degree field of view
@@ -78,13 +63,17 @@ struct ShaderState {
   GLint h_uModelViewMatrix;
   GLint h_uNormalMatrix;
   GLint h_uColor;
+    GLint h_uXCoordOffset;
 
   // Handles to vertex attributes
   GLint h_aPosition;
   GLint h_aNormal;
 
-  ShaderState(const char* vsfn, const char* fsfn) {
-    readAndCompileShader(program, vsfn, fsfn);
+  ShaderState(const char* vsfn, const char* fsfn,bool sourceFlag) {
+      if(sourceFlag)
+          loadAndCompileShader(program, vsfn, fsfn);
+      else
+          readAndCompileShader(program, vsfn, fsfn);
 
     const GLuint h = program; // short hand
 
@@ -95,27 +84,100 @@ struct ShaderState {
     h_uModelViewMatrix = safe_glGetUniformLocation(h, "uModelViewMatrix");
     h_uNormalMatrix = safe_glGetUniformLocation(h, "uNormalMatrix");
     h_uColor = safe_glGetUniformLocation(h, "uColor");
+      h_uXCoordOffset = safe_glGetUniformLocation(h, "uXCoordOffset");
 
     // Retrieve handles to vertex attributes
     h_aPosition = safe_glGetAttribLocation(h, "aPosition");
     h_aNormal = safe_glGetAttribLocation(h, "aNormal");
 
-//    if (!g_Gl2Compatible)
-//      glBindFragDataLocation(h, 0, "fragColor");
-    checkGlErrors();
+    checkGlError(__FUNCTION__);
   }
 
 };
 
 static const int g_numShaders = 2;
+
 static const char * const g_shaderFiles[g_numShaders][2] = {
-  {"/Users/afighter/Documents/XCode9-Workspace/TestOpengl4/TestOpengl4/shaders/basic-gl3.vshader", "/Users/afighter/Documents/XCode9-Workspace/TestOpengl4/TestOpengl4/shaders/solid-gl3.fshader"},
-  {"/Users/afighter/Documents/XCode9-Workspace/TestOpengl4/TestOpengl4/shaders/basic-gl3.vshader", "/Users/afighter/Documents/XCode9-Workspace/TestOpengl4/TestOpengl4/shaders/diffuse-gl3.fshader"}
+  {"/Users/afighter/Documents/Github_Projects/CGLearning/OpenGL/FoundationOfCG/Assignment2/TestOpengl4/TestOpengl4/shaders/basic-gl3.vshader", "/Users/afighter/Documents/Github_Projects/CGLearning/OpenGL/FoundationOfCG/Assignment2/TestOpengl4/TestOpengl4/shaders/solid-gl3.fshader"},
+  {"/Users/afighter/Documents/Github_Projects/CGLearning/OpenGL/FoundationOfCG/Assignment2/TestOpengl4/TestOpengl4/shaders/basic-gl3.vshader", "/Users/afighter/Documents/Github_Projects/CGLearning/OpenGL/FoundationOfCG/Assignment2/TestOpengl4/TestOpengl4/shaders/diffuse-gl3.fshader"}
 };
-static const char * const g_shaderFilesGl2[g_numShaders][2] = {
-  {"./shaders/basic-gl2.vshader", "./shaders/diffuse-gl2.fshader"},
-  {"./shaders/basic-gl2.vshader", "./shaders/solid-gl2.fshader"}
+
+const char* basicVert = GLSL
+(
+ 410 core,
+ 
+ uniform mat4 uProjMatrix;
+ uniform mat4 uModelViewMatrix;
+ uniform mat4 uNormalMatrix;
+ uniform float uXCoordOffset;
+ 
+ in vec3 aPosition;
+ in vec3 aNormal;
+ 
+ out vec3 vNormal;
+ out vec3 vPosition;
+ 
+ void main() {
+     vNormal = vec3(uNormalMatrix * vec4(aNormal, 0.0));
+     
+     // send position (eye coordinates) to fragment shader
+     vec4 tPosition = uModelViewMatrix * vec4(aPosition, 1.0);
+     vPosition = vec3(tPosition);
+     gl_Position = uProjMatrix * tPosition; 
+     gl_Position.x += uXCoordOffset;
+     
+ }
+ );
+
+const char* solidVert = GLSL
+(
+ 410 core,
+ 
+ uniform vec3 uColor;
+ 
+ out vec4 fragColor;
+ 
+ void main() {
+     fragColor = vec4(uColor, 1.0);
+ }
+ );
+
+const char* diffuseVert = GLSL
+(
+ 410 core,
+ 
+ uniform vec3 uLight;
+ uniform vec3 uLight2;
+ uniform vec3 uColor;
+ 
+ in vec3 vNormal;
+ in vec3 vPosition;
+ 
+ out vec4 fragColor;
+ 
+ void main() {
+     vec3 tolight = normalize(uLight - vPosition);
+     vec3 tolight2 = normalize(uLight2 - vPosition);
+     vec3 normal = normalize(vNormal);
+     
+     float diffuse = max(0.0, dot(normal, tolight));
+     diffuse += max(0.0, dot(normal, tolight2));
+     vec3 intensity = uColor * diffuse;
+     
+     fragColor = vec4(intensity, 1.0f);
+ }
+ );
+
+static const char * const g_shaderSources[g_numShaders][2] = {
+  {basicVert, diffuseVert},
+  {basicVert, solidVert}
 };
+
+//static const char * const g_shaderFilesGl2[g_numShaders][2] = {
+//  {"./shaders/basic-gl2.vshader", "./shaders/diffuse-gl2.fshader"},
+//  {"./shaders/basic-gl2.vshader", "./shaders/solid-gl2.fshader"}
+//};
+
 static vector<shared_ptr<ShaderState> > g_shaderStates; // our global shader states
 
 // --------- Geometry
@@ -266,39 +328,48 @@ static Matrix4 makeProjectionMatrix() {
 }
 
 static void drawStuff() {
-  // short hand for current shader state
-  const ShaderState& curSS = *g_shaderStates[g_activeShader];
-
-  // build & send proj. matrix to vshader
-  const Matrix4 projmat = makeProjectionMatrix();
-  sendProjectionMatrix(curSS, projmat);
-
-  // use the skyRbt as the eyeRbt
-  const Matrix4 eyeRbt = g_skyRbt;
-  const Matrix4 invEyeRbt = inv(eyeRbt);
-
-  const Cvec3 eyeLight1 = Cvec3(invEyeRbt * Cvec4(g_light1, 1)); // g_light1 position in eye coordinates
-  const Cvec3 eyeLight2 = Cvec3(invEyeRbt * Cvec4(g_light2, 1)); // g_light2 position in eye coordinates
-  safe_glUniform3f(curSS.h_uLight, eyeLight1[0], eyeLight1[1], eyeLight1[2]);
-  safe_glUniform3f(curSS.h_uLight2, eyeLight2[0], eyeLight2[1], eyeLight2[2]);
-
-  // draw ground
-  // ===========
-  //
-  const Matrix4 groundRbt = Matrix4();  // identity
-  Matrix4 MVM = invEyeRbt * groundRbt;
-  Matrix4 NMVM = normalMatrix(MVM);
-  sendModelViewNormalMatrix(curSS, MVM, NMVM);
-  safe_glUniform3f(curSS.h_uColor, 0.1, 0.95, 0.1); // set color
-  g_ground->draw(curSS);
-
-  // draw cubes
-  // ==========
-  MVM = invEyeRbt * g_objectRbt[0];
-  NMVM = normalMatrix(MVM);
-  sendModelViewNormalMatrix(curSS, MVM, NMVM);
-  safe_glUniform3f(curSS.h_uColor, g_objectColors[0][0], g_objectColors[0][1], g_objectColors[0][2]);
-  g_cube->draw(curSS);
+    // short hand for current shader state
+    const ShaderState& curSS = *g_shaderStates[g_activeShader];
+    
+    // build & send proj. matrix to vshader
+    const Matrix4 projmat = makeProjectionMatrix();
+    sendProjectionMatrix(curSS, projmat);
+    
+    // use the skyRbt as the eyeRbt
+    const Matrix4 eyeRbt = g_skyRbt;
+    const Matrix4 invEyeRbt = inv(eyeRbt);
+    
+    const Cvec3 eyeLight1 = Cvec3(invEyeRbt * Cvec4(g_light1, 1)); // g_light1 position in eye coordinates
+    const Cvec3 eyeLight2 = Cvec3(invEyeRbt * Cvec4(g_light2, 1)); // g_light2 position in eye coordinates
+    safe_glUniform3f(curSS.h_uLight, eyeLight1[0], eyeLight1[1], eyeLight1[2]);
+    safe_glUniform3f(curSS.h_uLight2, eyeLight2[0], eyeLight2[1], eyeLight2[2]);
+    
+    // draw ground
+    // ===========
+    //
+    safe_glUniform1f(curSS.h_uXCoordOffset, 0.f);
+    const Matrix4 groundRbt = Matrix4();  // identity
+    Matrix4 MVM = invEyeRbt * groundRbt;
+    Matrix4 NMVM = normalMatrix(MVM);
+    sendModelViewNormalMatrix(curSS, MVM, NMVM);
+    safe_glUniform3f(curSS.h_uColor, 0.1, 0.95, 0.1); // set color
+    g_ground->draw(curSS);
+    
+    // draw cubes
+    // ==========
+    safe_glUniform1f(curSS.h_uXCoordOffset, -1.5f);
+    MVM = invEyeRbt * g_objectRbt[0];
+    NMVM = normalMatrix(MVM);
+    sendModelViewNormalMatrix(curSS, MVM, NMVM);
+    safe_glUniform3f(curSS.h_uColor, g_objectColors[0][0], g_objectColors[0][1], g_objectColors[0][2]);
+    g_cube->draw(curSS);
+    
+    safe_glUniform1f(curSS.h_uXCoordOffset, 1.5f);
+    MVM = invEyeRbt * g_objectRbt[0];
+    NMVM = normalMatrix(MVM);
+    sendModelViewNormalMatrix(curSS, MVM, NMVM);
+    safe_glUniform3f(curSS.h_uColor, g_objectColors[0][1], g_objectColors[0][0], g_objectColors[0][1]);
+    g_cube->draw(curSS);
 }
 
 static void display() {
@@ -487,10 +558,10 @@ static void initGLState() {
 static void initShaders() {
   g_shaderStates.resize(g_numShaders);
   for (int i = 0; i < g_numShaders; ++i) {
-    if (g_Gl2Compatible)
-      g_shaderStates[i].reset(new ShaderState(g_shaderFilesGl2[i][0], g_shaderFilesGl2[i][1]));
+    if (g_GlSourceFlag)
+      g_shaderStates[i].reset(new ShaderState(g_shaderSources[i][0], g_shaderSources[i][1],g_GlSourceFlag));
     else
-      g_shaderStates[i].reset(new ShaderState(g_shaderFiles[i][0], g_shaderFiles[i][1]));
+      g_shaderStates[i].reset(new ShaderState(g_shaderFiles[i][0], g_shaderFiles[i][1],g_GlSourceFlag));
   }
 }
 

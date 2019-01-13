@@ -77,7 +77,6 @@
 		5CE2BC0C21E82530003B5B50 /* rigtform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rigtform.h; path = ../../../../BaseFramework/quat/rigtform.h; sourceTree = "<group>"; };
 		5CE2BC1021E8253E003B5B50 /* perfMonitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = perfMonitor.cpp; path = ../../../../BaseFramework/perfMonitor/perfMonitor.cpp; sourceTree = "<group>"; };
 		5CE2BC1121E8253E003B5B50 /* perfMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = perfMonitor.h; path = ../../../../BaseFramework/perfMonitor/perfMonitor.h; sourceTree = "<group>"; };
-		5CE2BC1521E825B3003B5B50 /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = readme.md; path = ../../../readme.md; sourceTree = "<group>"; };
 		5CF666A921E8233000EC4084 /* ppm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ppm.cpp; path = ../../../../Common/gles/ppm.cpp; sourceTree = "<group>"; };
 		5CF666AA21E8233000EC4084 /* ppm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ppm.h; path = ../../../../Common/gles/ppm.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -103,7 +102,6 @@
 		5C1A96FC21E47AA800C738A4 = {
 			isa = PBXGroup;
 			children = (
-				5CE2BC1521E825B3003B5B50 /* readme.md */,
 				5C8F249321EAE984009BE7F1 /* readme.md */,
 				5C1A970721E47AA800C738A4 /* AssignmentsProj */,
 				5C1A972021E47AA900C738A4 /* AssignmentsProjTests */,

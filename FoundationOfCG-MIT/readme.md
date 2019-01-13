@@ -41,7 +41,7 @@
 	#endif
 	```
     
-5. Draw two cubes using same vetex data by a x coordinate offset uniform variable. done(20190113)
+5. Draw two cubes using same vetex data by a x coordinate offset uniform variable on AssignmentsProj. done(20190113)
         
         
 	```

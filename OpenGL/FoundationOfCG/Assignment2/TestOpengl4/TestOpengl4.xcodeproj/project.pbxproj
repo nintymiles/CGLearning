@@ -34,10 +34,7 @@
 
 /* Begin PBXFileReference section */
 		5C1B0E4821DB1E86005C440E /* solid-gl3.fshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "solid-gl3.fshader"; sourceTree = "<group>"; };
-		5C1B0E4921DB1E86005C440E /* solid-gl2.fshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "solid-gl2.fshader"; sourceTree = "<group>"; };
 		5C1B0E4A21DB1E86005C440E /* diffuse-gl3.fshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "diffuse-gl3.fshader"; sourceTree = "<group>"; };
-		5C1B0E4B21DB1E86005C440E /* diffuse-gl2.fshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "diffuse-gl2.fshader"; sourceTree = "<group>"; };
-		5C1B0E4C21DB1E86005C440E /* basic-gl2.vshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "basic-gl2.vshader"; sourceTree = "<group>"; };
 		5C1B0E4D21DB1E86005C440E /* basic-gl3.vshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "basic-gl3.vshader"; sourceTree = "<group>"; };
 		5C2FD75121DAF61000E70862 /* asset2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = asset2.cpp; sourceTree = "<group>"; };
 		5C2FD75321DAF61000E70862 /* ppm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ppm.h; sourceTree = "<group>"; };
@@ -46,6 +43,7 @@
 		5C96C94C21EA10EC00223694 /* glsupport.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glsupport.cpp; path = "../../../../../FoundationOfCG-MIT/Common/glsupport.cpp"; sourceTree = "<group>"; };
 		5C96C94D21EA10EC00223694 /* glsupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glsupport.h; path = "../../../../../FoundationOfCG-MIT/Common/glsupport.h"; sourceTree = "<group>"; };
 		5CA9E4B121D9A52800F1BDC3 /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglfw3.a; path = ../../../../../usr/local/lib/libglfw3.a; sourceTree = "<group>"; };
+		5CD12C1921EB407B00AACC92 /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = readme.md; path = ../../../readme.md; sourceTree = "<group>"; };
 		5CD4E2E921D8D59800DBFCE3 /* HelloWorld3D */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = HelloWorld3D; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CD4E2F421D8D5DF00DBFCE3 /* CoreAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioKit.framework; path = System/Library/Frameworks/CoreAudioKit.framework; sourceTree = SDKROOT; };
 		5CD4E2F621D8D5E600DBFCE3 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
@@ -84,10 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				5C1B0E4821DB1E86005C440E /* solid-gl3.fshader */,
-				5C1B0E4921DB1E86005C440E /* solid-gl2.fshader */,
 				5C1B0E4A21DB1E86005C440E /* diffuse-gl3.fshader */,
-				5C1B0E4B21DB1E86005C440E /* diffuse-gl2.fshader */,
-				5C1B0E4C21DB1E86005C440E /* basic-gl2.vshader */,
 				5C1B0E4D21DB1E86005C440E /* basic-gl3.vshader */,
 			);
 			path = shaders;
@@ -106,6 +101,7 @@
 		5CD4E2E021D8D59800DBFCE3 = {
 			isa = PBXGroup;
 			children = (
+				5CD12C1921EB407B00AACC92 /* readme.md */,
 				5CD4E2EB21D8D59800DBFCE3 /* TestOpengl4 */,
 				5CD4E2EA21D8D59800DBFCE3 /* Products */,
 				5CD4E2F321D8D5DF00DBFCE3 /* Frameworks */,

@@ -15,11 +15,14 @@
 #endif
 #endif
 
-
+#define GLSL(version, shader) "#version " #version "\n" #shader
 
 // Check if there has been an error inside OpenGL and if yes, print the error and
 // through a runtime_error exception.
-void checkGlErrors();
+//void checkGlErrors();
+
+// call this function after every OpenGL function call
+void checkGlError(const char* op);
 
 // Reads and compiles a pair of vertex shader and fragment shader files into a
 // GL shader program. Throws runtime_error on error
@@ -32,6 +35,14 @@ void linkShader(GLuint programHandle, GLuint vertexShaderHandle, GLuint fragment
 // Reads and compiles a single shader (vertex, fragment, etc) file into a GL
 // shader. Throws runtime_error on error
 void readAndCompileSingleShader(GLuint shaderHandle, const char* shaderFileName);
+
+// load and compile shader from source by created shaderHandle
+void loadAndCompileSingleShader(GLuint shaderHandle, const char* shaderSource);
+
+// Loads and compiles a pair of vertex shader and fragment shader sources
+void loadAndCompileShader(GLuint programHandle,const char * vertexShaderSource, const char * fragmentShaderSource);
+
+
 
 // Classes inheriting Noncopyable will not have default compiler generated copy
 // constructor and assignment operator
@@ -55,7 +66,7 @@ public:
     handle_ = glCreateShader(shaderType); // create shader handle
     if (handle_ == 0)
       throw std::runtime_error("glCreateShader fails");
-    checkGlErrors();
+      checkGlError(__FUNCTION__);
   }
 
   ~GlShader() {
@@ -79,7 +90,7 @@ public:
     handle_ = glCreateProgram();
     if (handle_ == 0)
       throw std::runtime_error("glCreateProgram fails");
-    checkGlErrors();
+    checkGlError(__FUNCTION__);
   }
 
   ~GlProgram() {
@@ -102,7 +113,7 @@ protected:
 public:
   GlTexture() {
     glGenTextures(1, &handle_);
-    checkGlErrors();
+    checkGlError(__FUNCTION__);
   }
 
   ~GlTexture() {
@@ -124,7 +135,7 @@ protected:
 public:
   GlBufferObject() {
     glGenBuffers(1, &handle_);
-    checkGlErrors();
+    checkGlError(__FUNCTION__);
   }
 
   ~GlBufferObject() {
