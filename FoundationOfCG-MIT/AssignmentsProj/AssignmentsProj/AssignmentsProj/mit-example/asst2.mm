@@ -77,6 +77,7 @@ struct ShaderState {
   GLint h_uModelViewMatrix;
   GLint h_uNormalMatrix;
   GLint h_uColor;
+    GLint h_uXCoordOffset;
 
   // Handles to vertex attributes
   GLint h_aPosition;
@@ -94,6 +95,7 @@ struct ShaderState {
     h_uModelViewMatrix = safe_glGetUniformLocation(h, "uModelViewMatrix");
     h_uNormalMatrix = safe_glGetUniformLocation(h, "uNormalMatrix");
     h_uColor = safe_glGetUniformLocation(h, "uColor");
+      h_uXCoordOffset = safe_glGetUniformLocation(h, "uXCoordOffset");
 
     // Retrieve handles to vertex attributes
     h_aPosition = safe_glGetAttribLocation(h, "aPosition");
@@ -314,11 +316,20 @@ static void drawStuff() {
     
     // draw cube
     // ==========
+    safe_glUniform1f(curSS.h_uXCoordOffset, 1.5f);
     //MVM = invEyeRbt * g_objectRbt[0];
     MVM = rigTFormToMatrix(invEyeRbt * g_objectRbt[0]);
     NMVM = normalMatrix(MVM);
     sendModelViewNormalMatrix(curSS, MVM, NMVM);
     safe_glUniform3f(curSS.h_uColor, g_objectColors[0][0], g_objectColors[0][1], g_objectColors[0][2]);
+    g_cube->draw(curSS);
+    
+    safe_glUniform1f(curSS.h_uXCoordOffset, -1.5f);
+    //MVM = invEyeRbt * g_objectRbt[0];
+    MVM = rigTFormToMatrix(invEyeRbt * g_objectRbt[0]);
+    NMVM = normalMatrix(MVM);
+    sendModelViewNormalMatrix(curSS, MVM, NMVM);
+    //safe_glUniform3f(curSS.h_uColor, g_objectColors[0][0], g_objectColors[0][1], g_objectColors[0][2]);
     g_cube->draw(curSS);
     
     // draw spere

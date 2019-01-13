@@ -3,6 +3,7 @@
 uniform mat4 uProjMatrix;
 uniform mat4 uModelViewMatrix;
 uniform mat4 uNormalMatrix;
+uniform float uXCoordOffset;
 
 in vec3 aPosition;
 in vec3 aNormal;
@@ -17,4 +18,5 @@ void main() {
   vec4 tPosition = uModelViewMatrix * vec4(aPosition, 1.0);
   vPosition = vec3(tPosition);
   gl_Position = uProjMatrix * tPosition;
+gl_Position.x += uXCoordOffset;
 }

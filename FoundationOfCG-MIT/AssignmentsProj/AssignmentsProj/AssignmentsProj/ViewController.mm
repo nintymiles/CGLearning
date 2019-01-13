@@ -76,21 +76,22 @@
     [self setupGL];
 }
 
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-
-    if ([self isViewLoaded] && ([[self view] window] == nil)) {
-        self.view = nil;
-        
-        if ([EAGLContext currentContext] == self.context) {
-            [EAGLContext setCurrentContext:nil];
-        }
-        self.context = nil;
-    }
-
-    // Dispose of any resources that can be recreated.
-}
+//No more needed for explicitly dispose these resources in a newer iOS.
+//- (void)viewDidUnload
+//{
+//    [super viewDidUnload];
+//
+//    if ([self isViewLoaded] && ([[self view] window] == nil)) {
+//        self.view = nil;
+//
+//        if ([EAGLContext currentContext] == self.context) {
+//            [EAGLContext setCurrentContext:nil];
+//        }
+//        self.context = nil;
+//    }
+//
+//    // Dispose of any resources that can be recreated.
+//}
 
 - (void)setupGL
 {

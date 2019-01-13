@@ -19,6 +19,9 @@
 		5C1A974D21E47D4E00C738A4 /* diffuse-gles3.fshader in Resources */ = {isa = PBXBuildFile; fileRef = 5C1A973E21E47D4E00C738A4 /* diffuse-gles3.fshader */; };
 		5C1A974E21E47D4E00C738A4 /* basic-gles3.vshader in Resources */ = {isa = PBXBuildFile; fileRef = 5C1A973F21E47D4E00C738A4 /* basic-gles3.vshader */; };
 		5C1A975021E47D4E00C738A4 /* asst2.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5C1A974521E47D4E00C738A4 /* asst2.mm */; };
+		5C8F249121EAD634009BE7F1 /* glsupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C8F248F21EAD633009BE7F1 /* glsupport.cpp */; };
+		5C8F249221EAD634009BE7F1 /* glsupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C8F249021EAD634009BE7F1 /* glsupport.h */; };
+		5C8F249421EAE984009BE7F1 /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 5C8F249321EAE984009BE7F1 /* readme.md */; };
 		5CE2BC0721E82521003B5B50 /* geometrymaker.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CE2BC0421E82521003B5B50 /* geometrymaker.h */; };
 		5CE2BC0821E82521003B5B50 /* matrix4.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CE2BC0521E82521003B5B50 /* matrix4.h */; };
 		5CE2BC0921E82521003B5B50 /* cvec.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CE2BC0621E82521003B5B50 /* cvec.h */; };
@@ -28,8 +31,6 @@
 		5CE2BC1221E8253E003B5B50 /* perfMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC1021E8253E003B5B50 /* perfMonitor.cpp */; };
 		5CE2BC1321E8253E003B5B50 /* perfMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC1021E8253E003B5B50 /* perfMonitor.cpp */; };
 		5CE2BC1421E8253E003B5B50 /* perfMonitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CE2BC1121E8253E003B5B50 /* perfMonitor.h */; };
-		5CF666AB21E8233000EC4084 /* glsupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CF666A721E8232F00EC4084 /* glsupport.cpp */; };
-		5CF666AC21E8233000EC4084 /* glsupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CF666A821E8233000EC4084 /* glsupport.h */; };
 		5CF666AD21E8233000EC4084 /* ppm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CF666A921E8233000EC4084 /* ppm.cpp */; };
 		5CF666AE21E8233000EC4084 /* ppm.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CF666AA21E8233000EC4084 /* ppm.h */; };
 /* End PBXBuildFile section */
@@ -65,6 +66,9 @@
 		5C1A973E21E47D4E00C738A4 /* diffuse-gles3.fshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "diffuse-gles3.fshader"; sourceTree = "<group>"; };
 		5C1A973F21E47D4E00C738A4 /* basic-gles3.vshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "basic-gles3.vshader"; sourceTree = "<group>"; };
 		5C1A974521E47D4E00C738A4 /* asst2.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = asst2.mm; sourceTree = "<group>"; };
+		5C8F248F21EAD633009BE7F1 /* glsupport.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glsupport.cpp; path = ../../../Common/glsupport.cpp; sourceTree = "<group>"; };
+		5C8F249021EAD634009BE7F1 /* glsupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glsupport.h; path = ../../../Common/glsupport.h; sourceTree = "<group>"; };
+		5C8F249321EAE984009BE7F1 /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = readme.md; path = ../../readme.md; sourceTree = "<group>"; };
 		5CE2BC0421E82521003B5B50 /* geometrymaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = geometrymaker.h; path = ../../../../BaseFramework/geometrymaker.h; sourceTree = "<group>"; };
 		5CE2BC0521E82521003B5B50 /* matrix4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = matrix4.h; path = ../../../../BaseFramework/matrix4.h; sourceTree = "<group>"; };
 		5CE2BC0621E82521003B5B50 /* cvec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cvec.h; path = ../../../../BaseFramework/cvec.h; sourceTree = "<group>"; };
@@ -74,8 +78,6 @@
 		5CE2BC1021E8253E003B5B50 /* perfMonitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = perfMonitor.cpp; path = ../../../../BaseFramework/perfMonitor/perfMonitor.cpp; sourceTree = "<group>"; };
 		5CE2BC1121E8253E003B5B50 /* perfMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = perfMonitor.h; path = ../../../../BaseFramework/perfMonitor/perfMonitor.h; sourceTree = "<group>"; };
 		5CE2BC1521E825B3003B5B50 /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = readme.md; path = ../../../readme.md; sourceTree = "<group>"; };
-		5CF666A721E8232F00EC4084 /* glsupport.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glsupport.cpp; path = ../../../../Common/gles/glsupport.cpp; sourceTree = "<group>"; };
-		5CF666A821E8233000EC4084 /* glsupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glsupport.h; path = ../../../../Common/gles/glsupport.h; sourceTree = "<group>"; };
 		5CF666A921E8233000EC4084 /* ppm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ppm.cpp; path = ../../../../Common/gles/ppm.cpp; sourceTree = "<group>"; };
 		5CF666AA21E8233000EC4084 /* ppm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ppm.h; path = ../../../../Common/gles/ppm.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -102,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				5CE2BC1521E825B3003B5B50 /* readme.md */,
+				5C8F249321EAE984009BE7F1 /* readme.md */,
 				5C1A970721E47AA800C738A4 /* AssignmentsProj */,
 				5C1A972021E47AA900C738A4 /* AssignmentsProjTests */,
 				5C1A970621E47AA800C738A4 /* Products */,
@@ -128,6 +131,8 @@
 				5CE2BC0C21E82530003B5B50 /* rigtform.h */,
 				5CE2BC1021E8253E003B5B50 /* perfMonitor.cpp */,
 				5CE2BC1121E8253E003B5B50 /* perfMonitor.h */,
+				5C8F248F21EAD633009BE7F1 /* glsupport.cpp */,
+				5C8F249021EAD634009BE7F1 /* glsupport.h */,
 				5C1A974321E47D4E00C738A4 /* mit-example */,
 				5C1A973C21E47D4E00C738A4 /* shaders */,
 				5C1A970821E47AA800C738A4 /* AppDelegate.h */,
@@ -168,8 +173,6 @@
 		5C1A974321E47D4E00C738A4 /* mit-example */ = {
 			isa = PBXGroup;
 			children = (
-				5CF666A721E8232F00EC4084 /* glsupport.cpp */,
-				5CF666A821E8233000EC4084 /* glsupport.h */,
 				5CF666A921E8233000EC4084 /* ppm.cpp */,
 				5CF666AA21E8233000EC4084 /* ppm.h */,
 				5C1A974521E47D4E00C738A4 /* asst2.mm */,
@@ -191,8 +194,8 @@
 				5CE2BC0721E82521003B5B50 /* geometrymaker.h in Headers */,
 				5CF666AE21E8233000EC4084 /* ppm.h in Headers */,
 				5CE2BC0D21E82530003B5B50 /* arcball.h in Headers */,
+				5C8F249221EAD634009BE7F1 /* glsupport.h in Headers */,
 				5CE2BC1421E8253E003B5B50 /* perfMonitor.h in Headers */,
-				5CF666AC21E8233000EC4084 /* glsupport.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,6 +286,7 @@
 				5C1A974E21E47D4E00C738A4 /* basic-gles3.vshader in Resources */,
 				5C1A974C21E47D4E00C738A4 /* solid-gles3.fshader in Resources */,
 				5C1A971221E47AA900C738A4 /* Assets.xcassets in Resources */,
+				5C8F249421EAE984009BE7F1 /* readme.md in Resources */,
 				5C1A974D21E47D4E00C738A4 /* diffuse-gles3.fshader in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -303,7 +307,7 @@
 			files = (
 				5C1A973921E47D2700C738A4 /* FileWrapper.mm in Sources */,
 				5C1A973A21E47D2700C738A4 /* ViewController.mm in Sources */,
-				5CF666AB21E8233000EC4084 /* glsupport.cpp in Sources */,
+				5C8F249121EAD634009BE7F1 /* glsupport.cpp in Sources */,
 				5CE2BC1221E8253E003B5B50 /* perfMonitor.cpp in Sources */,
 				5C1A971821E47AA900C738A4 /* main.m in Sources */,
 				5C1A973821E47D2700C738A4 /* NativeTemplate.cpp in Sources */,
