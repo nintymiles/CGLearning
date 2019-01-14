@@ -79,22 +79,6 @@
     [self setupGL];
 }
 
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    
-    if ([self isViewLoaded] && ([[self view] window] == nil)) {
-        self.view = nil;
-        
-        if ([EAGLContext currentContext] == self.context) {
-            [EAGLContext setCurrentContext:nil];
-        }
-        self.context = nil;
-    }
-    
-    // Dispose of any resources that can be recreated.
-}
-
 - (void)setupGL
 {
     [EAGLContext setCurrentContext:self.context];

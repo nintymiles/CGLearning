@@ -380,7 +380,9 @@ static void motion(const float x, const float y) {
     }
     
     if (g_mouseClickDown) {
-        g_objectRbt[0] = g_objectRbt[0] * m; // Simply right-multiply is WRONG
+        //g_objectRbt[0] = g_objectRbt[0] * m; // Simply right-multiply is WRONG
+        RigTForm auxiliaryRbt = makeMixedFrame(g_objectRbt[0], g_skyRbt);
+        g_objectRbt[0] = doQtoOwrtA(m, g_objectRbt[0], auxiliaryRbt);
     }
     
     //旋转角度的匀速累加是通过每次施加一个固定角度的变换，而以角度值累加的方式进行选择，则意味着，每次都要从初始点进行变换。
@@ -428,9 +430,9 @@ static void motion(const float x, const float y) {
 //    Quat slerpQuat = slerp(q1Quat, q2Quat, rotation_angle_alpha);
 //    //若要插值动画循环播放，每次施加在base object frame（g_slerpBaseRbt)
 //    g_objectRbt[1] = doQtoOwrtA(RigTForm(slerpQuat), g_slerpBaseRbt, aRbt);
-//    
-//    g_mouseClickX = x;
-//    g_mouseClickY = g_windowHeight - y - 1;
+    
+    g_mouseClickX = x;
+    g_mouseClickY = g_windowHeight - y - 1;
 }
 
 
@@ -575,8 +577,10 @@ void TouchEventMove( float x, float y,unsigned long touchCount )
         Cvec2 endScreenPos = Cvec2(x,g_windowHeight - y - 1); //convert from window coordnate to OpenGL window coordinate.
         Cvec2 centerScreenPos = getScreenSpaceCoord(g_objectFrameOrigin,makeProjectionMatrix(), 0.0, 0.0, g_windowWidth, g_windowHeight);
         Quat arcballQuat = arcballv2(Cvec3(centerScreenPos,0), g_arcballScreenRadius, startScreenPos, endScreenPos);
+        //ego motion
         //g_skyRbt = g_skyRbt * RigTForm(arcballQuat);
-        g_skyRbt = doQtoOwrtA(RigTForm(arcballQuat), g_skyRbt, RigTForm(arcballQuat));
+        //让camera围绕sphere转动，以保持sphere一直在视野中心,around the auxiliary frame
+        g_skyRbt = doQtoOwrtA(RigTForm(arcballQuat), g_skyRbt, g_objectRbt[1]);
 
     }
 }

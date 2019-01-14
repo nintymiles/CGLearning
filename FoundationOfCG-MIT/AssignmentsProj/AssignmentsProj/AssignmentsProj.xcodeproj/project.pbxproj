@@ -18,7 +18,7 @@
 		5C1A974C21E47D4E00C738A4 /* solid-gles3.fshader in Resources */ = {isa = PBXBuildFile; fileRef = 5C1A973D21E47D4E00C738A4 /* solid-gles3.fshader */; };
 		5C1A974D21E47D4E00C738A4 /* diffuse-gles3.fshader in Resources */ = {isa = PBXBuildFile; fileRef = 5C1A973E21E47D4E00C738A4 /* diffuse-gles3.fshader */; };
 		5C1A974E21E47D4E00C738A4 /* basic-gles3.vshader in Resources */ = {isa = PBXBuildFile; fileRef = 5C1A973F21E47D4E00C738A4 /* basic-gles3.vshader */; };
-		5C1A975021E47D4E00C738A4 /* asst2.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5C1A974521E47D4E00C738A4 /* asst2.mm */; };
+		5C1A975021E47D4E00C738A4 /* assignment2.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5C1A974521E47D4E00C738A4 /* assignment2.mm */; };
 		5C8F249121EAD634009BE7F1 /* glsupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C8F248F21EAD633009BE7F1 /* glsupport.cpp */; };
 		5C8F249221EAD634009BE7F1 /* glsupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C8F249021EAD634009BE7F1 /* glsupport.h */; };
 		5C8F249421EAE984009BE7F1 /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 5C8F249321EAE984009BE7F1 /* readme.md */; };
@@ -65,7 +65,7 @@
 		5C1A973D21E47D4E00C738A4 /* solid-gles3.fshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "solid-gles3.fshader"; sourceTree = "<group>"; };
 		5C1A973E21E47D4E00C738A4 /* diffuse-gles3.fshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "diffuse-gles3.fshader"; sourceTree = "<group>"; };
 		5C1A973F21E47D4E00C738A4 /* basic-gles3.vshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "basic-gles3.vshader"; sourceTree = "<group>"; };
-		5C1A974521E47D4E00C738A4 /* asst2.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = asst2.mm; sourceTree = "<group>"; };
+		5C1A974521E47D4E00C738A4 /* assignment2.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = assignment2.mm; sourceTree = "<group>"; };
 		5C8F248F21EAD633009BE7F1 /* glsupport.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glsupport.cpp; path = ../../../Common/glsupport.cpp; sourceTree = "<group>"; };
 		5C8F249021EAD634009BE7F1 /* glsupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glsupport.h; path = ../../../Common/glsupport.h; sourceTree = "<group>"; };
 		5C8F249321EAE984009BE7F1 /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = readme.md; path = ../../readme.md; sourceTree = "<group>"; };
@@ -173,7 +173,7 @@
 			children = (
 				5CF666A921E8233000EC4084 /* ppm.cpp */,
 				5CF666AA21E8233000EC4084 /* ppm.h */,
-				5C1A974521E47D4E00C738A4 /* asst2.mm */,
+				5C1A974521E47D4E00C738A4 /* assignment2.mm */,
 			);
 			path = "mit-example";
 			sourceTree = "<group>";
@@ -310,7 +310,7 @@
 				5C1A971821E47AA900C738A4 /* main.m in Sources */,
 				5C1A973821E47D2700C738A4 /* NativeTemplate.cpp in Sources */,
 				5CF666AD21E8233000EC4084 /* ppm.cpp in Sources */,
-				5C1A975021E47D4E00C738A4 /* asst2.mm in Sources */,
+				5C1A975021E47D4E00C738A4 /* assignment2.mm in Sources */,
 				5C1A970A21E47AA800C738A4 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
