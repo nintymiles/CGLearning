@@ -13,8 +13,10 @@ Implement moving two cubes around corresponding auxiliary frames respectively.
 
 3. Done Ex.16 of Foundation of 3D Computer Graphics (20190113)
 Use 'O' key to toggle between two cubes.
+![Alt](./Screenshots/ex.15-16.png "Ex.16 Screenshot")
 
-4. Ex.17 draw two tesellate spheres to replace cubes 
+4. Done Ex.17 draw two tesellate spheres to replace cubes (20190114)
+![Alt](./Screenshots/ex.17.png "Ex.17 Screenshot")
 
 
 
