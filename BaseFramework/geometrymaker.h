@@ -132,54 +132,55 @@ inline void getSphereVbIbLen(int slices, int stacks, int& vbLen, int& ibLen) {
 
 template<typename VtxOutIter, typename IdxOutIter>
 void makeSphere(float radius, int slices, int stacks, VtxOutIter vtxIter, IdxOutIter idxIter) {
-  using namespace std;
-  assert(slices > 1);
-  assert(stacks >= 2);
-
-  const double radPerSlice = 2 * CS175_PI / slices;
-  const double radPerStack = CS175_PI / stacks;
-
-  vector<double> longSin(slices+1), longCos(slices+1);
-  vector<double> latSin(stacks+1), latCos(stacks+1);
-  for (int i = 0; i < slices + 1; ++i) {
-    longSin[i] = sin(radPerSlice * i);
-    longCos[i] = cos(radPerSlice * i);
-  }
-  for (int i = 0; i < stacks + 1; ++i) {
-    latSin[i] = sin(radPerStack * i);
-    latCos[i] = cos(radPerStack * i);
-  }
-
-  for (int i = 0; i < slices + 1; ++i) {
-    for (int j = 0; j < stacks + 1; ++j) {
-      float x = longCos[i] * latSin[j];
-      float y = longSin[i] * latSin[j];
-      float z = latCos[j];
-
-      Cvec3f n(x, y, z);
-      Cvec3f t(-longSin[i], longCos[i], 0);
-      Cvec3f b = cross(n, t);
-
-      *vtxIter = GenericVertex(
-        x * radius, y * radius, z * radius,
-        x, y, z,
-        1.0/slices*i, 1.0/stacks*j,
-        t[0], t[1], t[2],
-        b[0], b[1], b[2]);
-      ++vtxIter;
-
-      if (i < slices && j < stacks ) {
-        *idxIter = (stacks+1) * i + j;
-        *++idxIter = (stacks+1) * i + j + 1;
-        *++idxIter = (stacks+1) * (i + 1) + j + 1;
-
-        *++idxIter = (stacks+1) * i + j;
-        *++idxIter = (stacks+1) * (i + 1) + j + 1;
-        *++idxIter = (stacks+1) * (i + 1) + j;
-        ++idxIter;
-      }
+    using namespace std;
+    assert(slices > 1);
+    assert(stacks >= 2);
+    
+    const double radPerSlice = 2 * CS175_PI / slices;
+    const double radPerStack = CS175_PI / stacks;
+    
+    vector<double> longSin(slices+1), longCos(slices+1);
+    vector<double> latSin(stacks+1), latCos(stacks+1);
+    for (int i = 0; i < slices + 1; ++i) {
+        longSin[i] = sin(radPerSlice * i);
+        longCos[i] = cos(radPerSlice * i);
     }
-  }
+    for (int i = 0; i < stacks + 1; ++i) {
+        latSin[i] = sin(radPerStack * i);
+        latCos[i] = cos(radPerStack * i);
+    }
+    
+    for (int i = 0; i < slices + 1; ++i) {
+        for (int j = 0; j < stacks + 1; ++j) {
+            float x = longCos[i] * latSin[j];
+            float y = longSin[i] * latSin[j];
+            float z = latCos[j];
+            
+            Cvec3f n(x, y, z);
+            Cvec3f t(-longSin[i], longCos[i], 0);
+            Cvec3f b = cross(n, t);
+            
+            *vtxIter = GenericVertex(
+                                     x * radius, y * radius, z * radius,
+                                     x, y, z,
+                                     1.0/slices*i, 1.0/stacks*j,
+                                     t[0], t[1], t[2],
+                                     b[0], b[1], b[2]);
+            ++vtxIter;
+            
+            //every two adjacent points in a longitude pair with two adjacent right below points.
+            if (i < slices && j < stacks ) {
+                *idxIter = (stacks+1) * i + j;
+                *++idxIter = (stacks+1) * i + j + 1;
+                *++idxIter = (stacks+1) * (i + 1) + j + 1;
+                
+                *++idxIter = (stacks+1) * i + j;
+                *++idxIter = (stacks+1) * (i + 1) + j + 1;
+                *++idxIter = (stacks+1) * (i + 1) + j;
+                ++idxIter;
+            }
+        }
+    }
 }
 
 
