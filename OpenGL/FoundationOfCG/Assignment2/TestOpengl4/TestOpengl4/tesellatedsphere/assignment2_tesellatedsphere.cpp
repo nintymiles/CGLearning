@@ -50,7 +50,7 @@ static bool g_mouseClickDown = false;    // is the mouse button pressed
 static bool g_mouseLClickButton, g_mouseRClickButton, g_mouseMClickButton;
 static int g_mouseClickX, g_mouseClickY; // coordinates for mouse click event
 static int g_activeShader = 1;
-static int g_activeCube = 1;
+static int g_activeCube = 0;
 
 static GLFWwindow* window;
 
@@ -251,11 +251,10 @@ struct Geometry {
   }
 };
 
+#pragma mark - Scene Variables
 
 // Vertex buffer and index buffer associated with the ground and cube geometry
 static shared_ptr<Geometry> g_ground, g_cube,g_sphere;
-
-// --------- Scene
 
 static const Cvec3 g_light1(2.0, 3.0, 14.0), g_light2(-2, -3.0, -5.0);  // define two lights positions in world space
 static Matrix4 g_skyRbt = Matrix4::makeTranslation(Cvec3(0.0, 0.25, 4.0));
@@ -271,6 +270,8 @@ static Matrix4 g_auxiliaryRbt;
 //--------------------------------------------------------------------------------
 GLfloat cursor_x        = 0.f;
 GLfloat cursor_y        = 0.f;
+
+#pragma mark - Geometry Helper Function
 
 static void initGround() {
   // A x-z plane at y = g_groundY of dimension [-g_groundSize, g_groundSize]^2
@@ -436,10 +437,15 @@ static void motion(const float x, const float y) {
           //g_objectRbt[0] *= m; // Simply right-multiply is WRONG
           g_auxiliaryRbt = makeMixedFrame(g_objectRbt[0], g_skyRbt);
           g_objectRbt[0] = doQtoOwrtA(m, g_objectRbt[0], g_auxiliaryRbt);
-      }else{
+      
+      }else if(g_activeCube == 1){
           g_auxiliaryRbt = makeMixedFrame(g_objectRbt[1], g_skyRbt);
           g_objectRbt[1] = doQtoOwrtA(m, g_objectRbt[1], g_auxiliaryRbt);
+      }else{
+          Matrix4 invMouseMotionMatrix = inv(m);
+          g_skyRbt = doQtoOwrtA(m, g_skyRbt, g_skyRbt);
       }
+    
   }
 
   g_mouseClickX = x;
@@ -502,7 +508,9 @@ static void keyboard(GLFWwindow* window, int key, int scancode, int action, int 
                 writePpmScreenshot(g_windowWidth, g_windowHeight, "out.ppm");
                 break;
             case GLFW_KEY_O:
-                g_activeCube ^= 1;
+                g_activeCube++;
+                if(g_activeCube > 2)
+                    g_activeCube=0;
                 break;
             case GLFW_KEY_F:
                 g_activeShader ^= 1;
