@@ -111,9 +111,9 @@ public:
         return true;
     }
     
-    // ! precedes ==
+    
     bool operator != (const Cvec& v) {
-        return !(Cvec(*this) == v);
+        return !(Cvec(*this) == v); // ! precedes ==
     }
 
   Cvec operator + (const Cvec& v) const {
