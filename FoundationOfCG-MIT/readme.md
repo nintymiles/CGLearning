@@ -10,6 +10,7 @@
 - Pay attention to window coordinates (input from touch event/mouse),which need to be converted to OpenGL window coordinates when using in OpenGL context. -2019/01/12
 
 #To do list
+0. Migrate assignment 2 (helloworld3d) from Desktop OpenGL to OpenGL ES setting
 1. how to draw half translucent objects in OpenGL? done(20190111)
 
 	Just enable blend Fragment Operation and initialize a RGBA framebuffer

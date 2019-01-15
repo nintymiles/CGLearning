@@ -54,6 +54,32 @@ inline double calcSphereScreenZ(const Cvec3& centerScreenPos,const double onScre
 }
 
 //--------------------------------------------------------------------------------
+//  实现trackball接口/Implement Trackball Interface
+//--------------------------------------------------------------------------------
+inline Quat trackball(const Cvec3& centerScreenPos,const double onScreenRadius,const Cvec2& startScreenPos,const Cvec2& endScreenPos){
+    //compute z coordinates of selected 3d points on sphere
+    double startScreenZ = calcSphereScreenZ(centerScreenPos, onScreenRadius, startScreenPos);
+    double endScreenZ = calcSphereScreenZ(centerScreenPos, onScreenRadius, endScreenPos);
+    
+    //compute sphere center point to start/end point vectors,then normalize them
+    Cvec3 startVector = normalize(Cvec3(startScreenPos,startScreenZ) - centerScreenPos);
+    Cvec3 endVector = normalize(Cvec3(endScreenPos,endScreenZ) - centerScreenPos);
+    
+    if(startVector != Cvec3(0) && endVector!=Cvec3(0) && startVector != endVector){
+        //Phi angle between startVector and endVector,using arc cosine function thorough dot production value of start/end vector;
+        double angle = acos(dot(startVector,endVector));
+        
+        Cvec3 axisVector = normalize(cross(startVector,endVector));
+        
+        //construct trackball quat by definition
+        Quat trackball = Quat(cos(0.5 * angle), axisVector * sin(0.5 * angle));
+        return trackball;
+    }else{
+        return Quat::identity();
+    }
+}
+
+//--------------------------------------------------------------------------------
 //  实现arcball接口/Implement Arcball Interface 
 //--------------------------------------------------------------------------------
 inline Quat arcball(const Cvec3& centerScreenPos,const double onScreenRadius,const Cvec2& startScreenPos,const Cvec2& endScreenPos){
@@ -64,18 +90,31 @@ inline Quat arcball(const Cvec3& centerScreenPos,const double onScreenRadius,con
     //compute sphere center point to start/end point vectors,then normalize them
     Cvec3 startVector = normalize(Cvec3(startScreenPos,startScreenZ) - centerScreenPos);
     Cvec3 endVector = normalize(Cvec3(endScreenPos,endScreenZ) - centerScreenPos);
-    //Phi angle between startVector and endVector,using arc cosine function thorough dot production value of start/end vector;
-    double angle = acos(dot(startVector,endVector));
-    if(angle == NAN)
+
+    // incorrect usage for Nan
+    //    double angle = acos(dot(startVector,endVector));
+    //    if(angle == NAN)
+    //        return Quat::identity();
+   
+    if(startVector != Cvec3(0) && endVector!=Cvec3(0) && startVector != endVector){
+        //Phi angle between startVector and endVector,using arc cosine function thorough dot production value of start/end vector;
+        double angle = acos(dot(startVector,endVector));
+        
+        
+         //rotation axis, first compute cross product of start/end vectors(not necessarily normalized vector),then normalization
+        Cvec3 axisVector = normalize(cross(startVector,endVector));
+        //construct arcball quat by definition
+        Quat arcball = Quat(cos(angle), axisVector * sin(angle));
+        return arcball;
+    }else{
         return Quat::identity();
-    //rotation axis, first compute cross product of start/end vectors(not necessarily normalized vector),then normalization
-    Cvec3 axisVector = normalize(cross(startVector,endVector));
+    }
     
-    //construct arcball quat by definition
-    Quat arcball = Quat(cos(2 * angle), axisVector * sin(2*angle));
-    return arcball;
 }
 
+//--------------------------------------------------------------------------------
+//  arcball V2 - compute final quat based on arcball definition deriative
+//--------------------------------------------------------------------------------
 inline Quat arcballv2(const Cvec3& centerScreenPos,const double onScreenRadius,const Cvec2& startScreenPos,const Cvec2& endScreenPos){
     //compute z coordinates of selected 3d points on sphere
     double startScreenZ = calcSphereScreenZ(centerScreenPos, onScreenRadius, startScreenPos);
@@ -85,11 +124,15 @@ inline Quat arcballv2(const Cvec3& centerScreenPos,const double onScreenRadius,c
     Cvec3 startVector = normalize(Cvec3(startScreenPos,startScreenZ) - centerScreenPos);
     Cvec3 endVector = normalize(Cvec3(endScreenPos,endScreenZ) - centerScreenPos);
     
-    //construct two quats based start/end vectors
-    Quat startInvQuat = inv(Quat(0, startVector));
-    Quat endQuat = Quat(0,endVector);
-    
-    return endQuat * startInvQuat;
+    if(startVector != Cvec3(0) && endVector!=Cvec3(0) && startVector != endVector){
+        //construct two quats based start/end vectors
+        Quat startInvQuat = inv(Quat(0, startVector));
+        Quat endQuat = Quat(0,endVector);
+        
+        return endQuat * startInvQuat;
+    }else{
+        return Quat::identity();
+    }
 }
 
 #endif

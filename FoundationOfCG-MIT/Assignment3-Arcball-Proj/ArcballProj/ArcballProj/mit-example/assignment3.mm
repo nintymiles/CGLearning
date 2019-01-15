@@ -576,7 +576,7 @@ void TouchEventMove( float x, float y,unsigned long touchCount )
         Cvec2 startScreenPos = Cvec2(g_mouseClickX,g_mouseClickY);
         Cvec2 endScreenPos = Cvec2(x,g_windowHeight - y - 1); //convert from window coordnate to OpenGL window coordinate.
         Cvec2 centerScreenPos = getScreenSpaceCoord(g_objectFrameOrigin,makeProjectionMatrix(), 0.0, 0.0, g_windowWidth, g_windowHeight);
-        Quat arcballQuat = arcballv2(Cvec3(centerScreenPos,0), g_arcballScreenRadius, startScreenPos, endScreenPos);
+        Quat arcballQuat = arcball(Cvec3(centerScreenPos,0), g_arcballScreenRadius, startScreenPos, endScreenPos);
         //ego motion
         //g_skyRbt = g_skyRbt * RigTForm(arcballQuat);
         //让camera围绕sphere转动，以保持sphere一直在视野中心,around the auxiliary frame

@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../../BaseFramework/quat/arcball.h"
-            timestampString = "569170251.899827"
+            timestampString = "569233390.58604"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "62"
-            endingLineNumber = "62"
+            startingLineNumber = "88"
+            endingLineNumber = "88"
             landmarkName = "arcball(const Cvec3&amp; centerScreenPos,const double onScreenRadius,const Cvec2&amp; startScreenPos,const Cvec2&amp; endScreenPos)"
             landmarkType = "9">
          </BreakpointContent>
@@ -42,7 +42,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ArcballProj/mit-example/assignment3.mm"
-            timestampString = "569170251.899897"
+            timestampString = "569233390.586116"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "537"
@@ -58,13 +58,61 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../../BaseFramework/quat/arcball.h"
-            timestampString = "569170251.900261"
+            timestampString = "569233390.586174"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "45"
             endingLineNumber = "45"
             landmarkName = "getScreenToEyeScale(double z, double frustFovY, int screenHeight)"
             landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../../BaseFramework/cvec.h"
+            timestampString = "569233390.586229"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "146"
+            endingLineNumber = "146"
+            landmarkName = "cross(const Cvec&lt;T,3&gt;&amp; a, const Cvec&lt;T,3&gt;&amp; b)"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Cvec&lt;float, 3&gt; cross&lt;float&gt;(Cvec&lt;float, 3&gt; const&amp;, Cvec&lt;float, 3&gt; const&amp;)"
+                  moduleName = "ArcballProj"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/afighter/Documents/Github_Projects/CGLearning/BaseFramework/cvec.h"
+                  timestampString = "569231683.8380949"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "150"
+                  endingLineNumber = "150"
+                  offsetFromSymbolStart = "20">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Cvec&lt;double, 3&gt; cross&lt;double&gt;(Cvec&lt;double, 3&gt; const&amp;, Cvec&lt;double, 3&gt; const&amp;)"
+                  moduleName = "ArcballProj"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/afighter/Documents/Github_Projects/CGLearning/BaseFramework/cvec.h"
+                  timestampString = "569231683.8397911"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "150"
+                  endingLineNumber = "150"
+                  offsetFromSymbolStart = "20">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
