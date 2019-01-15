@@ -102,6 +102,19 @@ public:
     }
     return *this;
   }
+    
+    bool operator == (const Cvec& v) {
+        for (int i = 0; i < n; ++i) {
+            if(d_[i] != v[i])
+                return false;
+        }
+        return true;
+    }
+    
+    // ! precedes ==
+    bool operator != (const Cvec& v) {
+        return !(Cvec(*this) == v);
+    }
 
   Cvec operator + (const Cvec& v) const {
     return Cvec(*this) += v;
