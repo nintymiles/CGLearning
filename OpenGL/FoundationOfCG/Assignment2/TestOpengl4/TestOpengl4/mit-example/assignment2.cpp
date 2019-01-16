@@ -99,8 +99,8 @@ struct ShaderState {
 static const int g_numShaders = 2;
 
 static const char * const g_shaderFiles[g_numShaders][2] = {
-  {"/Users/afighter/Documents/Github_Projects/CGLearning/OpenGL/FoundationOfCG/Assignment2/TestOpengl4/TestOpengl4/shaders/basic-gl3.vshader", "/Users/afighter/Documents/Github_Projects/CGLearning/OpenGL/FoundationOfCG/Assignment2/TestOpengl4/TestOpengl4/shaders/solid-gl3.fshader"},
-  {"/Users/afighter/Documents/Github_Projects/CGLearning/OpenGL/FoundationOfCG/Assignment2/TestOpengl4/TestOpengl4/shaders/basic-gl3.vshader", "/Users/afighter/Documents/Github_Projects/CGLearning/OpenGL/FoundationOfCG/Assignment2/TestOpengl4/TestOpengl4/shaders/diffuse-gl3.fshader"}
+  {"./shaders/basic-gl3.vshader", "./shaders/solid-gl3.fshader"},
+  {"./shaders/basic-gl3.vshader", "./shaders/diffuse-gl3.fshader"}
 };
 
 const char* basicVert = GLSL

@@ -12,6 +12,9 @@
 		5C779FC821EF23FB0066F161 /* solid-gl3.fshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C1B0E4821DB1E86005C440E /* solid-gl3.fshader */; };
 		5C779FC921EF23FB0066F161 /* diffuse-gl3.fshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C1B0E4A21DB1E86005C440E /* diffuse-gl3.fshader */; };
 		5C779FCA21EF23FB0066F161 /* basic-gl3.vshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C1B0E4D21DB1E86005C440E /* basic-gl3.vshader */; };
+		5C779FE021EF268F0066F161 /* solid-gl3.fshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C1B0E4821DB1E86005C440E /* solid-gl3.fshader */; };
+		5C779FE121EF268F0066F161 /* diffuse-gl3.fshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C1B0E4A21DB1E86005C440E /* diffuse-gl3.fshader */; };
+		5C779FE221EF268F0066F161 /* basic-gl3.vshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C1B0E4D21DB1E86005C440E /* basic-gl3.vshader */; };
 		5C950D0221DCAA1B00C536A0 /* libGLEW.2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C950D0121DCAA1A00C536A0 /* libGLEW.2.1.0.dylib */; };
 		5C96C94E21EA10EC00223694 /* glsupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C96C94C21EA10EC00223694 /* glsupport.cpp */; };
 		5CA9E4B221D9A52800F1BDC3 /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CA9E4B121D9A52800F1BDC3 /* libglfw3.a */; };
@@ -37,12 +40,15 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		5CD4E2E721D8D59800DBFCE3 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
+			buildActionMask = 12;
+			dstPath = ./shaders;
+			dstSubfolderSpec = 16;
 			files = (
+				5C779FE021EF268F0066F161 /* solid-gl3.fshader in CopyFiles */,
+				5C779FE121EF268F0066F161 /* diffuse-gl3.fshader in CopyFiles */,
+				5C779FE221EF268F0066F161 /* basic-gl3.vshader in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		5CFAFDD221EC2AD0000803C1 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
