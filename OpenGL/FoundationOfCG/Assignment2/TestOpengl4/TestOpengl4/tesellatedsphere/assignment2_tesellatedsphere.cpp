@@ -10,6 +10,8 @@
 #include <string>
 #include <memory>
 #include <stdexcept>
+#include <dirent.h>
+
 
 //--------------------------------------------------------------------------------
 //  GLEW的作用就是将合适版本的OpenGL版本对应的头文件引入，以方便调用对应的OpenGL功能。若不想使用glew
@@ -99,8 +101,8 @@ struct ShaderState {
 static const int g_numShaders = 2;
 
 static const char * const g_shaderFiles[g_numShaders][2] = {
-  {"/Users/afighter/Documents/Github_Projects/CGLearning/OpenGL/FoundationOfCG/Assignment2/TestOpengl4/TestOpengl4/shaders/basic-gl3.vshader", "/Users/afighter/Documents/Github_Projects/CGLearning/OpenGL/FoundationOfCG/Assignment2/TestOpengl4/TestOpengl4/shaders/solid-gl3.fshader"},
-  {"/Users/afighter/Documents/Github_Projects/CGLearning/OpenGL/FoundationOfCG/Assignment2/TestOpengl4/TestOpengl4/shaders/basic-gl3.vshader", "/Users/afighter/Documents/Github_Projects/CGLearning/OpenGL/FoundationOfCG/Assignment2/TestOpengl4/TestOpengl4/shaders/diffuse-gl3.fshader"}
+  {"./shaders/basic-gl3.vshader", "./shaders/solid-gl3.fshader"},
+  {"./shaders/basic-gl3.vshader", "./shaders/diffuse-gl3.fshader"}
 };
 
 const char* basicVert = GLSL
@@ -637,6 +639,19 @@ int main(int argc, char * argv[]) {
       initGLState();
       initGeometry();
       initShaders();
+      
+//      // open current directory:
+//      unique_ptr<DIR> pDir(opendir("."));
+//
+//      // process each directory entry:
+//
+//      struct dirent *dp;
+//      while ((dp = readdir(pDir.get())) != nullptr) {
+//
+//          string filename(dp->d_name);
+//
+//          cout << "process " << filename << endl;
+//      }
       
       glfwSetWindowRefreshCallback(window, displayWindow);
       
