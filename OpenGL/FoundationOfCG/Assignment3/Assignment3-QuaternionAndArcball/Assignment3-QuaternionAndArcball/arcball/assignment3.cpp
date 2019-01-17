@@ -24,7 +24,10 @@
 
 #include "cvec.h"
 #include "matrix4.h"
+#include "quat.h"
+#include "rigtform.h"
 #include "geometrymaker.h"
+#include "arcball.h"
 #include "ppm.h"
 #include "glsupport.h"
 
@@ -259,11 +262,15 @@ struct Geometry {
 static shared_ptr<Geometry> g_ground, g_cube,g_sphere;
 
 static const Cvec3 g_light1(2.0, 3.0, 14.0), g_light2(-2, -3.0, -5.0);  // define two lights positions in world space
-static Matrix4 g_skyRbt = Matrix4::makeTranslation(Cvec3(0.0, 0.25, 4.0));
+static RigTForm g_skyRbt = RigTForm::makeTranslation(0.0, 0.25, 4.0);
 //初始tramsformation，将object frame的原点保持不动，每个cube使用一个object matrix。由于在shader中使用了offset，故此处对象帧的起点都为原点。
-static Matrix4 g_objectRbt[3] = {Matrix4::makeTranslation(Cvec3(0,0,0)),Matrix4::makeTranslation(Cvec3(0,0,0)),Matrix4::makeTranslation(Cvec3(0,0,0))};
+static RigTForm g_objectRbt[3] = {RigTForm(Cvec3(0,0,0)),RigTForm(Cvec3(0,0,0)),RigTForm(Cvec3(0,0,0))};
 static Cvec3f g_objectColors[3] = {Cvec3f(1, 0, 0),Cvec3f(0, 0, 1),Cvec3f(0.5, 0.5, 0)};
-static Matrix4 g_auxiliaryRbt;
+static RigTForm g_auxiliaryRbt;
+
+static const float g_sphereRaidusScreenRatio = 0.45;
+static float g_arcballScale;
+static float g_arcballScreenRadius = g_sphereRaidusScreenRatio * min(g_windowWidth,g_windowHeight);
 
 ///////////////// END OF G L O B A L S //////////////////////////////////////////////////
 
@@ -308,7 +315,7 @@ static void initSphere() {
     vector<VertexPN> vtx(vbLen);
     vector<unsigned short> idx(ibLen);
     
-    makeSphere(2, slices, stacks, vtx.begin(), idx.begin());
+    makeSphere(1, slices, stacks, vtx.begin(), idx.begin());
     g_sphere.reset(new Geometry(&vtx[0], &idx[0], vbLen, ibLen));
 }
 
@@ -345,6 +352,17 @@ static Matrix4 makeProjectionMatrix() {
            g_frustNear, g_frustFar);
 }
 
+//--------------------------------------------------------------------------------
+//  compute screen to eye scale for object frame origin in eye frame
+//--------------------------------------------------------------------------------
+static float computeArcballScale(const Cvec4 objectRbtOrigin){
+    float screenToEyeScale;
+    double zCoord = objectRbtOrigin[2];
+    screenToEyeScale = getScreenToEyeScale(zCoord, g_frustFovY, g_windowHeight);
+    
+    return screenToEyeScale;
+}
+
 static void drawStuff() {
     // short hand for current shader state
     const ShaderState& curSS = *g_shaderStates[g_activeShader];
@@ -354,8 +372,8 @@ static void drawStuff() {
     sendProjectionMatrix(curSS, projmat);
     
     // use the skyRbt as the eyeRbt
-    const Matrix4 eyeRbt = g_skyRbt;
-    const Matrix4 invEyeRbt = inv(eyeRbt);
+    const RigTForm eyeRbt = g_skyRbt;
+    const RigTForm invEyeRbt = inv(eyeRbt);
     
     const Cvec3 eyeLight1 = Cvec3(invEyeRbt * Cvec4(g_light1, 1)); // g_light1 position in eye coordinates
     const Cvec3 eyeLight2 = Cvec3(invEyeRbt * Cvec4(g_light2, 1)); // g_light2 position in eye coordinates
@@ -366,8 +384,8 @@ static void drawStuff() {
     // ===========
     //
     safe_glUniform1f(curSS.h_uXCoordOffset, 0.f);
-    const Matrix4 groundRbt = Matrix4();  // identity
-    Matrix4 MVM = invEyeRbt * groundRbt;
+    const RigTForm groundRbt = RigTForm::identity();  // identity
+    Matrix4 MVM = rigTFormToMatrix(invEyeRbt * groundRbt);
     Matrix4 NMVM = normalMatrix(MVM);
     sendModelViewNormalMatrix(curSS, MVM, NMVM);
     safe_glUniform3f(curSS.h_uColor, 0.1, 0.95, 0.1); // set color
@@ -376,22 +394,34 @@ static void drawStuff() {
     // draw cubes
     // ==========
     safe_glUniform1f(curSS.h_uXCoordOffset, -1.5f);
-    MVM = invEyeRbt * g_objectRbt[0];
+    RigTForm mvmRbt = invEyeRbt * g_objectRbt[0];
+    MVM = rigTFormToMatrix(mvmRbt);
     NMVM = normalMatrix(MVM);
     sendModelViewNormalMatrix(curSS, MVM, NMVM);
     safe_glUniform3f(curSS.h_uColor, g_objectColors[0][0], g_objectColors[0][1], g_objectColors[0][2]);
     g_cube->draw(curSS);
+    if(g_activeCube == 0){
+        g_arcballScale = computeArcballScale(Cvec4(mvmRbt.getTranslation(),0));
+    }
     
     safe_glUniform1f(curSS.h_uXCoordOffset, 1.5f);
-    MVM = invEyeRbt * g_objectRbt[1];
+    mvmRbt = invEyeRbt * g_objectRbt[1];
+    MVM = rigTFormToMatrix(mvmRbt);
     NMVM = normalMatrix(MVM);
     sendModelViewNormalMatrix(curSS, MVM, NMVM);
     safe_glUniform3f(curSS.h_uColor, g_objectColors[1][0], g_objectColors[1][1], g_objectColors[1][2]);
     g_cube->draw(curSS);
+    if(g_activeCube == 1){
+        g_arcballScale = computeArcballScale(Cvec4(mvmRbt.getTranslation(),0));
+    }
     
     // draw sphere
+    //initSphere(); //the raidus of sphere changed constantly,but calling this method frequetly is not effective
     safe_glUniform1f(curSS.h_uXCoordOffset, 0.f);
-    MVM = invEyeRbt * g_objectRbt[2];
+    float screenRadiusScale = g_arcballScreenRadius*g_arcballScale;
+    Matrix4 scaleMatrix = Matrix4::makeScale(Cvec3(screenRadiusScale,screenRadiusScale,screenRadiusScale));
+    mvmRbt = invEyeRbt * g_objectRbt[2];
+    MVM = rigTFormToMatrix(mvmRbt) * scaleMatrix;
     NMVM = normalMatrix(MVM);
     sendModelViewNormalMatrix(curSS, MVM, NMVM);
     safe_glUniform3f(curSS.h_uColor, g_objectColors[2][0], g_objectColors[2][1], g_objectColors[2][2]);
@@ -420,25 +450,33 @@ static void reshape(GLFWwindow* window,const int w, const int h) {
   cerr << "Size of window is now " << w << "x" << h << endl;
   updateFrustFovY();
   //glutPostRedisplay();
+    g_arcballScreenRadius = g_sphereRaidusScreenRatio * min(g_windowWidth,g_windowHeight);
 }
 
 static void displayWindow(GLFWwindow* window){
     display();
 }
 
+
 static void motion(const float x, const float y) {
+    Cvec2 startScreenPos = Cvec2(g_mouseClickX,g_mouseClickY);
+    Cvec2 endScreenPos = Cvec2(x,g_windowHeight - y - 1); //convert from window coordnate to OpenGL window coordinate.
+    Cvec2 centerScreenPos = getScreenSpaceCoord(g_objectRbt[0].getTranslation(),makeProjectionMatrix(), 0.0, 0.0, g_windowWidth, g_windowHeight);
+    Quat arcballQuat = arcball(Cvec3(centerScreenPos,0), g_arcballScreenRadius, startScreenPos, endScreenPos);
+    
   const double dx = x - g_mouseClickX;
   const double dy = g_windowHeight - y - 1 - g_mouseClickY;
 
-  Matrix4 m;
+  RigTForm m;
   if (g_mouseLClickButton && !g_mouseRClickButton) { // left button down?
-    m = Matrix4::makeXRotation(-dy) * Matrix4::makeYRotation(dx);
+    m = RigTForm::makeXRotation(-dy) * RigTForm::makeYRotation(dx);
+      //m = RigTForm(arcballQuat);
   }
   else if (g_mouseRClickButton && !g_mouseLClickButton) { // right button down?
-    m = Matrix4::makeTranslation(Cvec3(dx, dy, 0) * 0.01);
+    m = RigTForm(Cvec3(dx, dy, 0) * 0.01);
   }
   else if (g_mouseMClickButton || (g_mouseLClickButton && g_mouseRClickButton)) {  // middle or (left and right) button down?
-    m = Matrix4::makeTranslation(Cvec3(0, 0, -dy) * 0.01);
+    m = RigTForm(Cvec3(0, 0, -dy) * 0.01);
   }
 
     
@@ -452,7 +490,7 @@ static void motion(const float x, const float y) {
           g_auxiliaryRbt = makeMixedFrame(g_objectRbt[1], g_skyRbt);
           g_objectRbt[1] = doQtoOwrtA(m, g_objectRbt[1], g_auxiliaryRbt);
       }else{
-          Matrix4 invMouseMotionMatrix = inv(m);
+          RigTForm invMouseMotionMatrix = inv(m);
           g_skyRbt = doQtoOwrtA(m, g_skyRbt, g_skyRbt);
       }
     

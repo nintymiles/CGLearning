@@ -6,18 +6,20 @@
 
 
 ## To Do List
+- Using arcball interface to manuplate cubes rotation around the mixed auxiliary frame. (Done 20190117)
+- draw cubes and spheres using RigTForm and Quaternion style instead of the matrix4 style. (Done Ex.21 20190117)
 
-4. Done Ex.17 draw two tesellate spheres to replace cubes (20190114)
+- Done Ex.17 draw two tesellate spheres to replace cubes (20190114)
 ![Alt](./Screenshots/ex.17.png "Ex.17 Screenshot")
 
-3. Done Ex.16 of Foundation of 3D Computer Graphics (20190113)
+- Done Ex.16 of Foundation of 3D Computer Graphics (20190113)
 Use 'O' key to toggle between two cubes.
 ![Alt](./Screenshots/ex.15-16.png "Ex.16 Screenshot")
 
-2. Done Ex.15 of Foundation of 3D Computer Graphics (20190113)
+- Done Ex.15 of Foundation of 3D Computer Graphics (20190113)
 Implement moving two cubes around corresponding auxiliary frames respectively.
 
-1. Done making basic enviroment work and draw two cubes by using uniform coordinate offset variable (20190112) 
+- Done making basic enviroment work and draw two cubes by using uniform coordinate offset variable (20190112) 
 
 
 

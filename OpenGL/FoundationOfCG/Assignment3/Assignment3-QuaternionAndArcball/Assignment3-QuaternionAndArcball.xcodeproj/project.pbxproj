@@ -38,6 +38,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5C2BB5A621F02D96000F6BDC /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = readme.md; path = ../../../readme.md; sourceTree = "<group>"; };
 		5CDA257D21EF72AD00F2A6D1 /* Assignment3-QuaternionAndArcball */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Assignment3-QuaternionAndArcball"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CDA259B21EF735C00F2A6D1 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		5CDA259D21EF736100F2A6D1 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -83,6 +84,7 @@
 		5CDA257421EF72AD00F2A6D1 = {
 			isa = PBXGroup;
 			children = (
+				5C2BB5A621F02D96000F6BDC /* readme.md */,
 				5CDA257F21EF72AD00F2A6D1 /* Assignment3-QuaternionAndArcball */,
 				5CDA257E21EF72AD00F2A6D1 /* Products */,
 				5CDA259A21EF735C00F2A6D1 /* Frameworks */,
