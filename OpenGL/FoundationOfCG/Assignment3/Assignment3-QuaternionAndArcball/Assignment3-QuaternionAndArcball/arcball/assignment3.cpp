@@ -271,6 +271,7 @@ static RigTForm g_auxiliaryRbt;
 static const float g_sphereRaidusScreenRatio = 0.45;
 static float g_arcballScale;
 static float g_arcballScreenRadius = g_sphereRaidusScreenRatio * min(g_windowWidth,g_windowHeight);
+static bool g_arcballUpdateFlag = true;
 
 ///////////////// END OF G L O B A L S //////////////////////////////////////////////////
 
@@ -401,7 +402,8 @@ static void drawStuff() {
     safe_glUniform3f(curSS.h_uColor, g_objectColors[0][0], g_objectColors[0][1], g_objectColors[0][2]);
     g_cube->draw(curSS);
     if(g_activeCube == 0){
-        g_arcballScale = computeArcballScale(Cvec4(mvmRbt.getTranslation(),0));
+        if(g_arcballUpdateFlag)
+            g_arcballScale = computeArcballScale(Cvec4(mvmRbt.getTranslation(),0));
     }
     
     safe_glUniform1f(curSS.h_uXCoordOffset, 1.5f);
@@ -412,7 +414,8 @@ static void drawStuff() {
     safe_glUniform3f(curSS.h_uColor, g_objectColors[1][0], g_objectColors[1][1], g_objectColors[1][2]);
     g_cube->draw(curSS);
     if(g_activeCube == 1){
-        g_arcballScale = computeArcballScale(Cvec4(mvmRbt.getTranslation(),0));
+        if(g_arcballUpdateFlag)
+            g_arcballScale = computeArcballScale(Cvec4(mvmRbt.getTranslation(),0));
     }
     
     // draw sphere
@@ -467,16 +470,19 @@ static void motion(const float x, const float y) {
   const double dx = x - g_mouseClickX;
   const double dy = g_windowHeight - y - 1 - g_mouseClickY;
 
+    g_arcballUpdateFlag = true;
+    
   RigTForm m;
   if (g_mouseLClickButton && !g_mouseRClickButton) { // left button down?
-    m = RigTForm::makeXRotation(-dy) * RigTForm::makeYRotation(dx);
-      //m = RigTForm(arcballQuat);
+//    m = RigTForm::makeXRotation(-dy) * RigTForm::makeYRotation(dx);
+      m = RigTForm(arcballQuat);
   }
   else if (g_mouseRClickButton && !g_mouseLClickButton) { // right button down?
-    m = RigTForm(Cvec3(dx, dy, 0) * 0.01);
+    m = RigTForm(Cvec3(dx, dy, 0) * g_arcballScale/**0.01*/);
   }
   else if (g_mouseMClickButton || (g_mouseLClickButton && g_mouseRClickButton)) {  // middle or (left and right) button down?
-    m = RigTForm(Cvec3(0, 0, -dy) * 0.01);
+    m = RigTForm(Cvec3(0, 0, -dy) * g_arcballScale /**0.01*/);
+      g_arcballUpdateFlag = false;
   }
 
     

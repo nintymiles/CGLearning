@@ -199,6 +199,7 @@ public:
     return r;
   }
 
+    //example code doesn't provide supports for aspect ratio less than 1 to get maximal  vertical FOV
   static Matrix4 makeProjection(const double fovy, const double aspectRatio, const double zNear, const double zFar) {
     Matrix4 r(0);
     const double ang = fovy * 0.5 * CS175_PI/180;
