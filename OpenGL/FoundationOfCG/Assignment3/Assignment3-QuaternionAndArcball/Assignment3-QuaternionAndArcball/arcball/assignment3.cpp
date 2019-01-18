@@ -714,12 +714,14 @@ int main(int argc, char * argv[]) {
       while( !glfwWindowShouldClose(window) ){
           display();
           perfMonitor.Update(fps);
-          cout << "Current FPS at " << glfwGetTime() << " is " << fps << endl;
+          cout << "Current FPS at timeinterval:" << glfwGetTime() << " is " << fps << endl;
           
           motion(cursor_x, cursor_y);
           
           glfwSwapBuffers( window );
-          glfwPollEvents();
+          
+          //glfwPollEvents();
+          glfwWaitEvents(); //if window is put in background,then didn't return immediatetly until at least one available window event is call.
       }
       
       
