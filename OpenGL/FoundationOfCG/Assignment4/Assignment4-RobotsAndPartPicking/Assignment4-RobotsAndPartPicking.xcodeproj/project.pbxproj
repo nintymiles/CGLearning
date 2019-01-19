@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5CA6586921F0CA790087B7F8 /* scenegraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CA6586121F0CA790087B7F8 /* scenegraph.cpp */; };
+		5CA6586A21F0CA790087B7F8 /* asst4-snippets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CA6586321F0CA790087B7F8 /* asst4-snippets.cpp */; };
+		5CA6586B21F0CA790087B7F8 /* picker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CA6586421F0CA790087B7F8 /* picker.cpp */; };
 		5CDA259421EF72CB00F2A6D1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CDA259321EF72CB00F2A6D1 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +26,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5CA6586121F0CA790087B7F8 /* scenegraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scenegraph.cpp; sourceTree = "<group>"; };
+		5CA6586221F0CA790087B7F8 /* drawer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = drawer.h; sourceTree = "<group>"; };
+		5CA6586321F0CA790087B7F8 /* asst4-snippets.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "asst4-snippets.cpp"; sourceTree = "<group>"; };
+		5CA6586421F0CA790087B7F8 /* picker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = picker.cpp; sourceTree = "<group>"; };
+		5CA6586521F0CA790087B7F8 /* asstcommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asstcommon.h; sourceTree = "<group>"; };
+		5CA6586621F0CA790087B7F8 /* picker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = picker.h; sourceTree = "<group>"; };
+		5CA6586821F0CA790087B7F8 /* scenegraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scenegraph.h; sourceTree = "<group>"; };
+		5CA6586D21F0CA940087B7F8 /* pick-gl3.fshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "pick-gl3.fshader"; sourceTree = "<group>"; };
+		5CA6586E21F0CA940087B7F8 /* pick-gl2.fshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "pick-gl2.fshader"; sourceTree = "<group>"; };
 		5CDA259021EF72CB00F2A6D1 /* Assignment4-RobotsAndPartPicking */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Assignment4-RobotsAndPartPicking"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CDA259321EF72CB00F2A6D1 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -38,6 +50,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5CA6586021F0CA610087B7F8 /* RobotsAndPartPicking */ = {
+			isa = PBXGroup;
+			children = (
+				5CA6586C21F0CA940087B7F8 /* shaders */,
+				5CA6586321F0CA790087B7F8 /* asst4-snippets.cpp */,
+				5CA6586521F0CA790087B7F8 /* asstcommon.h */,
+				5CA6586221F0CA790087B7F8 /* drawer.h */,
+				5CA6586421F0CA790087B7F8 /* picker.cpp */,
+				5CA6586621F0CA790087B7F8 /* picker.h */,
+				5CA6586121F0CA790087B7F8 /* scenegraph.cpp */,
+				5CA6586821F0CA790087B7F8 /* scenegraph.h */,
+			);
+			path = RobotsAndPartPicking;
+			sourceTree = "<group>";
+		};
+		5CA6586C21F0CA940087B7F8 /* shaders */ = {
+			isa = PBXGroup;
+			children = (
+				5CA6586D21F0CA940087B7F8 /* pick-gl3.fshader */,
+				5CA6586E21F0CA940087B7F8 /* pick-gl2.fshader */,
+			);
+			path = shaders;
+			sourceTree = "<group>";
+		};
 		5CDA258721EF72CB00F2A6D1 = {
 			isa = PBXGroup;
 			children = (
@@ -57,6 +93,7 @@
 		5CDA259221EF72CB00F2A6D1 /* Assignment4-RobotsAndPartPicking */ = {
 			isa = PBXGroup;
 			children = (
+				5CA6586021F0CA610087B7F8 /* RobotsAndPartPicking */,
 				5CDA259321EF72CB00F2A6D1 /* main.cpp */,
 			);
 			path = "Assignment4-RobotsAndPartPicking";
@@ -119,6 +156,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				5CDA259421EF72CB00F2A6D1 /* main.cpp in Sources */,
+				5CA6586B21F0CA790087B7F8 /* picker.cpp in Sources */,
+				5CA6586A21F0CA790087B7F8 /* asst4-snippets.cpp in Sources */,
+				5CA6586921F0CA790087B7F8 /* scenegraph.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
