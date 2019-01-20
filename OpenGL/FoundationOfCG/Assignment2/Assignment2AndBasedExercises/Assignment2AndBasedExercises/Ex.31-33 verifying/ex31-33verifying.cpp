@@ -260,7 +260,7 @@ static shared_ptr<Geometry> g_ground, g_cube;
 static const Cvec3 g_light1(2.0, 3.0, 14.0), g_light2(-2, -3.0, -5.0);  // define two lights positions in world space
 static Matrix4 g_skyRbt = Matrix4::makeTranslation(Cvec3(0.0, 0.25, 4.0));
 //初始tramsformation，将object frame的原点保持不动，每个cube使用一个object matrix。由于在shader中使用了offset，故此处对象帧的起点都为原点。
-static Matrix4 g_objectRbt[2] = {Matrix4::makeTranslation(Cvec3(0,0,2)),Matrix4::makeTranslation(Cvec3(0,0,2))};
+static Matrix4 g_objectRbt[2] = {Matrix4::makeTranslation(Cvec3(-1,0,0)),Matrix4::makeTranslation(Cvec3(1,0,0))};
 static Cvec3f g_objectColors[1] = {Cvec3f(1, 0, 0)};
 static Matrix4 g_auxiliaryRbt;
 
@@ -299,9 +299,11 @@ static void initCubes() {
 // takes a projection matrix and send to the the shaders
 static void sendProjectionMatrix(const ShaderState& curSS, const Matrix4& projMatrix) {
   GLfloat glmatrix[16];
-    Matrix4 scaleMatrix =Matrix4::makeScale(Cvec3(3,3,1.6));
+    Matrix4 scaleMatrix =Matrix4::makeScale(Cvec3(3,3,1));
     scaleMatrix(3,3) = 1.0;
-    Matrix4 projTMatrix =  scaleMatrix* projMatrix  ;
+    Matrix4 contractMatrix = Matrix4::makeScale(Cvec3(1,1,1));
+    contractMatrix(3,3) = 1.0;
+    Matrix4 projTMatrix =  scaleMatrix * contractMatrix * projMatrix  ;
   projTMatrix.writeToColumnMajorMatrix(glmatrix); // send projection matrix
   safe_glUniformMatrix4fv(curSS.h_uProjMatrix, glmatrix);
 }
@@ -362,14 +364,14 @@ static void drawStuff() {
     
     // draw cubes
     // ==========
-    safe_glUniform1f(curSS.h_uXCoordOffset, -1.5f);
+    safe_glUniform1f(curSS.h_uXCoordOffset, 0.f);
     MVM = invEyeRbt * g_objectRbt[0];
     NMVM = normalMatrix(MVM);
     sendModelViewNormalMatrix(curSS, MVM, NMVM);
     safe_glUniform3f(curSS.h_uColor, g_objectColors[0][0], g_objectColors[0][1], g_objectColors[0][2]);
     g_cube->draw(curSS);
     
-    safe_glUniform1f(curSS.h_uXCoordOffset, 1.5f);
+    safe_glUniform1f(curSS.h_uXCoordOffset, 0.f);
     MVM = invEyeRbt * g_objectRbt[1];
     NMVM = normalMatrix(MVM);
     sendModelViewNormalMatrix(curSS, MVM, NMVM);
@@ -632,7 +634,8 @@ int main(int argc, char * argv[]) {
           motion(cursor_x, cursor_y);
           
           glfwSwapBuffers( window );
-          glfwPollEvents();
+          //glfwPollEvents();
+          glfwWaitEvents();
       }
       
       

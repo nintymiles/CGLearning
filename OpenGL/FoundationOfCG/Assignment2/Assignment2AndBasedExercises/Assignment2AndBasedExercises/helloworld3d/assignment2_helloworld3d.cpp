@@ -629,7 +629,8 @@ int main(int argc, char * argv[]) {
           motion(cursor_x, cursor_y);
           
           glfwSwapBuffers( window );
-          glfwPollEvents();
+          //glfwPollEvents();
+          glfwWaitEvents();
       }
       
       

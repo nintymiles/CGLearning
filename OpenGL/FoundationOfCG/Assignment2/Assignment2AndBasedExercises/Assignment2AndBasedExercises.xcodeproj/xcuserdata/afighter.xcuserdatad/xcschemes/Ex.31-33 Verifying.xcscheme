@@ -17,7 +17,7 @@
                BlueprintIdentifier = "5C45261321F40AEA00966DD0"
                BuildableName = "Ex.31-33 verifying"
                BlueprintName = "Ex.31-33 verifying"
-               ReferencedContainer = "container:TestOpengl4.xcodeproj">
+               ReferencedContainer = "container:Assignment2AndBasedExercises.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
             BlueprintIdentifier = "5C45261321F40AEA00966DD0"
             BuildableName = "Ex.31-33 verifying"
             BlueprintName = "Ex.31-33 verifying"
-            ReferencedContainer = "container:TestOpengl4.xcodeproj">
+            ReferencedContainer = "container:Assignment2AndBasedExercises.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -58,7 +58,7 @@
             BlueprintIdentifier = "5C45261321F40AEA00966DD0"
             BuildableName = "Ex.31-33 verifying"
             BlueprintName = "Ex.31-33 verifying"
-            ReferencedContainer = "container:TestOpengl4.xcodeproj">
+            ReferencedContainer = "container:Assignment2AndBasedExercises.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -77,7 +77,7 @@
             BlueprintIdentifier = "5C45261321F40AEA00966DD0"
             BuildableName = "Ex.31-33 verifying"
             BlueprintName = "Ex.31-33 verifying"
-            ReferencedContainer = "container:TestOpengl4.xcodeproj">
+            ReferencedContainer = "container:Assignment2AndBasedExercises.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
