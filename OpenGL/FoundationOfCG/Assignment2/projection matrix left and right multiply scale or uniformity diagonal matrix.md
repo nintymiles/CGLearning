@@ -12,9 +12,9 @@
 
  相比于情形一，scale matrix首先将眼睛坐标的每个部件都放大3倍，包括第4部件 - [3Xe,3Ye,3Ze,3]ᵗ。这样经过projection matrix变换后，我们就获得新的clip coordinate [3Xc,3Yc,3Zc,3Wc]。从新的clip coordinate我们可以看出虽然x，y，z轴坐标都同比放大3倍，但是w变量也被放大三倍，这样裁切后相比基准变化的顶点完全一样。再经过perspective division后，我们获得和基准变换完全相同的[Xn,Yn,Zn]ᵗ。也就是说成像不会有任何变化。
 
-### 情形三：Projection Matrix left multiplies scale affine matrix (diagonal vector is [3,3,3,1]) 成像中对象的数目会经历（可能剧烈）减少，留下的对象成像各坐标放大3倍，同样顶点的对象成像比基准放大9倍
-这种情形我们直接从裁切坐标开始考虑，我们可以理解为基准MVP变换后生成裁切坐标[Xc,Yc,Zc,Wc]ᵗ，然后scale matrix将前3个部件放大3倍成为新的clip coordinate-[3Xc,3Yc,3Zc,Wc]ᵗ。所有的部件都放大3倍，除了W变量（Wc）保留不变。这会导致在clipping phase，原来的顶点在x，y，z维度上被裁切掉的概率大大增加。同时near值之前深度的新顶点有可能新进入view frustum之内。在经历perspective division之后，获得的新normalized device coordinate变为[3Xn,3Yn,3Zn]ᵗ。也就是说最终的成像会加入新顶点，但是原有顶点的对象成像会放大9倍（不考虑三角形所有顶点都在view frustum之外，但是有三角形边穿透view frustum的情形，暂不知道这种情形会被如何处理?猜测可能是整体被裁切掉了）。
-#### 注：由于Projection Matrix变换后经过Perspective division之后，对象的深度信息被扭曲（非线性），只保留了前后相对位置信息，再加上考虑在趋近Ze=0时的Zn值的变化趋势更加不线性。也即如果如题所述将Zc放大三倍，而W变量不放大，那么由于Zc分布的不均匀性，可能导致在深度方向上更容易被裁切掉。
+### 情形三：Projection Matrix left multiplies scale affine matrix (diagonal vector is [3,3,3,1]) 成像中对象的数目会经历（可能剧烈）减少，同时view frustum之外的新顶点不可能在进入view frustum之内。相比基准留下的对象成像各坐标放大3倍，同样顶点的对象成像比基准放大9倍
+这种情形我们直接从裁切坐标开始考虑，我们可以理解为基准MVP变换后生成裁切坐标[Xc,Yc,Zc,Wc]ᵗ，然后scale matrix将前3个部件放大3倍成为新的clip coordinate-[3Xc,3Yc,3Zc,Wc]ᵗ。所有的部件都放大3倍，除了W变量（Wc）保留不变。这会导致在clipping phase，原来的顶点在x，y，z维度上被裁切掉的概率大大增加。同时near值之前深度的新顶点有可能新进入view frustum之内同时view frustum之外的新顶点不可能在进入view frustum之内（以Zc坐标为例，会导致生成的clip坐标值更大活更小，只能被裁切掉）。在经历perspective division之后，获得的新normalized device coordinate变为[3Xn,3Yn,3Zn]ᵗ。也就是说最终的成像会加入新顶点，但是原有顶点的对象成像会放大9倍（不考虑三角形所有顶点都在view frustum之外，但是有三角形边穿透view frustum的情形，暂不知道这种情形会被如何处理?猜测可能是整体被裁切掉了）。
+#### 注：由于Projection Matrix变换后经过Perspective division之后，对象的深度距离信息被扭曲（非线性），只保留了前后相对深度（位置）信息，再加上考虑在趋近Ze=0时的Zn值的变化趋势更加不线性。也即如果如题所述将Zc放大三倍，而W变量不放大，那么由于Zc分布的不均匀性，可能导致在深度方向上更容易被裁切掉。
 
 ### 情形四：Projection Matrix right multiplies uniformity Diagonal matrix（diagonal vector is [3,3,3,3] ，成像相比基准成像没有任何变化
 从裁切过程开始同于情形二。
