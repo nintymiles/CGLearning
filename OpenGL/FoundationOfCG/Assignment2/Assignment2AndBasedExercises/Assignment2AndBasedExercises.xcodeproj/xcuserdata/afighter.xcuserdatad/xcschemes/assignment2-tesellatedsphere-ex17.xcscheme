@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "5CD4E2E821D8D59800DBFCE3"
-               BuildableName = "Ex.15.16.HelloWorld3D"
-               BlueprintName = "Ex.15.16.HelloWorld3D"
-               ReferencedContainer = "container:TestOpengl4.xcodeproj">
+               BlueprintIdentifier = "5CFAFDC421EC2AD0000803C1"
+               BuildableName = "Ex.17.TeselatedSphere"
+               BlueprintName = "Ex.17.TeselatedSphere"
+               ReferencedContainer = "container:Assignment2AndBasedExercises.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +32,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5CD4E2E821D8D59800DBFCE3"
-            BuildableName = "Ex.15.16.HelloWorld3D"
-            BlueprintName = "Ex.15.16.HelloWorld3D"
-            ReferencedContainer = "container:TestOpengl4.xcodeproj">
+            BlueprintIdentifier = "5CFAFDC421EC2AD0000803C1"
+            BuildableName = "Ex.17.TeselatedSphere"
+            BlueprintName = "Ex.17.TeselatedSphere"
+            ReferencedContainer = "container:Assignment2AndBasedExercises.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -55,10 +55,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5CD4E2E821D8D59800DBFCE3"
-            BuildableName = "Ex.15.16.HelloWorld3D"
-            BlueprintName = "Ex.15.16.HelloWorld3D"
-            ReferencedContainer = "container:TestOpengl4.xcodeproj">
+            BlueprintIdentifier = "5CFAFDC421EC2AD0000803C1"
+            BuildableName = "Ex.17.TeselatedSphere"
+            BlueprintName = "Ex.17.TeselatedSphere"
+            ReferencedContainer = "container:Assignment2AndBasedExercises.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -74,10 +74,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5CD4E2E821D8D59800DBFCE3"
-            BuildableName = "Ex.15.16.HelloWorld3D"
-            BlueprintName = "Ex.15.16.HelloWorld3D"
-            ReferencedContainer = "container:TestOpengl4.xcodeproj">
+            BlueprintIdentifier = "5CFAFDC421EC2AD0000803C1"
+            BuildableName = "Ex.17.TeselatedSphere"
+            BlueprintName = "Ex.17.TeselatedSphere"
+            ReferencedContainer = "container:Assignment2AndBasedExercises.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

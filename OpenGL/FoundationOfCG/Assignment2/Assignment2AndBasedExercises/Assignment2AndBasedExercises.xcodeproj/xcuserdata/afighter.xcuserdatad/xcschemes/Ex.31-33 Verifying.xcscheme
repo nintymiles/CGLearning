@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "5CFAFDC421EC2AD0000803C1"
-               BuildableName = "Ex.17.TeselatedSphere"
-               BlueprintName = "Ex.17.TeselatedSphere"
+               BlueprintIdentifier = "5C45261321F40AEA00966DD0"
+               BuildableName = "Ex.31-33 verifying"
+               BlueprintName = "Ex.31-33 verifying"
                ReferencedContainer = "container:TestOpengl4.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,9 +32,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5CFAFDC421EC2AD0000803C1"
-            BuildableName = "Ex.17.TeselatedSphere"
-            BlueprintName = "Ex.17.TeselatedSphere"
+            BlueprintIdentifier = "5C45261321F40AEA00966DD0"
+            BuildableName = "Ex.31-33 verifying"
+            BlueprintName = "Ex.31-33 verifying"
             ReferencedContainer = "container:TestOpengl4.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -55,9 +55,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5CFAFDC421EC2AD0000803C1"
-            BuildableName = "Ex.17.TeselatedSphere"
-            BlueprintName = "Ex.17.TeselatedSphere"
+            BlueprintIdentifier = "5C45261321F40AEA00966DD0"
+            BuildableName = "Ex.31-33 verifying"
+            BlueprintName = "Ex.31-33 verifying"
             ReferencedContainer = "container:TestOpengl4.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -74,9 +74,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5CFAFDC421EC2AD0000803C1"
-            BuildableName = "Ex.17.TeselatedSphere"
-            BlueprintName = "Ex.17.TeselatedSphere"
+            BlueprintIdentifier = "5C45261321F40AEA00966DD0"
+            BuildableName = "Ex.31-33 verifying"
+            BlueprintName = "Ex.31-33 verifying"
             ReferencedContainer = "container:TestOpengl4.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
