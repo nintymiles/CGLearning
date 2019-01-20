@@ -299,11 +299,11 @@ static void initCubes() {
 // takes a projection matrix and send to the the shaders
 static void sendProjectionMatrix(const ShaderState& curSS, const Matrix4& projMatrix) {
   GLfloat glmatrix[16];
-    Matrix4 scaleMatrix =Matrix4::makeScale(Cvec3(3,3,1));
-    scaleMatrix(3,3) = 1.0;
-    Matrix4 contractMatrix = Matrix4::makeScale(Cvec3(1,1,1));
-    contractMatrix(3,3) = 1.0;
-    Matrix4 projTMatrix =  scaleMatrix * contractMatrix * projMatrix  ;
+    Matrix4 scaleMatrix =Matrix4::makeScale(Cvec3(3,3,3));
+    scaleMatrix(3,3) = 3.0;
+//    Matrix4 contractMatrix = Matrix4::makeScale(Cvec3(1,1,1));
+//    contractMatrix(3,3) = 1.0;
+    Matrix4 projTMatrix =  projMatrix * scaleMatrix  ;
   projTMatrix.writeToColumnMajorMatrix(glmatrix); // send projection matrix
   safe_glUniformMatrix4fv(curSS.h_uProjMatrix, glmatrix);
 }
