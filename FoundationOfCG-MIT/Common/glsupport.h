@@ -1,3 +1,7 @@
+/*****************************************************************************
+ *Original source template from book source site based on GLUT
+ *Modified to accomdate for current OS setting through GLFW by SeanRen
+ *****************************************************************************/
 #ifndef GLSUPPORT_H
 #define GLSUPPORT_H
 

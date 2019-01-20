@@ -5,6 +5,11 @@
 //   Professor Steven Gortler
 //
 ////////////////////////////////////////////////////////////////////////
+/*****************************************************************************
+ * Original source template from book source site based on GLUT
+ * Modified to use GLFW as a window manager by SeanRen
+ * Corresponding codes just tested on Mac OS X and iOS
+ *****************************************************************************/
 
 #include <vector>
 #include <string>
@@ -179,11 +184,6 @@ static const char * const g_shaderSources[g_numShaders][2] = {
   {basicVert, solidVert}
 };
 
-//static const char * const g_shaderFilesGl2[g_numShaders][2] = {
-//  {"./shaders/basic-gl2.vshader", "./shaders/diffuse-gl2.fshader"},
-//  {"./shaders/basic-gl2.vshader", "./shaders/solid-gl2.fshader"}
-//};
-
 static vector<shared_ptr<ShaderState> > g_shaderStates; // our global shader states
 
 // --------- Geometry
@@ -268,7 +268,7 @@ static RigTForm g_objectRbt[3] = {RigTForm(Cvec3(0,0,0)),RigTForm(Cvec3(0,0,0)),
 static Cvec3f g_objectColors[3] = {Cvec3f(1, 0, 0),Cvec3f(0, 0, 1),Cvec3f(0.5, 0.5, 0)};
 static RigTForm g_auxiliaryRbt;
 
-static const float g_sphereRaidusScreenRatio = 0.45;
+static const float g_sphereRaidusScreenRatio = 0.35;
 static float g_arcballScale;
 static float g_arcballScreenRadius = g_sphereRaidusScreenRatio * min(g_windowWidth,g_windowHeight);
 static bool g_arcballUpdateFlag = true;
@@ -439,20 +439,16 @@ static void display() {
 
   drawStuff();
 
-  //glutSwapBuffers();
 //   show the back buffer (where we rendered stuff)
 //  glfwSwapBuffers(window);
-
-//  checkGlErrors();
 }
 
 static void reshape(GLFWwindow* window,const int w, const int h) {
-  g_windowWidth = w;
-  g_windowHeight = h;
-  glViewport(0, 0, w, h);
-  cerr << "Size of window is now " << w << "x" << h << endl;
-  updateFrustFovY();
-  //glutPostRedisplay();
+    g_windowWidth = w;
+    g_windowHeight = h;
+    glViewport(0, 0, w, h);
+    cerr << "Size of window is now " << w << "x" << h << endl;
+    updateFrustFovY();
     g_arcballScreenRadius = g_sphereRaidusScreenRatio * min(g_windowWidth,g_windowHeight);
 }
 
@@ -467,43 +463,43 @@ static void motion(const float x, const float y) {
     Cvec2 centerScreenPos = getScreenSpaceCoord(g_objectRbt[0].getTranslation(),makeProjectionMatrix(), 0.0, 0.0, g_windowWidth, g_windowHeight);
     Quat arcballQuat = arcball(Cvec3(centerScreenPos,0), g_arcballScreenRadius, startScreenPos, endScreenPos);
     
-  const double dx = x - g_mouseClickX;
-  const double dy = g_windowHeight - y - 1 - g_mouseClickY;
-
+    const double dx = x - g_mouseClickX;
+    const double dy = g_windowHeight - y - 1 - g_mouseClickY;
+    
     g_arcballUpdateFlag = true;
     
-  RigTForm m;
-  if (g_mouseLClickButton && !g_mouseRClickButton) { // left button down?
-//    m = RigTForm::makeXRotation(-dy) * RigTForm::makeYRotation(dx);
-      m = RigTForm(arcballQuat);
-  }
-  else if (g_mouseRClickButton && !g_mouseLClickButton) { // right button down?
-    m = RigTForm(Cvec3(dx, dy, 0) * g_arcballScale/**0.01*/);
-  }
-  else if (g_mouseMClickButton || (g_mouseLClickButton && g_mouseRClickButton)) {  // middle or (left and right) button down?
-    m = RigTForm(Cvec3(0, 0, -dy) * g_arcballScale /**0.01*/);
-      g_arcballUpdateFlag = false;
-  }
-
+    RigTForm m;
+    if (g_mouseLClickButton && !g_mouseRClickButton) { // left button down?
+                                                       //    m = RigTForm::makeXRotation(-dy) * RigTForm::makeYRotation(dx);
+        m = RigTForm(arcballQuat);
+    }
+    else if (g_mouseRClickButton && !g_mouseLClickButton) { // right button down?
+        m = RigTForm(Cvec3(dx, dy, 0) * g_arcballScale/**0.01*/);
+    }
+    else if (g_mouseMClickButton || (g_mouseLClickButton && g_mouseRClickButton)) {  // middle or (left and right) button down?
+        m = RigTForm(Cvec3(0, 0, -dy) * g_arcballScale /**0.01*/);
+        g_arcballUpdateFlag = false;
+    }
     
-  if (g_mouseClickDown) {
-      if(g_activeCube == 0){
-          //g_objectRbt[0] *= m; // Simply right-multiply is WRONG
-          g_auxiliaryRbt = makeMixedFrame(g_objectRbt[0], g_skyRbt);
-          g_objectRbt[0] = doQtoOwrtA(m, g_objectRbt[0], g_auxiliaryRbt);
-      
-      }else if(g_activeCube == 1){
-          g_auxiliaryRbt = makeMixedFrame(g_objectRbt[1], g_skyRbt);
-          g_objectRbt[1] = doQtoOwrtA(m, g_objectRbt[1], g_auxiliaryRbt);
-      }else{
-          RigTForm invMouseMotionMatrix = inv(m);
-          g_skyRbt = doQtoOwrtA(m, g_skyRbt, g_skyRbt);
-      }
     
-  }
-
-  g_mouseClickX = x;
-  g_mouseClickY = g_windowHeight - y - 1;
+    if (g_mouseClickDown) {
+        if(g_activeCube == 0){
+            //g_objectRbt[0] *= m; // Simply right-multiply is WRONG
+            g_auxiliaryRbt = makeMixedFrame(g_objectRbt[0], g_skyRbt);
+            g_objectRbt[0] = doQtoOwrtA(m, g_objectRbt[0], g_auxiliaryRbt);
+            
+        }else if(g_activeCube == 1){
+            g_auxiliaryRbt = makeMixedFrame(g_objectRbt[1], g_skyRbt);
+            g_objectRbt[1] = doQtoOwrtA(m, g_objectRbt[1], g_auxiliaryRbt);
+        }else{
+            RigTForm invMouseMotionMatrix = inv(m);
+            g_skyRbt = doQtoOwrtA(m, g_skyRbt, g_skyRbt);
+        }
+        
+    }
+    
+    g_mouseClickX = x;
+    g_mouseClickY = g_windowHeight - y - 1;
 }
 
 void cursor_position_callback( GLFWwindow* window, double x, double y )
@@ -647,19 +643,19 @@ static void initGLState() {
 }
 
 static void initShaders() {
-  g_shaderStates.resize(g_numShaders);
-  for (int i = 0; i < g_numShaders; ++i) {
-    if (g_GlSourceFlag)
-      g_shaderStates[i].reset(new ShaderState(g_shaderSources[i][0], g_shaderSources[i][1],g_GlSourceFlag));
-    else
-      g_shaderStates[i].reset(new ShaderState(g_shaderFiles[i][0], g_shaderFiles[i][1],g_GlSourceFlag));
-  }
+    g_shaderStates.resize(g_numShaders);
+    for (int i = 0; i < g_numShaders; ++i) {
+        if (g_GlSourceFlag)
+            g_shaderStates[i].reset(new ShaderState(g_shaderSources[i][0], g_shaderSources[i][1],g_GlSourceFlag));
+        else
+            g_shaderStates[i].reset(new ShaderState(g_shaderFiles[i][0], g_shaderFiles[i][1],g_GlSourceFlag));
+    }
 }
 
 static void initGeometry() {
-  initGround();
-  initCubes();
-  initSphere();
+    initGround();
+    initCubes();
+    initSphere();
 }
 
 int main(int argc, char * argv[]) {
@@ -723,7 +719,6 @@ int main(int argc, char * argv[]) {
           //glfwPollEvents();
           glfwWaitEvents(); //if window is put in background,then didn't return immediatetly until at least one available window event is call.
       }
-      
       
       glfwTerminate();
 

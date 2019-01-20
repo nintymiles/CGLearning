@@ -1,3 +1,8 @@
+/*****************************************************************************
+ * Source template created by author of MIT-Foundation of 3D computer graphics
+ * Implemented by SeanRen for book assignment 3 - 2018/12
+ *****************************************************************************/
+
 #ifndef RIGTFORM_H
 #define RIGTFORM_H
 
@@ -114,6 +119,10 @@ inline RigTForm makeMixedFrame(const RigTForm& oRbt,const RigTForm& aRbt){
     return RigTForm(oRbt.getTranslation(), aRbt.getRotation());
 }
 
+//--------------------------------------------------------------------------------
+//  Conversion to matrix
+//  Created for assignment by SeanRen
+//--------------------------------------------------------------------------------
 inline Matrix4 rigTFormToMatrix(const RigTForm& tform) {
     Matrix4 T = Matrix4::makeTranslation(tform.getTranslation());
     Matrix4 R = quatToMatrix(tform.getRotation());
