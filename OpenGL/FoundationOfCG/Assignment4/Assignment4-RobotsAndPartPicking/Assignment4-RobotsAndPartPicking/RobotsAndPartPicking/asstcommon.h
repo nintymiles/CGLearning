@@ -5,14 +5,9 @@
 #include <vector>
 #include <memory>
 #include <stdexcept>
-#if __GNUG__
-#   include <tr1/memory>
-#endif
 
 #include "glsupport.h"
 #include "matrix4.h"
-
-extern const bool g_Gl2Compatible;
 
 struct ShaderState {
   GlProgram program;
@@ -47,9 +42,7 @@ struct ShaderState {
     h_aPosition = safe_glGetAttribLocation(h, "aPosition");
     h_aNormal = safe_glGetAttribLocation(h, "aNormal");
 
-    if (!g_Gl2Compatible)
-      glBindFragDataLocation(h, 0, "fragColor");
-    checkGlErrors();
+    checkGlError(__FUNCTION__);
   }
 
 };

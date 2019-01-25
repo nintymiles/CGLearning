@@ -4,9 +4,7 @@
 #include <vector>
 #include <memory>
 #include <stdexcept>
-#if __GNUG__
-#   include <tr1/memory>
-#endif
+
 
 #include "cvec.h"
 #include "matrix4.h"
@@ -14,9 +12,11 @@
 #include "glsupport.h" // for Noncopyable
 #include "asstcommon.h"
 
+using namespace std;
+
 class SgNodeVisitor;
 
-class SgNode : public std::tr1::enable_shared_from_this<SgNode>, Noncopyable {
+class SgNode : public enable_shared_from_this<SgNode>, Noncopyable {
 public:
   virtual bool accept(SgNodeVisitor& vistor) = 0;
   virtual ~SgNode() {}
@@ -45,19 +45,19 @@ public:
   virtual bool accept(SgNodeVisitor& visitor);
   virtual RigTForm getRbt() = 0;
 
-  void addChild(std::tr1::shared_ptr<SgNode> child);
-  void removeChild(std::tr1::shared_ptr<SgNode> child);
+  void addChild(shared_ptr<SgNode> child);
+  void removeChild(shared_ptr<SgNode> child);
 
   int getNumChildren() const {
     return children_.size();
   }
 
-  std::tr1::shared_ptr<SgNode> getChild(int i) {
+  shared_ptr<SgNode> getChild(int i) {
     return children_[i];
   }
 
 private:
-  std::vector<std::tr1::shared_ptr<SgNode> > children_;
+  std::vector<shared_ptr<SgNode> > children_;
 };
 
 //
@@ -87,8 +87,8 @@ public:
 
 
 RigTForm getPathAccumRbt(
-  std::tr1::shared_ptr<SgTransformNode> source,
-  std::tr1::shared_ptr<SgTransformNode> destination,
+  shared_ptr<SgTransformNode> source,
+  shared_ptr<SgTransformNode> destination,
   int offsetFromDestination = 0);
 
 
@@ -127,11 +127,11 @@ private:
 // A SgGeometryShapeNode is a Shape node that wraps a user geometry class
 template<typename Geometry>
 class SgGeometryShapeNode : public SgShapeNode {
-  std::tr1::shared_ptr<Geometry> geometry_;
+  shared_ptr<Geometry> geometry_;
   Matrix4 affineMatrix_;
   Cvec3 color_;
 public:
-  SgGeometryShapeNode(std::tr1::shared_ptr<Geometry> geometry,
+  SgGeometryShapeNode(shared_ptr<Geometry> geometry,
                       const Cvec3& color,
                       const Cvec3& translation = Cvec3(0, 0, 0),
                       const Cvec3& eulerAngles = Cvec3(0, 0, 0),

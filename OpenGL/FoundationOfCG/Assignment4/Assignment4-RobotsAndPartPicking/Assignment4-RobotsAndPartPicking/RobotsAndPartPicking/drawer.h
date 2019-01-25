@@ -15,6 +15,7 @@ public:
     : rbtStack_(1, initialRbt)
     , curSS_(curSS) {}
 
+    //visit will push the last rbtStack RBT * node RBT in rbtStack
   virtual bool visit(SgTransformNode& node) {
     rbtStack_.push_back(rbtStack_.back() * node.getRbt());
     return true;
@@ -26,6 +27,7 @@ public:
   }
 
   virtual bool visit(SgShapeNode& shapeNode) {
+    //back() function return the last element in the container
     const Matrix4 MVM = rigTFormToMatrix(rbtStack_.back()) * shapeNode.getAffineMatrix();
     sendModelViewNormalMatrix(curSS_, MVM, normalMatrix(MVM));
     shapeNode.draw(curSS_);
