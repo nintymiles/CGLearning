@@ -20,8 +20,9 @@
 		5C800CD521FA921900DB8452 /* diffuse-gl3.fshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C800CBE21FA81C200DB8452 /* diffuse-gl3.fshader */; };
 		5C800CD721FA921900DB8452 /* basic-gl3.vshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C800CC121FA81C200DB8452 /* basic-gl3.vshader */; };
 		5C800CD821FA923B00DB8452 /* pick-gl3.fshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C800CBF21FA81C200DB8452 /* pick-gl3.fshader */; };
+		5C800CDB21FB12E600DB8452 /* picker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C800CD921FB12E600DB8452 /* picker.cpp */; };
 		5CA6586921F0CA790087B7F8 /* scenegraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CA6586121F0CA790087B7F8 /* scenegraph.cpp */; };
-		5CDA259421EF72CB00F2A6D1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CDA259321EF72CB00F2A6D1 /* main.cpp */; };
+		5CDA259421EF72CB00F2A6D1 /* assignment4-main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CDA259321EF72CB00F2A6D1 /* assignment4-main.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -64,12 +65,14 @@
 		5C800CCE21FA85C400DB8452 /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglfw3.a; path = ../../../../../../../../../usr/local/lib/libglfw3.a; sourceTree = "<group>"; };
 		5C800CD121FA874C00DB8452 /* ppm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ppm.cpp; path = "../../../../Assignment3/Assignment3-QuaternionAndArcball/Assignment3-QuaternionAndArcball/mit-example/ppm.cpp"; sourceTree = "<group>"; };
 		5C800CD221FA874C00DB8452 /* ppm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ppm.h; path = "../../../../Assignment3/Assignment3-QuaternionAndArcball/Assignment3-QuaternionAndArcball/mit-example/ppm.h"; sourceTree = "<group>"; };
+		5C800CD921FB12E600DB8452 /* picker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = picker.cpp; path = "Assignment4-RobotsAndPartPicking/RobotsAndPartPicking/picker.cpp"; sourceTree = SOURCE_ROOT; };
+		5C800CDA21FB12E600DB8452 /* picker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = picker.h; path = "Assignment4-RobotsAndPartPicking/RobotsAndPartPicking/picker.h"; sourceTree = SOURCE_ROOT; };
 		5CA6586121F0CA790087B7F8 /* scenegraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scenegraph.cpp; sourceTree = "<group>"; };
 		5CA6586221F0CA790087B7F8 /* drawer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = drawer.h; sourceTree = "<group>"; };
 		5CA6586521F0CA790087B7F8 /* asstcommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asstcommon.h; sourceTree = "<group>"; };
 		5CA6586821F0CA790087B7F8 /* scenegraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scenegraph.h; sourceTree = "<group>"; };
 		5CDA259021EF72CB00F2A6D1 /* Assignment4-RobotsAndPartPicking */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Assignment4-RobotsAndPartPicking"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5CDA259321EF72CB00F2A6D1 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		5CDA259321EF72CB00F2A6D1 /* assignment4-main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "assignment4-main.cpp"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,8 +135,11 @@
 				5C800CBC21FA81C200DB8452 /* shaders */,
 				5CA6586521F0CA790087B7F8 /* asstcommon.h */,
 				5CA6586221F0CA790087B7F8 /* drawer.h */,
+				5C800CD921FB12E600DB8452 /* picker.cpp */,
+				5C800CDA21FB12E600DB8452 /* picker.h */,
 				5CA6586121F0CA790087B7F8 /* scenegraph.cpp */,
 				5CA6586821F0CA790087B7F8 /* scenegraph.h */,
+				5CDA259321EF72CB00F2A6D1 /* assignment4-main.cpp */,
 			);
 			path = RobotsAndPartPicking;
 			sourceTree = "<group>";
@@ -159,7 +165,6 @@
 			isa = PBXGroup;
 			children = (
 				5CA6586021F0CA610087B7F8 /* RobotsAndPartPicking */,
-				5CDA259321EF72CB00F2A6D1 /* main.cpp */,
 			);
 			path = "Assignment4-RobotsAndPartPicking";
 			sourceTree = "<group>";
@@ -221,8 +226,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				5C800CAC21FA810A00DB8452 /* perfMonitor.cpp in Sources */,
-				5CDA259421EF72CB00F2A6D1 /* main.cpp in Sources */,
+				5CDA259421EF72CB00F2A6D1 /* assignment4-main.cpp in Sources */,
 				5C800CB521FA815100DB8452 /* glsupport.cpp in Sources */,
+				5C800CDB21FB12E600DB8452 /* picker.cpp in Sources */,
 				5C800CD321FA874C00DB8452 /* ppm.cpp in Sources */,
 				5CA6586921F0CA790087B7F8 /* scenegraph.cpp in Sources */,
 			);

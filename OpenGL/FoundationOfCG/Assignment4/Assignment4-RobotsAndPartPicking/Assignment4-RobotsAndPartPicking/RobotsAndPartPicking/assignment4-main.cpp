@@ -45,10 +45,12 @@
 #include "asstcommon.h"
 #include "scenegraph.h"
 #include "drawer.h"
+#include "picker.h"
 
 #include "perfMonitor.h"
 
 using namespace std;      // for string, vector, iostream, and other standard C++ stuff
+static void pick();
 
 // G L O B A L S ///////////////////////////////////////////////////
 
@@ -71,6 +73,7 @@ static bool g_mouseLClickButton, g_mouseRClickButton, g_mouseMClickButton;
 static int g_mouseClickX, g_mouseClickY; // coordinates for mouse click event
 static int g_activeShader = 1;
 static int g_activeCube = 0;
+static bool g_pickingFlag = false;
 
 static GLFWwindow* window;
 
@@ -306,15 +309,14 @@ static void drawStuff(const ShaderState& curSS, bool picking){
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // draw wireframe
         g_sphere->draw(curSS);
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // draw filled again
+    }else {
+        Picker picker(invEyeRbt, curSS);
+        g_world->accept(picker);
+        glFlush();
+        g_currentPickedRbtNode = picker.getRbtNodeAtXY(g_mouseClickX, g_mouseClickY);
+        if (g_currentPickedRbtNode == g_groundNode)
+            g_currentPickedRbtNode = shared_ptr<SgRbtNode>();   // set to NULL
     }
-//    else {
-//        Picker picker(invEyeRbt, curSS);
-//        g_world->accept(picker);
-//        glFlush();
-//        g_currentPickedRbtNode = picker.getRbtNodeAtXY(g_mouseClickX, g_mouseClickY);
-//        if (g_currentPickedRbtNode == g_groundNode)
-//            g_currentPickedRbtNode = shared_ptr<SgRbtNode>();   // set to NULL
-//    }
 }
 
 static void drawStuff() {
@@ -386,7 +388,10 @@ static void display() {
     glUseProgram(g_shaderStates[g_activeShader]->program);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                   // clear framebuffer color&depth
     
-    drawStuff(*g_shaderStates[g_activeShader],false);
+    if(g_pickingFlag)
+        pick();
+    else
+        drawStuff(*g_shaderStates[g_activeShader],false);
     
     //   show the back buffer (where we rendered stuff)
     //  glfwSwapBuffers(window);
@@ -471,6 +476,8 @@ static void mouse(GLFWwindow* window, const int button, const int action, int mo
     g_mouseMClickButton &= !(button == GLFW_MOUSE_BUTTON_4 && action == GLFW_RELEASE);
     
     g_mouseClickDown = g_mouseLClickButton || g_mouseRClickButton || g_mouseMClickButton;
+    
+    
 }
 
 static void error_callback(int error, const char* description)
@@ -499,6 +506,7 @@ static void keyboard(GLFWwindow* window, int key, int scancode, int action, int 
                 << "s\t\tsave screenshot\n"
                 << "f\t\tToggle flat shading on/off.\n"
                 << "o\t\tCycle object to edit\n"
+                << "p\t\tPart Picking\n"
                 << "v\t\tCycle view\n"
                 << "drag left mouse to rotate\n" << endl;
                 break;
@@ -510,6 +518,9 @@ static void keyboard(GLFWwindow* window, int key, int scancode, int action, int 
                 g_activeCube++;
                 if(g_activeCube > 2)
                     g_activeCube=0;
+                break;
+            case GLFW_KEY_P:
+                g_pickingFlag ^= true;
                 break;
             case GLFW_KEY_F:
                 g_activeShader ^= 1;
@@ -688,6 +699,30 @@ static void initScene() {
     g_world->addChild(g_groundNode);
     g_world->addChild(g_robot1Node);
     g_world->addChild(g_robot2Node);
+}
+
+static void pick() {
+    // We need to set the clear color to black, for pick rendering.
+    // so let's save the clear color
+    GLdouble clearColor[4];
+    glGetDoublev(GL_COLOR_CLEAR_VALUE, clearColor);
+    
+    glClearColor(0, 0, 0, 0);
+    
+    // using PICKING_SHADER as the shader
+    glUseProgram(g_shaderStates[PICKING_SHADER]->program);
+    
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    drawStuff(*g_shaderStates[PICKING_SHADER], true);
+    
+    // Uncomment below and comment out the glutPostRedisplay in mouse(...) call back
+    // to see result of the pick rendering pass
+    // glutSwapBuffers();
+    
+    //Now set back the clear color
+    glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
+    
+    checkGlError(__func__);
 }
 
 int main(int argc, char * argv[]) {

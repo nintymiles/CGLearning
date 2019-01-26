@@ -3,25 +3,34 @@
 #include "picker.h"
 
 using namespace std;
-using namespace std::tr1;
 
 Picker::Picker(const RigTForm& initialRbt, const ShaderState& curSS)
   : drawer_(initialRbt, curSS)
   , idCounter_(0)
-  , srgbFrameBuffer_(!g_Gl2Compatible) {}
+  , srgbFrameBuffer_(true) {}
 
 bool Picker::visit(SgTransformNode& node) {
-  // TODO
+  shared_ptr<SgNode> baseNode = node.shared_from_this();
+  nodeStack_.push_back(baseNode);
   return drawer_.visit(node);
 }
 
 bool Picker::postVisit(SgTransformNode& node) {
-  // TODO
+  nodeStack_.pop_back();
   return drawer_.postVisit(node);
 }
 
 bool Picker::visit(SgShapeNode& node) {
-  // TODO
+  // We will increment idcounter every time visit a shape node
+    ++idCounter_;
+    Cvec3 idColor = idToColor(idCounter_);
+
+    shared_ptr<SgNode> baseNode = nodeStack_.back();
+    shared_ptr<SgRbtNode> rbtNode = dynamic_pointer_cast<SgRbtNode>(baseNode);
+    addToMap(idCounter_, rbtNode);
+    
+    safe_glUniform3f(drawer_.getCurSS().h_uIdColor, idColor[0], idColor[1], idColor[2]);
+  
   return drawer_.visit(node);
 }
 
@@ -31,8 +40,12 @@ bool Picker::postVisit(SgShapeNode& node) {
 }
 
 shared_ptr<SgRbtNode> Picker::getRbtNodeAtXY(int x, int y) {
-  // TODO
-  return shared_ptr<SgRbtNode>(); // return null for now
+    vector<char> image(3);
+    PackedPixel pixel;
+    glReadPixels(x,y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, &pixel);
+    int colorId = colorToId(pixel);
+    shared_ptr<SgRbtNode> jointNode = find(colorId);
+  return jointNode;
 }
 
 //------------------

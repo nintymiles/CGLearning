@@ -14,6 +14,7 @@
 #include "drawer.h"
 
 using namespace std;
+struct Geometry;
 
 class Picker : public SgNodeVisitor {
   std::vector<shared_ptr<SgNode> > nodeStack_;
