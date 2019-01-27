@@ -24,6 +24,10 @@ class Picker : public SgNodeVisitor {
 
   int idCounter_;
   bool srgbFrameBuffer_;
+    shared_ptr<SgRbtNode> selectedRbtNode_;
+    shared_ptr<SgRootNode> worldNode_;
+    RigTForm eyeRbt_;
+    RigTForm motionRbt_;
 
   Drawer drawer_;
 
@@ -34,6 +38,7 @@ class Picker : public SgNodeVisitor {
 
 public:
   Picker(const RigTForm& initialRbt, const ShaderState& curSS);
+    Picker(const RigTForm& initialRbt, const ShaderState& curSS,shared_ptr<SgRbtNode> selectedNode,shared_ptr<SgRootNode> worldNode,RigTForm eyeRbt,RigTForm motionRbt);
 
   virtual bool visit(SgTransformNode& node);
   virtual bool postVisit(SgTransformNode& node);

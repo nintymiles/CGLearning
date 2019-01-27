@@ -9,9 +9,30 @@ Picker::Picker(const RigTForm& initialRbt, const ShaderState& curSS)
   , idCounter_(0)
   , srgbFrameBuffer_(true) {}
 
+Picker::Picker(const RigTForm& initialRbt, const ShaderState& curSS,shared_ptr<SgRbtNode> selectedNode,shared_ptr<SgRootNode> worldNode,RigTForm eyeRbt,RigTForm motionRbt):drawer_(initialRbt, curSS)
+, idCounter_(0)
+, srgbFrameBuffer_(true)
+, selectedRbtNode_(selectedNode)
+, worldNode_(worldNode)
+, eyeRbt_(eyeRbt)
+, motionRbt_(motionRbt) {}
+
+
 bool Picker::visit(SgTransformNode& node) {
   shared_ptr<SgNode> baseNode = node.shared_from_this();
   nodeStack_.push_back(baseNode);
+    if(selectedRbtNode_ == baseNode){
+        shared_ptr<SgRbtNode> currentNode = dynamic_pointer_cast<SgRbtNode>(baseNode);
+        RigTForm nodeRbt = getPathAccumRbt(worldNode_, currentNode);
+        //auxiliary frame wrt nodeRbt and eyeRbt
+        RigTForm aRbt = makeMixedFrame(nodeRbt, eyeRbt_);
+        RigTForm nodeParentRbt = getPathAccumRbt(worldNode_, currentNode,1);
+        RigTForm asRbt = inv(nodeParentRbt) * aRbt;
+        RigTForm nodeMotionRbt = doQtoOwrtA(motionRbt_, node.getRbt(), asRbt);
+        currentNode->setRbt(nodeMotionRbt);
+        return drawer_.visit(*currentNode);
+    }
+    
   return drawer_.visit(node);
 }
 
@@ -30,7 +51,7 @@ bool Picker::visit(SgShapeNode& node) {
     addToMap(idCounter_, rbtNode);
     
     safe_glUniform3f(drawer_.getCurSS().h_uIdColor, idColor[0], idColor[1], idColor[2]);
-  
+    
   return drawer_.visit(node);
 }
 

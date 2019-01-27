@@ -189,6 +189,8 @@ static float g_arcballScale;
 static float g_arcballScreenRadius = g_sphereRaidusScreenRatio * min(g_windowWidth,g_windowHeight);
 static bool g_arcballUpdateFlag = true;
 
+static RigTForm g_motionRbt;
+
 
 
 ///////////////// END OF G L O B A L S //////////////////////////////////////////////////
@@ -323,7 +325,7 @@ static void drawStuff(const ShaderState& curSS, bool picking){
         g_sphere->draw(curSS);
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // draw filled again
     }else {
-        Picker picker(invEyeRbt, curSS);
+        Picker picker(invEyeRbt, curSS,g_currentPickedRbtNode,g_world,getEyeRbt(),g_motionRbt);
         g_world->accept(picker);
         glFlush();
         g_currentPickedRbtNode = picker.getRbtNodeAtXY(g_mouseClickX, g_mouseClickY);
@@ -462,8 +464,10 @@ static void motion(const float x, const float y) {
             RigTForm invMouseMotionMatrix = inv(m);
             g_skyRbt = doQtoOwrtA(m, g_skyRbt, g_skyRbt);
         }
-        
+        g_motionRbt = m;
     }
+    
+    
     
     g_mouseClickX = x;
     g_mouseClickY = g_windowHeight - y - 1;
