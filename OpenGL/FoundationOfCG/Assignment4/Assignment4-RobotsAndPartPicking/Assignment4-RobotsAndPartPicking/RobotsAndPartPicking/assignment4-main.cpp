@@ -74,6 +74,7 @@ static int g_mouseClickX, g_mouseClickY; // coordinates for mouse click event
 static int g_activeShader = 1;
 static int g_activeCube = 0;
 static bool g_pickingFlag = false;
+static int g_activeEyeFrame = 1;
 
 static GLFWwindow* window;
 
@@ -271,6 +272,20 @@ static float computeArcballScale(const Cvec4 objectRbtOrigin){
     return screenToEyeScale;
 }
 
+static RigTForm getEyeRbt(){
+    RigTForm eyeRbt;
+    if(g_activeEyeFrame == 1){
+        eyeRbt = getPathAccumRbt(g_world, g_skyNode);
+    }else if(g_activeEyeFrame == 2){
+        //when you get a path from g_world to g_robot1Node,the path is a direct path and just includes g_world,g_robot1Node.
+        // make g_skyCamera RBT left multiply the path to get an appropriate view angle.
+        eyeRbt = getPathAccumRbt(g_world, g_skyNode) * getPathAccumRbt(g_world, g_robot1Node);
+    }else{
+        eyeRbt = getPathAccumRbt(g_world, g_skyNode) * getPathAccumRbt(g_world, g_robot2Node);
+    }
+    return eyeRbt;
+}
+
 static void drawStuff(const ShaderState& curSS, bool picking){
     
     // build & send proj. matrix to vshader
@@ -278,7 +293,7 @@ static void drawStuff(const ShaderState& curSS, bool picking){
     sendProjectionMatrix(curSS, projmat);
     
     // use the skyRbt as the eyeRbt
-    const RigTForm eyeRbt = g_skyRbt;
+    const RigTForm eyeRbt = getEyeRbt();
     const RigTForm invEyeRbt = inv(eyeRbt);
     
     const Cvec3 eyeLight1 = Cvec3(invEyeRbt * Cvec4(g_light1, 1)); // g_light1 position in eye coordinates
@@ -303,8 +318,6 @@ static void drawStuff(const ShaderState& curSS, bool picking){
         Matrix4 NMVM = normalMatrix(MVM);
         sendModelViewNormalMatrix(curSS, MVM, NMVM);
         
-        
-        
         safe_glUniform3f(curSS.h_uColor, g_objectColors[2][0], g_objectColors[2][1], g_objectColors[2][2]);
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // draw wireframe
         g_sphere->draw(curSS);
@@ -319,70 +332,70 @@ static void drawStuff(const ShaderState& curSS, bool picking){
     }
 }
 
-static void drawStuff() {
-    // short hand for current shader state
-    const ShaderState& curSS = *g_shaderStates[g_activeShader];
-    
-    // build & send proj. matrix to vshader
-    const Matrix4 projmat = makeProjectionMatrix();
-    sendProjectionMatrix(curSS, projmat);
-    
-    // use the skyRbt as the eyeRbt
-    const RigTForm eyeRbt = g_skyRbt;
-    const RigTForm invEyeRbt = inv(eyeRbt);
-    
-    const Cvec3 eyeLight1 = Cvec3(invEyeRbt * Cvec4(g_light1, 1)); // g_light1 position in eye coordinates
-    const Cvec3 eyeLight2 = Cvec3(invEyeRbt * Cvec4(g_light2, 1)); // g_light2 position in eye coordinates
-    safe_glUniform3f(curSS.h_uLight, eyeLight1[0], eyeLight1[1], eyeLight1[2]);
-    safe_glUniform3f(curSS.h_uLight2, eyeLight2[0], eyeLight2[1], eyeLight2[2]);
-    
-    // draw ground
-    // ===========
-    //
-    const RigTForm groundRbt = RigTForm::identity();  // identity
-    Matrix4 MVM = rigTFormToMatrix(invEyeRbt * groundRbt);
-    Matrix4 NMVM = normalMatrix(MVM);
-    sendModelViewNormalMatrix(curSS, MVM, NMVM);
-    safe_glUniform3f(curSS.h_uColor, 0.1, 0.95, 0.1); // set color
-    g_ground->draw(curSS);
-    
-    // draw cubes
-    // ==========
-    RigTForm mvmRbt = invEyeRbt * g_objectRbt[0];
-    MVM = rigTFormToMatrix(mvmRbt);
-    NMVM = normalMatrix(MVM);
-    sendModelViewNormalMatrix(curSS, MVM, NMVM);
-    safe_glUniform3f(curSS.h_uColor, g_objectColors[0][0], g_objectColors[0][1], g_objectColors[0][2]);
-    g_cube->draw(curSS);
-    if(g_activeCube == 0){
-        if(g_arcballUpdateFlag)
-            g_arcballScale = computeArcballScale(Cvec4(mvmRbt.getTranslation(),0));
-    }
-    
-    mvmRbt = invEyeRbt * g_objectRbt[1];
-    MVM = rigTFormToMatrix(mvmRbt);
-    NMVM = normalMatrix(MVM);
-    sendModelViewNormalMatrix(curSS, MVM, NMVM);
-    safe_glUniform3f(curSS.h_uColor, g_objectColors[1][0], g_objectColors[1][1], g_objectColors[1][2]);
-    g_cube->draw(curSS);
-    if(g_activeCube == 1){
-        if(g_arcballUpdateFlag)
-            g_arcballScale = computeArcballScale(Cvec4(mvmRbt.getTranslation(),0));
-    }
-    
-    // draw sphere
-    //initSphere(); //the raidus of sphere changed constantly,but calling this method frequetly is not effective
-    float screenRadiusScale = g_arcballScreenRadius*g_arcballScale;
-    Matrix4 scaleMatrix = Matrix4::makeScale(Cvec3(screenRadiusScale,screenRadiusScale,screenRadiusScale));
-    mvmRbt = invEyeRbt * g_objectRbt[2];
-    MVM = rigTFormToMatrix(mvmRbt) * scaleMatrix;
-    NMVM = normalMatrix(MVM);
-    sendModelViewNormalMatrix(curSS, MVM, NMVM);
-    safe_glUniform3f(curSS.h_uColor, g_objectColors[2][0], g_objectColors[2][1], g_objectColors[2][2]);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // draw wireframe
-    g_sphere->draw(curSS);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // draw filled again
-}
+//static void drawStuff() {
+//    // short hand for current shader state
+//    const ShaderState& curSS = *g_shaderStates[g_activeShader];
+//    
+//    // build & send proj. matrix to vshader
+//    const Matrix4 projmat = makeProjectionMatrix();
+//    sendProjectionMatrix(curSS, projmat);
+//    
+//    // use the skyRbt as the eyeRbt
+//    const RigTForm eyeRbt = g_skyRbt;
+//    const RigTForm invEyeRbt = inv(eyeRbt);
+//    
+//    const Cvec3 eyeLight1 = Cvec3(invEyeRbt * Cvec4(g_light1, 1)); // g_light1 position in eye coordinates
+//    const Cvec3 eyeLight2 = Cvec3(invEyeRbt * Cvec4(g_light2, 1)); // g_light2 position in eye coordinates
+//    safe_glUniform3f(curSS.h_uLight, eyeLight1[0], eyeLight1[1], eyeLight1[2]);
+//    safe_glUniform3f(curSS.h_uLight2, eyeLight2[0], eyeLight2[1], eyeLight2[2]);
+//    
+//    // draw ground
+//    // ===========
+//    //
+//    const RigTForm groundRbt = RigTForm::identity();  // identity
+//    Matrix4 MVM = rigTFormToMatrix(invEyeRbt * groundRbt);
+//    Matrix4 NMVM = normalMatrix(MVM);
+//    sendModelViewNormalMatrix(curSS, MVM, NMVM);
+//    safe_glUniform3f(curSS.h_uColor, 0.1, 0.95, 0.1); // set color
+//    g_ground->draw(curSS);
+//    
+//    // draw cubes
+//    // ==========
+//    RigTForm mvmRbt = invEyeRbt * g_objectRbt[0];
+//    MVM = rigTFormToMatrix(mvmRbt);
+//    NMVM = normalMatrix(MVM);
+//    sendModelViewNormalMatrix(curSS, MVM, NMVM);
+//    safe_glUniform3f(curSS.h_uColor, g_objectColors[0][0], g_objectColors[0][1], g_objectColors[0][2]);
+//    g_cube->draw(curSS);
+//    if(g_activeCube == 0){
+//        if(g_arcballUpdateFlag)
+//            g_arcballScale = computeArcballScale(Cvec4(mvmRbt.getTranslation(),0));
+//    }
+//    
+//    mvmRbt = invEyeRbt * g_objectRbt[1];
+//    MVM = rigTFormToMatrix(mvmRbt);
+//    NMVM = normalMatrix(MVM);
+//    sendModelViewNormalMatrix(curSS, MVM, NMVM);
+//    safe_glUniform3f(curSS.h_uColor, g_objectColors[1][0], g_objectColors[1][1], g_objectColors[1][2]);
+//    g_cube->draw(curSS);
+//    if(g_activeCube == 1){
+//        if(g_arcballUpdateFlag)
+//            g_arcballScale = computeArcballScale(Cvec4(mvmRbt.getTranslation(),0));
+//    }
+//    
+//    // draw sphere
+//    //initSphere(); //the raidus of sphere changed constantly,but calling this method frequetly is not effective
+//    float screenRadiusScale = g_arcballScreenRadius*g_arcballScale;
+//    Matrix4 scaleMatrix = Matrix4::makeScale(Cvec3(screenRadiusScale,screenRadiusScale,screenRadiusScale));
+//    mvmRbt = invEyeRbt * g_objectRbt[2];
+//    MVM = rigTFormToMatrix(mvmRbt) * scaleMatrix;
+//    NMVM = normalMatrix(MVM);
+//    sendModelViewNormalMatrix(curSS, MVM, NMVM);
+//    safe_glUniform3f(curSS.h_uColor, g_objectColors[2][0], g_objectColors[2][1], g_objectColors[2][2]);
+//    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // draw wireframe
+//    g_sphere->draw(curSS);
+//    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // draw filled again
+//}
 
 static void display() {
     glUseProgram(g_shaderStates[g_activeShader]->program);
@@ -524,6 +537,11 @@ static void keyboard(GLFWwindow* window, int key, int scancode, int action, int 
                 break;
             case GLFW_KEY_F:
                 g_activeShader ^= 1;
+                break;
+            case GLFW_KEY_V:
+                g_activeEyeFrame++;
+                if(g_activeEyeFrame > 3)
+                    g_activeEyeFrame=1;
                 break;
         }
     }

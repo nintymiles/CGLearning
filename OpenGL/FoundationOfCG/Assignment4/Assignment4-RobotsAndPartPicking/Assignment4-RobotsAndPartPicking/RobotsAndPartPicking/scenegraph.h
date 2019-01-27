@@ -49,7 +49,7 @@ public:
   void removeChild(shared_ptr<SgNode> child);
 
   int getNumChildren() const {
-    return children_.size();
+    return (int)children_.size();
   }
 
   shared_ptr<SgNode> getChild(int i) {
