@@ -12,7 +12,6 @@
 		5C800CC421FA855100DB8452 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C800CC321FA855100DB8452 /* OpenGL.framework */; };
 		5C800CC621FA855800DB8452 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C800CC521FA855800DB8452 /* CoreVideo.framework */; };
 		5C800CCA21FA85A200DB8452 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C800CC921FA85A200DB8452 /* IOKit.framework */; };
-		5C800CCC21FA85A700DB8452 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C800CCB21FA85A700DB8452 /* Cocoa.framework */; };
 		5C800CCF21FA85C400DB8452 /* libGLEW.2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C800CCD21FA85C400DB8452 /* libGLEW.2.1.0.dylib */; };
 		5C800CD021FA85C400DB8452 /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C800CCE21FA85C400DB8452 /* libglfw3.a */; };
 		5C800CD321FA874C00DB8452 /* ppm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C800CD121FA874C00DB8452 /* ppm.cpp */; };
@@ -23,6 +22,7 @@
 		5C800CDB21FB12E600DB8452 /* picker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C800CD921FB12E600DB8452 /* picker.cpp */; };
 		5CA6586921F0CA790087B7F8 /* scenegraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CA6586121F0CA790087B7F8 /* scenegraph.cpp */; };
 		5CDA259421EF72CB00F2A6D1 /* assignment4-main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CDA259321EF72CB00F2A6D1 /* assignment4-main.cpp */; };
+		5CF9491821FEA0F1004D711B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CF9491721FEA0F1004D711B /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -59,9 +59,7 @@
 		5C800CC121FA81C200DB8452 /* basic-gl3.vshader */ = {isa = PBXFileReference; lastKnownFileType = text; path = "basic-gl3.vshader"; sourceTree = "<group>"; };
 		5C800CC321FA855100DB8452 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		5C800CC521FA855800DB8452 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
-		5C800CC721FA855F00DB8452 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		5C800CC921FA85A200DB8452 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
-		5C800CCB21FA85A700DB8452 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		5C800CCD21FA85C400DB8452 /* libGLEW.2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.1.0.dylib; path = ../../../../../../../../../usr/local/lib/libGLEW.2.1.0.dylib; sourceTree = "<group>"; };
 		5C800CCE21FA85C400DB8452 /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglfw3.a; path = ../../../../../../../../../usr/local/lib/libglfw3.a; sourceTree = "<group>"; };
 		5C800CD121FA874C00DB8452 /* ppm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ppm.cpp; path = "../../../../Assignment3/Assignment3-QuaternionAndArcball/Assignment3-QuaternionAndArcball/mit-example/ppm.cpp"; sourceTree = "<group>"; };
@@ -74,6 +72,7 @@
 		5CA6586821F0CA790087B7F8 /* scenegraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scenegraph.h; sourceTree = "<group>"; };
 		5CDA259021EF72CB00F2A6D1 /* Assignment4-RobotsAndPartPicking */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Assignment4-RobotsAndPartPicking"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CDA259321EF72CB00F2A6D1 /* assignment4-main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "assignment4-main.cpp"; sourceTree = "<group>"; };
+		5CF9491721FEA0F1004D711B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,7 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5C800CCC21FA85A700DB8452 /* Cocoa.framework in Frameworks */,
+				5CF9491821FEA0F1004D711B /* Cocoa.framework in Frameworks */,
 				5C800CCA21FA85A200DB8452 /* IOKit.framework in Frameworks */,
 				5C800CC621FA855800DB8452 /* CoreVideo.framework in Frameworks */,
 				5C800CC421FA855100DB8452 /* OpenGL.framework in Frameworks */,
@@ -109,9 +108,8 @@
 			children = (
 				5C800CCD21FA85C400DB8452 /* libGLEW.2.1.0.dylib */,
 				5C800CCE21FA85C400DB8452 /* libglfw3.a */,
-				5C800CCB21FA85A700DB8452 /* Cocoa.framework */,
+				5CF9491721FEA0F1004D711B /* Cocoa.framework */,
 				5C800CC921FA85A200DB8452 /* IOKit.framework */,
-				5C800CC721FA855F00DB8452 /* CoreAudio.framework */,
 				5C800CC521FA855800DB8452 /* CoreVideo.framework */,
 				5C800CC321FA855100DB8452 /* OpenGL.framework */,
 			);
