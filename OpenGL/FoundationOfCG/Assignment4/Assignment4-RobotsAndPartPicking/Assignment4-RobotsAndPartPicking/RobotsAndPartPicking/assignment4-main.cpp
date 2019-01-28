@@ -277,12 +277,15 @@ static float computeArcballScale(const Cvec4 objectRbtOrigin){
 static RigTForm getEyeRbt(){
     RigTForm eyeRbt;
     if(g_activeEyeFrame == 1){
+        g_currentPickedRbtNode = g_skyNode;
         eyeRbt = getPathAccumRbt(g_world, g_skyNode);
     }else if(g_activeEyeFrame == 2){
         //when you get a path from g_world to g_robot1Node,the path is a direct path and just includes g_world,g_robot1Node.
         // make g_skyCamera RBT left multiply the path to get an appropriate view angle.
+        g_currentPickedRbtNode = g_robot1Node;
         eyeRbt = getPathAccumRbt(g_world, g_skyNode) * getPathAccumRbt(g_world, g_robot1Node);
     }else{
+        g_currentPickedRbtNode=g_robot2Node;
         eyeRbt = getPathAccumRbt(g_world, g_skyNode) * getPathAccumRbt(g_world, g_robot2Node);
     }
     return eyeRbt;
