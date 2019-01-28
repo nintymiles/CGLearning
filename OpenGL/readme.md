@@ -1,5 +1,7 @@
 
 ## Involved Problems
+- Through `expr -f hex/oct/bin -- pixel(variable)`,we can print infomation by specified number format in LLDB.
+- When you see some negative mouse cursor values,then you must put mouse cursor outside of a glfw window.
 - glfwpollevents() and glfwwaitevents() behave very differnetly when the current window is put in background.at the moment,glfwwaitevents() suspends all threads (put them to sleep) until at least one avalable window event is fired while glfwpollevents() just cares about event queues instead available window events (in particular these quickly polled window events didn't really trigger any event callback).
 - In OpenGL,when you draw an object just changing its scale (uniformly or non uniformly), the effective way is to keep an scale matrix around the object (dont try to initialize the object with different aspect sizes every time drawing,will be ineffective).
 - Workaround for packaging files with command line application. Command line application wraps recources (shaders) by 'copy files' build configuration. (uncheck 'copy only when insalling' option to enable copying during debug phase).

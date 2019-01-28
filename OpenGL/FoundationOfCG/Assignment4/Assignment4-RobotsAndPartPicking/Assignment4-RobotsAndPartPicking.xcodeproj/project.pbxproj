@@ -42,6 +42,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5C54F28821FDA1F000657C36 /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = readme.md; path = ../../../readme.md; sourceTree = "<group>"; };
 		5C800CAA21FA810A00DB8452 /* perfMonitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = perfMonitor.cpp; path = ../../../../../../BaseFramework/perfMonitor/perfMonitor.cpp; sourceTree = "<group>"; };
 		5C800CAB21FA810A00DB8452 /* perfMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = perfMonitor.h; path = ../../../../../../BaseFramework/perfMonitor/perfMonitor.h; sourceTree = "<group>"; };
 		5C800CAD21FA812600DB8452 /* quat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = quat.h; path = ../../../../../../BaseFramework/quat/quat.h; sourceTree = "<group>"; };
@@ -147,6 +148,7 @@
 		5CDA258721EF72CB00F2A6D1 = {
 			isa = PBXGroup;
 			children = (
+				5C54F28821FDA1F000657C36 /* readme.md */,
 				5CDA259221EF72CB00F2A6D1 /* Assignment4-RobotsAndPartPicking */,
 				5CDA259121EF72CB00F2A6D1 /* Products */,
 				5C800CC221FA855100DB8452 /* Frameworks */,

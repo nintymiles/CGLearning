@@ -49,8 +49,11 @@ bool Picker::visit(SgShapeNode& node) {
     shared_ptr<SgNode> baseNode = nodeStack_.back();
     shared_ptr<SgRbtNode> rbtNode = dynamic_pointer_cast<SgRbtNode>(baseNode);
     addToMap(idCounter_, rbtNode);
-    
+    if(selectedRbtNode_ == baseNode){
+        safe_glUniform3f(drawer_.getCurSS().h_uIdColor, 0.3, 0.9, 0.5);
+    }else{
     safe_glUniform3f(drawer_.getCurSS().h_uIdColor, idColor[0], idColor[1], idColor[2]);
+    }
     
   return drawer_.visit(node);
 }

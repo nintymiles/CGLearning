@@ -70,7 +70,7 @@ static int g_windowWidth = 512;
 static int g_windowHeight = 512;
 static bool g_mouseClickDown = false;    // is the mouse button pressed
 static bool g_mouseLClickButton, g_mouseRClickButton, g_mouseMClickButton;
-static int g_mouseClickX, g_mouseClickY; // coordinates for mouse click event
+static int g_mouseClickX, g_mouseClickY,g_pickingMouseX,g_pickingMouseY; // coordinates for mouse click event
 static int g_activeShader = 1;
 static int g_activeCube = 0;
 static bool g_pickingFlag = false;
@@ -328,7 +328,7 @@ static void drawStuff(const ShaderState& curSS, bool picking){
         Picker picker(invEyeRbt, curSS,g_currentPickedRbtNode,g_world,getEyeRbt(),g_motionRbt);
         g_world->accept(picker);
         glFlush();
-        g_currentPickedRbtNode = picker.getRbtNodeAtXY(g_mouseClickX, g_mouseClickY);
+        g_currentPickedRbtNode = picker.getRbtNodeAtXY(g_pickingMouseX, g_pickingMouseY);
         if (g_currentPickedRbtNode == g_groundNode)
             g_currentPickedRbtNode = shared_ptr<SgRbtNode>();   // set to NULL
     }
@@ -427,6 +427,9 @@ static void displayWindow(GLFWwindow* window){
 
 
 static void motion(const float x, const float y) {
+    if(x<0 || y<0)
+        return;
+    
     Cvec2 startScreenPos = Cvec2(g_mouseClickX,g_mouseClickY);
     Cvec2 endScreenPos = Cvec2(x,g_windowHeight - y - 1); //convert from window coordnate to OpenGL window coordinate.
     Cvec2 centerScreenPos = getScreenSpaceCoord(g_objectRbt[0].getTranslation(),makeProjectionMatrix(), 0.0, 0.0, g_windowWidth, g_windowHeight);
@@ -439,7 +442,7 @@ static void motion(const float x, const float y) {
     
     RigTForm m;
     if (g_mouseLClickButton && !g_mouseRClickButton) { // left button down?
-                                                       //    m = RigTForm::makeXRotation(-dy) * RigTForm::makeYRotation(dx);
+  //    m = RigTForm::makeXRotation(-dy) * RigTForm::makeYRotation(dx);
         m = RigTForm(arcballQuat);
     }
     else if (g_mouseRClickButton && !g_mouseLClickButton) { // right button down?
@@ -465,6 +468,7 @@ static void motion(const float x, const float y) {
             g_skyRbt = doQtoOwrtA(m, g_skyRbt, g_skyRbt);
         }
         g_motionRbt = m;
+        
     }
     
     
@@ -493,6 +497,11 @@ static void mouse(GLFWwindow* window, const int button, const int action, int mo
     g_mouseMClickButton &= !(button == GLFW_MOUSE_BUTTON_4 && action == GLFW_RELEASE);
     
     g_mouseClickDown = g_mouseLClickButton || g_mouseRClickButton || g_mouseMClickButton;
+    
+    if(g_mouseClickDown){
+        g_pickingMouseX = g_mouseClickX;
+        g_pickingMouseY = g_mouseClickY;
+    }
     
     
 }
@@ -577,7 +586,7 @@ static int initGlfwState(){
     glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
     
     //创建本地窗口
-    window = glfwCreateWindow(g_windowWidth, g_windowHeight, "Quaternions and Arcball", NULL, NULL);
+    window = glfwCreateWindow(g_windowWidth, g_windowHeight, "Robots and Part Picking", NULL, NULL);
     if(!window){
         glfwTerminate();
         return -1;
