@@ -55,8 +55,20 @@
 
 #include "perfMonitor.h"
 
+//--------------------------------------------------------------------------------
+//  keyframe animation system implementation const & function definition
+//--------------------------------------------------------------------------------
+#pragma mark - keyframe animation system function & constant definition
+static const int g_msBetweenKeyframePairs = 2000; //millisecond between each pair of keyframes
+static void interploateAndRenderIntermediateFrame(const float t);
 static void restoreStatusToScenegraph();
 static void updateScenegraphStatusDataToKeyFrameList();
+static vector<RigTForm> interpolateRbtVectors(vector<RigTForm> firstVector,vector<RigTForm> endVector,float alpha);
+static void retreat();
+static void advanced();
+static void deleteKeyFrame();
+static void insertNewKeyFrame();
+
 
 
 using namespace std;      // for string, vector, iostream, and other standard C++ stuff
@@ -79,7 +91,7 @@ static bool g_mouseLClickButton, g_mouseRClickButton, g_mouseMClickButton;
 static int g_mouseClickX, g_mouseClickY,g_pickingMouseX,g_pickingMouseY; // coordinates for mouse click event
 static int g_activeShader = 1;
 static int g_activeCube = 0;
-static bool g_pickingFlag = false;
+static int g_renderFlag = 0;  //0 for normal,1 for picking,2 for animation play back
 static int g_activeEyeFrame = 1;
 
 static GLFWwindow* window;
@@ -357,131 +369,9 @@ static void drawStuff(const ShaderState& curSS, bool picking){
         if (g_currentPickedRbtNode == g_groundNode)
             g_currentPickedRbtNode = shared_ptr<SgRbtNode>();   // set to NULL
     }
-//    //此处实现SgRootNode中的节点倾倒出的动作。
-//    vector<shared_ptr<SgRbtNode>> nodePointer; //cpp can initialize automatically by default
-//    dumpSgRbtNodes(g_world, nodePointer);
-//
-//    vector<RigTForm> currentFrameRbts;
-//    //容器类的便利方法
-//    for(vector<shared_ptr<SgRbtNode>>::iterator iter = nodePointer.begin(),end = nodePointer.end() ; iter!=end ; iter++){
-//
-//        //iter.getRbt();
-//        shared_ptr<SgRbtNode> myNode = dynamic_pointer_cast<SgRbtNode>(*iter);
-//        RigTForm rbt=myNode->getRbt();
-//        currentFrameRbts.push_back(rbt);
-//    }
     
 }
 
-#pragma mark - hotkey 'n' function
-static void insertNewKeyFrame(){
-    
-    //此处实现SgRootNode中的节点倾倒出的动作。
-    vector<shared_ptr<SgRbtNode>> nodePointer; //cpp can initialize automatically by default
-    dumpSgRbtNodes(g_world, nodePointer);
-    
-    vector<RigTForm> currentFrameRbts;
-    //将scene graph中的RBT数据copy到vector<RigTForm>（单frame数据状态存储）中去
-    for(vector<shared_ptr<SgRbtNode>>::iterator iter = nodePointer.begin(),end = nodePointer.end() ; iter!=end ; iter++){
-        
-        //iter.getRbt();
-        shared_ptr<SgRbtNode> myNode = dynamic_pointer_cast<SgRbtNode>(*iter);
-        RigTForm rbt=myNode->getRbt();
-        currentFrameRbts.push_back(rbt);
-    }
-    keyFrames.push_back(currentFrameRbts);
-    
-    if(currentKeyFrame != keyFrames.end()){
-        currentKeyFrame++;
-    }else{
-        currentKeyFrame = keyFrames.begin();
-    }
-    
-}
-
-#pragma mark - '>' andvanced function
-static void advanced(){
-    if(currentKeyFrame == keyFrames.end())
-        return;
-    
-    currentKeyFrame++;
-    
-    if(currentKeyFrame == keyFrames.end())
-        currentKeyFrame--;
-    
-    restoreStatusToScenegraph();
-}
-
-#pragma mark - '<' retreat function
-static void retreat(){
-    if(currentKeyFrame == keyFrames.end() || currentKeyFrame == keyFrames.begin())
-        return;
-    
-    currentKeyFrame--;
-    
-    restoreStatusToScenegraph();
-}
-
-#pragma mark - 'd' delete function
-static void deleteKeyFrame(){
-    
-    if(keyFrames.size()==1){
-        keyFrames.erase(currentKeyFrame);
-        //currentKeyFrame will be set to be end interator automatically
-    }else if(keyFrames.size()>1){
-        list<vector<RigTForm>>::iterator copyIter = currentKeyFrame;
-        if(currentKeyFrame == keyFrames.begin()){
-            copyIter++;
-        }else{
-            copyIter--;
-        }
-        
-        keyFrames.erase(currentKeyFrame);
-        currentKeyFrame = copyIter;
-        restoreStatusToScenegraph();
-    }else{
-        
-    }
-}
-
-#pragma mark - hotkey 'Space' function
-static void restoreStatusToScenegraph(){
-    vector<RigTForm> currentKeyFrameVector = *currentKeyFrame;
-    
-    //此处实现SgRootNode中的节点倾倒出的动作。
-    vector<shared_ptr<SgRbtNode>> nodePointer; //cpp can initialize automatically by default
-    dumpSgRbtNodes(g_world, nodePointer);
-    
-    int index = 0;
-    for(vector<RigTForm>::iterator iter=currentKeyFrameVector.begin(),end=currentKeyFrameVector.end();iter!=end;iter++){
-        shared_ptr<SgRbtNode> node = nodePointer[index];
-        node->setRbt(*iter);
-    }
-    
-}
-
-#pragma mark - hotkey 'u' update function
-static void updateScenegraphStatusDataToKeyFrameList(){
-    //if current key frame is not defined,then insert new key frame
-    if(currentKeyFrame == keyFrames.end())
-        insertNewKeyFrame();
-    
-    //此处实现SgRootNode中的节点倾倒出的动作。
-    vector<shared_ptr<SgRbtNode>> nodePointer; //cpp can initialize automatically by default
-    dumpSgRbtNodes(g_world, nodePointer);
-    
-    vector<RigTForm> currentFrameRbts;
-    //容器类的便利方法
-    for(vector<shared_ptr<SgRbtNode>>::iterator iter = nodePointer.begin(),end = nodePointer.end() ; iter!=end ; iter++){
-        
-        //iter.getRbt();
-        shared_ptr<SgRbtNode> myNode = dynamic_pointer_cast<SgRbtNode>(*iter);
-        RigTForm rbt=myNode->getRbt();
-        currentFrameRbts.push_back(rbt);
-    }
-    
-    *currentKeyFrame = currentFrameRbts;
-}
 
 //static void drawStuff() {
 //    // short hand for current shader state
@@ -552,10 +442,17 @@ static void display() {
     glUseProgram(g_shaderStates[g_activeShader]->program);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                   // clear framebuffer color&depth
     
-    if(g_pickingFlag)
-        pick();
-    else
+    if(g_renderFlag == 0){
         drawStuff(*g_shaderStates[g_activeShader],false);
+    }else if(g_renderFlag == 1){
+        pick();
+    }else{
+        double currentTime = glfwGetTime();
+        printf("\n======current Time in milliseconds is = %f",currentTime);
+        interploateAndRenderIntermediateFrame(currentTime * 1000);
+        drawStuff(*g_shaderStates[g_activeShader],false);
+    }
+        
     
     //   show the back buffer (where we rendered stuff)
     //  glfwSwapBuffers(window);
@@ -670,6 +567,7 @@ static void error_callback(int error, const char* description)
 //    }
 //}
 
+#pragma mark - keyboard events definition
 static void keyboard(GLFWwindow* window, int key, int scancode, int action, int mods) {
     if(action == GLFW_PRESS){
         switch (key) {
@@ -695,7 +593,7 @@ static void keyboard(GLFWwindow* window, int key, int scancode, int action, int 
                     g_activeCube=0;
                 break;
             case GLFW_KEY_P:
-                g_pickingFlag ^= true;
+                g_renderFlag ^= 1;
                 break;
             case GLFW_KEY_F:
                 g_activeShader ^= 1;
@@ -722,6 +620,10 @@ static void keyboard(GLFWwindow* window, int key, int scancode, int action, int 
                 break;
             case GLFW_KEY_N:
                 insertNewKeyFrame();
+                break;
+            case GLFW_KEY_Y:
+                g_renderFlag = 2;
+                glfwSetTime(0);
                 break;
         }
     }
@@ -993,5 +895,189 @@ int main(int argc, char * argv[]) {
     catch (const runtime_error& e) {
         cout << "Exception caught: " << e.what() << endl;
         return -1;
+    }
+}
+
+//--------------------------------------------------------------------------------
+//  keyframe animation system implementation block
+//--------------------------------------------------------------------------------
+
+#pragma mark - hotkey 'n' function
+static void insertNewKeyFrame(){
+    
+    //此处实现SgRootNode中的节点倾倒出的动作。
+    vector<shared_ptr<SgRbtNode>> nodePointer; //cpp can initialize automatically by default
+    dumpSgRbtNodes(g_world, nodePointer);
+    
+    vector<RigTForm> currentFrameRbts;
+    //将scene graph中的RBT数据copy到vector<RigTForm>（单frame数据状态存储）中去
+    for(vector<shared_ptr<SgRbtNode>>::iterator iter = nodePointer.begin(),end = nodePointer.end() ; iter!=end ; iter++){
+        
+        //iter.getRbt();
+        shared_ptr<SgRbtNode> myNode = dynamic_pointer_cast<SgRbtNode>(*iter);
+        RigTForm rbt=myNode->getRbt();
+        currentFrameRbts.push_back(rbt);
+    }
+    keyFrames.push_back(currentFrameRbts);
+    
+    if(currentKeyFrame != keyFrames.end()){
+        currentKeyFrame++;
+    }else{
+        currentKeyFrame = keyFrames.begin();
+    }
+    
+}
+
+#pragma mark - '>' andvanced function
+static void advanced(){
+    if(currentKeyFrame == keyFrames.end())
+        return;
+    
+    currentKeyFrame++;
+    
+    if(currentKeyFrame == keyFrames.end())
+        currentKeyFrame--;
+    
+    restoreStatusToScenegraph();
+}
+
+#pragma mark - '<' retreat function
+static void retreat(){
+    if(currentKeyFrame == keyFrames.end() || currentKeyFrame == keyFrames.begin())
+        return;
+    
+    currentKeyFrame--;
+    
+    restoreStatusToScenegraph();
+}
+
+#pragma mark - 'd' delete function
+static void deleteKeyFrame(){
+    
+    if(keyFrames.size()==1){
+        keyFrames.erase(currentKeyFrame);
+        //currentKeyFrame will be set to be end interator automatically
+    }else if(keyFrames.size()>1){
+        list<vector<RigTForm>>::iterator copyIter = currentKeyFrame;
+        if(currentKeyFrame == keyFrames.begin()){
+            copyIter++;
+        }else{
+            copyIter--;
+        }
+        
+        keyFrames.erase(currentKeyFrame);
+        currentKeyFrame = copyIter;
+        restoreStatusToScenegraph();
+    }else{
+        
+    }
+}
+
+static void restoreRbtsVectorToSceneGraph(vector<RigTForm> currentKeyFrameVector){
+    //此处实现SgRootNode中的节点倾倒出的动作。
+    vector<shared_ptr<SgRbtNode>> nodePointer; //cpp can initialize automatically by default
+    dumpSgRbtNodes(g_world, nodePointer);
+    
+    int index = 0;
+    for(vector<RigTForm>::iterator iter=currentKeyFrameVector.begin(),end=currentKeyFrameVector.end();iter!=end;iter++){
+        shared_ptr<SgRbtNode> node = nodePointer[index];
+        node->setRbt(*iter);
+        index++;
+    }
+}
+
+#pragma mark - hotkey 'Space' function
+static void restoreStatusToScenegraph(){
+    vector<RigTForm> currentKeyFrameVector = *currentKeyFrame;
+    
+    restoreRbtsVectorToSceneGraph(currentKeyFrameVector);
+}
+
+#pragma mark - hotkey 'u' update function
+static void updateScenegraphStatusDataToKeyFrameList(){
+    //if current key frame is not defined,then insert new key frame
+    if(currentKeyFrame == keyFrames.end())
+        insertNewKeyFrame();
+    
+    //此处实现SgRootNode中的节点倾倒出的动作。
+    vector<shared_ptr<SgRbtNode>> nodePointer; //cpp can initialize automatically by default
+    dumpSgRbtNodes(g_world, nodePointer);
+    
+    vector<RigTForm> currentFrameRbts;
+    //容器类的便利方法
+    for(vector<shared_ptr<SgRbtNode>>::iterator iter = nodePointer.begin(),end = nodePointer.end() ; iter!=end ; iter++){
+        
+        //iter.getRbt();
+        shared_ptr<SgRbtNode> myNode = dynamic_pointer_cast<SgRbtNode>(*iter);
+        RigTForm rbt=myNode->getRbt();
+        currentFrameRbts.push_back(rbt);
+    }
+    
+    *currentKeyFrame = currentFrameRbts;
+}
+
+#pragma mark - interpolated between keyframe pairs and rendering the intermediate frame for some real value time variable t
+static void interploateAndRenderIntermediateFrame(const float t){
+    float normalizedTime = t/g_msBetweenKeyframePairs;
+    int beginTimeAtCurrentInterval = floor(normalizedTime);
+    int endTimeAtCurrentInterval = floor(normalizedTime) + 1;
+    float interpolationFactor = normalizedTime-beginTimeAtCurrentInterval;
+    
+    long keyFramesNumber = keyFrames.size();
+    if(keyFramesNumber < 4){
+        printf("\n========In order to play an animation,you must have at least 4 keyframes now number = %ld========\n",keyFramesNumber);
+        assert(keyFramesNumber >= 4);
+    }
+    if((beginTimeAtCurrentInterval < 0) || (endTimeAtCurrentInterval > (keyFramesNumber-1))){
+        printf("\n===========You just can interpolate keyframes between range 0..%ld ,now is %d=========\n",keyFramesNumber-1,endTimeAtCurrentInterval);
+    }
+    
+    //STL list不具备下标访问元素的方法，那么如何高效的定位特定索引处list中的元素？
+    vector<RigTForm> firstKeyframe;
+    vector<RigTForm> endKeyfrmae;
+    int index=0;
+    for( list<vector<RigTForm>>::iterator iter = keyFrames.begin(), end = keyFrames.end() ; iter != end ; iter++){
+        if(index == beginTimeAtCurrentInterval){
+            firstKeyframe = *iter;
+            endKeyfrmae = *(iter++);
+            break;
+        }
+        index++;
+    }
+    
+    vector<RigTForm> interpolatedVector = interpolateRbtVectors(firstKeyframe, endKeyfrmae, interpolationFactor);
+    
+    restoreRbtsVectorToSceneGraph(interpolatedVector);
+    
+}
+
+#pragma mark - question:怎么样高效的并行遍历两个相同尺寸的vectors？
+static vector<RigTForm> interpolateRbtVectors(vector<RigTForm> firstVector,vector<RigTForm> endVector,float alpha){
+    vector<RigTForm> returnVector;
+    
+    vector<RigTForm>::iterator endVectorIter = endVector.begin();
+    for(vector<RigTForm>::iterator iter=firstVector.begin(),end=firstVector.end(); iter!=end ; iter++){
+        Cvec3 interpoloatedTranslationVector = ((*iter).getTranslation()) * (1-alpha) +  ((*endVectorIter).getTranslation()) * alpha;
+        Quat lerpedQuat = lerp((*iter).getRotation(),(*endVectorIter).getRotation(), alpha);
+        
+        RigTForm interpolatedRbt = RigTForm(interpoloatedTranslationVector, lerpedQuat);
+        
+        returnVector.push_back(interpolatedRbt);
+    }
+    
+    return returnVector;
+}
+
+//naming问题怎么解决？
+#pragma mark - interpolated between keyframe pairs and play animation between all of them
+static bool playControlFlag = true;
+static void playOrStopAnimation(){
+    if(playControlFlag)
+        playControlFlag = false;
+    else
+        playControlFlag = true;
+    
+    if(playControlFlag){
+        
     }
 }
