@@ -1,8 +1,8 @@
 //
 //  main.cpp
-//  Assignment4-RobotsAndPartPicking
+//  Assignment5-RobotsAndPartPicking
 //
-//  Created by SeanRen on 2019/1/16.
+//  Created by SeanRen on 2019/3/12.
 //  Copyright © 2019 zxtech. All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////
@@ -33,6 +33,9 @@
 //#include <OpenGL/gl3.h>
 //#include <OpenGL/gl3ext.h>
 #include <GLFW/glfw3.h>
+#include <algorithm>
+#include <iostream>
+#include <list>
 
 #include "cvec.h"
 #include "matrix4.h"
@@ -47,16 +50,19 @@
 #include "drawer.h"
 #include "picker.h"
 
+#include "sgutils.h"
+
+
 #include "perfMonitor.h"
+
+static void restoreStatusToScenegraph();
+static void updateScenegraphStatusDataToKeyFrameList();
+
 
 using namespace std;      // for string, vector, iostream, and other standard C++ stuff
 static void pick();
 
 // G L O B A L S ///////////////////////////////////////////////////
-
-//indict whether to use source directly
-static const bool g_GlSourceFlag = false;
-
 
 static const float g_frustMinFov = 60.0;  // A minimal of 60 degree field of view
 static float g_frustFovY = g_frustMinFov; // FOV in y direction (updated by updateFrustFovY)
@@ -66,8 +72,8 @@ static const float g_frustFar = -50.0;    // far plane
 static const float g_groundY = -2.0;      // y coordinate of the ground
 static const float g_groundSize = 10.0;   // half the ground length
 
-static int g_windowWidth = 512;
-static int g_windowHeight = 512;
+static int g_windowWidth = 1024;
+static int g_windowHeight = 768;
 static bool g_mouseClickDown = false;    // is the mouse button pressed
 static bool g_mouseLClickButton, g_mouseRClickButton, g_mouseMClickButton;
 static int g_mouseClickX, g_mouseClickY,g_pickingMouseX,g_pickingMouseY; // coordinates for mouse click event
@@ -162,14 +168,22 @@ struct Geometry {
 
 typedef SgGeometryShapeNode<Geometry> MyShapeNode;
 
+//--------------------------------------------------------------------------------
+//  keyframe animator system specified variables
+//--------------------------------------------------------------------------------
+static list<vector<RigTForm>> keyFrames;  // keyframe list
+static list<vector<RigTForm>>::iterator currentKeyFrame = keyFrames.end();
+
+static shared_ptr<SgRootNode> g_world; //used as current edited keyframe scene graph
+static vector<shared_ptr<SgRbtNode>> g_editedFrameRbtNodePointers; //current edited keyframe scene graph SgRbtNode pointer list
+
 
 // ===================================================================
-// Declare the scene graph and pointers to suitable nodes in the scene
-// graph
+// Declare suitable nodes in the current scene graph
+// 下面这些节点是被编辑的关键帧要展现的主题内容
 // ===================================================================
-
-static shared_ptr<SgRootNode> g_world;
 static shared_ptr<SgRbtNode> g_skyNode, g_groundNode, g_robot1Node, g_robot2Node;
+
 static shared_ptr<SgRbtNode> g_currentPickedRbtNode; // used later when you do picking
 
 #pragma mark - Scene Variables
@@ -292,6 +306,14 @@ static RigTForm getEyeRbt(){
 }
 
 static void drawStuff(const ShaderState& curSS, bool picking){
+    //maintain relationship between current keyframe variable and keyframes list
+    if(keyFrames.size()==0){
+        currentKeyFrame = keyFrames.end();
+    }
+    if(keyFrames.size()>0){
+        if(currentKeyFrame == keyFrames.end())
+            currentKeyFrame = keyFrames.begin();
+    }
     
     // build & send proj. matrix to vshader
     const Matrix4 projmat = makeProjectionMatrix();
@@ -314,7 +336,7 @@ static void drawStuff(const ShaderState& curSS, bool picking){
         //initSphere(); //the raidus of sphere changed constantly,but calling this method frequetly is not effective
         
         RigTForm mvmRbt = invEyeRbt * g_objectRbt[2];
-        //update g_arcballScale
+        //update g_arcballScale，计算从眼部空间到window coordinate空间的对象的缩放倍数
         g_arcballScale = computeArcballScale(Cvec4(mvmRbt.getTranslation(),0));
         float screenRadiusScale = g_arcballScreenRadius*g_arcballScale;
         
@@ -335,6 +357,130 @@ static void drawStuff(const ShaderState& curSS, bool picking){
         if (g_currentPickedRbtNode == g_groundNode)
             g_currentPickedRbtNode = shared_ptr<SgRbtNode>();   // set to NULL
     }
+//    //此处实现SgRootNode中的节点倾倒出的动作。
+//    vector<shared_ptr<SgRbtNode>> nodePointer; //cpp can initialize automatically by default
+//    dumpSgRbtNodes(g_world, nodePointer);
+//
+//    vector<RigTForm> currentFrameRbts;
+//    //容器类的便利方法
+//    for(vector<shared_ptr<SgRbtNode>>::iterator iter = nodePointer.begin(),end = nodePointer.end() ; iter!=end ; iter++){
+//
+//        //iter.getRbt();
+//        shared_ptr<SgRbtNode> myNode = dynamic_pointer_cast<SgRbtNode>(*iter);
+//        RigTForm rbt=myNode->getRbt();
+//        currentFrameRbts.push_back(rbt);
+//    }
+    
+}
+
+#pragma mark - hotkey 'n' function
+static void insertNewKeyFrame(){
+    
+    //此处实现SgRootNode中的节点倾倒出的动作。
+    vector<shared_ptr<SgRbtNode>> nodePointer; //cpp can initialize automatically by default
+    dumpSgRbtNodes(g_world, nodePointer);
+    
+    vector<RigTForm> currentFrameRbts;
+    //将scene graph中的RBT数据copy到vector<RigTForm>（单frame数据状态存储）中去
+    for(vector<shared_ptr<SgRbtNode>>::iterator iter = nodePointer.begin(),end = nodePointer.end() ; iter!=end ; iter++){
+        
+        //iter.getRbt();
+        shared_ptr<SgRbtNode> myNode = dynamic_pointer_cast<SgRbtNode>(*iter);
+        RigTForm rbt=myNode->getRbt();
+        currentFrameRbts.push_back(rbt);
+    }
+    keyFrames.push_back(currentFrameRbts);
+    
+    if(currentKeyFrame != keyFrames.end()){
+        currentKeyFrame++;
+    }else{
+        currentKeyFrame = keyFrames.begin();
+    }
+    
+}
+
+#pragma mark - '>' andvanced function
+static void advanced(){
+    if(currentKeyFrame == keyFrames.end())
+        return;
+    
+    currentKeyFrame++;
+    
+    if(currentKeyFrame == keyFrames.end())
+        currentKeyFrame--;
+    
+    restoreStatusToScenegraph();
+}
+
+#pragma mark - '<' retreat function
+static void retreat(){
+    if(currentKeyFrame == keyFrames.end() || currentKeyFrame == keyFrames.begin())
+        return;
+    
+    currentKeyFrame--;
+    
+    restoreStatusToScenegraph();
+}
+
+#pragma mark - 'd' delete function
+static void deleteKeyFrame(){
+    
+    if(keyFrames.size()==1){
+        keyFrames.erase(currentKeyFrame);
+        //currentKeyFrame will be set to be end interator automatically
+    }else if(keyFrames.size()>1){
+        list<vector<RigTForm>>::iterator copyIter = currentKeyFrame;
+        if(currentKeyFrame == keyFrames.begin()){
+            copyIter++;
+        }else{
+            copyIter--;
+        }
+        
+        keyFrames.erase(currentKeyFrame);
+        currentKeyFrame = copyIter;
+        restoreStatusToScenegraph();
+    }else{
+        
+    }
+}
+
+#pragma mark - hotkey 'Space' function
+static void restoreStatusToScenegraph(){
+    vector<RigTForm> currentKeyFrameVector = *currentKeyFrame;
+    
+    //此处实现SgRootNode中的节点倾倒出的动作。
+    vector<shared_ptr<SgRbtNode>> nodePointer; //cpp can initialize automatically by default
+    dumpSgRbtNodes(g_world, nodePointer);
+    
+    int index = 0;
+    for(vector<RigTForm>::iterator iter=currentKeyFrameVector.begin(),end=currentKeyFrameVector.end();iter!=end;iter++){
+        shared_ptr<SgRbtNode> node = nodePointer[index];
+        node->setRbt(*iter);
+    }
+    
+}
+
+#pragma mark - hotkey 'u' update function
+static void updateScenegraphStatusDataToKeyFrameList(){
+    //if current key frame is not defined,then insert new key frame
+    if(currentKeyFrame == keyFrames.end())
+        insertNewKeyFrame();
+    
+    //此处实现SgRootNode中的节点倾倒出的动作。
+    vector<shared_ptr<SgRbtNode>> nodePointer; //cpp can initialize automatically by default
+    dumpSgRbtNodes(g_world, nodePointer);
+    
+    vector<RigTForm> currentFrameRbts;
+    //容器类的便利方法
+    for(vector<shared_ptr<SgRbtNode>>::iterator iter = nodePointer.begin(),end = nodePointer.end() ; iter!=end ; iter++){
+        
+        //iter.getRbt();
+        shared_ptr<SgRbtNode> myNode = dynamic_pointer_cast<SgRbtNode>(*iter);
+        RigTForm rbt=myNode->getRbt();
+        currentFrameRbts.push_back(rbt);
+    }
+    
+    *currentKeyFrame = currentFrameRbts;
 }
 
 //static void drawStuff() {
@@ -558,6 +704,24 @@ static void keyboard(GLFWwindow* window, int key, int scancode, int action, int 
                 g_activeEyeFrame++;
                 if(g_activeEyeFrame > 3)
                     g_activeEyeFrame=1;
+                break;
+            case GLFW_KEY_LEFT_BRACKET:
+                retreat();
+                break;
+            case GLFW_KEY_RIGHT_BRACKET:
+                advanced();
+                break;
+            case GLFW_KEY_SPACE:
+                restoreStatusToScenegraph();
+                break;
+            case GLFW_KEY_U:
+                updateScenegraphStatusDataToKeyFrameList();
+                break;
+            case GLFW_KEY_D:
+                deleteKeyFrame();
+                break;
+            case GLFW_KEY_N:
+                insertNewKeyFrame();
                 break;
         }
     }

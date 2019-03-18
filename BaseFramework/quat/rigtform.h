@@ -21,7 +21,7 @@ public:
         assert(norm2(Quat(1,0,0,0) - r_) < CS175_EPS2);
     }
     
-    //构造函数可以用：号直接初始化内部成员
+    //构造函数可以用：直接初始化内部成员
     RigTForm(const Cvec3& t, const Quat& r):t_(t),r_(r) {}
     
     //explicit阻止编译器对constructor的输入参数进行隐式转化
