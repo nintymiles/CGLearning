@@ -448,9 +448,10 @@ static void display() {
         pick();
     }else{
         double currentTime = glfwGetTime();
-        printf("\n======current Time in milliseconds is = %f",currentTime);
+        printf("\n======current Time in milliseconds is = %f \n",currentTime);
         interploateAndRenderIntermediateFrame(currentTime * 1000);
         drawStuff(*g_shaderStates[g_activeShader],false);
+        glfwti
     }
         
     
@@ -1025,11 +1026,11 @@ static void interploateAndRenderIntermediateFrame(const float t){
     
     long keyFramesNumber = keyFrames.size();
     if(keyFramesNumber < 4){
-        printf("\n========In order to play an animation,you must have at least 4 keyframes now number = %ld========\n",keyFramesNumber);
+        printf("\n=====In order to play an animation,you must have at least 4 keyframes now keyframes number = %ld=====\n",keyFramesNumber);
         assert(keyFramesNumber >= 4);
     }
     if((beginTimeAtCurrentInterval < 0) || (endTimeAtCurrentInterval > (keyFramesNumber-1))){
-        printf("\n===========You just can interpolate keyframes between range 0..%ld ,now is %d=========\n",keyFramesNumber-1,endTimeAtCurrentInterval);
+        printf("\n======You just can interpolate keyframes between range 0..%ld ,now is %d======\n",keyFramesNumber-1,endTimeAtCurrentInterval);
     }
     
     //STL list不具备下标访问元素的方法，那么如何高效的定位特定索引处list中的元素？
@@ -1058,11 +1059,13 @@ static vector<RigTForm> interpolateRbtVectors(vector<RigTForm> firstVector,vecto
     vector<RigTForm>::iterator endVectorIter = endVector.begin();
     for(vector<RigTForm>::iterator iter=firstVector.begin(),end=firstVector.end(); iter!=end ; iter++){
         Cvec3 interpoloatedTranslationVector = ((*iter).getTranslation()) * (1-alpha) +  ((*endVectorIter).getTranslation()) * alpha;
-        Quat lerpedQuat = lerp((*iter).getRotation(),(*endVectorIter).getRotation(), alpha);
+        Quat slerpedQuat = slerp((*iter).getRotation(),(*endVectorIter).getRotation(), alpha);
         
-        RigTForm interpolatedRbt = RigTForm(interpoloatedTranslationVector, lerpedQuat);
+        RigTForm interpolatedRbt = RigTForm(interpoloatedTranslationVector, slerpedQuat);
         
         returnVector.push_back(interpolatedRbt);
+        
+        endVectorIter++; //跟随for loop同步自增
     }
     
     return returnVector;
