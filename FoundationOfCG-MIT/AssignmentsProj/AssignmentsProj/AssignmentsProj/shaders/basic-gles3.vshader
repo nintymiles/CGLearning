@@ -18,5 +18,5 @@ void main() {
   vec4 tPosition = uModelViewMatrix * vec4(aPosition, 1.0);
   vPosition = vec3(tPosition);
   gl_Position = uProjMatrix * tPosition;
-gl_Position.x += uXCoordOffset;
+  gl_Position.x += uXCoordOffset;
 }

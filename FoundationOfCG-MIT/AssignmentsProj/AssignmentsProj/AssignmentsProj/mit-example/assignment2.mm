@@ -52,70 +52,90 @@ using namespace std;      // for string, vector, iostream, and other standard C+
 // ----------------------------------------------------------------------------
 //static const bool g_Gl2Compatible = false;
 
-
 static const float g_frustMinFov = 60.0;  // A minimal of 60 degree field of view
 static float g_frustFovY = g_frustMinFov; // FOV in y direction (updated by updateFrustFovY)
 
 static const float g_frustNear = -0.1;    // near plane
 static const float g_frustFar = -50.0;    // far plane
-static const float g_groundY = -2.0;      // y coordinate of the ground
+
+//地面相关的两个变量基本勾画出了地面的形状，位于y轴-2单位处，边长为20.
+static const float g_groundY = -2.0;      // y coordinate of the ground 地面所处的y轴方位
+//将地面尺寸定义为静态常量float类型，一半的地面宽度
 static const float g_groundSize = 10.0;   // half the ground length
 
+//窗口的宽高定位为static类型，作为全局缓存，可以随时存取
 static int g_windowWidth = 512;
 static int g_windowHeight = 512;
+
 static bool g_mouseClickDown = false;    // is the mouse button pressed
 static bool g_mouseLClickButton, g_mouseRClickButton, g_mouseMClickButton;
 static int g_mouseClickX, g_mouseClickY; // coordinates for mouse click event
+
+//当前激活的shader pair
 static int g_activeShader = 0;
+/**
+ ##### Log Program Info: #####
+ WARNING: Output of vertex shader 'vNormal' not read by fragment shader
+ WARNING: Output of vertex shader 'vPosition' not read by fragment shader
+ 出现这个日志说明了第二个shader成功加载
+ */
 
+//这个ShaderState结构封装了program，shader以及各种state数据，但是对于uniform和vertex是hard code的形式，所以耦合度很高
 struct ShaderState {
-  GlProgram program;
-
-  // Handles to uniform variables
-  GLint h_uLight, h_uLight2;
-  GLint h_uProjMatrix;
-  GLint h_uModelViewMatrix;
-  GLint h_uNormalMatrix;
-  GLint h_uColor;
+    //利用CPP类的自然结构封装glProgram对象的生存周期管理
+    GlProgram program;
+    
+    // Handles to uniform variables
+    GLint h_uLight, h_uLight2;
+    GLint h_uProjMatrix;
+    GLint h_uModelViewMatrix;
+    GLint h_uNormalMatrix;
+    GLint h_uColor;
     GLint h_uXCoordOffset;
-
-  // Handles to vertex attributes
-  GLint h_aPosition;
-  GLint h_aNormal;
-
-  ShaderState(const char* vsfn, const char* fsfn) {
-    readAndCompileShader(program, vsfn, fsfn);
-
-    const GLuint h = program; // short hand
-
-    // Retrieve handles to uniform variables
-    h_uLight = safe_glGetUniformLocation(h, "uLight");
-    h_uLight2 = safe_glGetUniformLocation(h, "uLight2");
-    h_uProjMatrix = safe_glGetUniformLocation(h, "uProjMatrix");
-    h_uModelViewMatrix = safe_glGetUniformLocation(h, "uModelViewMatrix");
-    h_uNormalMatrix = safe_glGetUniformLocation(h, "uNormalMatrix");
-    h_uColor = safe_glGetUniformLocation(h, "uColor");
-      h_uXCoordOffset = safe_glGetUniformLocation(h, "uXCoordOffset");
-
-    // Retrieve handles to vertex attributes
-    h_aPosition = safe_glGetAttribLocation(h, "aPosition");
-    h_aNormal = safe_glGetAttribLocation(h, "aNormal");
-
-    checkGlError(__FUNCTION__);
-  }
-
+    
+    // Handles to vertex attributes
+    GLint h_aPosition;
+    GLint h_aNormal;
+    
+    ShaderState(const char* vsfn, const char* fsfn) {
+        readAndCompileShader(program, vsfn, fsfn);
+        
+        const GLuint h = program; // short hand
+        
+        // Retrieve handles to uniform variables
+        h_uLight = safe_glGetUniformLocation(h, "uLight");
+        h_uLight2 = safe_glGetUniformLocation(h, "uLight2");
+        h_uProjMatrix = safe_glGetUniformLocation(h, "uProjMatrix");
+        h_uModelViewMatrix = safe_glGetUniformLocation(h, "uModelViewMatrix");
+        h_uNormalMatrix = safe_glGetUniformLocation(h, "uNormalMatrix");
+        h_uColor = safe_glGetUniformLocation(h, "uColor");
+        h_uXCoordOffset = safe_glGetUniformLocation(h, "uXCoordOffset");
+        
+        // Retrieve handles to vertex attributes
+        h_aPosition = safe_glGetAttribLocation(h, "aPosition");
+        h_aNormal = safe_glGetAttribLocation(h, "aNormal");
+        
+        printProgramInfoLog(h);
+        checkGlError(__FUNCTION__);
+    }
+    
 };
 
+//将shaders数量定义为静态const整型，shaders数量的变量声明类型及赋值
 static const int g_numShaders = 2;
+//将每对shader文件名定义为2维数组
 static const char * const g_shaderFiles[g_numShaders][2] = {
-  {"basic-gles3.vshader", "diffuse-gles3.fshader"},
-  {"basic-gles3.vshader", "solid-gles3.fshader"}
+    {"basic-gles3.vshader", "diffuse-gles3.fshader"},
+    {"basic-gles3.vshader", "solid-gles3.fshader"}
 };
 
+//用vector对象存储ShaderState的共享指针,声明ShaderState的管理缓存
 static vector<shared_ptr<ShaderState> > g_shaderStates; // our global shader states
 
 // --------- Geometry
 
+//相对偏移量macro，其原理是什么？利用struct实例的->操作符指向其成员变量的内存初始地址，这个是一种经验用法
+//这个macro意味着以array of structures的方式组织vertex data,如此才能利用借助了CPP机制的这个macro
 // Macro used to obtain relative offset of a field within a struct
 #define FIELD_OFFSET(StructType, field) &(((StructType *)0)->field)
 
@@ -134,10 +154,13 @@ struct VertexPN {
     //--------------------------------------------------------------------------------
     // Define copy constructor and assignment operator from GenericVertex so we can
     // use make* functions from geometrymaker.h
+    
+    //借助其它struct以及操作符“=”重载实现类型借用默认构造函数直接实现初始化
     VertexPN(const GenericVertex& v) {
         *this = v;
     }
 
+    //重载操作符“=”，并且此次重载在构造函数中是生效的
     VertexPN& operator = (const GenericVertex& v) {
         p = v.pos;
         n = v.normal;
@@ -190,6 +213,7 @@ static shared_ptr<Geometry> g_ground, g_cube,g_sphere;
 // --------- Scene
 
 static const Cvec3 g_light1(2.0, 3.0, 14.0), g_light2(-2, -3.0, -5.0);  // define two lights positions in world space
+
 //static Matrix4 g_skyRbt = Matrix4::makeTranslation(Cvec3(0.0, 0.25, 4.0));
 static RigTForm g_skyRbt = RigTForm(Cvec3(0.0, 0.25, 4.0));
 //static Matrix4 g_objectRbt[2] = {Matrix4::makeTranslation(Cvec3(0,0,0)),Matrix4::makeTranslation(Cvec3(0,0,-2))};
@@ -253,12 +277,16 @@ static void initSphere(){
 // takes a projection matrix and send to the the shaders
 static void sendProjectionMatrix(const ShaderState& curSS, const Matrix4& projMatrix) {
   GLfloat glmatrix[16];
-    Matrix4 scaleMatrix =Matrix4::makeScale(Cvec3(3,3,3));
-    scaleMatrix(3,3) = 1.0;
-    Matrix4 contractMatrix = Matrix4::makeScale(Cvec3(1,1,1));
-    contractMatrix(3,3) = 1.0;
-    Matrix4 projTMatrix =  scaleMatrix * contractMatrix * projMatrix  ;
-  projTMatrix.writeToColumnMajorMatrix(glmatrix); // send projection matrix
+    
+//对矩阵缩放的测试代码，注意用完之后删除
+//    Matrix4 scaleMatrix =Matrix4::makeScale(Cvec3(3,3,3));
+//    scaleMatrix(3,3) = 1.0;
+//    Matrix4 contractMatrix = Matrix4::makeScale(Cvec3(1,1,1));
+//    contractMatrix(3,3) = 1.0;
+//    Matrix4 projTMatrix =  scaleMatrix * contractMatrix * projMatrix  ;
+    
+//    projTMatrix.writeToColumnMajorMatrix(glmatrix); // send projection matrix
+  projMatrix.writeToColumnMajorMatrix(glmatrix); // send projection matrix
   safe_glUniformMatrix4fv(curSS.h_uProjMatrix, glmatrix);
 }
 
@@ -311,9 +339,11 @@ static void drawStuff() {
     // ===========
     //
     //const Matrix4 groundRbt = Matrix4();  // identity
+    //ground object frame即world frame
     const RigTForm groundRbt = RigTForm::identity();
     //Matrix4 MVM = invEyeRbt * groundRbt;
     Matrix4 MVM = rigTFormToMatrix(invEyeRbt * groundRbt);
+    //从模型试图矩阵中提取出normal矩阵
     Matrix4 NMVM = normalMatrix(MVM);
     sendModelViewNormalMatrix(curSS, MVM, NMVM);
     safe_glUniform3f(curSS.h_uColor, 0.1, 0.95, 0.1); // set color
@@ -355,7 +385,6 @@ static void display() {
     
     //iOS automatically control swapping buffer
     //no need to swap buffer manually
-    
     checkGlError(__FUNCTION__);
 }
 
@@ -486,17 +515,26 @@ static void mouse(const float x, const float y,u_long tapCount,bool press) {
 
 
 static void initGLState() {
-    //设置color buffer默认颜色
+    //设置color buffer被清理后的默认颜色值
     glClearColor(128./255., 200./255., 255./255., 0.);
-    //重置depth buffer默认值为0.f
+    //重置depth buffer默认值为0.f，一般情况下这个值是窗口z值的最小值，这说明z的范围为[0..1]
     glClearDepthf(0.f);
     
+    //指定纹理pixel数据压缩和解压缩的对其方式
     //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     //glPixelStorei(GL_PACK_ALIGNMENT, 1);
-    glCullFace(GL_BACK);
+    
+    //启用面部剔除，状态集中设置时没有顺序之分，状态值集中管理
     glEnable(GL_CULL_FACE);
+    
+    //剔除背向面三角形
+    glCullFace(GL_BACK);
+    
+    //启用深度缓存检测
     glEnable(GL_DEPTH_TEST);
+    //深度缓存比较方式的函数设置
     glDepthFunc(GL_GREATER);
+    
     //glReadBuffer(GL_BACK);
     
 }

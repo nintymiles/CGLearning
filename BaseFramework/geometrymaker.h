@@ -12,41 +12,53 @@
 
 // A generic vertex structure containing position, normal, and texture information
 // Used by make* functions to pass vertex information to the caller
-struct GenericVertex {
-  Cvec3f pos;
-  Cvec3f normal;
-  Cvec2f tex;
-  Cvec3f tangent, binormal;
 
-  GenericVertex(
-    float x, float y, float z,
-    float nx, float ny, float nz,
-    float tu, float tv,
-    float tx, float ty, float tz,
-    float bx, float by, float bz)
+//通用顶点GenericVertex结构，用于一次性封装顶点相关的所有可能数据项
+//GenericVertex可被用于有选择的两次vertex data封装
+struct GenericVertex {
+    Cvec3f pos;
+    Cvec3f normal;
+    Cvec2f tex;
+    Cvec3f tangent, binormal;
+    
+    //结构体成员变量的初始化借助cpp的结构构造函数的特定语法来进行
+    //在构造函数体后直接使用子构造函数初始化成员变量
+    GenericVertex(
+                  float x, float y, float z,
+                  float nx, float ny, float nz,
+                  float tu, float tv,
+                  float tx, float ty, float tz,
+                  float bx, float by, float bz)
     : pos(x,y,z), normal(nx,ny,nz), tex(tu, tv), tangent(tx, ty, tz), binormal(bx, by, bz)
-  {}
+    {}
 };
 
+//vbLen,ibLen只是被传入参数的reference，referece可用来对原来的变量进行值的改变
+//相当于参数值是inout方式的，可以被函数修改并保留修改的值
 inline void getPlaneVbIbLen(int& vbLen, int& ibLen) {
   vbLen = 4;
   ibLen = 6;
 }
 
 //function template
+//模版参数暗示接受数组地址作为参数
 template<typename VtxOutIter, typename IdxOutIter>
 void makePlane(float size, VtxOutIter vtxIter, IdxOutIter idxIter) {
-  float h = size / 2.0;
-  *vtxIter = GenericVertex(    -h, 0, -h, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, -1);
-  *(++vtxIter) = GenericVertex(-h, 0,  h, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, -1);
-  *(++vtxIter) = GenericVertex( h, 0,  h, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, -1);
-  *(++vtxIter) = GenericVertex( h, 0, -h, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, -1);
-  *idxIter = 0;
-  *(++idxIter) = 1;
-  *(++idxIter) = 2;
-  *(++idxIter) = 0;
-  *(++idxIter) = 2;
-  *(++idxIter) = 3;
+    float h = size / 2.0;
+    
+    //每一次赋值都将入参的数组指针顺延加1
+    *vtxIter = GenericVertex(    -h, 0, -h, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, -1);
+    *(++vtxIter) = GenericVertex(-h, 0,  h, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, -1);
+    *(++vtxIter) = GenericVertex( h, 0,  h, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, -1);
+    *(++vtxIter) = GenericVertex( h, 0, -h, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, -1);
+    
+    //索引值从0开始算起
+    *idxIter = 0;
+    *(++idxIter) = 1;
+    *(++idxIter) = 2;
+    *(++idxIter) = 0;
+    *(++idxIter) = 2;
+    *(++idxIter) = 3;
 }
 
 inline void getCubeVbIbLen(int& vbLen, int& ibLen) {
@@ -69,6 +81,8 @@ void makeCube(float size, VtxOutIter vtxIter, IdxOutIter idxIter) {
                              bin[0], bin[1], bin[2]); \
     ++vtxIter; \
 }
+    //此本地macro居然借助了即时的本地变量声明，这也意味着这些macro和本地变量的生存周期是同步的，否则这个macro不成立
+    //此处关键：本地macro，本地即时变量之间的交互
     Cvec3f tan(0, 1, 0), bin(0, 0, 1);
     DEFV(+, -, -, 1, 0, 0, 0, 0); // facing +X
     DEFV(+, +, -, 1, 0, 0, 1, 0);

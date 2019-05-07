@@ -45,8 +45,7 @@ static void readTextFile(const char *fn, vector<char>& data) {
   ifs.read(&data[0], len);
 }
 
-
-
+//打印关于shader的log
 // Print info regarding an GL object
 static void printInfoLog(GLuint obj, const string& filename) {
   GLint infologLength = 0;
@@ -68,22 +67,35 @@ static void printInfoLog(GLuint obj, const string& filename) {
 //#endif
 }
 
+void printProgramInfoLog(GLuint program){
+    GLint infologLength = 0;
+    GLint charsWritten  = 0;
+    
+    glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infologLength);
+    if (infologLength) {
+        string infoLog(infologLength, ' ');
+        glGetProgramInfoLog(program, infologLength, &charsWritten, &infoLog[0]);
+        std::cerr << "##### Log Program Info: #####\n" << infoLog << endl;
+    }
+}
+
 void readAndCompileSingleShader(GLuint shaderHandle, const char *fn) {
-  vector<char> source;
-  readTextFile(fn, source);
-
-  const char *ptrs[] = {&source[0]};
-  const GLint lens[] = {static_cast<GLint>(source.size())};
-  glShaderSource(shaderHandle, 1, ptrs, lens);   // load the shader sources
-
-  glCompileShader(shaderHandle);
-
-  printInfoLog(shaderHandle, fn);
-
-  GLint compiled = 0;
-  glGetShaderiv(shaderHandle, GL_COMPILE_STATUS, &compiled);
-  if (!compiled)
-    throw runtime_error("fails to compile GL shader");
+    vector<char> source;
+    readTextFile(fn, source);
+    
+    const char *ptrs[] = {&source[0]};
+    const GLint lens[] = {static_cast<GLint>(source.size())};
+    glShaderSource(shaderHandle, 1, ptrs, lens);   // load the shader sources
+    
+    glCompileShader(shaderHandle);
+    
+    //打印shader日志
+    printInfoLog(shaderHandle, fn);
+    
+    GLint compiled = 0;
+    glGetShaderiv(shaderHandle, GL_COMPILE_STATUS, &compiled);
+    if (!compiled)
+        throw runtime_error("fails to compile GL shader");
 }
 
 void linkShader(GLuint programHandle, GLuint vs, GLuint fs) {
