@@ -73,6 +73,7 @@ void makeCube(float size, VtxOutIter vtxIter, IdxOutIter idxIter) {
     //--------------------------------------------------------------------------------
     //  定义一个在local生效的macro，通过#define/#undef指令达成目的
     //  --structure的构造函数返回structure地址
+    // macro在函数编译时进行替换，但本地macro的执行时机？
     //--------------------------------------------------------------------------------
 #define DEFV(x, y, z, nx, ny, nz, tu, tv) { \
     *vtxIter = GenericVertex(x h, y h, z h, \

@@ -140,6 +140,7 @@ static vector<shared_ptr<ShaderState> > g_shaderStates; // our global shader sta
 #define FIELD_OFFSET(StructType, field) &(((StructType *)0)->field)
 
 // A vertex with floating point position and normal
+// VertexPN的初始化方式两种类型：一种从构造函数组数字部件方式构建，另一种则是利用特殊构造函数从GenericVertex结构中获取数据
 struct VertexPN {
     Cvec3f p, n;
     
@@ -160,7 +161,7 @@ struct VertexPN {
         *this = v;
     }
 
-    //重载操作符“=”，并且此次重载在构造函数中是生效的
+    //重载操作符“=”，并且此次重载在构造函数中是生效的。重载的目的是对GenericVertex中的数据进行选择性的使用
     VertexPN& operator = (const GenericVertex& v) {
         p = v.pos;
         n = v.normal;
@@ -168,42 +169,58 @@ struct VertexPN {
     }
 };
 
+//此处Geometry结构用于对具备相同的vertex数据组织结构及primitive mode的drawElements方式的统一绘制
+//在此方式下，Geometry只需关心vertex和element index缓存数据的绑定及使用
+//struct在cpp中的定义就是access control全为public的class
 struct Geometry {
-  GlBufferObject vbo, ibo;
-  int vboLen, iboLen;
-
-  Geometry(VertexPN *vtx, unsigned short *idx, int vboLen, int iboLen) {
-    this->vboLen = vboLen;
-    this->iboLen = iboLen;
-
-    // Now create the VBO and IBO
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(VertexPN) * vboLen, vtx, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * iboLen, idx, GL_STATIC_DRAW);
-  }
-
-  void draw(const ShaderState& curSS) {
-    // Enable the attributes used by our shader
-    safe_glEnableVertexAttribArray(curSS.h_aPosition);
-    safe_glEnableVertexAttribArray(curSS.h_aNormal);
-
-    // bind vbo
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    safe_glVertexAttribPointer(curSS.h_aPosition, 3, GL_FLOAT, GL_FALSE, sizeof(VertexPN), FIELD_OFFSET(VertexPN, p));
-    safe_glVertexAttribPointer(curSS.h_aNormal, 3, GL_FLOAT, GL_FALSE, sizeof(VertexPN), FIELD_OFFSET(VertexPN, n));
-
-    // bind ibo
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-
-    // draw!
-    glDrawElements(GL_TRIANGLES, iboLen, GL_UNSIGNED_SHORT, 0);
-
-    // Disable the attributes used by our shader
-    safe_glDisableVertexAttribArray(curSS.h_aPosition);
-    safe_glDisableVertexAttribArray(curSS.h_aNormal);
-  }
+    //GLBufferObject的变量声明即是GL buffer object的生成，GLBufferObject负责vertex buffer的整个生命周期管理
+    GlBufferObject vbo, ibo;
+    //vbo及ibo的数量变量
+    int vboLen, iboLen;
+    
+    Geometry(VertexPN *vtx, unsigned short *idx, int vboLen, int iboLen) {
+        //设置vertex buffer缓存，以vboLen来设置buffer中的元素数目
+        this->vboLen = vboLen;
+        this->iboLen = iboLen;
+        
+        // Now create the VBO and IBO
+        //绑定在成员变量vbo对象中生成的缓存对象
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        //上传顶点缓存数据到GPU
+        glBufferData(GL_ARRAY_BUFFER, sizeof(VertexPN) * vboLen, vtx, GL_STATIC_DRAW);
+        
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+        //上传元素索引缓存数据到GPU
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * iboLen, idx, GL_STATIC_DRAW);
+    }
+    
+    //整个Geometry的使用过程中对vertex buffer object只进行了绑定，并没有对应的解除绑定的动作，这是因为目前使用的绘制方式都是primitive相同的简单绘制，在不同的绘制中vertex attributes的数目也并未发生变化，故而不需要解除绑定。
+    void draw(const ShaderState& curSS) {
+        // Enable the attributes used by our shader
+        //对shader中的特定vertex attribute开启vertex array访问方式
+        safe_glEnableVertexAttribArray(curSS.h_aPosition);
+        safe_glEnableVertexAttribArray(curSS.h_aNormal);
+        
+        // bind vbo
+        //绑定已经就位的Vertex Array Buffer Object
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        //设定顶点数据在buffer中的具体寻址方式
+        //注意FIELD_OFFSET的使用方式，偏移量为VertexPN的p成员变量的相对偏移量？这个相对偏移量对每个VertexPN不知道地址的情形下的实现机制是什么？VertexPN -> p中操作符->的本质难道就是结构(类)的相对位置偏移量，这个是比较高级的使用方式。也即class/struct对象实例的内存存放时连续的，故而每个变量的访问的实质都是相对的地址（指针）偏移量
+        safe_glVertexAttribPointer(curSS.h_aPosition, 3, GL_FLOAT, GL_FALSE, sizeof(VertexPN), FIELD_OFFSET(VertexPN, p));
+        safe_glVertexAttribPointer(curSS.h_aNormal, 3, GL_FLOAT, GL_FALSE, sizeof(VertexPN), FIELD_OFFSET(VertexPN, n));
+        
+        // bind ibo
+        //绑定element索引缓存
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+        
+        // draw!
+        glDrawElements(GL_TRIANGLES, iboLen, GL_UNSIGNED_SHORT, 0);
+        
+        // Disable the attributes used by our shader
+        //关闭vertex attributes的vertex array访问方式
+        safe_glDisableVertexAttribArray(curSS.h_aPosition);
+        safe_glDisableVertexAttribArray(curSS.h_aNormal);
+    }
 };
 
 
@@ -236,29 +253,33 @@ GLfloat rotation_angle_slerp_start=75.f;
 GLfloat rotation_angle_slerp_end=255.f;
 RigTForm g_slerpBaseRbt = RigTForm(Cvec3(0,0,-2));
 
-
+//静态函数的意义？在函数返回类型前加关键字static，函数就定义成静态函数。函数的定义和生命在默认情况下都是extern的，但静态函数只是在声明他的文件当中可见，不能被其他文件所用
 static void initGround() {
-  // A x-z plane at y = g_groundY of dimension [-g_groundSize, g_groundSize]^2
-  VertexPN vtx[4] = {
-    VertexPN(-g_groundSize, g_groundY, -g_groundSize, 0, 1, 0),
-    VertexPN(-g_groundSize, g_groundY,  g_groundSize, 0, 1, 0),
-    VertexPN( g_groundSize, g_groundY,  g_groundSize, 0, 1, 0),
-    VertexPN( g_groundSize, g_groundY, -g_groundSize, 0, 1, 0),
-  };
-  unsigned short idx[] = {0, 1, 2, 0, 2, 3};
-  g_ground.reset(new Geometry(&vtx[0], &idx[0], 4, 6));
+    // A x-z plane at y = g_groundY of dimension [-g_groundSize, g_groundSize]^2
+    VertexPN vtx[4] = {
+        VertexPN(-g_groundSize, g_groundY, -g_groundSize, 0, 1, 0),
+        VertexPN(-g_groundSize, g_groundY,  g_groundSize, 0, 1, 0),
+        VertexPN( g_groundSize, g_groundY,  g_groundSize, 0, 1, 0),
+        VertexPN( g_groundSize, g_groundY, -g_groundSize, 0, 1, 0),
+    };
+    unsigned short idx[] = {0, 1, 2, 0, 2, 3};
+    g_ground.reset(new Geometry(&vtx[0], &idx[0], 4, 6));
 }
 
 static void initCubes() {
-  int ibLen, vbLen;
-  getCubeVbIbLen(vbLen, ibLen);
-
-  // Temporary storage for cube geometry
-  vector<VertexPN> vtx(vbLen);
-  vector<unsigned short> idx(ibLen);
-
-  makeCube(1, vtx.begin(), idx.begin());
-  g_cube.reset(new Geometry(&vtx[0], &idx[0], vbLen, ibLen));
+    int ibLen, vbLen;
+    //首先通过函数方式确定vbLen和ibLen，适用于特定算法安排的方式
+    getCubeVbIbLen(vbLen, ibLen);
+    
+    // Temporary storage for cube geometry
+    //用于所生成cube集合数据的存储，存在于static函数中，其实例的存在性会比较持久？
+    vector<VertexPN> vtx(vbLen);
+    //unsigned short用于element indices很合适
+    vector<unsigned short> idx(ibLen);
+    
+    //vtx和idx连续存储结构的初始地址被作为参数，用于存储cube数据
+    makeCube(1, vtx.begin(), idx.begin());
+    g_cube.reset(new Geometry(&vtx[0], &idx[0], vbLen, ibLen));
 }
 
 static void initSphere(){
@@ -276,38 +297,48 @@ static void initSphere(){
 
 // takes a projection matrix and send to the the shaders
 static void sendProjectionMatrix(const ShaderState& curSS, const Matrix4& projMatrix) {
-  GLfloat glmatrix[16];
+    //实际往shader中传递的矩阵格式，一元float数组，所有矩阵的基类型都是GLfloat
+    GLfloat glmatrix[16];
     
-//对矩阵缩放的测试代码，注意用完之后删除
-//    Matrix4 scaleMatrix =Matrix4::makeScale(Cvec3(3,3,3));
-//    scaleMatrix(3,3) = 1.0;
-//    Matrix4 contractMatrix = Matrix4::makeScale(Cvec3(1,1,1));
-//    contractMatrix(3,3) = 1.0;
-//    Matrix4 projTMatrix =  scaleMatrix * contractMatrix * projMatrix  ;
+    //对矩阵缩放的测试代码，注意用完之后删除
+    //    Matrix4 scaleMatrix =Matrix4::makeScale(Cvec3(3,3,3));
+    //    scaleMatrix(3,3) = 1.0;
+    //    Matrix4 contractMatrix = Matrix4::makeScale(Cvec3(1,1,1));
+    //    contractMatrix(3,3) = 1.0;
+    //    Matrix4 projTMatrix =  scaleMatrix * contractMatrix * projMatrix  ;
     
-//    projTMatrix.writeToColumnMajorMatrix(glmatrix); // send projection matrix
-  projMatrix.writeToColumnMajorMatrix(glmatrix); // send projection matrix
-  safe_glUniformMatrix4fv(curSS.h_uProjMatrix, glmatrix);
+    //    projTMatrix.writeToColumnMajorMatrix(glmatrix); // send projection matrix
+    
+    //使用之前将Matrix4中的数据按照列为主方式写入一元数组
+    projMatrix.writeToColumnMajorMatrix(glmatrix); // send projection matrix
+    //以uniform方式设置到shader中
+    safe_glUniformMatrix4fv(curSS.h_uProjMatrix, glmatrix);
 }
 
 // takes MVM and its normal matrix to the shaders
 static void sendModelViewNormalMatrix(const ShaderState& curSS, const Matrix4& MVM, const Matrix4& NMVM) {
-  GLfloat glmatrix[16];
-  MVM.writeToColumnMajorMatrix(glmatrix); // send MVM
-  safe_glUniformMatrix4fv(curSS.h_uModelViewMatrix, glmatrix);
-
-  NMVM.writeToColumnMajorMatrix(glmatrix); // send NMVM
-  safe_glUniformMatrix4fv(curSS.h_uNormalMatrix, glmatrix);
+    GLfloat glmatrix[16];
+    
+    //将用于运算的model view matrix转化为shader ready的格式，然后上传到shader中
+    MVM.writeToColumnMajorMatrix(glmatrix); // send MVM
+    safe_glUniformMatrix4fv(curSS.h_uModelViewMatrix, glmatrix);
+    
+    //normal matrix from model view matrix
+    NMVM.writeToColumnMajorMatrix(glmatrix); // send NMVM
+    safe_glUniformMatrix4fv(curSS.h_uNormalMatrix, glmatrix);
 }
 
 // update g_frustFovY from g_frustMinFov, g_windowWidth, and g_windowHeight
+//根据screen ratio的特点调整最佳默认FOV值
 static void updateFrustFovY() {
-  if (g_windowWidth >= g_windowHeight)
-    g_frustFovY = g_frustMinFov;
-  else {
-    const double RAD_PER_DEG = 0.5 * CS175_PI/180;
-    g_frustFovY = atan2(sin(g_frustMinFov * RAD_PER_DEG) * g_windowHeight / g_windowWidth, cos(g_frustMinFov * RAD_PER_DEG)) / RAD_PER_DEG;
-  }
+    if (g_windowWidth >= g_windowHeight)
+        g_frustFovY = g_frustMinFov;
+    else {
+        //此处的RAD_PER_DEG的名称应该是HALF_RAD_PER_DEG,因为只是为了符合实际FOV应用时在场景中一般使用一半角度。
+        const double RAD_PER_DEG = 0.5 * CS175_PI/180;
+        //此处计算的含义？sin(θ)和cos(θ)可以分别作为y和x值，同时在sin(θ)上应用screen ratio（windowHeight>windowWidth),则意味着追求最大的y轴正常FOV（不放大和缩小）。这个update等效于在make projectionMatrix时在frust matrix上针对screen ratio进行的因子设置。
+        g_frustFovY = atan2(sin(g_frustMinFov * RAD_PER_DEG) * g_windowHeight / g_windowWidth, cos(g_frustMinFov * RAD_PER_DEG)) / RAD_PER_DEG;
+    }
 }
 
 static Matrix4 makeProjectionMatrix() {
@@ -532,7 +563,7 @@ static void initGLState() {
     
     //启用深度缓存检测
     glEnable(GL_DEPTH_TEST);
-    //深度缓存比较方式的函数设置
+    //深度缓存比较方式的函数设置，在本程序的矩阵计算体系上，若不设置此参数，则无法执行深度相关的预算，导致z-buffer紊乱，无法正常渲染到FBO中。
     glDepthFunc(GL_GREATER);
     
     //glReadBuffer(GL_BACK);
