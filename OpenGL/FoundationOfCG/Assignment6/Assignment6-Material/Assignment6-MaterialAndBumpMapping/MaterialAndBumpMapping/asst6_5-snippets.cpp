@@ -2,6 +2,11 @@
 // STEP 0: Include the newly provided "geometry.h"
 //==================================================================
 #include "geometry.h"
+#include "material.h"
+
+#include <memory>
+
+using namespace std;
 
 //==================================================================
 // STEP 1: Replace the "------- Shaders" section with the following.

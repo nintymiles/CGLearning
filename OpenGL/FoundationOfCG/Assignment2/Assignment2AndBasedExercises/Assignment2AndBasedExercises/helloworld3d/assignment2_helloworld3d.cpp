@@ -257,7 +257,7 @@ static shared_ptr<Geometry> g_ground, g_cube;
 
 // --------- Scene
 
-static const Cvec3 g_light1(2.0, 3.0, 14.0), g_light2(-2, -3.0, -5.0);  // define two lights positions in world space
+static const Cvec3 g_light1(2.0, 3.0, 4.0), g_light2(-2, -3.0, -5.0);  // define two lights positions in world space
 static Matrix4 g_skyRbt = Matrix4::makeTranslation(Cvec3(0.0, 0.25, 4.0));
 //初始tramsformation，将object frame的原点保持不动，每个cube使用一个object matrix。由于在shader中使用了offset，故此处对象帧的起点都为原点。
 static Matrix4 g_objectRbt[2] = {Matrix4::makeTranslation(Cvec3(0,0,0)),Matrix4::makeTranslation(Cvec3(0,0,0))};
@@ -376,16 +376,16 @@ static void drawStuff() {
 }
 
 static void display() {
-  glUseProgram(g_shaderStates[g_activeShader]->program);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                   // clear framebuffer color&depth
+    glUseProgram(g_shaderStates[g_activeShader]->program);
+    
+    //glClear(GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);    // clear framebuffer color&depth
 
-  drawStuff();
+    drawStuff();
 
-  //glutSwapBuffers();
-//   show the back buffer (where we rendered stuff)
-//  glfwSwapBuffers(window);
+    //glutSwapBuffers();
+    //   show the back buffer (where we rendered stuff)
 
-//  checkGlErrors();
 }
 
 static void reshape(GLFWwindow* window,const int w, const int h) {
@@ -557,15 +557,16 @@ static int initGlfwState(){
 static void initGLState() {
     glClearColor(128./255., 200./255., 255./255., 0.);
     glClearDepth(0.f);
-    //glClear(GL_DEPTH_BUFFER_BIT);
     
-    //  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    //  glPixelStorei(GL_PACK_ALIGNMENT, 1);
-    //  glCullFace(GL_BACK);
-    //  glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_GREATER);
+    
     //  glReadBuffer(GL_BACK);
+    //  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    //  glPixelStorei(GL_PACK_ALIGNMENT, 1);
     
     glEnable(GL_FRAMEBUFFER_SRGB);
 }

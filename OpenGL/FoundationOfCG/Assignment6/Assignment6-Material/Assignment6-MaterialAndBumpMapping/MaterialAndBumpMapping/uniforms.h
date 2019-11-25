@@ -6,9 +6,9 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
-#if __GNUG__
-#   include <tr1/memory>
-#endif
+//#if __GNUG__
+//#   include <tr1/memory>
+//#endif
 
 #include "cvec.h"
 #include "matrix4.h"
@@ -17,89 +17,91 @@
 
 // Private namespace for some helper functions. You should ignore this unless you
 // are interested in the internal implementation.
+
+// Private name _helper中服装了用于自定义CVec矢量类型族的const uniform设置，涵盖了基础结构可能用到的所有类型如何设置uniform值
 namespace _helper {
-    //对glUniform*方法的封装是为了方法命名的一致性？
-inline void genericGlUniformi(GLint location, int i) {
-  ::glUniform1i(location, i);
-}
-inline void genericGlUniformf(GLint location, float f) {
-  ::glUniform1f(location, f);
-}
-inline void genericGlUniformv(GLint location, int size, const GLint *v) {
-  ::glUniform1iv(location, size, v);
-}
-inline void genericGlUniformv(GLint location, int size, const GLfloat *v) {
-  ::glUniform1fv(location, size, v);
-}
-inline void genericGlUniformv(GLint location, int size, const Cvec<int, 1> *v) {
-  ::glUniform1iv(location, size, &v[0][0]);
-}
-inline void genericGlUniformv(GLint location, int size, const Cvec<int, 2> *v) {
-  ::glUniform2iv(location, size, &v[0][0]);
-}
-inline void genericGlUniformv(GLint location, int size, const Cvec<int, 3> *v) {
-  ::glUniform3iv(location, size, &v[0][0]);
-}
-inline void genericGlUniformv(GLint location, int size, const Cvec<int, 4> *v) {
-  ::glUniform4iv(location, size, &v[0][0]);
-}
-inline void genericGlUniformv(GLint location, int size, const Cvec<float, 1> *v) {
-  ::glUniform1fv(location, size, &v[0][0]);
-}
-inline void genericGlUniformv(GLint location, int size, const Cvec<float, 2> *v) {
-  ::glUniform2fv(location, size, &v[0][0]);
-}
-inline void genericGlUniformv(GLint location, int size, const Cvec<float, 3> *v) {
-  ::glUniform3fv(location, size, &v[0][0]);
-}
-inline void genericGlUniformv(GLint location, int size, const Cvec<float, 4> *v) {
-  ::glUniform4fv(location, size, &v[0][0]);
-}
-inline void genericGlUniformMatrix4v(GLint location, int size, const Cvec<float, 16> *m) {
-  ::glUniformMatrix4fv(location, size, GL_FALSE, &m[0][0]);
-}
-
+    inline void genericGlUniformi(GLint location, int i) {
+        ::glUniform1i(location, i);
+    }
+    inline void genericGlUniformf(GLint location, float f) {
+        ::glUniform1f(location, f);
+    }
+    inline void genericGlUniformv(GLint location, int size, const GLint *v) {
+        ::glUniform1iv(location, size, v);
+    }
+    inline void genericGlUniformv(GLint location, int size, const GLfloat *v) {
+        ::glUniform1fv(location, size, v);
+    }
+    inline void genericGlUniformv(GLint location, int size, const Cvec<int, 1> *v) {
+        ::glUniform1iv(location, size, &v[0][0]);
+    }
+    inline void genericGlUniformv(GLint location, int size, const Cvec<int, 2> *v) {
+        ::glUniform2iv(location, size, &v[0][0]);
+    }
+    inline void genericGlUniformv(GLint location, int size, const Cvec<int, 3> *v) {
+        ::glUniform3iv(location, size, &v[0][0]);
+    }
+    inline void genericGlUniformv(GLint location, int size, const Cvec<int, 4> *v) {
+        ::glUniform4iv(location, size, &v[0][0]);
+    }
+    inline void genericGlUniformv(GLint location, int size, const Cvec<float, 1> *v) {
+        ::glUniform1fv(location, size, &v[0][0]);
+    }
+    inline void genericGlUniformv(GLint location, int size, const Cvec<float, 2> *v) {
+        ::glUniform2fv(location, size, &v[0][0]);
+    }
+    inline void genericGlUniformv(GLint location, int size, const Cvec<float, 3> *v) {
+        ::glUniform3fv(location, size, &v[0][0]);
+    }
+    inline void genericGlUniformv(GLint location, int size, const Cvec<float, 4> *v) {
+        ::glUniform4fv(location, size, &v[0][0]);
+    }
+    inline void genericGlUniformMatrix4v(GLint location, int size, const Cvec<float, 16> *m) {
+        ::glUniformMatrix4fv(location, size, GL_FALSE, &m[0][0]);
+    }
+    
     //获得矢量类型所对应的GL类型
-template<typename T, int n>
-inline GLenum getTypeForCvec();   // should replace with STATIC_ASSERT
-
-template<>
-inline GLenum getTypeForCvec<int, 1>() { return GL_INT; }
-template<>
-inline GLenum getTypeForCvec<int, 2>() { return GL_INT_VEC2; }
-template<>
-inline GLenum getTypeForCvec<int, 3>() { return GL_INT_VEC3; }
-template<>
-inline GLenum getTypeForCvec<int, 4>() { return GL_INT_VEC4; }
-template<>
-inline GLenum getTypeForCvec<float, 1>() { return GL_FLOAT; }
-template<>
-inline GLenum getTypeForCvec<float, 2>() { return GL_FLOAT_VEC2; }
-template<>
-inline GLenum getTypeForCvec<float, 3>() { return GL_FLOAT_VEC3; }
-template<>
-inline GLenum getTypeForCvec<float, 4>() { return GL_FLOAT_VEC4; }
-template<>
-inline GLenum getTypeForCvec<bool, 1>() { return GL_BOOL; }
-template<>
-inline GLenum getTypeForCvec<bool, 2>() { return GL_BOOL_VEC2; }
-template<>
-inline GLenum getTypeForCvec<bool, 3>() { return GL_BOOL_VEC3; }
-template<>
-inline GLenum getTypeForCvec<bool, 4>() { return GL_BOOL_VEC4; }
+    template<typename T, int n>
+    inline GLenum getTypeForCvec();   // should replace with STATIC_ASSERT
+    
+    template<>
+    inline GLenum getTypeForCvec<int, 1>() { return GL_INT; }
+    template<>
+    inline GLenum getTypeForCvec<int, 2>() { return GL_INT_VEC2; }
+    template<>
+    inline GLenum getTypeForCvec<int, 3>() { return GL_INT_VEC3; }
+    template<>
+    inline GLenum getTypeForCvec<int, 4>() { return GL_INT_VEC4; }
+    template<>
+    inline GLenum getTypeForCvec<float, 1>() { return GL_FLOAT; }
+    template<>
+    inline GLenum getTypeForCvec<float, 2>() { return GL_FLOAT_VEC2; }
+    template<>
+    inline GLenum getTypeForCvec<float, 3>() { return GL_FLOAT_VEC3; }
+    template<>
+    inline GLenum getTypeForCvec<float, 4>() { return GL_FLOAT_VEC4; }
+    template<>
+    inline GLenum getTypeForCvec<bool, 1>() { return GL_BOOL; }
+    template<>
+    inline GLenum getTypeForCvec<bool, 2>() { return GL_BOOL_VEC2; }
+    template<>
+    inline GLenum getTypeForCvec<bool, 3>() { return GL_BOOL_VEC3; }
+    template<>
+    inline GLenum getTypeForCvec<bool, 4>() { return GL_BOOL_VEC4; }
 }
 
 //Uniforms类的功能描述及所适用的类型、以及使用方法、初始状态
 // The Uniforms keeps a map from strings to values
 //
+// 当前Uniforms类可实际支持的uniform variable typetype
 // Currently the value can be of the following type:
 // - Single int, float, or Matrix4
 // - Cvec<T, n> with T=int or float, and n = 1, 2, 3, or 4
-// - shared_ptr<Texture>
+// - shared_ptr<Texture>  //支持纹理上传并同时设置uniform texture type值
 // - arrays of any of the above
 //
 // You either use uniform.put("varName", val) or
-// uniform.put("varArrayName", vals, numVals);
+// uniform.put("varArrayName", vals, numVals); //以matrix4 uniform为例考虑
 //
 // A Uniforms instance will start off empty, and you can use
 // its put member function to populate it.
@@ -123,7 +125,7 @@ public:
         return *this;
     }
     
-    Uniforms& put(const std::string& name, const std::tr1::shared_ptr<Texture>& value) {
+    Uniforms& put(const std::string& name, const std::shared_ptr<Texture>& value) {
         valueMap[name].reset(new TexturesValue(&value, 1));
         return *this;
     }
@@ -165,7 +167,7 @@ public:
         return *this;
     }
     
-    Uniforms& put(const std::string& name, const std::tr1::shared_ptr<Texture> *values, int count) {
+    Uniforms& put(const std::string& name, const std::shared_ptr<Texture> *values, int count) {
         valueMap[name].reset(new TexturesValue(values, count));
         return *this;
     }
@@ -200,6 +202,7 @@ protected:
     
     typedef std::map<std::string, ValueHolder> ValueMap;
     
+    //声明Uniforms容器的存储变量
     ValueMap valueMap;
     
     //从valueMap中查找name所指定的值
@@ -274,7 +277,7 @@ protected:
         
     public:
         CvecsValue(const Cvec<T, n> *vs, int size)
-        : Value(_helper::getTypeForCvec<T,n>(), size), vs_(vs, vs + size) {
+        : Value(_helper::getTypeForCvec<T,n>(), size), vs_(vs, vs + size) { //vs_(vs, vs + size)，以iterator范围从其它容器初始化
             assert(size > 0);
         }
         
@@ -300,6 +303,7 @@ protected:
         }
     };
 
+    //support Matrix4 list to be uploaded as uniform matrices data。
     class Matrix4sValue : public Value {
         // we use cvecs here instead of matrix4s here since matrix4
         // doesn't allow double element (yet), and to pass the data
@@ -347,6 +351,7 @@ protected:
             return new TexturesValue(*this);
         }
         
+        //texture uniform值非texture本身所含值，为所指定的物体texture unit index，故而不能从具体类型的值本身获得，需要额外传入
         virtual void apply(GLint location, GLsizei count, const GLint *boundTexUnits) const {
             assert(count <= size);
             _helper::genericGlUniformv(location, count, boundTexUnits); //为纹理uniform设置texture unit值

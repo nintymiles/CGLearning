@@ -5,15 +5,17 @@
 
 #include "scenegraph.h"
 #include "asstcommon.h"
+#include "material.h"
+#include "matrix4.h"
 
 class Drawer : public SgNodeVisitor {
 protected:
   std::vector<RigTForm> rbtStack_;
-  const ShaderState& curSS_;
+  const Material& material_;
 public:
-  Drawer(const RigTForm& initialRbt, const ShaderState& curSS)
+  Drawer(const RigTForm& initialRbt, const Material& material)
     : rbtStack_(1, initialRbt)
-    , curSS_(curSS) {}
+    , material_(material) {}
 
     //visit will push the last rbtStack RBT * node RBT in rbtStack
   virtual bool visit(SgTransformNode& node) {
@@ -28,9 +30,10 @@ public:
 
   virtual bool visit(SgShapeNode& shapeNode) {
     //back() function return the last element in the container
-    const Matrix4 MVM = rigTFormToMatrix(rbtStack_.back()) * shapeNode.getAffineMatrix();
-    sendModelViewNormalMatrix(curSS_, MVM, normalMatrix(MVM));
-    shapeNode.draw(curSS_);
+    Matrix4 MVM = rigTFormToMatrix(rbtStack_.back()) * shapeNode.getAffineMatrix();
+    Matrix4 NMVM = normalMatrix(MVM);
+    //sendModelViewNormalMatrix(material_.getUniforms(), MVM, NMVM);
+    shapeNode.draw(material_);
     return true;
   }
 
@@ -38,8 +41,8 @@ public:
     return true;
   }
 
-  const ShaderState& getCurSS() const {
-    return curSS_;
+  const Material& getCurMat() const {
+    return material_;
   }
 };
 

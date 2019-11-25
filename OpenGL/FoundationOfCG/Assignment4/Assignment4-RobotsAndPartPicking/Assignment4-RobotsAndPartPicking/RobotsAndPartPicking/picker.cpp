@@ -49,6 +49,7 @@ bool Picker::visit(SgShapeNode& node) {
     shared_ptr<SgNode> baseNode = nodeStack_.back();
     shared_ptr<SgRbtNode> rbtNode = dynamic_pointer_cast<SgRbtNode>(baseNode);
     addToMap(idCounter_, rbtNode);
+    //为选中的节点指定颜色
     if(selectedRbtNode_ == baseNode){
         safe_glUniform3f(drawer_.getCurSS().h_uIdColor, 0.3, 0.9, 0.5);
     }else{
@@ -66,6 +67,7 @@ bool Picker::postVisit(SgShapeNode& node) {
 shared_ptr<SgRbtNode> Picker::getRbtNodeAtXY(int x, int y) {
     vector<char> image(3);
     PackedPixel pixel;
+    glReadBuffer(GL_BACK);
     glReadPixels(x,y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, &pixel);
     int colorId = colorToId(pixel);
     shared_ptr<SgRbtNode> jointNode = find(colorId);

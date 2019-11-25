@@ -11,6 +11,7 @@
 #include "rigtform.h"
 #include "glsupport.h" // for Noncopyable
 #include "asstcommon.h"
+#include "material.h"
 
 using namespace std;
 
@@ -69,7 +70,7 @@ public:
   virtual bool accept(SgNodeVisitor& visitor);
 
   virtual Matrix4 getAffineMatrix() = 0;
-  virtual void draw(const ShaderState& curSS) = 0;
+  virtual void draw(const Material& curSS) = 0;
 };
 
 
@@ -148,9 +149,10 @@ public:
     return affineMatrix_;
   }
 
-  virtual void draw(const ShaderState& curSS) {
-    safe_glUniform3f(curSS.h_uColor, color_[0], color_[1], color_[2]);
-    geometry_->draw(curSS);
+  virtual void draw(const Material& material) {
+    //safe_glUniform3f(curSS.h_uColor, color_[0], color_[1], color_[2]);
+    material.getUniforms().put("uColor",color_[0], color_[1], color_[2]);
+    geometry_->draw(material);
   }
 };
 

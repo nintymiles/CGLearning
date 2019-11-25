@@ -82,6 +82,7 @@ const vector<string>& BufferObjectGeometry::getVertexAttribNames() {
   return vertexAttribNames_;
 }
 
+//attribIndices[]中的数据从glProgram中由attributesDesc所维护的数据处理而得
 void BufferObjectGeometry::draw(int attribIndices[]) {
   if (wiringChanged_)
     processWiring();

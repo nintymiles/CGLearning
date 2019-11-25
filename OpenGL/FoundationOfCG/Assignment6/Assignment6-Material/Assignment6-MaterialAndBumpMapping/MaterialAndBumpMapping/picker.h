@@ -37,8 +37,8 @@ class Picker : public SgNodeVisitor {
   int colorToId(const PackedPixel& p);
 
 public:
-  Picker(const RigTForm& initialRbt, const ShaderState& curSS);
-    Picker(const RigTForm& initialRbt, const ShaderState& curSS,shared_ptr<SgRbtNode> selectedNode,shared_ptr<SgRootNode> worldNode,RigTForm eyeRbt,RigTForm motionRbt);
+  Picker(const RigTForm& initialRbt, const Material& material);
+    Picker(const RigTForm& initialRbt, const Material& material,shared_ptr<SgRbtNode> selectedNode,shared_ptr<SgRootNode> worldNode,RigTForm eyeRbt,RigTForm motionRbt);
 
   virtual bool visit(SgTransformNode& node);
   virtual bool postVisit(SgTransformNode& node);

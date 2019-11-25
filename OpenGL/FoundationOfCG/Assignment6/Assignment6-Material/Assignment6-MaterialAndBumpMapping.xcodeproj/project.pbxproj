@@ -8,13 +8,27 @@
 
 /* Begin PBXBuildFile section */
 		5C0F676F2295270E00C3EE99 /* scenegraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CA6586121F0CA790087B7F8 /* scenegraph.cpp */; };
-		5C0F67702295270E00C3EE99 /* assignment4-main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CDA259321EF72CB00F2A6D1 /* assignment4-main.cpp */; };
-		5C0F67742295276900C3EE99 /* picker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C0F67722295276800C3EE99 /* picker.cpp */; };
+		5C0F67702295270E00C3EE99 /* assignment6-main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CDA259321EF72CB00F2A6D1 /* assignment6-main.cpp */; };
 		5C0F6775229527E800C3EE99 /* ppm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C800CD121FA874C00DB8452 /* ppm.cpp */; };
 		5C0F677A2295285300C3EE99 /* material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C0F67782295285200C3EE99 /* material.cpp */; };
 		5C0F677B2295285300C3EE99 /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C0F67792295285300C3EE99 /* texture.cpp */; };
 		5C0F677E2295301500C3EE99 /* renderstates.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C0F677D2295301500C3EE99 /* renderstates.cpp */; };
-		5C0F6781229538D400C3EE99 /* asst6_5-snippets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C0F6780229538D400C3EE99 /* asst6_5-snippets.cpp */; };
+		5C522851230E8913006A84CA /* perfMonitor.h in Sources */ = {isa = PBXBuildFile; fileRef = 5C800CAB21FA810A00DB8452 /* perfMonitor.h */; };
+		5C522852230E8913006A84CA /* arcball.h in Sources */ = {isa = PBXBuildFile; fileRef = 5C800CAE21FA812600DB8452 /* arcball.h */; };
+		5C522853230E8913006A84CA /* quat.h in Sources */ = {isa = PBXBuildFile; fileRef = 5C800CAD21FA812600DB8452 /* quat.h */; };
+		5C522854230E8913006A84CA /* rigtform.h in Sources */ = {isa = PBXBuildFile; fileRef = 5C800CAF21FA812600DB8452 /* rigtform.h */; };
+		5C522855230E8913006A84CA /* cvec.h in Sources */ = {isa = PBXBuildFile; fileRef = 5C800CB121FA813300DB8452 /* cvec.h */; };
+		5C522856230E8913006A84CA /* geometrymaker.h in Sources */ = {isa = PBXBuildFile; fileRef = 5C800CB021FA813300DB8452 /* geometrymaker.h */; };
+		5C522857230E8913006A84CA /* matrix4.h in Sources */ = {isa = PBXBuildFile; fileRef = 5C800CB221FA813300DB8452 /* matrix4.h */; };
+		5C522858230E8913006A84CA /* glsupport.h in Sources */ = {isa = PBXBuildFile; fileRef = 5C800CB421FA815100DB8452 /* glsupport.h */; };
+		5C522859230E8913006A84CA /* ppm.h in Sources */ = {isa = PBXBuildFile; fileRef = 5C800CD221FA874C00DB8452 /* ppm.h */; };
+		5C5850CC230FB55A00AEDBB3 /* asstcommon.h in Sources */ = {isa = PBXBuildFile; fileRef = 5CA6586521F0CA790087B7F8 /* asstcommon.h */; };
+		5C5850CF230FB55A00AEDBB3 /* scenegraph.h in Sources */ = {isa = PBXBuildFile; fileRef = 5CA6586821F0CA790087B7F8 /* scenegraph.h */; };
+		5C5850D0230FB55A00AEDBB3 /* material.h in Sources */ = {isa = PBXBuildFile; fileRef = 5C0F677F229530CF00C3EE99 /* material.h */; };
+		5C5850D1230FB55A00AEDBB3 /* texture.h in Sources */ = {isa = PBXBuildFile; fileRef = 5C0F67772295285200C3EE99 /* texture.h */; };
+		5C5850D2230FB55A00AEDBB3 /* uniforms.h in Sources */ = {isa = PBXBuildFile; fileRef = 5C0F67762295285200C3EE99 /* uniforms.h */; };
+		5C5850D3230FB55A00AEDBB3 /* renderstates.h in Sources */ = {isa = PBXBuildFile; fileRef = 5C0F677C2295301500C3EE99 /* renderstates.h */; };
+		5C5850D4230FB55A00AEDBB3 /* geometry.h in Sources */ = {isa = PBXBuildFile; fileRef = 5C6D40792296475E007D01A8 /* geometry.h */; };
 		5C6D407B2296475E007D01A8 /* geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C6D407A2296475E007D01A8 /* geometry.cpp */; };
 		5C800CAC21FA810A00DB8452 /* perfMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C800CAA21FA810A00DB8452 /* perfMonitor.cpp */; };
 		5C800CB521FA815100DB8452 /* glsupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C800CB321FA815100DB8452 /* glsupport.cpp */; };
@@ -28,6 +42,7 @@
 		5C800CD721FA921900DB8452 /* basic-gl3.vshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C800CC121FA81C200DB8452 /* basic-gl3.vshader */; };
 		5C800CD821FA923B00DB8452 /* pick-gl3.fshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C800CBF21FA81C200DB8452 /* pick-gl3.fshader */; };
 		5CF9491821FEA0F1004D711B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CF9491721FEA0F1004D711B /* Cocoa.framework */; };
+		5CFA80472331EB1C0034E816 /* picker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CFA80452331EB1C0034E816 /* picker.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -47,8 +62,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		5C0F67722295276800C3EE99 /* picker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = picker.cpp; sourceTree = "<group>"; };
-		5C0F67732295276900C3EE99 /* picker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = picker.h; sourceTree = "<group>"; };
 		5C0F67762295285200C3EE99 /* uniforms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = uniforms.h; sourceTree = "<group>"; };
 		5C0F67772295285200C3EE99 /* texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = texture.h; sourceTree = "<group>"; };
 		5C0F67782295285200C3EE99 /* material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = material.cpp; sourceTree = "<group>"; };
@@ -56,7 +69,6 @@
 		5C0F677C2295301500C3EE99 /* renderstates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = renderstates.h; sourceTree = "<group>"; };
 		5C0F677D2295301500C3EE99 /* renderstates.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = renderstates.cpp; sourceTree = "<group>"; };
 		5C0F677F229530CF00C3EE99 /* material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = material.h; sourceTree = "<group>"; };
-		5C0F6780229538D400C3EE99 /* asst6_5-snippets.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "asst6_5-snippets.cpp"; sourceTree = "<group>"; };
 		5C54F28821FDA1F000657C36 /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = readme.md; path = ../../../readme.md; sourceTree = "<group>"; };
 		5C6D4075229646CC007D01A8 /* normal-gl3.vshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "normal-gl3.vshader"; sourceTree = "<group>"; };
 		5C6D4076229646CC007D01A8 /* normal-gl2.fshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "normal-gl2.fshader"; sourceTree = "<group>"; };
@@ -86,12 +98,14 @@
 		5C800CD121FA874C00DB8452 /* ppm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ppm.cpp; path = "../../../../Assignment3/Assignment3-QuaternionAndArcball/Assignment3-QuaternionAndArcball/mit-example/ppm.cpp"; sourceTree = "<group>"; };
 		5C800CD221FA874C00DB8452 /* ppm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ppm.h; path = "../../../../Assignment3/Assignment3-QuaternionAndArcball/Assignment3-QuaternionAndArcball/mit-example/ppm.h"; sourceTree = "<group>"; };
 		5CA6586121F0CA790087B7F8 /* scenegraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scenegraph.cpp; sourceTree = "<group>"; };
-		5CA6586221F0CA790087B7F8 /* drawer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = drawer.h; sourceTree = "<group>"; };
 		5CA6586521F0CA790087B7F8 /* asstcommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asstcommon.h; sourceTree = "<group>"; };
 		5CA6586821F0CA790087B7F8 /* scenegraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scenegraph.h; sourceTree = "<group>"; };
 		5CDA259021EF72CB00F2A6D1 /* Assignment6-MaterialAndBumpMapping */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Assignment6-MaterialAndBumpMapping"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5CDA259321EF72CB00F2A6D1 /* assignment4-main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "assignment4-main.cpp"; sourceTree = "<group>"; };
+		5CDA259321EF72CB00F2A6D1 /* assignment6-main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "assignment6-main.cpp"; sourceTree = "<group>"; };
 		5CF9491721FEA0F1004D711B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		5CFA80452331EB1C0034E816 /* picker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = picker.cpp; sourceTree = "<group>"; };
+		5CFA80462331EB1C0034E816 /* picker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = picker.h; sourceTree = "<group>"; };
+		5CFA80482331EB780034E816 /* drawer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = drawer.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,12 +170,12 @@
 				5C800CD221FA874C00DB8452 /* ppm.h */,
 				5C800CBC21FA81C200DB8452 /* shaders */,
 				5CA6586521F0CA790087B7F8 /* asstcommon.h */,
-				5CA6586221F0CA790087B7F8 /* drawer.h */,
-				5C0F67722295276800C3EE99 /* picker.cpp */,
-				5C0F67732295276900C3EE99 /* picker.h */,
+				5CFA80482331EB780034E816 /* drawer.h */,
+				5CFA80452331EB1C0034E816 /* picker.cpp */,
+				5CFA80462331EB1C0034E816 /* picker.h */,
 				5CA6586121F0CA790087B7F8 /* scenegraph.cpp */,
 				5CA6586821F0CA790087B7F8 /* scenegraph.h */,
-				5CDA259321EF72CB00F2A6D1 /* assignment4-main.cpp */,
+				5CDA259321EF72CB00F2A6D1 /* assignment6-main.cpp */,
 				5C0F67782295285200C3EE99 /* material.cpp */,
 				5C0F677F229530CF00C3EE99 /* material.h */,
 				5C0F67792295285300C3EE99 /* texture.cpp */,
@@ -171,7 +185,6 @@
 				5C0F677C2295301500C3EE99 /* renderstates.h */,
 				5C6D407A2296475E007D01A8 /* geometry.cpp */,
 				5C6D40792296475E007D01A8 /* geometry.h */,
-				5C0F6780229538D400C3EE99 /* asst6_5-snippets.cpp */,
 			);
 			path = MaterialAndBumpMapping;
 			sourceTree = "<group>";
@@ -258,14 +271,29 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C5850CC230FB55A00AEDBB3 /* asstcommon.h in Sources */,
+				5C5850CF230FB55A00AEDBB3 /* scenegraph.h in Sources */,
+				5C5850D0230FB55A00AEDBB3 /* material.h in Sources */,
+				5C5850D1230FB55A00AEDBB3 /* texture.h in Sources */,
+				5C5850D2230FB55A00AEDBB3 /* uniforms.h in Sources */,
+				5C5850D3230FB55A00AEDBB3 /* renderstates.h in Sources */,
+				5C5850D4230FB55A00AEDBB3 /* geometry.h in Sources */,
+				5C522851230E8913006A84CA /* perfMonitor.h in Sources */,
+				5C522852230E8913006A84CA /* arcball.h in Sources */,
+				5C522853230E8913006A84CA /* quat.h in Sources */,
+				5C522854230E8913006A84CA /* rigtform.h in Sources */,
+				5CFA80472331EB1C0034E816 /* picker.cpp in Sources */,
+				5C522855230E8913006A84CA /* cvec.h in Sources */,
+				5C522856230E8913006A84CA /* geometrymaker.h in Sources */,
+				5C522857230E8913006A84CA /* matrix4.h in Sources */,
+				5C522858230E8913006A84CA /* glsupport.h in Sources */,
+				5C522859230E8913006A84CA /* ppm.h in Sources */,
 				5C0F6775229527E800C3EE99 /* ppm.cpp in Sources */,
 				5C0F677E2295301500C3EE99 /* renderstates.cpp in Sources */,
-				5C0F67742295276900C3EE99 /* picker.cpp in Sources */,
-				5C0F6781229538D400C3EE99 /* asst6_5-snippets.cpp in Sources */,
 				5C6D407B2296475E007D01A8 /* geometry.cpp in Sources */,
 				5C0F677A2295285300C3EE99 /* material.cpp in Sources */,
 				5C0F676F2295270E00C3EE99 /* scenegraph.cpp in Sources */,
-				5C0F67702295270E00C3EE99 /* assignment4-main.cpp in Sources */,
+				5C0F67702295270E00C3EE99 /* assignment6-main.cpp in Sources */,
 				5C0F677B2295285300C3EE99 /* texture.cpp in Sources */,
 				5C800CAC21FA810A00DB8452 /* perfMonitor.cpp in Sources */,
 				5C800CB521FA815100DB8452 /* glsupport.cpp in Sources */,

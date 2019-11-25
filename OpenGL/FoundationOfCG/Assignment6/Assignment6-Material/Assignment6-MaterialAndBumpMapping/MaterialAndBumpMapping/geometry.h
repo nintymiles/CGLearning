@@ -54,6 +54,7 @@ public:
 //vertex数据格式封装，包括了一个attribute描述列表
 // Helper class that describes the format of a vertex. Maintains
 // a list of attribute descriptions
+//一个Vertex Attribute的封装，包含名称，attribute size，顶点数目以及顶点数据的尺寸等，但是attribute location数据由外部传入。
 class VertexFormat {
 
 public:
@@ -84,7 +85,7 @@ public:
         AttribDesc ad(name, size, type, normalized, offset);
         //若map容器中找不到name，则加入attribDescs的index
         if (name2Idx_.find(name) == name2Idx_.end()) {
-            //当前attribDescs的数目刚好可作为attribute的自然attribute location
+            //当前attribDescs的数目刚好可作为attribDescs_的自然索引
             name2Idx_[name] = attribDescs_.size();
             //确定attribute location值之后再将ad压入attribDescs
             attribDescs_.push_back(ad);
@@ -144,7 +145,7 @@ class FormattedVbo : public GlBufferObject {
     int length_;
     
 public:
-    //构造函数以饮用方式传入了vertexFormat参数，对其生存周期需要关注
+    //构造函数以引用方式传入了vertexFormat参数，对其生存周期需要关注
     // The passed in formatDesc_ is stored by reference. Hence the caller
     // should either pass in a static global variable, or ensure its lifespan
     // encompasses the lifespan of the FormmatedVbo
@@ -183,7 +184,7 @@ public:
             glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
         }
 #ifndef NDEBUG
-        checkGlErrors(__func__);
+        checkGlError(__func__);
 #endif
     }
 };
@@ -227,23 +228,24 @@ public:
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
         }
 #ifndef NDEBUG
-        checkGlErrors(__func__);
+        checkGlError(__func__);
 #endif
     }
     
 };
 
-//一个有弹性的Geometry class实现，支持灵活的一个或多个vertex buffers使用，借助或不借助index buffers，以及primitives type的灵活指定，强大的设计
+//一个有弹性的Geometry class实现，支持灵活的一个**或*多个vertex buffers使用，借助或不借助index buffers，以及primitives type的灵活指定，强大的设计
 // A flexible light weight Geometry implementation allowing drawing using multiple vertex buffers,
 // with or without an index buffer, and as different primitives (e.g., triangles, quads, points...).
 //
-// This essentially maintains a map of
+// This* essentially maintains a map of
 //   vertex attribute names --> (FormattedVbo, attribute name)
 //
 // To draw its self, it binds all the vertex attributes that it is wired to, and calls
 // the suitable OpenGL calls to draw either indexed or non-index geometry. There are optimizations
 // to call glBindBuffer only once for each distince FormattedVbo it wires to.
 
+//将VBO和具体的几何顶点产生关系
 class BufferObjectGeometry : public Geometry {
 public:
     // Initialize, with zero vertex buffer and index buffer attached. Defaults to TRIANGLES primitive
@@ -298,6 +300,7 @@ private:
     std::shared_ptr<FormattedIbo> ib_;
     
     // Internal struct for optimized vb binding order
+    // 真正最后设置attribute pointer的依据结构
     struct PerVbWiring {
         // Use bare pointers since shared_ptrs are maintained by wiring_, hence
         // we do not need to worry about keeping it getting freed

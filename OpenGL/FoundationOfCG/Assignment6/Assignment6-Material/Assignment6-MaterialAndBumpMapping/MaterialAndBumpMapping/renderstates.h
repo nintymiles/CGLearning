@@ -15,23 +15,26 @@
 // - GL_CULL_FACE   (Default: on)
 
 class RenderStates {
-  GLenum glFront, glBack; // for polygonMode
-  GLenum glBlendSrcFactor, glBlendDstFactor; // for blendFunc
-  GLenum glCullFaceMode; // for cullFace
-  unsigned int flags;
-
+    //声明了几种状态
+    GLenum glFront, glBack; // for polygonMode
+    GLenum glBlendSrcFactor, glBlendDstFactor; // for blendFunc
+    GLenum glCullFaceMode; // for cullFace
+    unsigned int flags;
+    
 public:
-  RenderStates();
-
-  RenderStates& polygonMode(GLenum face, GLenum mode);
-  RenderStates& blendFunc(GLenum sfactor, GLenum dfactor);
-  RenderStates& cullFace(GLenum mode);
-
-  RenderStates& enable(GLenum target);
-  RenderStates& disable(GLenum target);
-
-  void apply() const;
-  void captureFromGl();
+    RenderStates();
+    
+    //不管设置什么状态，返回参数为RenderStates对象引用
+    //知识点：操作函数的返回值设计
+    RenderStates& polygonMode(GLenum face, GLenum mode);
+    RenderStates& blendFunc(GLenum sfactor, GLenum dfactor);
+    RenderStates& cullFace(GLenum mode);
+    
+    RenderStates& enable(GLenum target);
+    RenderStates& disable(GLenum target);
+    
+    void apply() const;
+    void captureFromGl();
 };
 
 #endif

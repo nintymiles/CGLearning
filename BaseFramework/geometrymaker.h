@@ -13,7 +13,7 @@
 // A generic vertex structure containing position, normal, and texture information
 // Used by make* functions to pass vertex information to the caller
 
-//通用顶点GenericVertex结构，用于一次性封装顶点相关的所有可能数据项
+//通用顶点数据类型GenericVertex，用于一次性封装顶点相关的所有可能数据项目
 //GenericVertex可被用于有选择的两次vertex data封装
 struct GenericVertex {
     Cvec3f pos;
@@ -58,6 +58,7 @@ void makePlane(float size, VtxOutIter vtxIter, IdxOutIter idxIter) {
     *(++idxIter) = 2;
     *(++idxIter) = 0;
     *(++idxIter) = 2;
+    
     *(++idxIter) = 3;
 }
 

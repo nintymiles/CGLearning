@@ -8,8 +8,11 @@
 
 #include "glsupport.h"
 #include "matrix4.h"
+#include "uniforms.h"
 
-struct ShaderState {
+#define DEPRECATED
+
+DEPRECATED struct ShaderState {
   GlProgram program;
 
   // Handles to uniform variables
@@ -47,15 +50,25 @@ struct ShaderState {
 
 };
 
+// the responsibility of ShaderState: read and compile shaders,then check and store uniform locations. therefore it is not needed any more for current material system.
 // takes MVM and its normal matrix to the shaders
-inline void sendModelViewNormalMatrix(const ShaderState& curSS, const Matrix4& MVM, const Matrix4& NMVM) {
-  GLfloat glmatrix[16];
-  MVM.writeToColumnMajorMatrix(glmatrix); // send MVM
-  safe_glUniformMatrix4fv(curSS.h_uModelViewMatrix, glmatrix);
+//DEPRECATED inline void sendModelViewNormalMatrix(const ShaderState& curSS, const Matrix4& MVM, const Matrix4& NMVM) {
+//  GLfloat glmatrix[16];
+//  MVM.writeToColumnMajorMatrix(glmatrix); // send MVM
+//  safe_glUniformMatrix4fv(curSS.h_uModelViewMatrix, glmatrix);
+//
+//  NMVM.writeToColumnMajorMatrix(glmatrix); // send NMVM
+//  safe_glUniformMatrix4fv(curSS.h_uNormalMatrix, glmatrix);
+//}
 
-  NMVM.writeToColumnMajorMatrix(glmatrix); // send NMVM
-  safe_glUniformMatrix4fv(curSS.h_uNormalMatrix, glmatrix);
+// takes MVM and its normal matrix to the shaders by using uniforms
+inline void sendModelViewNormalMatrix(Uniforms& uniforms, const Matrix4& MVM, const Matrix4& NMVM) {
+//    GLfloat glmatrix[16];
+//    MVM.writeToColumnMajorMatrix(glmatrix); // send MVM
+    uniforms.put("uModelViewMatrix",MVM);
+    
+//    NMVM.writeToColumnMajorMatrix(glmatrix); // send NMVM
+    uniforms.put("uNormalMatrix",NMVM);
 }
-
 
 #endif

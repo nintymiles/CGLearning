@@ -252,6 +252,7 @@ static void updateFrustFovY() {
     if (g_windowWidth >= g_windowHeight)
         g_frustFovY = g_frustMinFov;
     else {
+        //意图？达到了将alpha值用在不同对角线位置的效果
         const double RAD_PER_DEG = 0.5 * CS175_PI/180;
         g_frustFovY = atan2(sin(g_frustMinFov * RAD_PER_DEG) * g_windowHeight / g_windowWidth, cos(g_frustMinFov * RAD_PER_DEG)) / RAD_PER_DEG;
     }
@@ -625,7 +626,8 @@ static void initGLState() {
     glClearDepth(0.f);
     //glClear(GL_DEPTH_BUFFER_BIT);
     
-    //  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    //necessary step for picking
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     //  glPixelStorei(GL_PACK_ALIGNMENT, 1);
     //  glCullFace(GL_BACK);
     //  glEnable(GL_CULL_FACE);

@@ -205,10 +205,17 @@ public:
         Matrix4 r(0);
         const double ang = fovy * 0.5 * CS175_PI/180;
         const double f = std::abs(std::sin(ang)) < CS175_EPS ? 0 : 1/std::tan(ang);
-        if (std::abs(aspectRatio) > CS175_EPS)
-            r(0,0) = f/aspectRatio;  // 1st row
+        if (std::abs(aspectRatio) > CS175_EPS ){
+            if(aspectRatio >= 1){
+                r(0,0) = f/aspectRatio;  // 1st row
+                r(1,1) = f;    // 2nd row
+            }else{
+                r(0,0) = f;  // 1st row
+                r(1,1) = aspectRatio * f;    // 2nd row
+            }
+        }
         
-        r(1,1) = f;    // 2nd row
+        //r(1,1) = f;    // 2nd row
         
         if (std::abs(zFar - zNear) > CS175_EPS) { // 3rd row
             r(2,2) = (zFar+zNear) / (zFar - zNear);

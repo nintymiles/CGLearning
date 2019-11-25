@@ -99,6 +99,7 @@ void ppmRead(const char *filename, int& width, int& height, std::vector<PackedPi
     }
   }
   else {
+    //bit by bit reading and converting
     for (int row = height - 1; row >= 0; row--) {
       for (int l = 0; l < width; l++) {
         PackedPixel &p = pixels[row * width + l];

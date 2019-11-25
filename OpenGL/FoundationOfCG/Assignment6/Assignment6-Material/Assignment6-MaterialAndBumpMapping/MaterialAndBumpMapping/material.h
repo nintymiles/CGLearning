@@ -6,9 +6,9 @@
 #include <map>
 #include <memory>
 #include <stdexcept>
-#if __GNUG__
-#   include <tr1/memory>
-#endif
+//#if __GNUG__
+//#   include <tr1/memory>
+//#endif
 
 
 #include "cvec.h"
@@ -20,24 +20,27 @@
 
 struct GlProgramDesc;
 
+//材料类的接口定义
 class Material {
 public:
-  Material(const std::string& vsFilename, const std::string& fsFilename);
-
-  void draw(Geometry& geometry, const Uniforms& extraUniforms);
-
-  Uniforms& getUniforms() { return uniforms_; }
-  const Uniforms& getUniforms() const { return uniforms_; }
-
-  RenderStates& getRenderStates() { return renderStates_; }
-  const RenderStates& getRenderStates() const { return renderStates_; }
-
+    //构造函数，接收两个shader源文件
+    Material(const std::string& vsFilename, const std::string& fsFilename);
+    //绘制接口，传入geometry和uniforms封装参数
+    void draw(Geometry& geometry, const Uniforms& extraUniforms);
+    
+    Uniforms& getUniforms() { return uniforms_; }
+    //第一个const代表返回一个const reference，第二个const代表const memeber function，即函数对象不可改变
+    const Uniforms& getUniforms() const { return uniforms_; }
+    
+    RenderStates& getRenderStates() { return renderStates_; }
+    const RenderStates& getRenderStates() const { return renderStates_; }
+    
 protected:
-  std::tr1::shared_ptr<GlProgramDesc> programDesc_;
-
-  Uniforms uniforms_;
-
-  RenderStates renderStates_;
+    std::shared_ptr<GlProgramDesc> programDesc_;
+    
+    Uniforms uniforms_;
+    
+    RenderStates renderStates_;
 };
 
 
