@@ -109,39 +109,30 @@ This general description can be numerically formulated in the so called hue satu
 这种通用描述可以被数字化准确表达在所谓的明确色彩的色调饱和度评估系统
 
 ##19.2 数学模型（Mathematical Model）
-The model just described in Section 19.1 was actually deduced in the 19th century using just a few perceptual experiments. They had no access to the technologies needed to study cells in an eye. This was an amazing feat. Here, we follow this original line of reasoning and explain how our color model can be deduced from the ground up with just the right kind of perceptual experiments. This will give us a more careful understanding of how to deﬁne color, and it will let us treat color space with all the tools of linear algebra, without reference to neural responses of any kind.
-
 刚刚在19.1节描述的模型实际上在19世纪已经被推导出来，仅仅借助了几个感知实验。他们当时无法使用研究眼睛细胞所需的技术。所以这是一个很神奇的伟业。此处，我们跟从这个原始的推理线索并且解释我们的颜色模型如何可以从头开始被推导出来，仅借助正确种类的感知实验。这会让我们更仔细深入的理解如何定义色彩，并且这也让我们可以使用所有线性代数的工具处理色彩空间，并无需借助任何种类的神经反应。
-
-We start only with the basic knowledge from physics, that light beams can be described as wavelength distributions l(λ), and the rough observation that distinct light distributions can sometimes appear indistinguishable to a human observer. In order to carefully study such metamerism, and speciﬁcally to avoid any effects that may occur when a human observes a complicated scene, we design an experimental setup such as that shown in Figure 19.3. This allows us to present to an observer two light beams with known wavelength distributions. We can then ask the observer if these beams appear identical or different.
 
 我们从来自物理学的基础知识作为起始点，也即是说光束可以被描述为波长分布𝑙(λ)，同时借助一种大略的观察-这种观察可以区分出光分布对于人类观察者有时候无法区分。为了仔细研究这种条件等色现象，同时特意去避免任何可能出现在人观察复杂场景时的效应，我们设计了一个实验设备，就如在图示Figure 19.3中所示。这允许我们为一个观察者呈现两束拥有已知波长分布的光束。我们随后就可以询问观察者是否这些光束看起来完全相同还是不同。
 ![Figure19.3](media/Figure19.3.png)
-Figure 19.3: Basic color-matching experimental setup. Light projectors focus light beams with various wavelength distributions onto a large monochromatic screen in a way that forms two colored patches, each with a controlled wavelength distribution. Multiple projectors are placed on the right side so we can also test what happens when various light distributions are added together. A human observer is asked if the two patches can be distinguished by color, or not.
-
 Figure 19.3: 基本颜色匹配实验装置。光投影仪使用多种可变光分布，将光束聚焦在一块大的单色屏幕上，借助特定方式形成两种色块，这种方式让每个光束都由受控制的波长分布构成。多个投影仪被放置在右边，以方便我们也能够检测到当多种光分布被汇总在一起会发生什么。人类观察者会被问两个色块能否通过色彩来区分或者不能。
-
-In our very ﬁrst experiment, we test that the metameric relation is transitive (here we ignore the issue of just noticeable differences, and thresholding effects). In particu￿ ￿ lar we ﬁnd that, if l 1 (λ) is indistinguishable to l 1 (λ), and l 1 (λ) is indistinguishable to ￿￿ ￿ ￿￿ l 1 (λ), then l 1 (λ) will always be indistinguishable to l 1 (λ).
 
 就是在第一个实验中，我们验证了条件等色关系是可传递的（此处我们忽略刚刚可注意到的差异问题，以及阈值效应）。实际上，我们发现如果𝑙₁(λ)对于𝑙₁‘(λ)不可区分，同时𝑙₁‘(λ)对于𝑙₁‘‘(λ)不可区分，那么𝑙₁(λ)也总是对于𝑙₁‘‘(λ)不可区分。
 
-Due to this transitivity, we actually deﬁne ⃗c(l 1 (λ)), “the color of the beam l 1 (λ)”, as the collection of light beams that are indistinguishable to a human observer from ′ ′′ l 1 (λ). So in our case, we would have ⃗c(l 1 (λ)) = ⃗c(l 1 (λ)) = ⃗c(l 1 (λ)). Thus in our mathematical model, a (retinal) color is an equivalence class of light beams.
-
 由于这种传递性，我们实际上定义c⃗(𝑙₁(λ))，“光束𝑙₁(λ)的色彩”为对于人类观察者无法从𝑙₁(λ)区分的光束的集合。所以在我们的案例中，我们会有c⃗(𝑙₁(λ))=c⃗(𝑙₁‘(λ))=c⃗(𝑙₁‘‘(λ))。因此在我们的数学模型中，一种（视网膜）色彩就是一种类等效（一整类具有相同效果的）的光束（也就是说具有相同效果的每个光束都是同一种色彩）。
-
-Ultimately, we would like to be able to treat the space of colors as a linear vector space. This, for example, would allow us to easily represent colors using coordinate vectors, and it would tell us how we could produce desired colors by mixing together various “primary” colors.
 
 最终，我们想要可以（意欲能够）将色彩空间处理为一个线性矢量空间。例如，这会允许我们轻松借助坐标矢量（coordinate vectors)就可以表示色彩，同时也会告诉我们怎样通过将几种“主色彩”混合在一起以产生要求的色彩。
 
-Our next step, then, is to ﬁgure out how to add two colors together. We know from physics that when two light beams, l 1 (λ) and l 2 (λ), are added together, they simply form a combined beam with light distribution l 1 (λ)+l 2 (λ). Thus, we attempt to deﬁne the addition of two colors, as the color of the addition of two beams.
-
 然后，我们的下一步是指出怎样将两种色彩加在一起。我们从物理学中得知当两个光束，𝑙₁(λ)和𝑙₂(λ)被加在一起，它们只是以光分布𝑙₁(λ)+𝑙₂(λ)的特征组成了一个合并光束。如此，我们尝试定义两个色彩的加法，其结果为两个光束的加法（和）所对应的色彩。
 
-⃗c(l 1 (λ)) + ⃗c(l 2 (λ)) := ⃗c(l 1 (λ) + l 2 (λ)) For this to be well deﬁned, we must experimentally verify that it does not make a difference which beam we choose as representative for each color. In particular, if ′ ⃗c(l 1 (λ)) = ⃗c(l 1 (λ)), then we must verify (again using our setup of Figure 19.3) that, ′ for all l 2 (λ), we have ⃗c(l 1 (λ) + l 2 (λ)) = ⃗c(l 1 (λ) + l 2 (λ)), i.e., we must test that ′ the beam l 1 (λ) + l 2 (λ) is indistinguishable to l 1 (λ) + l 2 (λ). This property is indeed conﬁrmed by experiment.
+c⃗(𝑙₁(λ))+c⃗(𝑙₂(λ)) := c⃗(𝑙₁(λ)+𝑙₂(λ))
 
-Our next step is to try to deﬁne what it means to multiply a color by a non-negative real number α. Again, since we can multiply a light beam by a positive scalar, we try the deﬁnition
+要让这个公式被正确定义，必须以实验方式验证我们选择哪个光束作为每个色彩的代表并没有不同。实际上，如果c⃗(𝑙₁(λ))=c⃗(𝑙₁‘(λ))，那么我们必须验证（再次借助图示Figure19.3的装置）：对于所有的𝑙₂(λ)，我们具有如下关系c⃗(𝑙₁(λ))+c⃗(𝑙₂(λ)) := c⃗(𝑙₁‘(λ))+c⃗(𝑙₂(λ)),也即，我们必须验证光束𝑙₁(λ)+𝑙₂(λ)对于𝑙₁‘(λ)+𝑙₂(λ)是不可区分。这个属性确实可被实验证实。
 
-α⃗c(l 1 (λ)) := ⃗c(αl 1 (λ)) (19.4) Again, we need to verify that the behavior of this operation does not depend on our ′ choice of beam. Thus when ⃗c(l 1 (λ)) = ⃗c(l 1 (λ)) we must verify that for all α we have ′ ⃗c(αl 1 (λ)) = ⃗c(αl 1 (λ)), i.e., we must test that the beam αl 1 (λ) is indistinguishable to ′ αl 1 (λ). This property is also conﬁrmed by experiment.
+
+我们的下一步是尝试定义用非负实数α乘以一个色彩坐标意味着什么。再次，因为我们可以用一个正数（scalar）乘以一个光束，尝试如下定义：
+
+αc⃗(𝑙₁(λ)) := c⃗(α𝑙₁(λ) (19.4) 
+
+再一次，我们需要验证这个操作的行为不依赖我们对光束的选择。因此当c⃗(𝑙₁(λ))= c⃗(𝑙₁‘(λ))，我们必须验证对于所有的α值我们也具有c⃗(α𝑙₁(λ))= c⃗(α𝑙₁‘(λ))，也即是说，我们必须验证光束α𝑙₁(λ)对于α𝑙₁‘(λ)是无法区分的。这个属性也可以通过实验证实。
 
 ##19.3 色彩匹配（Color Matching）
 
