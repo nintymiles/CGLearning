@@ -197,7 +197,7 @@ static const char * getGlConstantName(GLenum c) {
 }
 
 //draw函数是material的关键函数
-void Material::draw(Geometry& geometry, const Uniforms& extraUniforms) {
+void Material::draw(Geometry& geometry, const Uniforms& extraUniforms){
     //static storage duration最大textureImageUnits变量
     static GLint maxTextureImageUnits = 0;
     
@@ -218,7 +218,7 @@ void Material::draw(Geometry& geometry, const Uniforms& extraUniforms) {
     // Step 1:
     // set the uniforms and bind the textures
     int textureUnit = 0;
-    for (int i = 0, n = programDesc_->uniforms.size(); i < n; ++i) {
+    for (int i = 0, n = static_cast<int>(programDesc_->uniforms.size()); i < n; ++i) {
         const GlProgramDesc::UniformDesc& ud = programDesc_->uniforms[i];
         
         const Uniforms* uniformsList[] = {&uniforms_, &extraUniforms};

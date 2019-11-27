@@ -11,9 +11,9 @@
 class Drawer : public SgNodeVisitor {
 protected:
   std::vector<RigTForm> rbtStack_;
-  const Material& material_;
+  Material& material_;
 public:
-  Drawer(const RigTForm& initialRbt, const Material& material)
+  Drawer(const RigTForm& initialRbt, Material& material)
     : rbtStack_(1, initialRbt)
     , material_(material) {}
 
@@ -32,7 +32,7 @@ public:
     //back() function return the last element in the container
     Matrix4 MVM = rigTFormToMatrix(rbtStack_.back()) * shapeNode.getAffineMatrix();
     Matrix4 NMVM = normalMatrix(MVM);
-    //sendModelViewNormalMatrix(material_.getUniforms(), MVM, NMVM);
+    sendModelViewNormalMatrix(material_.getUniforms(), MVM, NMVM);
     shapeNode.draw(material_);
     return true;
   }

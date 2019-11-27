@@ -37,7 +37,7 @@ public:
     virtual ~Geometry() {}
 };
 
-//提供一个参考阳历BufferObjectGeometry，提供功能有：允许使用来自一个或多个vertex buffers的vertices，0个或一整个index buffers，使用不同的primitives进行绘制
+//提供一个参考样例BufferObjectGeometry，提供功能有：允许使用来自一个或多个vertex buffers的vertices，0个或一整个index buffers，使用不同的primitives进行绘制
 //BufferObjectGeometry提供了对绘制复杂性的封装，所封装的复杂性包括vertex data和绘制方式
 // ============================================================================
 // We provide a flexible implementation of Geometry called BufferObjectGeometry
@@ -69,7 +69,7 @@ public:
         
         AttribDesc(const std::string& _name, GLint _size, GLenum _type, GLboolean _normalized, int _offset)
         : name(_name), size(_size), type(_type), normalized(_normalized), offset(_offset) {
-            assert(_name != "");   // some basic sanity checks
+            assert(_name != "");   // some basic sanity（健全） checks
             assert(_size > 0);
             assert(_offset >= 0);
         }
@@ -86,13 +86,14 @@ public:
         //若map容器中找不到name，则加入attribDescs的index
         if (name2Idx_.find(name) == name2Idx_.end()) {
             //当前attribDescs的数目刚好可作为attribDescs_的自然索引
-            name2Idx_[name] = attribDescs_.size();
+            name2Idx_[name] = static_cast<int>(attribDescs_.size());
             //确定attribute location值之后再将ad压入attribDescs
+            //in other words,name2Idx_ maintains indices to attriDescs for a specific attribute name
             attribDescs_.push_back(ad);
         }
         //如果name在本地缓存中存在，则直接将缓存设置为新attribDesc数据
         else
-            attribDescs_[name2Idx_[name]] = ad;
+            attribDescs_[name2Idx_[name]] = ad; //如果 attribute name已经存在，则直接替换数据
         
         return *this;
     }
@@ -103,7 +104,7 @@ public:
     
     //获得vertex attribute数目
     int getNumAttribs() const {
-        return attribDescs_.size();
+        return static_cast<int>(attribDescs_.size());//attribDescs_.size();
     }
     
     //获得具体索引所指向的本地缓存中的attribute
@@ -121,6 +122,7 @@ public:
     // Calls glVertexAttribPointer with appropirate arguments to bind the attribute
     // indexed by 'attribIndex' within this VertexFormat to vertex attribute location
     // specified by 'glAttribLocation'
+    // Notes -- the biggest role of AttributeDesc object is to guide setting of params of glVertexAttribPointer()，同时数据则认为已经上传到VBO中
     void setGlVertexAttribPointer(int attribIndex, int glAttribLocation) const {
         assert(glAttribLocation >= 0);
         const AttribDesc &ad = attribDescs_[attribIndex];

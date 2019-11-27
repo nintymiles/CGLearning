@@ -15,6 +15,7 @@
 
 using namespace std;
 
+//forward declaration
 class SgNodeVisitor;
 
 class SgNode : public enable_shared_from_this<SgNode>, Noncopyable {
@@ -50,15 +51,16 @@ public:
   void removeChild(shared_ptr<SgNode> child);
 
   int getNumChildren() const {
-    return (int)children_.size();
+      //此处针对size_type类型执行传统的强制转型
+      return (int)children_.size();
   }
 
   shared_ptr<SgNode> getChild(int i) {
-    return children_[i];
+      return children_[i];
   }
 
 private:
-  std::vector<shared_ptr<SgNode> > children_;
+    std::vector<shared_ptr<SgNode> > children_;
 };
 
 //
@@ -70,7 +72,7 @@ public:
   virtual bool accept(SgNodeVisitor& visitor);
 
   virtual Matrix4 getAffineMatrix() = 0;
-  virtual void draw(const Material& curSS) = 0;
+  virtual void draw(Material& material) = 0;
 };
 
 
@@ -86,7 +88,7 @@ public:
   virtual bool postVisit(SgShapeNode& node) { return true; }
 };
 
-
+//a global function defifnition？
 RigTForm getPathAccumRbt(
   shared_ptr<SgTransformNode> source,
   shared_ptr<SgTransformNode> destination,
@@ -149,11 +151,14 @@ public:
     return affineMatrix_;
   }
 
-  virtual void draw(const Material& material) {
+  virtual void draw(Material& material){
     //safe_glUniform3f(curSS.h_uColor, color_[0], color_[1], color_[2]);
-    material.getUniforms().put("uColor",color_[0], color_[1], color_[2]);
-    geometry_->draw(material);
+      Uniforms uniforms = material.getUniforms();
+      uniforms.put("uColor",Cvec3(color_[0], color_[1], color_[2]));
+      //geometry_->draw(material);
+      material.draw(geometry_,NULL);
   }
+
 };
 
 #endif

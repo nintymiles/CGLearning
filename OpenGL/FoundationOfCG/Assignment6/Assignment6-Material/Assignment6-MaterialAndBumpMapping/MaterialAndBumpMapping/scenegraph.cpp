@@ -4,6 +4,7 @@
 
 using namespace std;
 
+//一直迭代知道最终找到对应子节点，visit步骤执行完毕，程序return false（意味着压stack完毕）；否则一直执行到子步骤执行完毕，最后执行到postVisit。也意味着没有子节点，则当前stack压入后直接在pop出去。
 bool SgTransformNode::accept(SgNodeVisitor& visitor) {
   if (!visitor.visit(*this))
     return false;
@@ -22,6 +23,7 @@ void SgTransformNode::removeChild(shared_ptr<SgNode> child) {
   children_.erase(find(children_.begin(), children_.end(), child));
 }
 
+//in general,shapeNode doesn't have a child node
 bool SgShapeNode::accept(SgNodeVisitor& visitor) {
   if (!visitor.visit(*this))
     return false;
