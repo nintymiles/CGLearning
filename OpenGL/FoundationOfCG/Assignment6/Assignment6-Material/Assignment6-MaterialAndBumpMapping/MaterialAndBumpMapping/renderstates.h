@@ -15,7 +15,7 @@
 // - GL_CULL_FACE   (Default: on)
 
 class RenderStates {
-    //声明了几种状态
+    //The number of render state flags that are supported here need to be speically maintained. That means how many flags are encoded here, those then are be supported.
     GLenum glFront, glBack; // for polygonMode
     GLenum glBlendSrcFactor, glBlendDstFactor; // for blendFunc
     GLenum glCullFaceMode; // for cullFace
@@ -24,7 +24,7 @@ class RenderStates {
 public:
     RenderStates();
     
-    //不管设置什么状态，返回参数为RenderStates对象引用
+    //不管设置什么状态，返回参数为RenderStates对象引用,目的在于链式引用。
     //知识点：操作函数的返回值设计
     RenderStates& polygonMode(GLenum face, GLenum mode);
     RenderStates& blendFunc(GLenum sfactor, GLenum dfactor);

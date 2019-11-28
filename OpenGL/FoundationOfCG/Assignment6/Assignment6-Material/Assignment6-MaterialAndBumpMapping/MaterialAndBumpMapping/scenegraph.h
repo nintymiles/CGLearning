@@ -156,7 +156,8 @@ public:
       Uniforms uniforms = material.getUniforms();
       uniforms.put("uColor",Cvec3(color_[0], color_[1], color_[2]));
       //geometry_->draw(material);
-      material.draw(geometry_,NULL);
+      Uniforms extraUniforms;
+      material.draw(*geometry_, extraUniforms);
   }
 
 };

@@ -120,11 +120,13 @@ void RenderStates::apply() const {
     }
     
     //位&运算操作决定blending状态的启用关闭？
+    //首先比较当前系统渲染状态的值，若不一致，才继续进行操作，目的尽量减少API调用开销。
     if ((flags & kBlendBit) != (currentRs.flags & kBlendBit)) {
         if (flags & kBlendBit)
             glEnable(GL_BLEND);
         else
             glDisable(GL_BLEND);
+        //只要执行了状态设置，就说明不一致，维护的当前渲染状态变量值需要改变，此位关闭和当前位的或值操作，保证和当前设置值一致。
         currentRs.flags = (currentRs.flags & (~kBlendBit)) | (flags & kBlendBit);
     }
     
@@ -154,6 +156,7 @@ void RenderStates::captureFromGl() {
     glGetIntegerv(GL_CULL_FACE_MODE, values);
     glCullFaceMode = values[0];
     
+    //若两种标志为启用，则设置bitMask为on
     flags = 0;
     if (glIsEnabled(GL_BLEND))
         flags |= kBlendBit;

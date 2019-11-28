@@ -6,9 +6,6 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
-//#if __GNUG__
-//#   include <tr1/memory>
-//#endif
 
 #include "cvec.h"
 #include "matrix4.h"
@@ -18,7 +15,8 @@
 // Private namespace for some helper functions. You should ignore this unless you
 // are interested in the internal implementation.
 
-// Private name _helper中服装了用于自定义CVec矢量类型族的const uniform设置，涵盖了基础结构可能用到的所有类型如何设置uniform值
+// Private name _helper中封装了用于自定义CVec矢量类型族的const uniform设置，涵盖了基础结构可能用到的所有类型如何设置uniform值
+// Summarize：Uniforms object response for hold onto necessary unifrom values，then upload them to shader when needed. that's all
 namespace _helper {
     inline void genericGlUniformi(GLint location, int i) {
         ::glUniform1i(location, i);
@@ -217,11 +215,13 @@ protected:
     public:
         ValueHolder() : value_(NULL) {}
         ValueHolder(Value* value) : value_(value) {}
+        //construct an object from a constant instance
         ValueHolder(const ValueHolder& u) : value_(u.value_ ? u.value_->clone() : NULL) {}
         ~ValueHolder() {
             if (value_)
                 delete value_;
         }
+        //若ValueHolder对象实例本身已经有值，那么在reset时先删去旧值，然后再设置新值；否则直接设置。
         void reset(Value* value) {
             if (value_)
                 delete value_;
@@ -253,7 +253,7 @@ protected:
         virtual Value* clone() const = 0;
         virtual ~Value() {}
         
-        //针对texture类型的特定成员函数
+        //针对texture类型的特定成员函数，非texture数据类型中，tetureUnit参数通常被忽略
         // If type is one of GL_SAMPLER_*, the getTextures should provide a pointer to
         // the array of shared_ptr<Texture> stored by the uniform. And apply should
         // use the boundTexUnits argument as the argument for glUniform*.
