@@ -182,7 +182,6 @@ Thus, there are three main conceptual ways to specify a basis for color space:
 
 在$[\vec{c}(𝑙_{435}) \  \vec{c}(𝑙_{545}) \ \vec{c}(𝑙_{625})]$之外，我们已经看到另一种用于色彩空间的基（basis）。实际上，方程（19.1）中的匹配函数也描述了一种色彩空间基（basis），这里色彩的坐标被称为$[S,M,L]^t$。实际基由3种色彩构成，我们称之为$[\vec{c}_s,\vec{c}_m,\vec{c}_l ]$。色彩$\vec{c}_m$事实上是一种想象色，因为在LMS色彩坐标中，不存在真实的光束其坐标为$[0,1,0]^t$
 
-
 ###19.4.1 Gamut
 假设我们想让一种基，其上所有的实际色彩都有非负坐标，如此则其上Lasso curve决不会离开第一象限。那么我们发现（找寻到）定义这个象限的至少一个基矢量（basis vectors）一定位于实际色彩锥体的外部。这样一个基矢量一定是一种想象色。这种现象仅是由于Lasso curve本身的形状所导致；我们不能找到3个矢量，它们即都触碰（碰撞）到Lasso curve同时还在它们的正数区间（象限）中包含整个Lasso curve。
 
@@ -199,7 +198,7 @@ Throughout this book, we have been using RGB coordinates to describe colors. In 
 整本书中，我们都在使用RGB坐标来描述色彩。事实上，存在多种不同的色彩空间都使用了这个名称。当前正在使用的被指定的RGB色彩空间为Rec.709 RGB色彩空间。（参考图示Figure 19.10）。
 
 In this case the basis [⃗c r ,⃗c g ,⃗c b ] is made up of three actual colors intended to match the colors of the three phosphors of an ideal monitor/tv display. Colors with nonnegative RGB coordinates can be produced on a monitor and are said to lie inside the gamut of the color space. These colors are in the ﬁrst octant of the Figure. But similar to the case of [⃗c(l 435 ) ⃗c(l 545 ) ⃗c(l 645 )], there exist actual colors with some negative RGB coordinates. Such colors cannot be produced on a monitor. Additionally, on a monitor, each phosphor maxes out at “1”, which also limits the achievable outputs.
-这种情形中基$[c_r^\to,c_g^\to,c_b^\to]^t$由3种意图匹配理想监视器/电视的3种Phsphors的实际色彩构成。拥有非负RGB坐标的色彩可以在一台监视器上被产生，同时可被说成是位于这个色彩空间的范围之内。这些色彩实际位于图示的第一象限之内。但是类似于基$[c^\to(l_{435} c^\to(l_{545} c^\to(l_{625}]$，存在有用某种负RGB坐标表示的实际色彩。这样的色彩不能在监视器上被产生。另外，在一台监视器上，每个phosphor（磷光子）的最大值为“1”，这也限制了可获取的色彩输出。
+这种情形中基$[c_r^\to,c_g^\to,c_b^\to]^t$由3种意图匹配理想监视器/电视的3种Phsphors的实际色彩构成。拥有非负RGB坐标的色彩可以在一台监视器上被产生，同时可被说成是位于这个色彩空间的范围之内。这些色彩实际位于图示的第一象限之内。但是类似于基$[\vec{c}(l_{435} \vec{c}(l_{545} \vec{c}(l_{625}]$，存在有用某种负RGB坐标表示的实际色彩。这样的色彩不能在监视器上被产生。另外，在一台监视器上，每个phosphor（磷光子）的最大值为“1”，这也限制了可获取的色彩输出。
 
 An image that has colors outside of the gamut must somehow be mapped into the gamut for display. The simplest solution for this is to simply clamp all negative values at 0. There are also more sophisticated methods for gamut mapping that will be beyond our scope.
 一个具有显示器显示范围之外色彩的图像一定要某种程度（意义）上被映射到显示范围之内。对于这种情形最简单的方案只是将所有的负值限制到（固定到）0。也存在用于显示范围映射更成熟的方法，只不过那超过了我们的学习范围。
@@ -208,19 +207,14 @@ In Section 19.7.2, we will describe another commonly encountered color space cal
 在小节19.7.2中，我们会描述另一种常常碰到的色彩空间，被称作$sRGB$。正如我们会看到的，其不是线性色彩空间。
 
 ###19.5 反射建模（Reflection Modeling）
-When a beam of light i(λ) from an illumination source hits a surface, some of that light is absorbed and some reﬂected. The fraction of reﬂected light depends on the physical properties of the surface’s material. Let us specify how much of each wavelength is reﬂected using a reﬂectance function r(λ). In this case, we can model the light beam reﬂecting off the surface using per-wavelength multiplication
 当来自一个光源的一束光$i(\lambda)$照射到一个表面上，那个光的一些被吸收，还有一些被反射。被反射的光的部分依赖于表面材料的物理属性。让我们借助一个反射函数$r(\lambda)$指定每个波长有多少被反射.在这种情形中，我们可以用每波长乘法建模从表面反射出来的光束
 
 $l(\lambda) = i(\lambda)r(\lambda)$
 
-(Note: this does not model all types of interactions between a light and a surface, for example ﬂorescence. Additionally, in this discussion, we are not concerning ourselves with the dependence of r(λ) on the angles of entering or exiting light, as will be done in Chapter 21.) This multiplication happens on a per-wavelength basis, and cannot be simulated exactly in a 3D color space. Indeed, two materials may reﬂect metameric beams under one illuminant, but may produce distinguishable beams under a second illuminant:
 （注意：这种方式没有建模光和表面之间的所有类型的交互，例如光闪耀（florescence）。另外，这个讨论中，我们没有让我们注意$r(\lambda)$的对于光进入和逃离（出射）角度的依赖，这点将会在第21章完成。）这种乘法发生在每波长的基础上，同时在3D线性空间中不能被精确模拟。确实，两种可能在一种光源下反射出条件等色光束的材料，但是在另一种光源下却可能产生两种有区别的光束。
 
-$c^\to(i_1(\lambda)r_a(\lambda)) = c^\to(i_1(\lambda)r_b(\lambda))$
-$<\neq>$
-$c^\to(i_2(\lambda)r_a(\lambda)) = c^\to(i_2(\lambda)r_b(\lambda))$
+$ \vec{c}(i_1(\lambda)r_a(\lambda)) = \vec{c}(i_1(\lambda)r_b(\lambda)) \nLeftrightarrow \vec{c}(i_2(\lambda)r_a(\lambda)) = \vec{c}(i_2(\lambda)r_b(\lambda))$
 
-As such, in some rendering situations, it is important to model this spectral dependence in reﬂection. More typically, we ignore this issue, and model the illuminant by three, say RGB, color coordinates (throwing away the spectral information about i(λ)), and likewise use three reﬂectance “coefﬁcients” to model the surface’s reﬂectance property.
 因此，在某些渲染情形中，在反射中建模光谱以来就是重要的因数。但是更典型的，我们会忽略这个问题，而是通过比方说3个RGB色彩坐标（抛掉关于$i(\lambda)$的频谱信息），同样再借助3个反射“因子”来建模表面的反射属性（大部分关于光的渲染模型都是基于这个假设，比如Gauraud的Phone Shading）。
 
 ###19.5.1 白平衡
