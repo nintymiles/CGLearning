@@ -9,6 +9,7 @@
 #include <stdexcept>
 #include <memory>
 
+//tr1/memory为以前的遗迹，memory目前已经被引入标准库
 //#if __GNUG__
 //#   include <tr1/memory>
 //#endif
@@ -17,17 +18,16 @@
 #include "glsupport.h"
 #include "geometrymaker.h"
 
-//抽象类，封装了vertex attributes等几何数据，且知道如何绘制自身
-//Geometry对象可发起对自身的绘制
+//Geometry抽象类，封装了vertex attributes等几何数据，且知道如何绘制自身
 // An abstract class that encapsulates geometry data that provides vertex attributes and
 // know how to draw itself.
 class Geometry {
 public:
-    //纯虚函数，用于提供几何对象所提供的所有vertex attributes，需要实现类实现
+    //纯虚函数，用于提供几何对象所需的所有vertex attributes，需要实现类实现
     // return names of vertex attributes provided by this geometry
     virtual const std::vector<std::string>& getVertexAttribNames() = 0;
     
-    //对attribIndices提供说明，其数据组织应该满足attribute location确切对应于数组index本身
+    //对attribIndices提供说明，用于启用/关闭vertex attribute array
     // Draw the geometry. attribIndices[i] corresponds to the index of the
     // shader vertex attribute location that the i-th vertex attribute provided
     // by this geometry should bind to. It can be -1 to indicate that this stream is
@@ -37,7 +37,7 @@ public:
     virtual ~Geometry() {}
 };
 
-//提供一个参考样例BufferObjectGeometry，提供功能有：允许使用来自一个或多个vertex buffers的vertices，0个或一整个index buffers，使用不同的primitives进行绘制
+//提供一个参考样例BufferObjectGeometry，提供功能有：允许使用来自一个或多个vertex buffers的vertices，0个或一整个index buffers，使用不同的primitives type进行绘制
 //BufferObjectGeometry提供了对绘制复杂性的封装，所封装的复杂性包括vertex data和绘制方式
 // ============================================================================
 // We provide a flexible implementation of Geometry called BufferObjectGeometry
@@ -168,8 +168,10 @@ public:
     //关注glBufferData和glBufferSubData的用法区别
     // Upload vertex data to the vbo. Specify dynamicUsage = true if you intend
     // to upload different data multiple times
+
     template<typename Vertex>
     void upload(const Vertex* vertices, int length, bool dynamicUsage = false) {
+        //首先检查实际的Vertex数据中每个vertex的尺寸是否和vertexformat中记录的尺寸的一致
         assert(sizeof(Vertex) == format_.getVertexSize());
         glBindBuffer(GL_ARRAY_BUFFER, *this);
         length_ = length;

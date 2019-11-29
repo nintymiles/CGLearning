@@ -798,7 +798,7 @@ static void constructRobot(shared_ptr<SgTransformNode> base, const Cvec3& color)
     }
     for (int i = 0; i < NUM_SHAPES; ++i) {
         shared_ptr<MyShapeNode> shape(
-                                      new MyShapeNode(make_shared<SimpleGeometryPNTBX>(shapeDesc[i].geometry),
+                                      new MyShapeNode(make_shared<SimpleIndexedGeometryPNTBX>(shapeDesc[i].geometry),
                                                       color,
                                                       Cvec3(shapeDesc[i].x, shapeDesc[i].y, shapeDesc[i].z),
                                                       Cvec3(0, 0, 0),

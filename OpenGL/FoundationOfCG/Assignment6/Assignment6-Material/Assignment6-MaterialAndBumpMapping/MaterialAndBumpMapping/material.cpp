@@ -292,6 +292,7 @@ void Material::draw(Geometry& geometry, const Uniforms& extraUniforms){
     
     // Step 2:
     // see what attribs are provided by the geometry
+    // 将几何对象的属性和Shader中的属性名称匹配，然后将匹配的attribute location放入数组中。
     const vector<string>& geoAttribNames = geometry.getVertexAttribNames();
     
     const static int MAX_ATTRIB = 64;
@@ -331,6 +332,7 @@ void Material::draw(Geometry& geometry, const Uniforms& extraUniforms){
     }
     
     // Now let the geometry draw its self
+    // 几何对象根据vbo/ibo中的数据绘制自身，这种方式支持多个VBO？
     geometry.draw(attribIndices);
     
     for (size_t i = 0; i < numAttribs; ++i) {

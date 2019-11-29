@@ -6,10 +6,6 @@
 #include <map>
 #include <memory>
 #include <stdexcept>
-//#if __GNUG__
-//#   include <tr1/memory>
-//#endif
-
 
 #include "cvec.h"
 #include "matrix4.h"

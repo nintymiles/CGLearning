@@ -95,6 +95,7 @@ void BufferObjectGeometry::draw(int attribIndices[]) {
     const PerVbWiring &pvw = perVbWirings_[i];
     const VertexFormat& vfd = pvw.vb->getVertexFormat();
 
+    //每次绑定一个VBO，然后设置vertexattribpointer，这意味着可以支持多缓存共用。
     glBindBuffer(GL_ARRAY_BUFFER, *(pvw.vb));
 
     vboLen = min(vboLen, (unsigned int)pvw.vb->length());
