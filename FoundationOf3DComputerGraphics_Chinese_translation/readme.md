@@ -1,33 +1,34 @@
 # Note
 这本书正在不断的学习中，每读一遍都受益匪浅。当对一种文献拥有足够的熟悉度，那么翻译出来自然会有一定的准确度。这本教材适于没有专业的数学和物理知识的人员使用。内容深浅有度，可浅可深。但是所提供习题样例却又具有相当的深度。需要不断的理解书中内容，逐步的解决。
 
-## Markdown一般语法的注意事项
+## 翻译过程中所用到的一些Markdown语法
+
+### Markdown一般语法的注意事项
 1. Section（#）和List（*）等标记和内容之间要留下空格，否则github不能正常解析。
 
-## 翻译过程当中用到的Markdown MathJax表达
+### 已经用到的Markdown MathJax表达
 注意这里不是标准的Markdown语法而是用于数学公式表达的语法。
 
-### 基本格式控制
+#### 基本格式控制
 
 | 内容 | 格式 |
 | --- | --- |
-| 空格表达 |有四种宽度的表达， \, 、 \; 、 \quad 、 \qquad |
-| 注释表达，当然使用空格字符串注释也可插入空格 | \text{Figure 19.7} 、\text{    } |
-| 在数学公式中的粗体表示 | \mathbf{c},注意基本格式控制要用在数学符号控制的外围，而非其内。例如：\\mathbf{\vec{c}} |
-| 控制字体缩放 | \normalsize \small \Small \SMALL \large \Large \LARGE \huge \Huge \HUGE ，其中大些字母的多少代表相应行为的严重程度|
+| 空格表达 |四种宽度: \\,  、 \\;  、 \\quad  、 \\qquad |
+| 注释表达，当然使用空格字符串注释也可插入空格 | \\text{Figure 19.7} 、\\text{    } |
+| 在数学公式中的粗体表示 | \\mathbf{c},注意基本格式控制要用在数学符号控制的外围，而非其内。例如：\\mathbf{\vec{c}} |
+| 控制字体缩放 | \\normalsize \\small \\Small \\SMALL \\large \\Large \\LARGE \huge \Huge \HUGE ，其中大些字母越多代表相应行为的程度越大|
 
 
-### 数学符号表达
+#### 数学符号表达
 
 | 内容 | 格式 |  样例  |
 | --- | --- | --- |
-| 矢量的表达 | \vec{x} |  $\quad \vec{c} \quad 、 \mathbf{\vec{c}}$  |
-| 用到的拉丁字母 | \alpha 、\lambda 、\Omega | $\alpha 、 \lambda 、 \Omega$ |
+| 矢量的表达 | \\vec{x} |  $\quad \vec{c} \quad 、 \mathbf{\vec{c}}$  |
+| 用到的拉丁字母 | \\alpha 、\\lambda 、\\Omega | $\alpha 、 \lambda 、 \Omega$ |
 | 上下标 | 使用\^和\_，如x\_i 、 x\^2;若上下标长度超过1，将内容放入{}，例如 x_{123} | $C^2 、 C_m 、 C_{123m}$  |
-| 分数形式表达 | \frac{分子}{分母} | $$\frac{1}{.45}$$ |
+| 分数形式表达 |\ \frac{分子}{分母} | $\frac{1}{.45}$ |
 | 矩阵表达 | --- | --- |
 | Copyright符号 | 直接使用字符 ©️ | --- |
-
 
 
 
