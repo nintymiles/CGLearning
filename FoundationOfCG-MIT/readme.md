@@ -1,4 +1,4 @@
-#Some involved problems
+# Some involved problems
 - ViewController resolution problem -2019/01/11
 
     When create OpenGL ES project to be run only on iPhone device, if you want viewcontroller to be fit for iPhone device resolution,you need to remove viewcontroller properties "use trait variation" from right pane.
@@ -9,7 +9,7 @@
 - If you want to receive multitouch event, you need to enable "Multiple Touch" (default disabled) -2019/01/12
 - Pay attention to window coordinates (input from touch event/mouse),which need to be converted to OpenGL window coordinates when using in OpenGL context. -2019/01/12
 
-#To do list
+# To do list
 
 0. Migrate assignment 2 (helloworld3d) from Desktop OpenGL to OpenGL ES setting
 1. how to draw half translucent objects in OpenGL? done(20190111)
