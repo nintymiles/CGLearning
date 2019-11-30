@@ -26,7 +26,7 @@
 
 在某种强度范围内，（相关对应的）锥体（细胞）线性地响应照摄在它们之上的光。如此，对于混合光束$l(\lambda)$，3个响应坐标值$[S,M,L]^t$可用如下公式计算：
 
-$ \begin{matrix} S \quad = \quad \int_\Omega d\lambda \ l(\lambda) \ k_s(\lambda)  \qquad \text{(19.1)} \\ M \quad = \quad \int_\Omega d\lambda \ l(\lambda) \  k_m(\lambda) \qquad \text{(19.2)}  \\ L \quad =  \quad \int_\Omega d\lambda \ l(\lambda) \  k_l(\lambda) \qquad \text{(19.3)}  \end{matrix} $ 
+$$ \begin{matrix} S \quad = \quad \int_\Omega d\lambda \ l(\lambda) \ k_s(\lambda)  \qquad \text{(19.1)} \\ M \quad = \quad \int_\Omega d\lambda \ l(\lambda) \  k_m(\lambda) \qquad \text{(19.2)}  \\ L \quad =  \quad \int_\Omega d\lambda \ l(\lambda) \  k_l(\lambda) \qquad \text{(19.3)}  \end{matrix} $$ 
 
 此处$\Omega = [380..770]$。
 
@@ -117,14 +117,14 @@ $\vec{c}(l_\lambda ) = [\vec{c}(𝑙_{435}) \  \vec{c}(𝑙_{545}) \ \vec{c}(�
 正如各种矢量空间，色彩空间可以借助很多不同的基（bases）被描述。以方程（19.5）为基础，我们可以插入任何（非奇点）$3\times3$ 矩阵M和它的反转矩阵以获得如下的表达：
 
 
-$ \vec{c}(l_\lambda ) = ([\vec{c}(𝑙_{435}) \  \vec{c}(𝑙_{545}) \ \vec{c}(𝑙_{625})] M^{-1}) \left(  M \begin{bmatrix} \int_\Omega d\lambda \ l(\lambda) \ k_{435}(\lambda) \\ \int_\Omega d\lambda \ l(\lambda) \  k_{545}(\lambda) \\ \int_\Omega d\lambda \ l(\lambda) \  k_{625}(\lambda) \end{bmatrix}  \right)  $ 
+$$ \vec{c}(l_\lambda ) = ([\vec{c}(𝑙_{435}) \  \vec{c}(𝑙_{545}) \ \vec{c}(𝑙_{625})] M^{-1}) \left(  M \begin{bmatrix} \int_\Omega d\lambda \ l(\lambda) \ k_{435}(\lambda) \\ \int_\Omega d\lambda \ l(\lambda) \  k_{545}(\lambda) \\ \int_\Omega d\lambda \ l(\lambda) \  k_{625}(\lambda) \end{bmatrix}  \right)  $$
 
-$ \;\qquad = [\vec{c}_1 \  \vec{c}_2 \ \vec{c}_3)] \begin{bmatrix} \int_\Omega d\lambda \ l(\lambda) \ k_1(\lambda) \\ \int_\Omega d\lambda \ l(\lambda) \  k_2(\lambda) \\ \int_\Omega d\lambda \ l(\lambda) \  k_3(\lambda) \end{bmatrix}  \ (19.6)$ 
+$$ \;\qquad = [\vec{c}_1 \  \vec{c}_2 \ \vec{c}_3)] \begin{bmatrix} \int_\Omega d\lambda \ l(\lambda) \ k_1(\lambda) \\ \int_\Omega d\lambda \ l(\lambda) \  k_2(\lambda) \\ \int_\Omega d\lambda \ l(\lambda) \  k_3(\lambda) \end{bmatrix}  \ (19.6)$$ 
 
 
 此处$\vec{c}_i$描述了一个新的色彩基(basis)，定义如下：
 
-$ [\vec{c}_1 \  \vec{c}_2 \ \vec{c}_3] = [\vec{c}(𝑙_{435}) \  \vec{c}(𝑙_{545}) \ \vec{c}(𝑙_{625})]M^{-1}  $ 
+$$ [\vec{c}_1 \  \vec{c}_2 \ \vec{c}_3] = [\vec{c}(𝑙_{435}) \  \vec{c}(𝑙_{545}) \ \vec{c}(𝑙_{625})]M^{-1}  $$ 
 
 还有$k(\lambda)$函数可以组成新的关联匹配函数，定义如下：
 
