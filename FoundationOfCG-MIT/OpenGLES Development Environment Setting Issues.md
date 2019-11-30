@@ -3,7 +3,7 @@
 ## 在Windows台式机上开发OpenGLES的可行性
 由于OpenGLES是OpenGL的子集，所以在Windows上直接进行OpenGLES的开发是可行的。利用GLFW就可以实现这种目的。GLFW是用于OpenGL、OpenGLES和Vulkan应用开发的跨平台库，提供了简洁、平台独立的API，用于管理本地窗口（EGL\EAGL）生成、OpenGL/OpenGLES环境上下文和渲染表面的初始化和生成、以及负责读取输入并处理事件等。
 
-不借助GLFW，那么使用OpenGLES模拟器（各移动图形卡厂商和Google都有提供）也是一种较好的选择。
+不借助GLFW等第三方库，那么在Windows上直接使用EGL和OpenGLES API并配合OpenGLES模拟器（各移动图形卡厂商和Google都有提供）也是一种较好的选择。
 
 总之，我们完全可以将OpenGLES渲染过程的代码在Windows平台上运行。由于OpenGL在Windows（PC）环境中已经十分成熟，所以只要Windows（PC）上拥有对应版本的OpenGL图形驱动，OpenGLES渲染代码就基本可以在其上运行。利用GLFW的跨平台特性，那么也可以实现OpenGLES代码跨移动和PC平台运行。
 
@@ -60,4 +60,6 @@ OpenGLES 3.0 API的加载可以借助Glad库（保证正确上下文环境的Ope
 如果不使用GLFW和Glad库，那么一般情况下需要安装OpenGLES模拟器。比如**OpenGLES 3.0 Programming Guide**书中就不借助第三方辅助库，而是使用Cmake直接配置OpenGLES模拟器配合使用。
 
 这种情形下，一般可选择Mali OpenGLES模拟器，可以从ARM公司的网站下载。建议下载可安装的exe版本，因为这种安装版本可以自动设置环境变量，而这在OpenGLES网上相关资料不多的情形下就显得价值巨大，省去很多茫然无措（参考文档不详细、资料不足）的折腾时间。其余按照网上对**OpenGLES 3.0 Programming Guide**源码环境的设置即可。
+
+
 
