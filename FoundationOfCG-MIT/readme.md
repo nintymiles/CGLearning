@@ -8,6 +8,7 @@
 - If you want to get 60 FPS on iOS (verified on iOS 9/12), you just set 'self.preferredFramesPerSecond = 60;' on view controller. -2019/01/12
 - If you want to receive multitouch event, you need to enable "Multiple Touch" (default disabled) -2019/01/12
 - Pay attention to window coordinates (input from touch event/mouse),which need to be converted to OpenGL window coordinates when using in OpenGL context. -2019/01/12
+- If OpenGL context can't be properly initialized (e.g., GLFW isn't initialized),the following error occurs(On XCode):"Thread 1: EXC_BAD_ACCESS (code=1, address=0x0)" - 2019/11/30
 
 #To do list
 
@@ -44,7 +45,6 @@
 	```
     
 5. Draw two cubes using same vetex data by a x coordinate offset uniform variable on AssignmentsProj. done(20190113)
-        
         
 	```
 	...
