@@ -1,4 +1,4 @@
-#Some involved problems
+# Some involved problems
 - ViewController resolution problem -2019/01/11
 
     When create OpenGL ES project to be run only on iPhone device, if you want viewcontroller to be fit for iPhone device resolution,you need to remove viewcontroller properties "use trait variation" from right pane.
@@ -10,7 +10,7 @@
 - Pay attention to window coordinates (input from touch event/mouse),which need to be converted to OpenGL window coordinates when using in OpenGL context. -2019/01/12
 - If OpenGL context can't be properly initialized (e.g., GLFW isn't initialized),the following error occurs(On XCode):"Thread 1: EXC_BAD_ACCESS (code=1, address=0x0)" - 2019/11/30
 
-#To do list
+# To do list
 
 0. Migrate assignment 2 (helloworld3d) from Desktop OpenGL to OpenGL ES setting
 1. how to draw half translucent objects in OpenGL? done(20190111)
