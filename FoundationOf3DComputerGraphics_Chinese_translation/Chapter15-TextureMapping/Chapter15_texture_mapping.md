@@ -55,16 +55,20 @@ The data type sampler2D is a special GLSL data type that refers to an OpenGL tex
 注：此处实际上是texture()函数调用。
 
 In this simplest incarnation, we just fetch r,g,b values from the texture and send them directly to the framebuffer. Alternatively, the texture data could be interpreted as, say, the diffuse material color of the surface point, which would then be followed by the diffuse material computation described in Section 14.2.
-在这种最简单的理想化情形中，我们只是从纹理中获取r、g、b的数值并且直接发送它们到帧缓存中。
+在这种最简单的理想化情形中，我们只是从纹理中获取r、g、b的数值并且直接发送它们到帧缓存中。可选地，纹理数据可以被解释为，比方说，不同的表面点的材料色，这然后会跟着被在14.2节中所描述的漫射表面计算所使用。
 
 ![Figure15.1](media/Figure15.1.png)
-Figure 15.1: Top: each vertex of a triangle is given x, y texture coordinates. These point into the texture image. Bottom: these coordinates are interpolated as varying variables at the pixel resolution. In the fragment shader, we can grab the color pointed c to by the texture coordinates, and use it in our rendering (right). From [65], ⃝ACM.
+**Figure 15.1:** Top: each vertex of a triangle is given x, y texture coordinates. These point into the texture image. Bottom: these coordinates are interpolated as varying variables at the pixel resolution. In the fragment shader, we can grab the color pointed  to by the texture coordinates, and use it in our rendering (right). From [65],. 顶部：一个三角形的每个顶点都被给出x，y纹理坐标。这些坐标指向纹理图像中。底部：这些坐标被在像素解析时插值为变异变量（varying variables）。在帧缓存（framebuffer）中，我们通过这些纹理坐标抓取其所指向的色彩，同时在渲染中使用这个色彩（右侧）。参考[65],ACM。
 
-## 15.2 Normal Mapping
-
+## 15.2 法线映射（Normal Mapping）
 The data from a texture can also be interpreted in more interesting ways. In normal mapping, the r,g,b values from a texture are interpreted as the three coordinates of the normal at the point. This normal data can then be used as part of some material simulation , as described in Chapter 14. See Figure 15.2 for such an example.
+来自一个纹理的发现也可以更有趣的方式被解读。在法线映射，来自一个纹理的r、g、b数值被解读为当前点法线的3个坐标。这种法线数据随后会被用作某种材料模拟计算的一部分，就如在14章所描述的。参看这种情形的实例图示$\text{Figure 15.2}$
 
-Normal data has three coordinate values, each in the range [−1..1], while RGB textures store three values, each in the range [0..1]. Thus the normal data needs to be transformed into this format before being stored in the texture, as in r = normal x/2. +.5;. Conversely, your fragment shader needs to undo this transformation, as in normal x = 2r-1;.
+Normal data has three coordinate values, each in the range [−1..1], while RGB textures store three values, each in the range [0..1]. Thus the normal data needs to be transformed into this format before being stored in the texture, as in . Conversely, your fragment shader needs to undo this transformation, as in normal x = 2r-1;.
+法线数据有3中坐标值，每个都位于范围$[-1..1]$,而RGB纹理存储的3个数值，每个都处于范围$[0..1]$。因此，法线数据在被存储为纹理之前需要被转换为这种格式，就如在代码`r = normal_x/2. +.5;`中的转换。反之，你的碎片着色器（fragment shader）需要恢复这种转换，就如在代码`normal_x = 2r-1;`中的转换。
+
+![Figure15.2](media/Figure15.2.png)
+**Figure 15.2:** On the left we show a rendering of a teapot model. The teapot is shaded c with smoothly interpolated normals and the triangle edges are shown. (⃝Hugues Hoppe). On the right, we show the same surface but now it is rendered using a normal ﬁeld fetched from a high resolution texture. These normals are used in the lighting calc culations, and give the effect of highly resolved geometric detail. From [54], ⃝ACM. 在左侧，我们展示了一个茶壶模型的渲染。茶壶使用平滑插值的法线被着色，同时三角形边缘被展示。(©️Hugues Hoppe)。在右侧，我们展示了相同的表面，但是现在茶壶却是被来自高解析度纹理中所提取的法线域所渲染。这些法线被使用在光照计算中。并且给出了高解析度几何细节效果。参考[54],©️ACM。
 
 ## 15.3 Environment Cube Maps
 
@@ -94,6 +98,9 @@ In eye coordinates, the eye’s position coincides with the origin, and thus -vP
 In this code, all of our vectors are expressed in eye coordinates, and so we are also assuming that our cube texture represents the environment data in eye coordinates. If our cube texture were representing directions using, say, world coordinates, then appropriate coordinates for the rendered point would need to be passed to the fragment shader.
 
 This same idea, but modeling refraction instead of mirror reﬂection, has been used to generate the fountain image of Figure 22.4.
+
+![Figure15.3](media/Figure15.3.png)
+**Figure 15.3:** On the left the environment is stored as a cube texture. This is used to c render a mirrored lizard. From [25], ⃝IEEE. 在左侧，环境被存储为一个立方体纹理（cube texture）。其被用来渲染一个镜面化的蜥蜴。参考[25],©️IEEE。
 
 ## 15.4 投影仪纹理映射（Projector Texture Mapping）
 There are times when we wish to glue our texture onto our triangles using a projector model, instead of the afﬁne gluing model assumed in Section 15.1. For example, we may wish to simulate a slide projector illuminating some triangles in space. (See Figure 15.4). This is not as unusual as it may ﬁrst appear. For example, suppose we have taken a photograph of the facade of a building with a camera, and then wish to paste it appropriately on a digital 3D model of the building. To do this pasting, we should invert the geometry of the photography process by replacing the camera with a virtual slide projector in the same position relative to the building. (See Figure 15.5).
