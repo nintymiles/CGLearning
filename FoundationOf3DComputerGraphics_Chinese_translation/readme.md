@@ -16,7 +16,8 @@
 | 空格表达 |四种宽度: \\,  、 \\;  、 \\quad  、 \\qquad |
 | 注释表达，当然使用空格字符串注释也可插入空格 | \\text{Figure 19.7} 、\\text{    } |
 | 在数学公式中的粗体表示 | \\mathbf{c},注意基本格式控制要用在数学符号控制的外围，而非其内。例如：\\mathbf{\vec{c}} |
-| 控制字体缩放 | \\normalsize \\small \\Small \\SMALL \\large \\Large \\LARGE \huge \Huge \HUGE ，其中大些字母越多代表相应行为的程度越大|
+| 控制字体缩放 | \\normalsize \\small \\Small \\SMALL \\large \\Large \\LARGE \huge \Huge \HUGE{公式内容} ，其中大些字母越多代表相应行为的程度越大|
+| 公式的多行表达 | 若公式很复杂，或者为了可读性美观性想换行表达，则使用双\$\$ 围住多行公式，但要注意不要有空白行（可以理解为公式表达内容字符中间允许多个非连续回车符），否则会出现解析错误 |
 
 
 #### 数学符号表达
@@ -27,7 +28,7 @@
 | 用到的拉丁字母 | \\alpha 、\\lambda 、\\Omega | $\alpha 、 \lambda 、 \Omega$ |
 | 上下标 | 使用\^和\_，如x\_i 、 x\^2;若上下标长度超过1，将内容放入{}，例如 x_{123} | $C^2 、 C_m 、 C_{123m}$  |
 | 分数形式表达 |\ \frac{分子}{分母} | $\frac{1}{.45}$ |
-| 矩阵表达 | --- | --- |
+| 矩阵表达 |\\ begin\{[p/b/B/v/V]matrix\} a \\\\ b \\\\c \\ end\{[p/b/B/v/V]matrix\},若matrix之前没有字母则生成的矩阵没有包围符号，若有，则p表示(),b表示[],B表示{},V表示"∥∥",begin和end之间的内容表达 row1a&&row1b&&row1c \\\\ row2a&&row2b&&row2c \\\\ row3a&&row3b&&row3c | $\begin{Vmatrix} row1a&&row1b&&row1c \\ row2a&&row2b&&row2c \\ row3a&&row3b&&row3c \end{Vmatrix}$ |
 | Copyright符号 | 直接使用字符 ©️ | --- |
 
 
