@@ -1,18 +1,13 @@
 # 纹理映射（Texture Mapping）
-In Chapter 14, we saw how a simple model of interaction between light and materials can be used to compute a pixel’s color. The second main tool typically used by a fragment shader to compute a pixel’s color is to fetch data from an auxiliary image called a texture. In this chapter we will explore basic texture mapping as well as a number of variants. Such techniques are one of the main tools used to make our renderings look detailed and rich.
 在第14章中，我们看到了在光和材料之间的一个简单交互模型是如何被用来计算一个像素的色彩。通常被碎片着色器（fragment shader）用来计算一个像素色彩的另一种重要工具是从一个被称作纹理的辅助图像中提取数据。在本章中我们会探索基本纹理映射（basic texture mapping），同时还会包含它的多个变体。这样的技术正是让我们的渲染显得细致和内容丰富的主要工具。
 
-Figure 15.1 shows a simple example of texture mapping. On the left, we see a simple model made up of a few dozen triangles. One triangle is highlighted in red. We associate x t , y t texture coordinates with each vertex of each triangle (top). These coordinates “map” each vertex to some location in the texture. The texture coordinates are then interpolated over the triangle (bottom), giving us texture coordinates for each pixel. The fragment shader then grabs the texture color that is pointed to by its texture coordinates, and sends it to the framebuffer. The resulting rendered image is shown on the right.
-图示$\text{Figure 15.1}$展示了一个纹理映射的简单例子。在其左侧，我们看到了一个用几十个三角形构成的简单模型。其中一个三角形被高亮为红色。我们给每个三角形的每个顶点关联一个纹理坐标$x_t,y_t$（参考图示上部）。这些坐标“映射”每个顶点纹理中的某个位置。纹理坐标随后在三角形范围被插值（参考图示底部），如此就针对每个像素给出了纹理坐标。碎片着色器（fragment shader）随后抓取被纹理坐标所指向的纹理色彩，并且将其发送到framebuffer。最终被渲染的图像展示在图示的右侧。
+图示$\text{Figure 15.1}$展示了一个纹理映射的简单例子。在其左侧，我们看到了一个用几十个三角形构成的简单模型。其中一个三角形被高亮为红色。我们给每个三角形的每个顶点关联一个纹理坐标$x_t,y_t$（参考图示上部）。这些坐标“映射”每个顶点纹理中的某个位置。纹理坐标随后在三角形范围内被插值（参考图示底部），如此就针对每个像素给出了纹理坐标。碎片着色器（fragment shader）随后抓取被纹理坐标所指向的纹理色彩，并且将其发送到帧缓存（framebuffer）。最终被渲染的图像展示在图示的右侧。
 
 ## 15.1 基础纹理映射 （Basic Texturing）
-In basic texturing, we simply “glue” part of an image onto a triangle by specifying texture coordinates at the three vertices. In this model, we assume that each of the variables x t and y t are functions over a triangle that are afﬁne in object coordinates. This allows us to translate and rotate (or even scale and shear) the texture image in this gluing process.
 基础纹理映射中，我们只是“粘贴”一个图像的局部到一个三角形上，这个动作通过在三角形的三个顶点上指定纹理坐标的方式完成。在这个模型中，我们假设每个变量$x_t$和$y_t$都是一个三角形上的函数，而这些函数在对象坐标上具有并行的特点。这种情形允许我们在粘合过程中平移、选择（甚至缩放和切削）纹理图片。
 
-The code for loading a texture is described in Section A.4. As described there, a uniform variable is used to point to the desired texture unit, which is the same for all pixels processed in this draw-call. Varying variables are used to store texture coordinates at vertices, which point into some speciﬁc 2D location in the texture.
 用于加载一个纹理的代码在附录小节A.4中已经被描述。正如在那里所讲的，一个uniform变量被用于指向想要的纹理单位，这个纹理单位对于在这个绘制调用中的所有像素都是相同的。变异变量（varying variables）被用于在顶点上存储纹理坐标，这些纹理坐标指向纹理中某个特定2D地址。
 
-Here, we describe the relevant shaders needed for basic texture mapping. In this basic texturing example, the vertex shader simply passes the texture coordinates out to the fragment shader as varying variables.
 下面，我们描述相关的用于基础纹理映射所需着色器（shaders）。在这个基础的纹理映射例子里，顶点着色器（vertex shader）只是将纹理坐标作为变异变量传递到碎片着色器（fragment shader）中。
 
 ```
@@ -32,8 +27,7 @@ void main(){
 }
 ```
 
-The following fragment shader then uses these interpolated texture coordinates to lookup the desired color data from the texture and set the color in the framebuffer.
-下面的碎片着色器（fragment shader）随后使用这些被插值的纹理坐标来从纹理上寻找想要的色彩数据，并且将其设置到帧缓存（framebuffer）中。
+下面的碎片着色器（fragment shader）随后使用这些被插值的纹理坐标来从纹理中寻找想要的色彩数据，并且将其设置到帧缓存（framebuffer）中。
 
 ```
 #version 330
@@ -49,58 +43,55 @@ void main(){
 }
 ```
 
-The data type sampler2D is a special GLSL data type that refers to an OpenGL texture unit. The call to texture2D fetches a value from the texture unit.
-数据类型sampler2D是一种特殊的GLSL数据类型，用于指向一个OpenGL纹理单位（texture unit）。对texture2D的调用会获取来自纹理单位的一个色彩值。
+数据类型sampler2D是一种特殊的GLSL数据类型，用于指向一个OpenGL纹理单位（texture unit）。对texture2D的调用会获取来自纹理单位的一个色彩值。（注：此处实际上是texture()函数调用。）
 
-注：此处实际上是texture()函数调用。
-
-In this simplest incarnation, we just fetch r,g,b values from the texture and send them directly to the framebuffer. Alternatively, the texture data could be interpreted as, say, the diffuse material color of the surface point, which would then be followed by the diffuse material computation described in Section 14.2.
-在这种最简单的理想化情形中，我们只是从纹理中获取r、g、b的数值并且直接发送它们到帧缓存中。可选地，纹理数据可以被解释为，比方说，不同的表面点的材料色，这然后会跟着被在14.2节中所描述的漫射表面计算所使用。
+在这种最简单的理想化情形中，我们只是从纹理中获取r、g、b的数值并且直接发送它们到帧缓存（framebuffer）中。可选地，纹理数据可以被解释为，比方说，不同的表面点的材料色，这然后会跟着被在14.2节中所描述的漫射表面计算所使用。
 
 ![Figure15.1](media/Figure15.1.png)
-**Figure 15.1:** Top: each vertex of a triangle is given x, y texture coordinates. These point into the texture image. Bottom: these coordinates are interpolated as varying variables at the pixel resolution. In the fragment shader, we can grab the color pointed  to by the texture coordinates, and use it in our rendering (right). From [65],. 顶部：一个三角形的每个顶点都被给出x，y纹理坐标。这些坐标指向纹理图像中。底部：这些坐标被在像素解析时插值为变异变量（varying variables）。在帧缓存（framebuffer）中，我们通过这些纹理坐标抓取其所指向的色彩，同时在渲染中使用这个色彩（右侧）。参考[65],ACM。
+**Figure 15.1:** 顶部：一个三角形的每个顶点都被给出x，y纹理坐标。这些坐标指向纹理图像中。底部：这些坐标被在像素解析时插值为变异变量（varying variables）。在碎片着色器（fragment shader）中，我们通过这些纹理坐标抓取其所指向的色彩，同时在渲染中使用这个色彩（右侧）。参考[65],ACM。
 
 ## 15.2 法线映射（Normal Mapping）
-The data from a texture can also be interpreted in more interesting ways. In normal mapping, the r,g,b values from a texture are interpreted as the three coordinates of the normal at the point. This normal data can then be used as part of some material simulation , as described in Chapter 14. See Figure 15.2 for such an example.
-来自一个纹理的发现也可以更有趣的方式被解读。在法线映射，来自一个纹理的r、g、b数值被解读为当前点法线的3个坐标。这种法线数据随后会被用作某种材料模拟计算的一部分，就如在14章所描述的。参看这种情形的实例图示$\text{Figure 15.2}$
+来自一个纹理的法线也可以更有趣的方式被解读。在法线映射中，来自一个纹理的r、g、b数值被解读为当前点法线的3个坐标。这种法线数据随后会被用作某种材料模拟计算的一部分，就如在14章中所描述的。参看这种情形的实例图示$\text{Figure 15.2}$
 
-Normal data has three coordinate values, each in the range [−1..1], while RGB textures store three values, each in the range [0..1]. Thus the normal data needs to be transformed into this format before being stored in the texture, as in . Conversely, your fragment shader needs to undo this transformation, as in normal x = 2r-1;.
-法线数据有3中坐标值，每个都位于范围$[-1..1]$,而RGB纹理存储的3个数值，每个都处于范围$[0..1]$。因此，法线数据在被存储为纹理之前需要被转换为这种格式，就如在代码`r = normal_x/2. +.5;`中的转换。反之，你的碎片着色器（fragment shader）需要恢复这种转换，就如在代码`normal_x = 2r-1;`中的转换。
+法线数据有3种坐标值，每个都位于范围$[-1..1]$,而RGB纹理存储的3个数值，每个都处于范围$[0..1]$。因此，法线数据在被存储为纹理之前需要被转换为这种格式，就如在代码`r = normal_x/2. +.5;`中的转换。反之，你的碎片着色器（fragment shader）需要恢复这种转换，就如在代码`normal_x = 2r-1;`中的转换。
 
 ![Figure15.2](media/Figure15.2.png)
-**Figure 15.2:** On the left we show a rendering of a teapot model. The teapot is shaded c with smoothly interpolated normals and the triangle edges are shown. (⃝Hugues Hoppe). On the right, we show the same surface but now it is rendered using a normal ﬁeld fetched from a high resolution texture. These normals are used in the lighting calc culations, and give the effect of highly resolved geometric detail. From [54], ⃝ACM. 在左侧，我们展示了一个茶壶模型的渲染。茶壶使用平滑插值的法线被着色，同时三角形边缘被展示。(©️Hugues Hoppe)。在右侧，我们展示了相同的表面，但是现在茶壶却是被来自高解析度纹理中所提取的法线域所渲染。这些法线被使用在光照计算中。并且给出了高解析度几何细节效果。参考[54],©️ACM。
+**Figure 15.2:** 在左侧，我们展示了一个茶壶模型的渲染。茶壶使用平滑插值的法线被着色，同时三角形边缘被展示。(©️Hugues Hoppe)。在右侧，我们展示了相同的表面，但是现在茶壶却是被来自高解析度纹理中所提取的法线域所渲染。这些法线被使用在光照计算中。并且给出了高解析度几何细节效果。参考[54],©️ACM。
 
-## 15.3 Environment Cube Maps
+## 15.3 环境立方体映射（Environment Cube Maps）
+纹理也可以在围绕被渲染物体的距离上建模环境。在这种情形中，我们通常使用6个正方形纹理表达一个环绕场景的大立方体的面。每个纹理像素表达顺着环境中一个方向看过去的色彩。这就被称为立方体映射。GLSL提供了一个专门用于立方体纹理（cube-texture）目的的数据类型-samplerCube。在一个点的着色过程中，我们将那个点的材料处理为一个完美镜面并且从合适的入射方向获取环境数据。一个例子被展示在图示$\text{Figure 15.3}$中。
 
-Textures can also be used to model the environment in the distance around the object being rendered. In this case, we typically use 6 square textures representing the faces of a large cube surrounding the scene. Each texture pixel represents the color as seen along one direction in the environment. This is called a cube map. GLSL provides a cube-texture data type, samplerCube speciﬁcally for this purpose. During the shading of a point, we can treat the material at that point as a perfect mirror and fetch the environment data from the appropriate incoming direction. An example is shown in Figure 15.3.
+实现这个思路，我们采用方程（14.1）来计算被反射的查看矢量$B(\vec{v})$。这个反射矢量会指向环境方向，这个方向会在镜面化的表面被观察到。通过借助这个方向查找立方体纹理映射，我们给予了这个表面一个镜子的外观。
 
-To implement this idea, we use Equation (14.1) to calculate the bounced view vector, B(⃗v ). This bounced vector will point points towards the environment direction which would be observed in a mirrored surface. By looking up the cube map using this direction, we give the surface the appearance of a mirror.
+```
+#version 330 
 
+uniform samplerCube texUnit0;
 
-```#version 330 uniform samplerCube texUnit0;
-
-in vec3 vNormal; in vec4 vPosition;
+in vec3 vNormal; 
+in vec4 vPosition;
 
 out fragColor;
-vec3 reflect(vec3 w, vec3 n){ return - w + n * (dot(w, n) * 2.0); }
+vec3 reflect(vec3 w, vec3 n){
+	return - w + n * (dot(w, n) * 2.0); 
+}
 
 void main(void){
+	vec3 normal = normalize(vNormal); 
+	vec3 reflected = reflect(normalize(vec3(-vPosition)), normal); 
+	vec4 texColor0 = textureCube(texUnit0,reflected);
 
-vec3 normal = normalize(vNormal); vec3 reflected = reflect(normalize(vec3(-vPosition)), normal); vec4 texColor0 = textureCube(texUnit0,reflected);
-
-fragColor = vec4(texColor0.r, texColor0.g, texColor0.b, 1.0);
-
+	fragColor = vec4(texColor0.r, texColor0.g, texColor0.b, 1.0);
 }
 ```
+在眼睛坐标中，眼睛的位置和原点重合，因此`-vPostion`表达了查看矢量$\vec{v}$。textureCube为一个特殊的GLSL函数，这个函数接收一个方向矢量同时返回立方体纹理映射中在这个方向上所存储的色彩。
 
-In eye coordinates, the eye’s position coincides with the origin, and thus -vPosition represents the view vector ⃗v . textureCube is a special GLSL function that takes a direction vector and returns the color stored at this direction in the cube texture map.
+这段代码中，我们的所有矢量被以眼睛坐标的方式表达，同时我们也假设立方体纹理以眼睛坐标方式表达环境数据。比方说，如果我们的环境纹理正在用世界坐标表达方向，那么被渲染点的恰当坐标需要被传递到碎片着色器（fragment shader）。
 
-In this code, all of our vectors are expressed in eye coordinates, and so we are also assuming that our cube texture represents the environment data in eye coordinates. If our cube texture were representing directions using, say, world coordinates, then appropriate coordinates for the rendered point would need to be passed to the fragment shader.
-
-This same idea, but modeling refraction instead of mirror reﬂection, has been used to generate the fountain image of Figure 22.4.
+这种完全相同的思路，除了代替镜面反射建模折射外，已经被用于生成图示$\text{Figure 22.4}}$中的喷泉图像。
 
 ![Figure15.3](media/Figure15.3.png)
-**Figure 15.3:** On the left the environment is stored as a cube texture. This is used to c render a mirrored lizard. From [25], ⃝IEEE. 在左侧，环境被存储为一个立方体纹理（cube texture）。其被用来渲染一个镜面化的蜥蜴。参考[25],©️IEEE。
+**Figure 15.3:** 在左侧，环境被存储为一个立方体纹理（cube texture）。其被用来渲染一个镜面化的蜥蜴。参考[25],©️IEEE。
 
 ## 15.4 投影仪纹理映射（Projector Texture Mapping）
 There are times when we wish to glue our texture onto our triangles using a projector model, instead of the afﬁne gluing model assumed in Section 15.1. For example, we may wish to simulate a slide projector illuminating some triangles in space. (See Figure 15.4). This is not as unusual as it may ﬁrst appear. For example, suppose we have taken a photograph of the facade of a building with a camera, and then wish to paste it appropriately on a digital 3D model of the building. To do this pasting, we should invert the geometry of the photography process by replacing the camera with a virtual slide projector in the same position relative to the building. (See Figure 15.5).
