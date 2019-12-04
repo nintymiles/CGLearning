@@ -94,17 +94,18 @@ void main(void){
 **Figure 15.3:** 在左侧，环境被存储为一个立方体纹理（cube texture）。其被用来渲染一个镜面化的蜥蜴。参考[25],©️IEEE。
 
 ## 15.4 投影仪纹理映射（Projector Texture Mapping）
-There are times when we wish to glue our texture onto our triangles using a projector model, instead of the afﬁne gluing model assumed in Section 15.1. For example, we may wish to simulate a slide projector illuminating some triangles in space. (See Figure 15.4). This is not as unusual as it may ﬁrst appear. For example, suppose we have taken a photograph of the facade of a building with a camera, and then wish to paste it appropriately on a digital 3D model of the building. To do this pasting, we should invert the geometry of the photography process by replacing the camera with a virtual slide projector in the same position relative to the building. (See Figure 15.5).
-要完成这种粘合，我们应反转相机成像处理的几何过程-通过在相对于建筑的相同位置将相机替换为虚拟滑动投影仪的方式。
+经常我们会想以投影仪模型去粘贴我们的纹理到三角形上，而不是采用在15.1节中所述的并行粘贴模型。例如，我们可能希望模拟滑动投影仪照亮空间中的某些三角形。（参考图示$\text{Figure 15.4}$）。这种行为并不像其刚出现时那样不正常。例如，假设我们以及拍摄了一张建筑的正面照片，随后希望恰当地将其粘贴到建筑的电子3D模型之上。要完成这种粘合动作，我们应反转相机成像处理的几何过程-通过在相对于建筑的相同位置将相机替换为虚拟滑动投影仪的方式。
 
-In projector texture mapping, the slide projector is modeled using 4 by 4, modelview and projection matrices, M s and P s . These deﬁne the relation 
+在滑动投影仪映射中，滑动投影仪被借助$4\times 4$模型试图（modelview）矩阵-$M_s$和投射（projection）矩阵-$P_s$建模。确定了如下关系：
+
 $$\large{ 
 	\begin{bmatrix} x_tw_t \\ y_tw_t \\ z_tw_t \\ w_t \end{bmatrix} 
 	=
 	P_sM_s \begin{bmatrix} x_o \\ y_o \\ z_o \\ 1 \end{bmatrix} 
 	\qquad (15.1) 
 }$$
-with the texture coordinates deﬁned as x t = x w t w t t and y t = y w t w t t . To color a point on a triangle with object coordinates [x o , y o , z o , 1] t , we fetch the texture data stored at location [x t , y t ] t . See Figure 15.6.
+
+那么让投影仪映射的纹理坐标（texture coordinates）被定义为$x_t = x_tw_t/w_t,y_t = y_tw_t/w_t$。要为用对象坐标$[x_o,y_o,z_o,1]^t$表达的一个三角形上的点着色，我们就获取存储在地址$[x_t,y_t]^t$处的纹理数据。参考图示$\text{Figure 15.6}$
 
 Due to the division by w t , the values x t and y t are not afﬁne functions of (x o , y o , z o ), and thus would not be appropriately interpolated if directly implemented using varying variables. But, from Section B.5, we see that, indeed, the three quantities x t w t , y t w t and w t are all afﬁne functions of (x o , y o , z o ). Thus these quantities will be properly interpolated over a triangle when implemented as varying variables. In the fragment shader, we need to divide by w t to obtain the actual texture coordinates.
 
@@ -143,7 +144,7 @@ void main(void){
 }
 ```
 
-Full disclosure: to produce the image of Figure 15.4, in our vertex shader we also computed the normal at each vertex in the “eye” coordinates of the projector. A diffuse lighting equation was then added to our fragment shader to modulate the texture color. As a result, the top face in the image is a bit dimmer than the rightmost face.
+> Full disclosure: to produce the image of Figure 15.4, in our vertex shader we also computed the normal at each vertex in the “eye” coordinates of the projector. A diffuse lighting equation was then added to our fragment shader to modulate the texture color. As a result, the top face in the image is a bit dimmer than the rightmost face.
 
 Conveniently, OpenGL even gives us a special call texture2DProj(vTexUnit0, pTexCoord), that actually does the divide for us. Inconveniently, when designing our slide projector matrix uSProjMatrix, we have to deal with the fact that (as described in Section 12.3.1), the canonical texture image domain in OpenGL is the unit square whose lower left and upper right corners have coordinates [0, 0] t and [1, 1] t respectively, instead of the canonical square from [−1, −1] t to [1, 1] t used for the display window. Thus the appropriate projection matrix passed to the vertex shader would be of the form makeTranslation(Cvec3(0.5,0.5,0.5)) * makeScale(Cvec3(0.5,0.5,1)) * makeProjection(...).
 
