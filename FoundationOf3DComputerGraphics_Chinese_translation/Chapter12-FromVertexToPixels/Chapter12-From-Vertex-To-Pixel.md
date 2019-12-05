@@ -16,7 +16,6 @@
 针对这个问题，存在避免做任何几何裁切的方式。感兴趣的读者可以进一步阅读参考数目[52]。
 
 ## 用于裁切的坐标类型（Which Coordinates To Use）
-We could do clipping in eye coordinates, but this processing would also need to know about the parameters of the camera projection, which is inconvenient. Conversely, testing in normalized device coordinates would be quite canonical: ultimately we would be happy if our triangles never left the canonical cube 
 我们可以在眼睛坐标中裁切，但是这种处理方式也需要知晓相机投射的参数，这一点是不方便的。反过来讲，在标准化设备坐标中验证裁切条件会非常经典：这种环境中，如果我们的三角形不离开经典矩型区域，我们近很乐见。
 
 $$ \begin{matrix} −1 < x_n < 1 \qquad\qquad\qquad\qquad(12.1) \\ −1 < y_n < 1 \qquad\qquad\qquad\qquad(12.2) \\ −1 < z_n < 1 \qquad\qquad\qquad\qquad(12.3)\end{matrix} $$
@@ -29,7 +28,6 @@ $$\begin{matrix}
     −w_c < x_c < w_c  \\ −w_c < y_c < w_c \\ −w_c < z_c < w_c
 \end{matrix}$$
 
-Since we have not done any divisions yet, no ﬂip can have happened yet. Our triangles in 3D eye space have simply mapped to triangles in 4D clip space.
 因为我们还没做除法，就没有翻转问题发生。在3D眼睛空间（3D eye space）中的三角形只是被映射为4D裁切空间（4D clip space）中的三角形。
 
 ![Figure12.2](media/Figure12.2.png)
@@ -41,5 +39,21 @@ Since we have not done any divisions yet, no ﬂip can have happened yet. Our tr
 新顶点以裁切坐标的方式进行计算，从而用于自己的4个新关联的裁切坐标$[x_c,y_c,z_c,w_c]^t$。每个新顶点和旧顶点一样，关联了针对每个变异变量类型的一个集合的值。
 
 全部变异变量（varying variables）都表达了在对象坐标$[x_o,y_o,z_o]^t$上的并行函数（affine functions），因此，借助B.5节中的推理，这些变量在$(x_c,y_c,z_c,w_c)$上也是并行函数。从而，如果新顶点位于两个三角形顶点的路径的某个分数比例-$\alpha$处，我们只需以“路径的$\alpha$比例”方式插值变异变量，同时借助这些新值设置这个顶点的变异变量。
+
+## 12.2 背向面剔除（Backface Culling）
+Suppose we are using triangles to draw a closed solid object, such as a cube. Let us label the two sides of each triangle as “front” or “back”. No matter how we turn the cube, we will never see the back side of any triangle as it must be occluded by some triangle whose front side we are observing. (See Figure 12.5). As such, we may as well cull these back facing polygons as soon as possible. and not draw them at all. For a “non-watertight” geometric model, we may wish to see both sides of a triangle; in this case, backface culling would be inappropriate.
+
+In OpenGL, backface culling is turned on by calling glEnable(GL CULL FACE). For each face, we need to somehow tell OpenGL which side is the front and which is the back. To do this, we use the conventionof ordering the three vertices so that they are counter clockwise (CCW) when looking at its front side. When drawing each triangle, we use this vertex ordering in the vertex buffer object.
+
+Using the normalized device coordinates of the vertices, OpenGL can now easily determine which side of a triangle we are observing in the current image. Here’s how (see Figure 12.6). Let ˜p 1 , ˜p 2 , and ˜p 3 be the three vertices of the triangle projected down to the (x n , y n , 0) plane. Deﬁne the vectors ⃗a = ˜p 3 − ˜p 2 and b = ˜p 1 − ˜p 2 . Next compute the cross product ⃗c = ⃗a × b. If the three vertices are counter clockwise in the plane, then ⃗c will be in the −z n direction. Otherwise it will be in the positive z n direction. In summary, all we need to do is compute the z coordinate of the cross product in normalized device coordinates. When all the dust settles, this coordinate is
+
+(x − x n 2 )(y n 1 − y n 2 ) − (y n 3 − y n 2 )(x 1 − x 2 ) n n
+
+3 n
+
+(12.4)
+
+To test if three vertices are counter clockwise, we simply compute the value of Equation (12.4). If it is positive then the vertices are counter clockwise as viewed from the camera.
+
 
 
