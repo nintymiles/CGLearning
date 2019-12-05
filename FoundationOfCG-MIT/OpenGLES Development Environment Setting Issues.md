@@ -56,7 +56,7 @@ OpenGLES 3.0 API的加载可以借助Glad库（保证正确上下文环境的Ope
 		}
 ```
 
-### （二）裸奔（不借助GLFW）进行OpenGLES 3.0开发的环境设置（一般需要借助OpenGLES模拟器）
+### （二）裸奔（不借助GLFW）进行OpenGLES 3.0开发的环境设置（只借助OpenGLES模拟器）
 虽然OpenGLES是OpenGL的子集，但是在Windows（PC）上运行OpenGLES程序，即便使用GLFW环境，仍然需要借助OpenGLES模拟器来启用OpenGLES渲染环境。
 
 如果不使用GLFW和Glad库，只借助OpenGLES模拟器进行裸奔也是可行的。比如**OpenGLES 3.0 Programming Guide**书中就不借助第三方辅助库，而是使用Cmake直接配置OpenGLES模拟器配合使用。
