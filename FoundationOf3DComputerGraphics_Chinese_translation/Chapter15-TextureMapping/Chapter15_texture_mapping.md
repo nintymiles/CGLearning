@@ -107,9 +107,9 @@ $$\large{
 
 那么让投影仪映射的纹理坐标（texture coordinates）被定义为$x_t = x_tw_t/w_t,y_t = y_tw_t/w_t$。要为用对象坐标$[x_o,y_o,z_o,1]^t$表达的一个三角形上的点着色，我们就获取存储在地址$[x_t,y_t]^t$处的纹理数据。参考图示$\text{Figure 15.6}$
 
-Due to the division by w t , the values x t and y t are not afﬁne functions of (x o , y o , z o ), and thus would not be appropriately interpolated if directly implemented using varying variables. But, from Section B.5, we see that, indeed, the three quantities x t w t , y t w t and w t are all afﬁne functions of (x o , y o , z o ). Thus these quantities will be properly interpolated over a triangle when implemented as varying variables. In the fragment shader, we need to divide by w t to obtain the actual texture coordinates.
+由于除以$w_t$的除法，$x_t$和$y_t$值不是$(x_o,y_o,z_o)$上的并行函数（affine functions），因此如果直接借助变异变量（varying variable）实现将不会被正确恰当地插值。但是，根据小节B.5，我们知道（看到），确实，这3个量$x_tw_t,y_tw_t$和$z_tw_t$全都是$(x_o,y_o,z_o)$上的并行函数（affine fuctions）。如此当被实现为变异变量时（varying variables）这些数量将被正确地插值。在碎片着色器（fragment shader）中，我们需要除以$w_t$以获得真实的纹理坐标。
 
-When doing projector texture mapping, we do not need to pass any texture coordinates as attribute variables to our vertex shader. We simply use the object coordinates already available to us. We do need to pass in, using uniform variables, the necessary projector matrices. Here is the relevant part of our vertex shader.
+当进行投影仪纹理映射时，我们不需要传递任何纹理坐标为属性变量到顶点着色器（vertex shader）中。我们只是使用对我们来说已经可使用的对象坐标（object coordinates）。但是我们确实需要传入-借助uniform变量-必需的投影仪矩阵。我们的顶点着色器（vertex shader）代码的相关部分列出在下面。
 
 ```
 #version 330 
@@ -126,7 +126,7 @@ void main(){
 }
 ```
 
-And our fragment shader is
+同时还有碎片着色器的代码也被列于这里。
 
 ```
 #version 330
@@ -144,50 +144,56 @@ void main(void){
 }
 ```
 
-> Full disclosure: to produce the image of Figure 15.4, in our vertex shader we also computed the normal at each vertex in the “eye” coordinates of the projector. A diffuse lighting equation was then added to our fragment shader to modulate the texture color. As a result, the top face in the image is a bit dimmer than the rightmost face.
+> 全解密：要产生图示$\text{Figure 15.4}$的图像，在顶点着色器（vertex shader）中，我们还要计算在投影仪的“眼睛”坐标中位于其每个顶点上的法线。一个漫射光照方程式随后被加入我们的碎片着色器（fragment shader）以调和纹理色。最终，图像中顶面比最右侧面要模糊一点。
 
-Conveniently, OpenGL even gives us a special call texture2DProj(vTexUnit0, pTexCoord), that actually does the divide for us. Inconveniently, when designing our slide projector matrix uSProjMatrix, we have to deal with the fact that (as described in Section 12.3.1), the canonical texture image domain in OpenGL is the unit square whose lower left and upper right corners have coordinates [0, 0] t and [1, 1] t respectively, instead of the canonical square from [−1, −1] t to [1, 1] t used for the display window. Thus the appropriate projection matrix passed to the vertex shader would be of the form makeTranslation(Cvec3(0.5,0.5,0.5)) * makeScale(Cvec3(0.5,0.5,1)) * makeProjection(...).
+OpenGL体贴地给了我们一个专有的调用`texture2DProj(vTexUnit0, pTexCoord)`，这个调用实际上替我们实现了（透视）除法。当我们设计滑动投影仪矩阵`uSProjMatrix`时，不方便的是，我们不得不处理这个事实（就如在小节12.3.1中所描述）- OpenGL中的经典纹理图像域为单位方形域（unit square）其左下和右上角分别拥有坐标$[0,0]^t$和$[1,1]^t$,而不是经典方形域（canonical square）其坐标范围为用于显示窗口的$[-1,-1]^t$和$[1,1]^t$。因此被传递给顶点着色器（vertex shader）的恰当的投影仪矩阵会是这种形式`makeTranslation(Cvec3(0.5,0.5,0.5)) * makeScale(Cvec3(0.5,0.5,1)) * makeProjection(...)`。
 
 ![Figure15.4](media/Figure15.4.png)
-**Figure 15.4:** The checkerboard image is slide projected on to the front and top faces of the cube. 棋盘图像被滑动投射到立方体的前脸和顶部面
+**Figure 15.4:** 棋盘图像被滑动投射到立方体的前脸和顶面。
 
 ![Figure15.5](media/Figure15.5.png)
-**Figure 15.5:** Left: Actual photograph. Middle: Rendered geometric model. Right: c Rendered with projector texture mapping. From [15], ⃝ACM. 左侧：实际相片。中间：渲染的几何模型。右侧：用投影仪纹理映射渲染的图像。来自参考书目[15],©️ACM.
+**Figure 15.5:** 左侧：实际相片。中间：渲染的几何模型。右侧：用投影仪纹理映射渲染的图像。来自参考书目[15]，©️ACM。
 
 ![Figure15.6](media/Figure15.6.png)
-**Figure 15.6:** In projector texture mapping, to determine the color of a point observed in the eye’s camera, we map this to the a point in the “projectors image”. The color from this texture is used to color the point.
+**Figure 15.6:** 在投影仪纹理映射中，要确定一个在“眼睛”相机中观察到的点的色彩，我们将这个点映射到“投影仪图片（projectors image）”中的一个对应点。来自这个纹理的色彩被用于给这个点着色。
 
 ## 15.5 多通道（Multipass）
-More interesting rendering effects can be obtained using multiple rendering passes over the geometry in the scene. In this approach, the results of all but the ﬁnal pass are stored ofﬂine and not drawn to the screen. To do this, the data is rendered into something called a frameBufferObject, or FBO. After rendering, the FBO data is then loaded as a texture, and thus can be used as input data in the next rendering pass. For coding details on FBOs you might start with [53].
+更多有趣的渲染效果可以在场景几何体之上借助多渲染通道方式获得。在这种方式中，所有通道除了最后通道（final pass）外都被离线存储且不被绘制到屏幕之上。要实现这种方式，数据会被渲染到被称作frameBufferObject（帧缓存对象）-也称为FBO-的某种数据结构中。渲染之后，FBO数据随后被加载为一个纹理（texture），因此可以作为下一个渲染通道（rendering pass）的输入数据。关于FBOs的编码细节，可以从查阅参考数目[53]开始。
 
 ### 15.5.1 反射映射（Reﬂection Mapping）
-Reﬂection mapping is a simple example of multipass rendering. In this case, we want one of the rendered objects to be mirrored and reﬂect the rest of the scene. To accomplish this, we ﬁrst render the rest of the scene as seen from, say, the center of the mirrored object. Since the scene is 360 degrees, we need to render six images from the chosen viewpoint, looking right, left, back, forth, up and down. Each of these six images has a 90 degree vertical and horizontal ﬁeld of view.
+反射映射是多通道渲染的简单例子。这种情形中，我们想让一个被渲染对象（物体）被镜面化并且反射出场景的其余（物体）。要完成这种渲染，我们首先渲染场景的其余部分-这个场景就如被从被镜面化对象的中心所观看的样子。因为场景是360度的，我们需要从被选择的这个视点渲染6个图像，分别看向右、左、前、后、上、下。这六个图像每个都有90度的垂直和水平视域（field of view）。
 
-This data is then transferred over to a cube map. The mirrored object can now be rendered using the cube map shaders from Section 15.3. See Figures 15.7 and 15.8 for an example. This calculation is not completely correct, since the environment map stores the view of the scene as seen from one point only. Meanwhile, true reﬂection needs to look at the appropriate bounced ray from each point of the object (see Figure 15.9). Nonetheless, for casual use, reﬂection mapping can be quite effective.
+这种数据随后被转移到一个立方体映射（cube map）中。被镜面化的对象现在可以借助小节15.3中的立方体映射着色器（cube map shader）被渲染。参考图示$\text{Figure 15.7}$和图示$\text{Figure 15.8}$作为例子。这种计算并非完全正确的，因为环境映射存储场景的视图为仅从一个点所观看的角度。而同时，真正的反射现象需要从物体的每个点（参考图示$\text{Figure 15.9}$观察恰当地反射射线。然而，出于临时使用的目的，反射映射可能相当有效。
 
 ![Figure15.7](media/Figure15.7.png)
-Figure 15.7: In reﬂection mapping, the scene (ﬂoor and cubes) is ﬁrst rendered into a cube map. This is used as environment map to render the mirrored sphere.
+**Figure 15.7:** 在反射映射中，场景（地面和立方体）首先被渲染进一个立方体纹理中。这个纹理又被用作环境映射渲染出被镜面化球体。
 
 ![FIgure15.8](media/FIgure15.8.png)
-Figure 15.8: The blue cube is moved. The cube map is recreated and the image redrawn.
+**Figure 15.8:** 蓝色立方体被移动。立方体映射纹理被重新生成同时图像被重绘。
 
 ![Figure15.9](media/Figure15.9.png)
-Figure 15.9: To correctly render a mirrored sphere, we need to follow a set of bounce rays that do not all intersect in a single point.
+**Figure 15.9:** 要正确渲染一个被镜面化的球体，我们需要根据一系列不完全相交于一个点的反射线进行渲染。
 
 ### 15.5.2 阴影映射（Shadow Mapping）
-In our simple material calculations of Chapter 14, the color computation at a point does not depend on any of the rest of the geometry in the scene. Of course, in the real world, if some occluding object is situated between a surface point and the light, the point will be in shadow and thus be darker. This effect can be simulated using a multipass technique called shadow mapping. The idea is to ﬁrst create and store a z-buffered image from the point of view of the light, and then compare what we see in our view to what the light saw in its view. See Figure 15.10. If a point observed by the eye is not observed by the light, then there must be some occluding object in between, and we should draw that point as if it were in shadow.
+在14章我们的简单材料计算中，一个点上的色彩计算不依赖场景中剩余的任何几何体。当然，在真实世界中，如果某种遮挡性的物体位于一个表面点和光源之间，这个点就处于阴影中因而会显得更暗。这种效果可以借助一种称作阴影映射（shadow mapping）的多通道技术被模拟。实现思路是首先从光的视角生成并存储一个z-buffer化的图像，随后比较我们从自己的视角所看到的和光在其视角所看到的。参考图示$\text{Figure 15.10}$。如果一个被眼睛看到的点没有被光看到，那么其中一定存在着某种遮挡性的物体，我们应该绘制那个点就如其处于阴影中。
 
-In a ﬁrst pass, we render into an FBO the scene as observed from some camera whose origin coincides with the position of the point light source. Let us model this camera transform as:
+在第一个通道中，我们将场景渲染到一个FBO中，这个场景就像从某个原点和点光源（point light source）位置重合的相机所观察到的一样。让我们用合适的矩阵，$P_s$和$M_s$建模这个相机变换为：
 
-⎡ ⎤ ⎡ ⎤ x t w t x o ⎢ y t w t ⎥ ⎢ y o ⎥ ⎢ ⎥ ⎢ ⎥ ⎣ z t w t ⎦ = P s M s ⎣ z o ⎦ w t 1
+$$\large{ 
+	\begin{bmatrix} x_tw_t \\ y_tw_t \\ z_tw_t \\ w_t \end{bmatrix} 
+	=
+	P_sM_s \begin{bmatrix} x_o \\ y_o \\ z_o \\ 1 \end{bmatrix} 
+	\qquad (15.1) 
+}$$
 
-for appropriate matrices, P s and M s . During this ﬁrst pass, we render the scene to an FBO using M s as the modelview matrix and P s as the projection matrix. In the FBO, we store, not the color of the point, but rather its z t value. Due to z-buffering, the data stored at a pixel in the FBO represents the z t value of the geometry closest to the light along the relevant line of sight. This FBO is then transferred to a texture.
+在第一个通道期间，我们借助模型视图矩阵（$M_s$）和投射矩阵（$P_s$）将场景渲染到一个FBO中。在这个FBO中，我们不存储点的色彩，而是存储其$z_t$值。由于z-buffer动作，存储在FBO中的一个像素上的数据表达沿着相关视线距离光源最近的几何体的$z_t$值。这个FBO随后被转移到一个纹理。
 
-During the second rendering pass, we render our desired image from the eye’s point of view, but for each pixel, we check and see if the point we are observing was also observed by the light, or if it was blocked by something closer in the light’s view. To do this, we use the same computation that was done with projector texture mapping in Section 15.4. Doing so, in the fragment shader, we can obtain the varying variables x t y t and z t associated with the point [x o , y o , z o , 1] t . We then compare this z t value with the z t value stored at [x t , y t ] t in the texture. If these values agree (to within a small precision tolerance), then we are looking at a point that was also seen by the light; such a point is not in shadow and should be shaded accordingly. Conversely, if these values disagree, then the point we are looking at was occluded in the light’s image, is in shadow, and should be shaded as such. See Figure 15.11 for an example.
+在第二个渲染通道期间，我们从眼睛视野渲染想要的图像，但是针对每个像素，我们查看是否我们正在观察的点也被光观察到，或是它是否在光视野中被某个更近的东西所阻挡。要做到这样，我们使用和在投影仪映射中相同的计算（在15.4节中）。以这样方式来做，在碎片着色器（fragment shader）中，我们能获得关联于$[x_o,y_o,z_o,1]^t$的变异变量（varying variables）$x_t,y_t$和$z_t$。随后我们比较这个$z_t$值和在纹理中存储在$[x_t,y_t]^t$中的$z_t$值。如果这些值一致（在一个小的精度容忍范围内），那么我们在观察一个同时被光源看到的点；这样一个点没有处于阴影中，应该被按照对应情形着色。反过来说，如果这些值不一致，那么我们观察的这个点在光图像中被阻挡，就位于阴影中，应该按照这种情形着色。参考样例图示$\text{Figure 15.11}$。
+
 ![Figure15.10](media/Figure15.10.png)
-Figure 15.10: In shadow mapping, we ﬁrst render an (FBO) image from the point of view of the light. Only depth values are stored in this image. In a second pass, we render the scene from the point of view of our eye. Using the same mathematics from projector texturing, for every point observed by the eye, we can compare its light-depth to that stored in the light’s image. If these agree (orange and green points), the point was seen by the light, and we color it appropriately. If these disagree (purple), then the point was occluded from the eye and is in shadow, and we color it differently.
+**Figure 15.10:** In shadow mapping, we ﬁrst render an (FBO) image from the point of view of the light. Only depth values are stored in this image. In a second pass, we render the scene from the point of view of our eye. Using the same mathematics from projector texturing, for every point observed by the eye, we can compare its light-depth to that stored in the light’s image. If these agree (orange and green points), the point was seen by the light, and we color it appropriately. If these disagree (purple), then the point was occluded from the eye and is in shadow, and we color it differently.
 
 ![Figure15.11](media/Figure15.11.png)
-Figure 15.11: In shadow mapping, the scene is ﬁrst rendered from the point of view of the light (visualized on the left). The depth values are stored in a texture. In the second pass the light texture data is used to determine if the surface point is directly observed by the light. This gives us the ﬁnal rendered image on the right. ⃝Hamilton c Chong.
+**Figure 15.11:** 在阴影映射中，场景首先被从光源的视野（在左侧被可视化）被渲染。深度值被存储在一个纹理中。在第二个通道中，光纹理数据被用于确定是否表面点直接被光源观察到。这就给出了我么最终的位于右侧的渲染图像。©️Hamilton c Chong。
 
 
