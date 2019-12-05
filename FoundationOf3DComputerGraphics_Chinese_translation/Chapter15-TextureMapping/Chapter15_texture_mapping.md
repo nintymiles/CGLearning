@@ -191,7 +191,7 @@ $$\large{
 在第二个渲染通道期间，我们从眼睛视野渲染想要的图像，但是针对每个像素，我们查看是否我们正在观察的点也被光观察到，或是它是否在光视野中被某个更近的东西所阻挡。要做到这样，我们使用和在投影仪映射中相同的计算（在15.4节中）。以这样方式来做，在碎片着色器（fragment shader）中，我们能获得关联于$[x_o,y_o,z_o,1]^t$的变异变量（varying variables）$x_t,y_t$和$z_t$。随后我们比较这个$z_t$值和在纹理中存储在$[x_t,y_t]^t$中的$z_t$值。如果这些值一致（在一个小的精度容忍范围内），那么我们在观察一个同时被光源看到的点；这样一个点没有处于阴影中，应该被按照对应情形着色。反过来说，如果这些值不一致，那么我们观察的这个点在光图像中被阻挡，就位于阴影中，应该按照这种情形着色。参考样例图示$\text{Figure 15.11}$。
 
 ![Figure15.10](media/Figure15.10.png)
-**Figure 15.10:** In shadow mapping, we ﬁrst render an (FBO) image from the point of view of the light. Only depth values are stored in this image. In a second pass, we render the scene from the point of view of our eye. Using the same mathematics from projector texturing, for every point observed by the eye, we can compare its light-depth to that stored in the light’s image. If these agree (orange and green points), the point was seen by the light, and we color it appropriately. If these disagree (purple), then the point was occluded from the eye and is in shadow, and we color it differently.
+**Figure 15.10:** 在阴影映射中，我们首先从光视角渲染一个（FBO）图像。只有深度值被存储在这个图像中。在第二个通道，我们从我们眼睛的视野渲染场景。借助来自于投影仪纹理化动作，对于被眼睛观察到每个点，我们能够将与存储在光图像中的深度与当前点的光深度（light-depth）比较。如果这些值一致（橙色和绿色点），点就能被光看到，同时我们合适地为其上色。如果这些值不一致（紫色），那么这个点就被阻隔于光源，位于阴影中，那么我们就以不同地方式为其上色。
 
 ![Figure15.11](media/Figure15.11.png)
 **Figure 15.11:** 在阴影映射中，场景首先被从光源的视野（在左侧被可视化）被渲染。深度值被存储在一个纹理中。在第二个通道中，光纹理数据被用于确定是否表面点直接被光源观察到。这就给出了我么最终的位于右侧的渲染图像。©️Hamilton c Chong。
