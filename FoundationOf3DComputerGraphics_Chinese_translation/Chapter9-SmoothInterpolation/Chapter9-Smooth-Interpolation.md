@@ -5,12 +5,12 @@
 
 我们也会展示这样的splines函数表达如何被用于描述空间和平面中的曲线。这样的曲线有超越动画之外的许多用途。例如，它们可以在字体中被用于描述字符形状的轮廓。
 
-## 9.1 立方Bezier函数（Cubic Bezier Functions）
-We start by just looking at how to represent a cubic polynomial function c(t) with t ∈ [0..1] (see Figure 9.2). There are many possible ways to do this, here we describe the Bezier representation. This is a convenient representation where the parameters have a geometric interpretation, and where evaluation reduces to repeated linear interpolation.
+## 9.1 立方贝塞尔函数（Cubic Bezier Functions）
+我们通过观察如何表达一个立方多项式函数$c(t),t \in [0..1]$(参考图示$\text{Figure 9.2}$开始。有很多可能的方式可以做这件事情，此处我们描述Berzier表达方法。这是一种方便的表达，其中的参数拥有几何解释，并且评估减弱为重复的线性插值。
 
-In the cubic Bezier representation, a cubic function is described by four values c 0 , d 0 , e 0 and c 1 called control values. In Figure 9.2 we have visualized this data as points in the 2D (t, c) plane with coordinates [0, c 0 ] t , [1/3, d 0 ] t , [2/3, e 0 ] t and [1, c 1 ] t . We have also drawn in light blue a poly-line connecting these points; this is called the control polygon.
+在立方贝塞尔表达法（cubic Bezier representation）中，一个立方函数被4个被称为控制值（control value）的数值$c_0,d_0,e_0,c_1$所描述。在图示$\text{Figure 9.2}$中，我们可在2D(t,c)平面视化这种数据为点，这些点拥有坐标$[0,c_0],[1/3,d_0],[2/3,e_0],[1,c_1]$。我们同时以浅蓝色绘制一个由连接这些点所形成的折线（poly-line）；这条折线被称为控制多边形（control polygon）。
 
-To evaluate the function c(t) at any value of t, we perform the following sequence of linear interpolations
+要评估在任何t指上的函数c(t)，我们执行下面的线性插值序列：
 
 $$
    f = (1 − t)c_0 + td_0 \qquad\qquad\qquad\qquad (9.1)\ \\
@@ -21,17 +21,16 @@ $$
    c(t) = (1 − t)m + tn \qquad\qquad\qquad\qquad (9.6) \\
 $$
 
-In Figure 9.3, we have visualized the steps of this computation for t = .3 as linear interpolation in 2D.
+在图示$\text{Figure 9.3}$中，当t=0.3时，我们可视化这种计算步骤为2D空间中的线性插值。
 
-### 9.1.1 特性（Properties）
+### 9.1.1 属性（Properties）
+很容易验证函数c(t)具有下列属性。
 
-It is easy to verify the following properties of the function c(t).
-
-By unwrapping the evaluation steps above, we can verify that c(t) has the form
+通过展开上面的评估步骤，我们可以证实函数c(t)具有下面的形式：
 
 $$c(t)= c_0(1 − t)^3 + 3d_0t(1 − t)^2 + 3e_0t^2(1 − t) + c_1t^3$$
 
-Clearly, it is a cubic function. Moreover, the c i are interpolated: c(0) = c 0 and c(1) = c 1 . Taking derivatives, we see that c ￿ (0) = 3(d 0 − c 0 ) and c ￿ (1) = 3(c 1 − e 0 ). In Figure 9.2, we see indeed that the slope of c(t) matches the slope of the control polygon at 0 and 1. We can also see that if we set c 0 = d 0 = e 0 = c 1 = 1, then c(t) = 1 for all t. This property is called partition of unity, and means that adding adding a constant value to all control values results in simply adding this constant to c(t).
+清晰无误地，这是一个立方函数。更进一步，$c_i$被函数插值：$c(0)=c_0$ 和 $c(1)=c_1$。通过推导，我们看到 $c'(0) = 3(d_0-c_0) $ 和 $ c'(1) = 3(c_1-e_{0})$。在图示$\text{Figure 9.2}$中，我们确实观察到c(t)函数的斜率（slope）匹配在0和1处控制多边形（control polygon）的斜率。我们也可以看到如果我们设置$c_0 = d_0 = e_0 = c_1 = 1$，那么对于所有的t值，函数c(t)=1。这种属性被称作一致性分区（partition of unity），那么这意味着为所有的控制值（control value）增加一个常量值也仅相当于给函数c(t)增加这个常量值。
 
 ### 9.1.2 平移（Translation）
 
