@@ -33,8 +33,7 @@ $$c(t)= c_0(1 − t)^3 + 3d_0t(1 − t)^2 + 3e_0t^2(1 − t) + c_1t^3$$
 清晰无误地，这是一个立方函数。更进一步，$c_i$被函数插值：$c(0)=c_0$ 和 $c(1)=c_1$。通过推导，我们看到 $c'(0) = 3(d_0-c_0) $ 和 $ c'(1) = 3(c_1-e_{0})$。在图示$\text{Figure 9.2}$中，我们确实观察到c(t)函数的斜率（slope）匹配在0和1处控制多边形（control polygon）的斜率。我们也可以看到如果我们设置$c_0 = d_0 = e_0 = c_1 = 1$，那么对于所有的t值，函数c(t)=1。这种属性被称作一致性分区（partition of unity），那么这意味着为所有的控制值（control value）增加一个常量值也仅相当于给函数c(t)增加这个常量值。
 
 ### 9.1.2 平移（Translation）
-
-If we want a cubic function to interpolate values c i and c i+1 at t = i and t = i + 1, respectively, and calling our two other control points d i and e i , we just have to “translate” the evaluation algorithm of Equation (9.1) to get
+如果我们想让一个立方函数在t=i和t=i+1时分别在$c_i$和$c_{i+1}$上插值，同时调用两个另外的控制值$d_i$和$e_i$，我们就不得不“平移”方程（9.1）中的评估算法，从而获得下列评估表达。
 
 $$
    f = (1 − t + i)c_i + (t-i)d_i \qquad\qquad\qquad\qquad (9.7)\ \\
