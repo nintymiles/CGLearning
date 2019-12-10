@@ -33,8 +33,7 @@ $$c(t)= c_0(1 − t)^3 + 3d_0t(1 − t)^2 + 3e_0t^2(1 − t) + c_1t^3$$
 清晰无误地，这是一个立方函数。更进一步，$c_i$被函数插值：$c(0)=c_0$ 和 $c(1)=c_1$。通过推导，我们看到 $c'(0) = 3(d_0-c_0) $ 和 $ c'(1) = 3(c_1-e_{0})$。在图示$\text{Figure 9.2}$中，我们确实观察到c(t)函数的斜率（slope）匹配在0和1处控制多边形（control polygon）的斜率。我们也可以看到如果我们设置$c_0 = d_0 = e_0 = c_1 = 1$，那么对于所有的t值，函数c(t)=1。这种属性被称作一致性分区（partition of unity），那么这意味着为所有的控制值（control value）增加一个常量值也仅相当于给函数c(t)增加这个常量值。
 
 ### 9.1.2 平移（Translation）
-
-If we want a cubic function to interpolate values c i and c i+1 at t = i and t = i + 1, respectively, and calling our two other control points d i and e i , we just have to “translate” the evaluation algorithm of Equation (9.1) to get
+如果我们想获得一个立方函数，这个函数分别在t = i和t = i+1上的具体值$c_i$和$c_{i+1}$上插值，同时调用另外两个控制点$d_i$和$e_i$，我们仅必须“平移”方程（9.1）的评估算法以获得下面的评估步骤：
 
 $$
    f = (1 − t + i)c_i + (t-i)d_i \qquad\qquad\qquad\qquad (9.7)\ \\
@@ -45,55 +44,51 @@ $$
    c(t) = (1 − t +i)m + (t-i)n \qquad\qquad\qquad\quad (9.12) \\
 $$
 
-## 9.2 Catmull-Rom Splines
+## 9.2 Catmull-Rom样条函数（Catmull-Rom Splines）
+让我们返回在一系列具体值$c_i,i \in -1..n+1$上插值的最初问题。做这个事情的简单方式是借助Catmull-Rom样条函数（Catmull-Rom Splines）。这个方法定义了一个针对变量$t \in [0..n]$的函数c(t)。这个函数被n个立方函数定义，每个在$t \in [i..i+1]$的单位区间上被支持。块函数（piece）被选定在$c_i$值上插值，同时满足它们的第一推导。
 
-Let us return now to our original problem of interpolating a set of values c i for i ∈ −1..n + 1. An easy way to do this is using Catmull-Rom splines. This method deﬁnes a function c(t) for values of t ∈ [0..n]. The function is deﬁned by n cubic functions, each supported over a unit interval t ∈ [i..i + 1]. The pieces are chosen to interpolate the c i values, and to agree on their ﬁrst derivatives.
-
-Each function is described in its Bezier representation, using four control values: c i , d i , e i , and c i+1 . From our input data, we already have the c i values. To set the d i and e i values we impose the constraint c ′ (t)| i = 1 2 (c i+1 − c i−1 ). In other words, we look forward and backwards one sample to determine its slope at t = i; this is why we need the extra extreme values c −1 and c n+1 . Since $c'(i) = 3(d_i-c_i) = 3(c_i-e_{i-1})$, in the Bezier representation, this tells us that we need to set
+每个块函数在其贝塞尔表达（Bezier represesntation）方式中，借助4个控制值：$c_i,d_i,e_i和c_{i+1}$被确定。根据我们的输入值。要设置$d_i$和$e_i$的值，我们施加约束$c′(t)|_i = \frac{1}{2} (c_{i+1} − c_{i−1} )$。换句话说，我们向前和向后各寻找一个样例以决定t=i处的斜率；这是为什么我们需要额外的边缘值（extreme values）$c_{-1}$和$c_{n+1}$的原因。因为在贝塞尔表达（Bezier representation）中$c'(i) = 3(d_i-c_i) = 3(c_i-e_{i-1}) $，这其实告诉我们需要做如下设置：
 
 $$ 
 	d_i = \frac{1}{6}(c_{i+1}-c_{i-1}) + c_i  \qquad\qquad(9.13)\\
 	e_i = -\frac{1}{6}(c_{i+2}-c_{i}) + c_{i+1} \qquad\quad(9.14)
 $$
 
-This process is visualized in Figure 9.4. Here we show the c, d and e values (in red) that are needed for one cubic segment. We show the control polygon of one cubic piece in light blue. The d and e are determined using the chords shown in dark blue.
+这个处理在图示$\text{Figure 9.4}$中被可视化表达。在这里我们展示了一个立方函数线段所需的控制值c，d和e（其中d和e以红色表示）。我们以浅蓝色展示了一个立方块函数（cubic piece）的控制多边形。控制值d和e借助深蓝色展示的弦（chords）被确定。
 
-## 9.3 Quaternion Splining
+![Figure9.4](media/Figure9.4.png)
+**Figure 9.4:** Catmull-Rom样条函数（Catmull-Rom spline function）由多个独立的块函数（piece）构成。每个块函数可以用贝塞尔（Bezier）形式表达。这里我们展示了一个贝塞尔形式如何通过输入的控制值被确定。箭头指向的线段拥有相同的斜率。 
 
-The Bezier and Catmull-Rom representations can be used to interpolate any real valued animation parameter. For example, if we have a time varying translation, each of its three deﬁning parameters t x , t y and t z can be interpolated independently.
+## 9.3 四元数样条化（Quaternion Splining）
+贝塞尔（Bezier）和Catmull-Rom表达可用于在任何实数值化的动画参数上插值。例如，如果我们有一个随时间变化的平移，那么3个定义的平移参数$t_x,t_y$和$t_z$可以独立地被插值。
 
-If we want to interpolate a set of orientations, the theory does not directly apply. There is ongoing research on the best theoretical approach to use in this case. One efﬁcient hack is to simply substitute appropriate quaternion operations for the scalar operations in the algorithms above. With these substitutions, scalar addition becomes quaternion multiplication, scalar negation becomes quaternion inversion, and scalar multiplication becomes quaternion power. Doing so, Bezier evaluation steps of the form
-
-$r = (1 − t)p + tq$ become $r = slerp(p, q, t)$
-
-and the d i and e i quaternion values are deﬁned as
-
+如果我们想要在一系列方位上插值，这种理论（Catmull-Rom和Bezier表达）不能直接应用。有一些关于在这种情形中使用的最佳理论方式的研究正在进行。一种有效的手段是仅仅针对上面的标量（scalar）操作替换为恰当的四元数（quaternion）操作。借助这些替换，标量（scalar）加法变为四元数（quaternion）乘法，标量（scalar）负操作变为四元数（quaternion）反转（倒数操作），标量（scalar）乘法变为四元数（quaternion）幂操作。如此进行，这种形式的贝塞尔（Bezier）评估步骤：
+$r = (1 − t)p + tq$ 变为 $r = slerp(p, q, t)$
+同时 $d_i$和$e_i$四元数（quaternion）的值被定义如下：
 $$ 
 d_i = ((c_{i+1}c_{i−1}^{−1} )^\frac{1}{6})c_i \\
 e_i = ((c_{i+2}c_{i}^{−1} )^\frac{-1}{6})c_{i+1}
 $$
 
-As in Section 7.4, in order to interpolate “the short way”, we negate the quaternion c i+1 c −1 before applying the power operator if its ﬁrst coordinate is negative. i−1
+正如在小节7.4中所述，为了在“短路径”上插值，如果四元数（quaternion）$c_{i+1}c_{i-1}^{-1}$的第一个坐标值为负，在应用幂操作符之前，我们先将其负化。
 
-Other slerp based quaternions spline methods are described in [68] and [66]. Another more natural, but more expensive method based on n-way spherical blends is described in [10].
+其它基于四元数样条（quaternion spline）的slerp方法在参考书目[68]和[66]中被讲述。另一种更自然的但是更昂贵的基于n路球体混合的方法在参考书目[10]中被讲述。
 
-Another alternative, often used in practice, is to simply treat the quaternions as points in R 4 , do standard splining on these four coordinates, and then normalize the result to get a unit-norm quaternion. In this context, the conditions needed for continuity between segments are described in [22].
+还有一种可选的，经常在实践中使用的方法，这种方法只是将四元数（quaternions）看作$R^4$空间中的点，在这些点坐标上做标准的样条化（splining）动作，随后标准化结果以获得单位态四元数（unit-norm quaternion）。在这种上下文中，用于线段间连续性的条件在参考书目[22]中被描述。
 
-## 9.4 Other Splines
+## 9.4 其它样条函数（Other Splines）
+存在很多其它类型的样条函数（spline function），它们的名字我们将会提及，因为你可能偶然会碰到这些函数，但是我们不会深入细节。这些样条函数在计算机辅助几何设计领域被重度研究。有兴趣的读者可能希望阅读参考书目[21]和[59]。
 
-There are a variety of other types of spline functions whose names we will mention, as you may run across these, but will not go into in detail. These splines are studied heavily in the ﬁeld of computer aided geometric design. The interested reader may wish to read [21] and [59].
+自然立方样条（natural cubic spline）函数在其控制值上插值并且最小化第二推导的积分。这样一种样条（spline）在某种意义上是“最平滑的”插值体。其证实了自然立方样条（natural spline）由满足第一和第二推导的立方块函数（piece）构成。需要求解一个线性方程式系统以确定这样一种自然立方样条函数。这种样条函数的行为是全局性的：移动一个控制值将影响整个范围的函数值。
 
-A natural cubic spline is a function that interpolates its control values and minimizes the integral of second derivative. Such a spline is in some sense “the smoothest” interpolant. It turns out that a natural spline will be made up of cubic pieces which meet up with agreement in both ﬁrst and second derivative. A linear system needs to be solved to determine such a natural cubic spline. The behavior of this spline is global: moving one control value will affect the function over its entire range.
+均匀（立方或3次）B样条函数表达了借助由一个集合的为了同时满足第二推导而被缝合在一起的3次（立方）多项式所构成的函数。不像自然3次样条函数，这个函数随着控制值的变化只会局部变动。然而，一个B样条，并不在任何控制值上插值，而只是近似它们。
 
-A uniform (cubic) B-spline represents a function using a set of cubic polynomials that are stitched together so that they match in second derivative as well. Unlike the natural cubic spline, this function changes only locally with changes in a control value. A B-spline, however, does not interpolate any of its control values, but merely approximates them.
+非均匀B样条是均匀B样条的泛化，其允许在变量t的集合上的不平均的控制值间隔，并同时维护两度连续性。
 
-A non uniform B-spline is a generalization of the uniform B-spline that allows for non-uniform spacing of the control values over the t line, while maintaining two degrees of continuity.
+最后，非均匀有理B样条（或称NURB）是非均匀B样条的泛化，在其上每个“块函数（piece）”是一种两个多项式函数的有理数（一种比率）表示。这种有理数形式允许你建模很多经典代数形状。
 
-Finally, a non uniform rational B-spline (or NURB) is a generalization of the non uniform B-spline where each “piece” of the function is a rational expression (a ratio) of two polynomial functions. The rational form allows one to model many classical algebraic shapes.
-
-## 9.5 Curves in Space ......
-
-For the purpose of animation, we have looked at univariate scalar functions (where we think of the free variable as time). One can also use a spline representation to describe curves in space. In this case, the spline curve is controlled by a set of control points ˜c i in 2D or 3D. Applying the spline construction independently to the x y and z coordinates, one gets a point-valued spline function ˜c(t); you can think of this as a point ﬂying through space over time, tracing out the spline curve, γ.
+## 9.5 空间中的曲线（Curves in Space） ......
+出于动画的目的，我们已经观察了单变量标量（scalar）函数（这里我们将自由变量当作时间）。你可以使用样条（spline）表达描述空中的曲线。在这种情形中，样条曲线被一系列2D或3D空间中的控制点$\tilde{c}$所控制。针对x、y和z坐标独立应用样条构造函数，你可以获得一个点值化的样条函数$\tilde{c}(t)$；你可以将它当作一个随时间飞过空中的点，勾勒出样条曲线，$\gamma$。
 
 Using the Bezier construction with four control points, we obtain a Bezier curve (see Figure 9.5), while using the Catmull-Rom construction on a set of control points, we obtain a Catmull-Rom curve (see Figure 9.6).
 
