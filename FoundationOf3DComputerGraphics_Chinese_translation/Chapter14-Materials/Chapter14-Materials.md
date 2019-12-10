@@ -1,5 +1,6 @@
 # Note
-本章以简洁明了的方式给出了计算机图形学中光和材料的基本讲解。
+这是对**Foundation of 3D Computer Graphics**第14章的翻译，本章以简洁明了的方式给出了计算机图形学中光和材料的基本讲解。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教ninetymiles@icloud.com 
+
 
 # 材料（Materials）
 碎片着色器（fragment shader)的职责是决定一个三角形上的点，这个点对应于图像中的一个像素。碎片着色器（fragment shader）拥有对于被插值的变异变量（varying variables）的访问权限，同时还有以uniform变量形式来自于用户程序的数据。Uniforms（统一参数）变量经常被用于描述像某种光源位置这类的内容，这些值不会逐像素变化。变异变量（varying variables）经常被用于描述点的坐标矢量（比方说，关联于眼睛帧（eye frame）），还有用于点的法线和描述这个点上材料属性的参数（正如底层的材料色）。碎片着色器（fragment shader）随后接收这些数据并且同时模拟光如何从这种材料反弹出去，同时产生一个图像中的色彩。本章中，我们将覆盖最常见的这种用于材料模拟的着色就算（shading calculations）。随后的章节中，我们会探索在碎片着色器（fragment shader）中完成的其它主要计算方式：纹理着色。
