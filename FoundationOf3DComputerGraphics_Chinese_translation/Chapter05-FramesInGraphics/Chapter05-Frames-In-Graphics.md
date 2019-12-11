@@ -50,31 +50,100 @@ $$ \Large{
 
 所以在代码中我们将变换实现为$O \leftarrow AMA^{-1}O$。
 
-What is a natural choice for ⃗ a t ? The most obvious choice would be to apply the transformation to ⃗ o t with respect to ⃗ o t itself. Unfortunately, this means that the axes used will be those that correspond to the object itself. “Rightward” will be in the object’s rightward direction, which will not correspond to any particular direction in the observed image. We might try to rectify this by instead transforming ⃗ o t with respect to ⃗ e t . This ﬁxes the axis problem but creates another problem. When we rotate the object, it will rotate about the origin of the eye’s frame; it will appear to orbit around the eye. But we typically ﬁnd it more natural to rotate the object about its center, which we think of as the origin of o t . (See Figure 5.2).
+什么是$\vec{\alpha}^t$的自然选择？最明显的选择会是关联于$\vec{\mathbf{o}}^t$自身应用变换到$\vec{\mathbf{o}}^t$上。不幸的是，这意味着被使用的轴会是相对于物体本身的那些轴。“向右”会在物体的右侧方向，这不会在被观察的图像中对应任何实际的方向。我们可能尝试通过关联于$\vec{\mathbf{e}}^t $变换$\vec{\mathbf{o}}^t$。这会修复轴相关问题但是确生成了另一个问题。当我们旋转物体，它会围绕eye frame（眼睛帧）的原点做环绕运动。但是我们通常发现围绕物体自己的中心旋转才更自然，这个中心我们认为是$\vec{\mathbf{o}}^t$的原点。参考图示$\text{Figure 5.2}$。
 
-To ﬁx both of these problems, we can create a new frame that has the origin of the object, but the axes of the eye. To do this let us factor our matrices as follows
+要修复这两种问题，我们可以生成一个新的帧（frame），其拥有物体（object）帧的原点，还有眼睛（eye）帧的轴。要获得这个帧，让我们将我们已有的矩阵分解如下：
+$$\Large{
+O = (O)_T(O)_R \\
+E = (E)_T(E)_R
+}$$
 
-O E
+这里$(A)_T$代表矩阵A的平移因子，$(A)_R$代表矩阵A的旋转因子，就如在方程（3.3）中一样。我们随后可以看到想要的辅助帧（auxiliary frame）应该如下：
+$$\Large{
+ \vec{\mathbf{\alpha}}^t = \vec{\mathbf{w}}^t(O)_T(E)_R   \qquad (5.6)
+}$$
+
+这个帧（frame）通过始于世界坐标系（world coordinate system），然后平移其到物体帧（object‘s frame）的原点（从左到右读，也就是说，依次经历局部变换的解读），再然后围绕这个点旋转从而达到与眼睛帧（eye）的轴方向对齐。（参考图示$\text{Figure 5.3}$）。
+
+因此，对于这种物体运动（object motion），方程式（5.1）中矩阵A应该为$A=(O)_T(E)_R$。
+
+有一种完成相同效果的替代计算。举个例子，假设，我们希望借助一个旋转轴$\vec{k}$围绕其自身的中心旋转一个物体，这个旋转轴具有关联于$\vec{\mathbf{e}}^t$的坐标$\mathbf{k}$。（在上面计算中我们其实用$\mathbf{k}$获得了一个矩阵M，然后和一个合适的矩阵A一起，我们更新物体矩阵$O \leftarrow AMA^{-1}O$。）我们可以首先计算$\mathbf{k'}$,$\mathbf{k}$的关联于$\vec{\mathbf{o}}^t$的坐标。然后将$\mathbf{k'}$代入方程式（2.5）中，我们可以得到一个矩阵M'，这个矩阵直接表达了关联于$\vec{\mathbf{o}}^t$的我们所要求的旋转。在这种情形中，我们可以更新物体矩阵（object's matrix）为：$$\Large{ O \leftarrow OM' }$$
+
+### 5.2.2 移动眼睛（视角）（Moving the Eye）
+另一种我们希望进行的操作是移动眼睛到不同的视角。这会涉及改动$\vec{\mathbf{e}}^t$,在程序中具体通过更新矩阵E来达到目的。再一次，我们可以挑选一个合适的坐标系，关联于这个坐标系我们执行$\vec{\mathbf{e}}^t$的更新，就如之前我们在物体上所做的操作。
+
+One choice is to use the same auxiliary coordinate system we just used above. In this case, the eye would orbit around the center of the object.
+
+Another useful choice is to transform e t with respect to the eye’s own frame. This models ego-motion, like turning ones head. This is commonly used to control ﬁrst-person motion. In this case the matrix E would be updated as
+
+E ← EM
+
+### 5.2.3 Lookat（盯着看）
+
+Sometimes (especially for static images) it can be convenient to describe the eye frame, ⃗ e t = w t E, directly by specifying the position of the eye ˜p, a point ˜q that the eye is ⃗ looking directly at, and an “up vector” ⃗u describing the vertical direction of the eye. ⃗ These points and vector are given by p, q and u, their coordinates with respect to w t . Given this input, let
+
+z y x
 
 = =
 
-(O) T (O) R
+=
 
-(E) T (E) R
+normalize(q − p) normalize(u)
 
-Where (A) T is the translational and (A) R is the rotational factor of A, as in Equation (3.3). We can then see that the desired auxiliary frame should be
+y×z
 
-⃗ a t = w t (O) T (E) R
+where
 
-⃗
+normalize(c) =c ⁄
 
-(5.6)
+￿
 
-This frame is obtained by starting with the world coordinate system and (reading left to right, i.e. successive local interpretation) translating it to the center of the object’s frame, and then rotating it about that point to align with the directions of the eye. (See Figure 5.3).
+2 1
 
-Thus for this kind of object motion, the matrix A of Equation (5.1) should be A = (O) T (E) R .
+c
 
-There is an alternative computation that accomplishes the same effect. Suppose, for example, that we wish to rotate an object around its own center using an axis of rotation k that has coordinates k with respect to ⃗ e t . (Above we used k to obtain a matrix M, and together with an appropriate A, we updated O ← AMA −1 O.) We can ﬁrst compute k ′ , the coordinates of k with respect to ⃗ o t . Then plugging k ′ into Equation (2.5), we can obtain a matrix M ′ that directly expresses our rotation with respect to ⃗o t . In this case we can update the object’s matrix as
++ c 2 2 + c 3 2
 
-O ← OM ′
+Then the matrix E is deﬁned as ⎡
+
+⎢ ⎢ ⎣
+
+## 5.3 Scales
+
+x 1 x 2 x 3
+
+0
+
+y 1 y 2 y 3
+
+0
+
+z 1 z 2 z 3
+
+0
+
+p 1 p 2 p 3
+
+1
+
+⎤
+
+⎥ ⎥ ⎦
+
+Thus far, we have thought of our world as being made up of movable objects, each ⃗ with its own orthonormal frame represented by its own rigid body matrix ⃗ o t = w t O. We have restricted our attention to orthonormal frames so that translation and rotation matrices work as we expect them to.
+
+Of course, for modeling objects, we certainly may want to apply scaling as well. For example, we may want to model an ellipsoid as a squashed sphere. One way to deal with this is to keep a separate scale matrix O ′ around for the object as well. Then t the scaled (non-orthonormal) object frame is o ′ = ⃗ o t O ′ . This way we can still move
+
+the object by updating its O matrix as above. To draw the object, we use the matrix E −1 OO ′ to transform the “scaled object coordinates” into eye coordinates.
+
+## 5.4 Hierarchy
+
+Often it is convenient to think of an object as being assembled by some ﬁxed or movable sub-objects. Each sub-object may have its own orthonormal frame, say ⃗ a t (and scaled frame as well). Then we can store the vertex coordinates of the sub-object in its own coordinate system. Given this hierarchy we want the ability to easily model motions of the object as a whole as well as independent motions of the sub-objects.
+
+For example, when modeling a robot with moving limbs, we may use an object and scaled object frame to represent the trunk, a sub-object frame to represent a rotatable shoulder, and a scaled sub-sub-object frame to to represent the upper arm (which moves along with the shoulder). (See Figure 5.4).
+
+When we move the whole object, by updating its O matrix, we want all of the subjects more along in unison (see Figure 5.5). To get this behavior, we represent the sub-object’s frame using a rigid body matrix that relates it to the object’s frame, (instead of relating it to the world frame). Thus, we store a rigid body matrix A which we interpret as deﬁning the relationship: a t = o t A, as well as a scale matrix A ′ deﬁning its t scaled sub-object frame as a ′ = ⃗ a t A ′ . To reposition the sub-object within the object,
+
+all we do is update the matrix A. To draw the sub-object, we use the matrix E −1 OAA ′ which transforms “scaled sub-object coordinates” into eye coordinates. Clearly this idea can be nested recursively, and we can represent a sub-sub-object as b t = ⃗ a t B, t and a scaled sub-sub-object as b ′ = b t B ′ .
+
 
