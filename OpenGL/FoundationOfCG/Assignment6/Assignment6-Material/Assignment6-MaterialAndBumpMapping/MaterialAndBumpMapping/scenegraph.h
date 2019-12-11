@@ -155,9 +155,9 @@ public:
     //safe_glUniform3f(curSS.h_uColor, color_[0], color_[1], color_[2]);
       Uniforms uniforms = material.getUniforms();
       uniforms.put("uColor",Cvec3(color_[0], color_[1], color_[2]));
+      uniforms.put("uColor",Cvec3(1.0,0.0,0.0));
       //geometry_->draw(material);
-      Uniforms extraUniforms;
-      material.draw(*geometry_, extraUniforms);
+      material.draw(*geometry_);
   }
 
 };

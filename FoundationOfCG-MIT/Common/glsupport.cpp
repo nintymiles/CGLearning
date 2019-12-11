@@ -24,7 +24,7 @@ using namespace std;
 void checkGlError(const char* op) {
     //将GL error stack中的error逐一取出，直至stack中没有error
     for (GLint error = glGetError(); error; error= glGetError()) {
-        printf("after %s() glError (0x%x)\n", op, error);
+        printf("Error Occurs, %s() glError (0x%x)\n", op, error);
     }
 }
 
@@ -116,19 +116,26 @@ void readAndCompileSingleShader(GLuint shaderHandle, const char *fn) {
 }
 
 void linkShader(GLuint programHandle, GLuint vs, GLuint fs) {
+    checkGlError("before linkShader - glAttachShader");
     glAttachShader(programHandle, vs);
     glAttachShader(programHandle, fs);
     
+    checkGlError("before linkShader - glLinkProgram");
     glLinkProgram(programHandle);
     
+    checkGlError("before linkShader - glDetachShader");
     //链接完shader之后，直接取消挂载（分离）shaders对象
     glDetachShader(programHandle, vs);
     glDetachShader(programHandle, fs);
     
+    checkGlError("before linkShader - glGetProgramiv");
     GLint linked = 0;
     glGetProgramiv(programHandle, GL_LINK_STATUS, &linked);
-    printInfoLog(programHandle, "linking");
-    
+    checkGlError("before linkShader - printInfoLog");
+    //此处应该不能在调用shader的信息，因为已经detached，这是一个bug
+    //printInfoLog(programHandle, "linking");
+    checkGlError("after linkShader - printInfoLog");
+        
     if (!linked)
         throw runtime_error("fails to link shaders");
 }
@@ -140,6 +147,8 @@ void readAndCompileShader(GLuint programHandle, const char * vertexShaderFileNam
 
   readAndCompileSingleShader(vs, vertexShaderFileName);
   readAndCompileSingleShader(fs, fragmentShaderFileName);
+    
+    
 
   linkShader(programHandle, vs, fs);
 }

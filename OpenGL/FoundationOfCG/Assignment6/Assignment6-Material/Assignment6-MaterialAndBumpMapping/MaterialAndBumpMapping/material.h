@@ -23,6 +23,7 @@ public:
     Material(const std::string& vsFilename, const std::string& fsFilename);
     //绘制接口，传入geometry和uniforms封装参数
     void draw(Geometry& geometry, const Uniforms& extraUniforms);
+    void draw(Geometry& geometry);
     
     Uniforms& getUniforms() { return uniforms_; }
     //第一个const代表返回一个const reference，第二个const代表const memeber function，即函数对象不可改变
@@ -38,6 +39,5 @@ protected:
     
     RenderStates renderStates_;
 };
-
 
 #endif

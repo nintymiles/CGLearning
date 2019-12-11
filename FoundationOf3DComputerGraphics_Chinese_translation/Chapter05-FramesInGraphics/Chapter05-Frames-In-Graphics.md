@@ -72,73 +72,39 @@ $$\Large{
 ### 5.2.2 移动眼睛（视角）（Moving the Eye）
 另一种我们希望进行的操作是移动眼睛到不同的视角。这会涉及改动$\vec{\mathbf{e}}^t$,在程序中具体通过更新矩阵E来达到目的。再一次，我们可以挑选一个合适的坐标系，关联于这个坐标系我们执行$\vec{\mathbf{e}}^t$的更新，就如之前我们在物体上所做的操作。
 
-One choice is to use the same auxiliary coordinate system we just used above. In this case, the eye would orbit around the center of the object.
+一种选择是使用和上面相同的辅助坐标系。在这种情形中，眼睛会围着物体的中心环绕运动。
 
-Another useful choice is to transform e t with respect to the eye’s own frame. This models ego-motion, like turning ones head. This is commonly used to control ﬁrst-person motion. In this case the matrix E would be updated as
-
-E ← EM
+另一种有效的选择是关联于眼睛自身的帧（frame）变换$\vec{\mathbf{e}}^t$。这会建模自我运动（ego-motion），就如转动你的头部。这通常被用于控制第一人称（first-person）运动。在这种情形中矩阵E会被更新为$E \leftarrow EM$
 
 ### 5.2.3 Lookat（盯着看）
+> 本节有一些错误，已经根据本书的errata改正。
 
-Sometimes (especially for static images) it can be convenient to describe the eye frame, ⃗ e t = w t E, directly by specifying the position of the eye ˜p, a point ˜q that the eye is ⃗ looking directly at, and an “up vector” ⃗u describing the vertical direction of the eye. ⃗ These points and vector are given by p, q and u, their coordinates with respect to w t . Given this input, let
+有时，特别是针对静态图像(static images)时，直接描绘出眼睛帧$\vec{\mathbf{e}}^t = \vec{\mathbf{w}}^tE$会很便利，通过指定眼睛的位置$\tilde{p}$,和一个眼睛正死盯着的点$\tilde{q}$，还有一个“上方矢量(up vector)"$\vec{u}$用于描述眼睛上方的方向。这些点和矢量通过变量p,q和u被给出，它们的坐标关联于$\vec{\mathbf{w}}^t$。假定这种输入，进行下面的计算：
 
-z y x
+$$
+z = normalize(p-q) \\
+x = normalize(u \times z) \\
+y = normalize(z \times x)
+$$
 
-= =
+$$ normalize(c) = \frac{c}{\sqrt{c_1^2+c_2^2+c_3^2}}$$
 
-=
+然后矩阵E可以被定义为：
+$$ \begin{bmatrix}
+x_1 & y_1 & z_1 & p_1 \\
+x_2 & y_2 & z_2 & p_2 \\
+x_3 & y_3 & z_3 & p_3 \\
+0 & 0 & 0 & 1
+\end{bmatrix}$$
 
-normalize(q − p) normalize(u)
 
-y×z
+## 5.3 缩放变换（Scales）
+目前为止，我们已经将我们的世界认为是由运动的物体组成，每个物体都有一个由其自身的坚固形体矩阵所表达的正交标准帧（orthonormal frame)$\vec{\mathbf{o}}^t = \vec{\mathbf{w}}^tO$。我们限制关注点到正交标准帧以便平移和旋转矩阵可以像我们预期它们的行为那样工作。
 
-where
-
-normalize(c) =c ⁄
-
-￿
-
-2 1
-
-c
-
-+ c 2 2 + c 3 2
-
-Then the matrix E is deﬁned as ⎡
-
-⎢ ⎢ ⎣
-
-## 5.3 Scales
-
-x 1 x 2 x 3
-
-0
-
-y 1 y 2 y 3
-
-0
-
-z 1 z 2 z 3
-
-0
-
-p 1 p 2 p 3
-
-1
-
-⎤
-
-⎥ ⎥ ⎦
-
-Thus far, we have thought of our world as being made up of movable objects, each ⃗ with its own orthonormal frame represented by its own rigid body matrix ⃗ o t = w t O. We have restricted our attention to orthonormal frames so that translation and rotation matrices work as we expect them to.
-
-Of course, for modeling objects, we certainly may want to apply scaling as well. For example, we may want to model an ellipsoid as a squashed sphere. One way to deal with this is to keep a separate scale matrix O ′ around for the object as well. Then t the scaled (non-orthonormal) object frame is o ′ = ⃗ o t O ′ . This way we can still move
-
-the object by updating its O matrix as above. To draw the object, we use the matrix E −1 OO ′ to transform the “scaled object coordinates” into eye coordinates.
+当然，要建模物体，我们当然想同时应用缩放。例如，我们想要建模一个椭球体为一个被挤压的球体。一种处理方式是让这个物体同时拥有一个缩放矩阵（scaled matrix）$O'$。然后被缩放的物体帧（非正交标准化的）被确定为$\vec{\mathbf{o}}'^t = \vec{\mathbf{o}}^tO'$。这种方式中我们仍然像上面一样通过更新矩阵O移动物体。要绘制这个物体，我们使用矩阵$E^{-1}OO'$将“缩放的物体坐标”变换为眼睛坐标。
 
 ## 5.4 Hierarchy
-
-Often it is convenient to think of an object as being assembled by some ﬁxed or movable sub-objects. Each sub-object may have its own orthonormal frame, say ⃗ a t (and scaled frame as well). Then we can store the vertex coordinates of the sub-object in its own coordinate system. Given this hierarchy we want the ability to easily model motions of the object as a whole as well as independent motions of the sub-objects.
+经常将一个物体（对象）当作由某些固定的或者移动的多个子对象（sub-objects）组装而成，这种观点其实很有用。每个子对象可以拥有自己的正交标准帧（orthonormal frame），比如说$\vec{\mathbf{\alpha}}^t$。（同时还有缩放帧-scaled frame）。然后我们可以用其自己的坐标系存储这个子对象的顶点。给定这个层次体系，我们想拥有这种能力，即轻松以整体建模物体的运动，同时可以独立建模子对象的运动。
 
 For example, when modeling a robot with moving limbs, we may use an object and scaled object frame to represent the trunk, a sub-object frame to represent a rotatable shoulder, and a scaled sub-sub-object frame to to represent the upper arm (which moves along with the shoulder). (See Figure 5.4).
 

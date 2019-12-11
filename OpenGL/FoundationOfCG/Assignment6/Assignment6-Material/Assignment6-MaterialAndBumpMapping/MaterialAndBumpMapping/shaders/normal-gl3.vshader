@@ -1,4 +1,4 @@
-#version 130
+#version 410 core
 
 uniform mat4 uProjMatrix;
 uniform mat4 uModelViewMatrix;

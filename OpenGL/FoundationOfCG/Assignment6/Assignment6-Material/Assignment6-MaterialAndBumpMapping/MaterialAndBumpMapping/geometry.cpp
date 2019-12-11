@@ -89,6 +89,18 @@ void BufferObjectGeometry::draw(int attribIndices[]) {
 
   const unsigned int UNDEFINED_VB_LEN = 0xFFFFFFFF;
   unsigned int vboLen = UNDEFINED_VB_LEN;
+    
+    GLuint vaoId;
+    glGenVertexArrays(1,&vaoId);
+    glBindVertexArray(vaoId);
+    
+//    for (size_t i = 0; i < numAttribs; ++i) {
+//        //只要有对应的属性Index，则开启vertex array方式
+//        if (attribIndices[i] >= 0)
+//            glEnableVertexAttribArray(attribIndices[i]);
+//        checkGlError("after glEnableVertexAttribArray");
+//        printProgramInfoLog(programDesc_->program);
+//    }
 
   // bind the vertex buffer and set vertex attribute pointers
   for (int i = 0, n = perVbWirings_.size(); i < n; ++i) {
@@ -97,15 +109,40 @@ void BufferObjectGeometry::draw(int attribIndices[]) {
 
     //每次绑定一个VBO，然后设置vertexattribpointer，这意味着可以支持多缓存共用。
     glBindBuffer(GL_ARRAY_BUFFER, *(pvw.vb));
-
+      
+      
+      /** 通过mapperBuffer的方式验证VertexBuffer中的数据并没有问题
+       
+      GLfloat *vtxMappedBuf;
+      
+      GLfloat vtxBuf[56] ;
+      
+      GLint bufferSize = pvw.vb->length() * (pvw.vb->getVertexFormat().getVertexSize());
+      vtxMappedBuf = (GLfloat*) glMapBufferRange ( GL_ARRAY_BUFFER, 0, (unsigned int)bufferSize , GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT );
+      if ( vtxMappedBuf == NULL ) {
+          printf( "Error mapping vertex buffer object." );
+      }
+      
+      memcpy (  vtxBuf,vtxMappedBuf, bufferSize );
+     */
+      
     vboLen = min(vboLen, (unsigned int)pvw.vb->length());
 
     for (size_t j = 0; j < pvw.vb2GeoIdx.size(); ++j) {
       int loc = attribIndices[pvw.vb2GeoIdx[j].second];
-      if (loc >= 0)
-        vfd.setGlVertexAttribPointer(pvw.vb2GeoIdx[j].first, loc);
+        if (loc >= 0){
+            glEnableVertexAttribArray(loc);
+            checkGlError("before setGlVertexAttribPointer");
+            vfd.setGlVertexAttribPointer(pvw.vb2GeoIdx[j].first, loc);
+            checkGlError("after setGlVertexAttribPointer");
+        }
+        
     }
   }
+    
+//    glBindVertexArray(0);
+//    
+//    glBindVertexArray(vaoId);
 
   if (isIndexed()) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *ib_);
@@ -114,6 +151,8 @@ void BufferObjectGeometry::draw(int attribIndices[]) {
   else if (vboLen != UNDEFINED_VB_LEN) {
     glDrawArrays(primitiveType_, 0, vboLen);
   }
+    
+  glBindVertexArray(0);
 }
 
 void BufferObjectGeometry::processWiring() {

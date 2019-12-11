@@ -124,9 +124,11 @@ public:
     // specified by 'glAttribLocation'
     // Notes -- the biggest role of AttributeDesc object is to guide setting of params of glVertexAttribPointer()，同时数据则认为已经上传到VBO中
     void setGlVertexAttribPointer(int attribIndex, int glAttribLocation) const {
+        checkGlError("before setGlVertexAttribPointer glVertexAttribPointer");
         assert(glAttribLocation >= 0);
         const AttribDesc &ad = attribDescs_[attribIndex];
         glVertexAttribPointer(glAttribLocation, ad.size, ad.type, ad.normalized, vertexSize_, reinterpret_cast<const GLvoid*>(ad.offset));
+        checkGlError("after setGlVertexAttribPointer glVertexAttribPointer");
     }
 
 //privtate variables的定义放置到定义末尾是因为引用了public中定义的类型
@@ -183,12 +185,13 @@ public:
             // us a new one without stalling the pipeline
             glBufferData(GL_ARRAY_BUFFER, size, NULL, GL_DYNAMIC_DRAW);
             glBufferSubData(GL_ARRAY_BUFFER, 0, size, vertices);
+            checkGlError("after glBufferSubData");
         }
         else {
             glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
         }
 #ifndef NDEBUG
-        checkGlError(__func__);
+        
 #endif
     }
 };
@@ -227,6 +230,7 @@ public:
         if (dynamicUsage) {
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, NULL, GL_DYNAMIC_DRAW);
             glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, size, indices);
+            checkGlError(__FUNCTION__);
         }
         else {
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
@@ -282,8 +286,7 @@ public:
     
     // Return if we are in indexed mode
     bool isIndexed() const {
-        //return ib_;  //??此处注释掉，是因为不知其含义
-        return ib_==NULL;
+        return (ib_!=NULL);
     }
     
     // Return the primitive types we are drawing using. Default is GL_TRIANGLES

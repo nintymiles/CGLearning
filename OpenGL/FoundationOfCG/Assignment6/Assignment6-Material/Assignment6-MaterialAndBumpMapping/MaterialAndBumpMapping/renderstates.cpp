@@ -99,15 +99,18 @@ void RenderStates::apply() const {
         firstRun = false;
     }
     
+    
+    
     //和当前不同，则调用状态设置API
     if (glFront != currentRs.glFront) {
         glPolygonMode(GL_FRONT, glFront);
         currentRs.glFront = glFront;
     }
     if (glBack != currentRs.glBack) {
-        glPolygonMode(GL_BACK, glFront);
+        glPolygonMode(GL_BACK, glBack);
         currentRs.glBack = glBack;
     }
+    
     if (glBlendSrcFactor != currentRs.glBlendSrcFactor || glBlendDstFactor != currentRs.glBlendDstFactor) {
         glBlendFunc(glBlendSrcFactor, glBlendDstFactor);
         currentRs.glBlendSrcFactor = glBlendSrcFactor;

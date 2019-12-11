@@ -8,10 +8,10 @@
 
 using namespace std;
 
-ImageTexture::ImageTexture(const char* ppmFileName, bool srgb) {
+ImageTexture::ImageTexture(const std::string& ppmFileName, bool srgb) {
     int width, height;
     vector<PackedPixel> pixData;
-    ppmRead(ppmFileName, width, height, pixData);
+    ppmRead(ppmFileName.c_str(), width, height, pixData);
         
     glBindTexture(GL_TEXTURE_2D, tex);
     //  if (g_Gl2Compatible)
