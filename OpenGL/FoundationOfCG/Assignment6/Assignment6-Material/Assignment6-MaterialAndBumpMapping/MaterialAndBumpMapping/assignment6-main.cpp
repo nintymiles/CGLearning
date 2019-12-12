@@ -186,8 +186,8 @@ static void initMaterials(){
     
     Material bump("./shaders/normal-gl3.vshader","./shaders/normal-gl3.fshader");
     
-    g_redDiffuseMat.reset(new Material(bump));
-    g_blueDiffuseMat.reset(new Material(bump));
+    g_redDiffuseMat.reset(new Material(diffuse));
+    g_blueDiffuseMat.reset(new Material(diffuse));
     //g_bumpFloorMat,
     g_arcballMat.reset(new Material(solid));
     g_arcballMat->getUniforms().put("uColor", Cvec3(0.97f,0.1f,0.0f));
@@ -301,41 +301,67 @@ static void drawStuff(const Uniforms& uniforms, bool picking){
     
     //Material sphereMat("./shaders/normal-gl3.vshader","./shaders/normal-gl3.fshader");
     if (!picking) {
-        g_lightMat->getUniforms().put("uLight", eyeLight1);
-        g_lightMat->getUniforms().put("uLight2", eyeLight2);
         
-        sendProjectionMatrix(g_lightMat->getUniforms(), projmat);
-        
-        
+
         RigTForm mvmRbt = invEyeRbt * g_objectRbt[2];
         
-        Matrix4 MVM = rigTFormToMatrix(mvmRbt); //* scaleMatrix;
-        Matrix4 NMVM = normalMatrix(MVM);
-        sendModelViewNormalMatrix(g_lightMat->getUniforms(), MVM, NMVM);
+//        Matrix4 MVM = rigTFormToMatrix(mvmRbt); //* scaleMatrix;
+//        Matrix4 NMVM = normalMatrix(MVM);
+//        sendModelViewNormalMatrix(g_lightMat->getUniforms(), MVM, NMVM);
+//
+//        sendModelViewNormalMatrix(g_redDiffuseMat->getUniforms(), MVM, NMVM);
+//        sendModelViewNormalMatrix(g_blueDiffuseMat->getUniforms(), MVM, NMVM);
 
-        
-        Uniforms extraUniforms;
-        
         //extraUniforms.put("uTexColor",colorTex);
         
         g_lightMat->getUniforms().put("uTexColor",colorTex);
         
         g_lightMat->getRenderStates().polygonMode(GL_FRONT, GL_FILL);
+        g_redDiffuseMat->getRenderStates().polygonMode(GL_FRONT, GL_FILL);
+        g_blueDiffuseMat->getRenderStates().polygonMode(GL_FRONT, GL_FILL);
         //sphereMat.draw(*g_cube, extraUniforms);
         
         g_lightMat->getUniforms().put("uColor",Cvec3{0.1,1,0.1});
+        g_redDiffuseMat->getUniforms().put("uColor",Cvec3{0.9,0.1,0.1});
+        g_blueDiffuseMat->getUniforms().put("uColor",Cvec3{0.1,1,0.1});
         
-        Drawer ground_drawer(invEyeRbt,*g_lightMat);
-        g_groundNode->accept(ground_drawer);
+//        Drawer ground_drawer(invEyeRbt,*g_lightMat);
+//        g_groundNode->accept(ground_drawer);
+//////
+//        Drawer robot1_drawer(invEyeRbt,*g_arcballMat);
+//        g_robot1Node->accept(robot1_drawer);
+//        g_robot2Node->accept(ground_drawer);
         
-        Drawer robot1_drawer(invEyeRbt,*g_arcballMat);
-        g_robot1Node->accept(robot1_drawer);
-        g_robot2Node->accept(ground_drawer);
         
+        
+//        g_lightMat->getUniforms().put("uLight", eyeLight1);
+//        g_lightMat->getUniforms().put("uLight2", eyeLight2);
+//
+//        g_redDiffuseMat->getUniforms().put("uLight", eyeLight1);
+//        g_redDiffuseMat->getUniforms().put("uLight2", eyeLight2);
+//
+//        g_blueDiffuseMat->getUniforms().put("uLight", eyeLight1);
+//        g_blueDiffuseMat->getUniforms().put("uLight2", eyeLight2);
+//
+//        sendProjectionMatrix(g_lightMat->getUniforms(), projmat);
+//
+//        sendProjectionMatrix(g_redDiffuseMat->getUniforms(), projmat);
+//        sendProjectionMatrix(g_blueDiffuseMat->getUniforms(), projmat);
+        
+        //公用的属性可以放到extraUniforms中，可以供每个drawer使用。
+        //这样代码的结构才体现出简洁高效
+        Uniforms extraUniforms;
+        extraUniforms.put("uLight", eyeLight1);
+        extraUniforms.put("uLight2", eyeLight1);
+        sendProjectionMatrix(extraUniforms, projmat);
+        
+        Drawer drawer(invEyeRbt,extraUniforms);
+        g_world->accept(drawer);
         
         
     }else {
-        Picker picker(invEyeRbt, *g_lightMat,g_currentPickedRbtNode,g_world,getEyeRbt(),g_motionRbt);
+        Uniforms extraUniforms;
+        Picker picker(invEyeRbt, extraUniforms,g_currentPickedRbtNode,g_world,getEyeRbt(),g_motionRbt);
         g_world->accept(picker);
         glFlush();
         g_currentPickedRbtNode = picker.getRbtNodeAtXY(g_pickingMouseX, g_pickingMouseY);
@@ -639,7 +665,7 @@ static void initGeometry() {
     colorTex.reset(new ImageTexture("./shaders/Color_Tex.ppm",true));
 }
 
-static void constructRobot(shared_ptr<SgTransformNode> base, const Cvec3& color) {
+static void constructRobot(shared_ptr<SgTransformNode> base, shared_ptr<Material> material,const Cvec3& color) {
     
     const float ARM_LEN = 0.7,ARM_THICK = 0.25,TORSO_LEN = 1.5,TORSO_THICK = 0.25,TORSO_WIDTH = 1, HEAD_LEN = 0.5,HEAD_THICK = 0.45,LIMB_LEN = 0.9,LIMB_THICK = 0.25;
     const int NUM_JOINTS = 10,NUM_SHAPES = 10;
@@ -696,6 +722,7 @@ static void constructRobot(shared_ptr<SgTransformNode> base, const Cvec3& color)
     for (int i = 0; i < NUM_SHAPES; ++i) {
         shared_ptr<MyShapeNode> shape(
                                       new MyShapeNode(shapeDesc[i].geometry,
+                                                      material,
                                                       color,
                                                       Cvec3(shapeDesc[i].x, shapeDesc[i].y, shapeDesc[i].z),
                                                       Cvec3(0, 0, 0),
@@ -713,16 +740,16 @@ static void initScene() {
     
     shared_ptr<SimpleIndexedGeometryPNTBX> g_ground2 = g_ground;
     g_groundNode->addChild(shared_ptr<MyShapeNode>(
-                                                   new MyShapeNode(g_ground2, Cvec3(0.1, 0.95, 0.1))));
+                                                   new MyShapeNode(g_ground2,g_lightMat, Cvec3(0.1, 0.95, 0.1))));
     
     g_robot1Node.reset(new SgRbtNode(RigTForm(Cvec3(-2, 1, 0))));
     g_robot2Node.reset(new SgRbtNode(RigTForm(Cvec3(2, 1, 0))));
     
-    constructRobot(g_robot1Node, Cvec3(1, 0, 0)); // a Red robot
-    constructRobot(g_robot2Node, Cvec3(0, 0, 1)); // a Blue robot
+    constructRobot(g_robot1Node,g_redDiffuseMat, Cvec3(1, 0, 0)); // a Red robot
+    constructRobot(g_robot2Node,g_blueDiffuseMat, Cvec3(0, 1, 0)); // a Blue robot
     
     g_world->addChild(g_skyNode);
-    //g_world->addChild(g_groundNode);
+    g_world->addChild(g_groundNode);
     g_world->addChild(g_robot1Node);
     g_world->addChild(g_robot2Node);
 }

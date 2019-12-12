@@ -72,7 +72,7 @@ public:
   virtual bool accept(SgNodeVisitor& visitor);
 
   virtual Matrix4 getAffineMatrix() = 0;
-  virtual void draw(Material& material) = 0;
+  virtual void draw(Uniforms& extraUniforms) = 0;
 };
 
 
@@ -131,15 +131,18 @@ private:
 template<typename Geometry>
 class SgGeometryShapeNode : public SgShapeNode {
   shared_ptr<Geometry> geometry_;
+  shared_ptr<Material> material_;
   Matrix4 affineMatrix_;
   Cvec3 color_;
 public:
   SgGeometryShapeNode(shared_ptr<Geometry> geometry,
+                      shared_ptr<Material> material,
                       const Cvec3& color,
                       const Cvec3& translation = Cvec3(0, 0, 0),
                       const Cvec3& eulerAngles = Cvec3(0, 0, 0),
                       const Cvec3& scales = Cvec3(1, 1, 1))
     : geometry_(geometry)
+    , material_(material)
     , color_(color)
     , affineMatrix_(Matrix4::makeTranslation(translation) *
                     Matrix4::makeXRotation(eulerAngles[0]) *
@@ -151,14 +154,14 @@ public:
     return affineMatrix_;
   }
 
-  virtual void draw(Material& material){
+  virtual void draw(Uniforms& extraUniforms){
       //safe_glUniform3f(curSS.h_uColor, color_[0], color_[1], color_[2]);
-      Uniforms uniforms = material.getUniforms();
+      Uniforms uniforms = material_->getUniforms();
       if(color_ == NULL)
           color_=Cvec3(1,0,0);
       uniforms.put("uColor",color_);
       //所有的绘制动作都由material发动
-      material.draw(*geometry_);
+      material_->draw(*geometry_,extraUniforms);
   }
 
 };

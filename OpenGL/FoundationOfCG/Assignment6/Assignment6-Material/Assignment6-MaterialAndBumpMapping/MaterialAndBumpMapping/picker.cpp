@@ -4,12 +4,12 @@
 
 using namespace std;
 
-Picker::Picker(const RigTForm& initialRbt, Material& material)
-  : drawer_(initialRbt, material)
+Picker::Picker(const RigTForm& initialRbt, Uniforms& uniforms)
+  : drawer_(initialRbt, uniforms)
   , idCounter_(0)
   , srgbFrameBuffer_(true) {}
 
-Picker::Picker(const RigTForm& initialRbt, Material& material,shared_ptr<SgRbtNode> selectedNode,shared_ptr<SgRootNode> worldNode,RigTForm eyeRbt,RigTForm motionRbt):drawer_(initialRbt, material)
+Picker::Picker(const RigTForm& initialRbt, Uniforms& uniforms,shared_ptr<SgRbtNode> selectedNode,shared_ptr<SgRootNode> worldNode,RigTForm eyeRbt,RigTForm motionRbt):drawer_(initialRbt, uniforms)
 , idCounter_(0)
 , srgbFrameBuffer_(true)
 , selectedRbtNode_(selectedNode)
