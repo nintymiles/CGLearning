@@ -116,7 +116,7 @@ static RigTForm g_objectRbt[3] = {RigTForm(Cvec3(0,0,0)),RigTForm(Cvec3(0,0,0)),
 
 static RigTForm g_auxiliaryRbt;
 
-static const float g_sphereRaidusScreenRatio = 0.25;
+static const float g_sphereRaidusScreenRatio = 0.3;
 static float g_arcballScale;
 static float g_arcballScreenRadius = g_sphereRaidusScreenRatio * min(g_windowWidth,g_windowHeight);
 static bool g_arcballUpdateFlag = true;
@@ -178,6 +178,23 @@ static void initSphere() {
     vector<unsigned short> idx(ibLen);
     makeSphere(1, 20, 10, vtx.begin(), idx.begin());
     g_sphere.reset(new SimpleIndexedGeometryPNTBX(&vtx[0], &idx[0], vtx.size(), idx.size()));
+}
+
+static void initMaterials(){
+    Material diffuse("./shaders/basic-gl3.vshader","./shaders/diffuse-gl3.fshader");
+    Material solid("./shaders/basic-gl3.vshader","./shaders/solid-gl3.fshader");
+    
+    Material bump("./shaders/normal-gl3.vshader","./shaders/normal-gl3.fshader");
+    
+    g_redDiffuseMat.reset(new Material(bump));
+    g_blueDiffuseMat.reset(new Material(bump));
+    //g_bumpFloorMat,
+    g_arcballMat.reset(new Material(solid));
+    g_arcballMat->getUniforms().put("uColor", Cvec3(0.97f,0.1f,0.0f));
+    g_arcballMat->getRenderStates().polygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    
+    //g_pickingMat,
+    g_lightMat.reset(new Material(diffuse));
 }
 
 
@@ -257,8 +274,6 @@ static RigTForm getEyeRbt(){
 
 
 static void drawStuff(const Uniforms& uniforms, bool picking){
-    g_arcballMat.reset(new Material("./shaders/basic-gl3.vshader","./shaders/solid-gl3.fshader"));
-    
     // build & send proj. matrix to vshader
     const Matrix4 projmat = makeProjectionMatrix();
     
@@ -268,10 +283,8 @@ static void drawStuff(const Uniforms& uniforms, bool picking){
     
     const Cvec3 eyeLight1 = Cvec3(invEyeRbt * Cvec4(g_light1, 1)); // g_light1 position in eye coordinates
     const Cvec3 eyeLight2 = Cvec3(invEyeRbt * Cvec4(g_light2, 1)); // g_light2 position in eye coordinates
-//    uniforms.put("uLight", eyeLight1);
-//    uniforms.put("uLight2",eyeLight2);
     
-    //drawing arcball
+    //draw arcball in wireframe
     RigTForm mvmRbt = invEyeRbt * g_objectRbt[2];
     g_arcballScale = computeArcballScale(Cvec4(mvmRbt.getTranslation(),0));
     float screenRadiusScale = g_arcballScreenRadius*g_arcballScale;
@@ -282,62 +295,47 @@ static void drawStuff(const Uniforms& uniforms, bool picking){
     
     sendProjectionMatrix(g_arcballMat->getUniforms(), projmat);
 
-    g_arcballMat->getUniforms().put("uColor", g_objectColors[0]);
-
-    //g_arcballMat->getRenderStates().polygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // draw wireframe
     Uniforms extraUniforms;
     g_arcballMat->draw(*g_sphere, extraUniforms);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // draw filled again
     
     
-    Material sphereMat("./shaders/normal-gl3.vshader","./shaders/normal-gl3.fshader");
+    //Material sphereMat("./shaders/normal-gl3.vshader","./shaders/normal-gl3.fshader");
     if (!picking) {
+        g_lightMat->getUniforms().put("uLight", eyeLight1);
+        g_lightMat->getUniforms().put("uLight2", eyeLight2);
         
-        sphereMat.getUniforms().put("uLight", eyeLight1);
-        sphereMat.getUniforms().put("uLight2", eyeLight2);
+        sendProjectionMatrix(g_lightMat->getUniforms(), projmat);
         
-        sendProjectionMatrix(sphereMat.getUniforms(), projmat);
-        
-        
-        
-        // draw sphere
-        //initSphere(); //the raidus of sphere changed constantly,but calling this method frequetly is not effective
         
         RigTForm mvmRbt = invEyeRbt * g_objectRbt[2];
-        //update g_arcballScale
         
-        
-//        Matrix4 scaleMatrix = Matrix4::makeScale(Cvec3(screenRadiusScale,screenRadiusScale,screenRadiusScale));
         Matrix4 MVM = rigTFormToMatrix(mvmRbt); //* scaleMatrix;
         Matrix4 NMVM = normalMatrix(MVM);
-        sendModelViewNormalMatrix(sphereMat.getUniforms(), MVM, NMVM);
-        
-        //uColor用于测试目的
-        //sphereMat.getUniforms().put("uColor", g_objectColors[0]);
+        sendModelViewNormalMatrix(g_lightMat->getUniforms(), MVM, NMVM);
+
         
         Uniforms extraUniforms;
         
         //extraUniforms.put("uTexColor",colorTex);
         
-        sphereMat.getUniforms().put("uTexColor",colorTex);
+        g_lightMat->getUniforms().put("uTexColor",colorTex);
         
-        //glPolygonMode(GL_FRONT, GL_LINE); // draw wireframe
-        //g_sphere->draw(curSS);
+        g_lightMat->getRenderStates().polygonMode(GL_FRONT, GL_FILL);
         //sphereMat.draw(*g_cube, extraUniforms);
         
-        sphereMat.getRenderStates().polygonMode(GL_FRONT, GL_LINE);
-        //sphereMat.draw(*g_cube, extraUniforms);
+        g_lightMat->getUniforms().put("uColor",Cvec3{0.1,1,0.1});
         
-        Drawer drawer(invEyeRbt, sphereMat);
-        g_world->accept(drawer);
-//
-//        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // draw filled again
+        Drawer ground_drawer(invEyeRbt,*g_lightMat);
+        g_groundNode->accept(ground_drawer);
+        
+        Drawer robot1_drawer(invEyeRbt,*g_arcballMat);
+        g_robot1Node->accept(robot1_drawer);
+        g_robot2Node->accept(ground_drawer);
         
         
         
     }else {
-        Picker picker(invEyeRbt, sphereMat,g_currentPickedRbtNode,g_world,getEyeRbt(),g_motionRbt);
+        Picker picker(invEyeRbt, *g_lightMat,g_currentPickedRbtNode,g_world,getEyeRbt(),g_motionRbt);
         g_world->accept(picker);
         glFlush();
         g_currentPickedRbtNode = picker.getRbtNodeAtXY(g_pickingMouseX, g_pickingMouseY);
@@ -711,7 +709,7 @@ static void initScene() {
     
     g_skyNode.reset(new SgRbtNode(RigTForm(Cvec3(0.0, 0.25, 4.0))));
     
-    g_groundNode.reset(new SgRbtNode());
+    g_groundNode.reset(new SgRbtNode(RigTForm(Cvec3(0.0, -1.55, 4.0))));
     
     shared_ptr<SimpleIndexedGeometryPNTBX> g_ground2 = g_ground;
     g_groundNode->addChild(shared_ptr<MyShapeNode>(
@@ -724,7 +722,7 @@ static void initScene() {
     constructRobot(g_robot2Node, Cvec3(0, 0, 1)); // a Blue robot
     
     g_world->addChild(g_skyNode);
-    g_world->addChild(g_groundNode);
+    //g_world->addChild(g_groundNode);
     g_world->addChild(g_robot1Node);
     g_world->addChild(g_robot2Node);
 }
@@ -772,7 +770,7 @@ int main(int argc, char * argv[]) {
         
         initGLState();
         initGeometry();
-        //initShaders();
+        initMaterials();
         initScene();
         
         //      // open current directory:

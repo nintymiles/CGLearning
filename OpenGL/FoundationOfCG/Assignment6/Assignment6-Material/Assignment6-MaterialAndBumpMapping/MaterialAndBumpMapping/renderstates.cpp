@@ -11,8 +11,7 @@ kCullFaceBit = 2;
 //默认构造函数实现，初始化成员变量为默认值
 //知识点：用默认构造函数初始化成员变量
 RenderStates::RenderStates()
-: glFront(GL_FILL)
-, glBack(GL_FILL)
+: glPolygonModeValue(GL_FILL)
 , glBlendSrcFactor(GL_ONE)
 , glBlendDstFactor(GL_ZERO)
 , glCullFaceMode(GL_BACK)
@@ -26,13 +25,9 @@ RenderStates& RenderStates::polygonMode(GLenum face, GLenum mode) {
         case GL_FILL:
             switch (face) {
                 case GL_FRONT_AND_BACK:
-                    glFront = glBack = mode;
-                    return *this;
                 case GL_FRONT:
-                    glFront = mode;
-                    return *this;
                 case GL_BACK:
-                    glBack = mode;
+                    glPolygonModeValue = mode;
                     return *this;
                 default:
                     ;
@@ -99,16 +94,10 @@ void RenderStates::apply() const {
         firstRun = false;
     }
     
-    
-    
     //和当前不同，则调用状态设置API
-    if (glFront != currentRs.glFront) {
-        glPolygonMode(GL_FRONT, glFront);
-        currentRs.glFront = glFront;
-    }
-    if (glBack != currentRs.glBack) {
-        glPolygonMode(GL_BACK, glBack);
-        currentRs.glBack = glBack;
+    if (glPolygonModeValue != currentRs.glPolygonModeValue) {
+        glPolygonMode(GL_FRONT_AND_BACK, glPolygonModeValue);
+        currentRs.glPolygonModeValue = glPolygonModeValue;
     }
     
     if (glBlendSrcFactor != currentRs.glBlendSrcFactor || glBlendDstFactor != currentRs.glBlendDstFactor) {
@@ -147,8 +136,7 @@ void RenderStates::captureFromGl() {
     GLint values[2];
     
     glGetIntegerv(GL_POLYGON_MODE, values);
-    glFront = values[0];
-    glBack = values[1];
+    glPolygonModeValue = values[0];
     
     glGetIntegerv(GL_BLEND_SRC_RGB, values); // Ignore glBlendFuncSeparate fo rnow
     glBlendSrcFactor = values[0];

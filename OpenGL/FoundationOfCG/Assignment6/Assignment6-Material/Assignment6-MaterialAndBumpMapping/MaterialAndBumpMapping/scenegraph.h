@@ -152,11 +152,12 @@ public:
   }
 
   virtual void draw(Material& material){
-    //safe_glUniform3f(curSS.h_uColor, color_[0], color_[1], color_[2]);
+      //safe_glUniform3f(curSS.h_uColor, color_[0], color_[1], color_[2]);
       Uniforms uniforms = material.getUniforms();
-      uniforms.put("uColor",Cvec3(color_[0], color_[1], color_[2]));
-      uniforms.put("uColor",Cvec3(1.0,0.0,0.0));
-      //geometry_->draw(material);
+      if(color_ == NULL)
+          color_=Cvec3(1,0,0);
+      uniforms.put("uColor",color_);
+      //所有的绘制动作都由material发动
       material.draw(*geometry_);
   }
 

@@ -124,11 +124,9 @@ public:
     // specified by 'glAttribLocation'
     // Notes -- the biggest role of AttributeDesc object is to guide setting of params of glVertexAttribPointer()，同时数据则认为已经上传到VBO中
     void setGlVertexAttribPointer(int attribIndex, int glAttribLocation) const {
-        checkGlError("before setGlVertexAttribPointer glVertexAttribPointer");
         assert(glAttribLocation >= 0);
         const AttribDesc &ad = attribDescs_[attribIndex];
         glVertexAttribPointer(glAttribLocation, ad.size, ad.type, ad.normalized, vertexSize_, reinterpret_cast<const GLvoid*>(ad.offset));
-        checkGlError("after setGlVertexAttribPointer glVertexAttribPointer");
     }
 
 //privtate variables的定义放置到定义末尾是因为引用了public中定义的类型

@@ -8,6 +8,7 @@
 - When you organize your desktop OpenGL application through command line approach, you can't package any of your resource file into a non bundle. So be careful of the shader files path,before start building,specify the right shader path. 
 - Fail to add shader source string loading support using GLSL macro.
 - Most critical problem at material and bumping project is that VertexArrayObject is not used,but the VAO is required.(the error is "no vertex array object bound" from getProgramInfo)
+- glPolygonMode in OpenGL (4.x) ，it's face paramenter must be GL_FRONT_AND_BACK, no seperating parametes GL_FRONT and GL_BACK supported.
 
 
 

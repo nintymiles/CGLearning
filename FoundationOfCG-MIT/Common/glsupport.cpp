@@ -116,28 +116,22 @@ void readAndCompileSingleShader(GLuint shaderHandle, const char *fn) {
 }
 
 void linkShader(GLuint programHandle, GLuint vs, GLuint fs) {
-    checkGlError("before linkShader - glAttachShader");
     glAttachShader(programHandle, vs);
     glAttachShader(programHandle, fs);
     
-    checkGlError("before linkShader - glLinkProgram");
     glLinkProgram(programHandle);
     
-    checkGlError("before linkShader - glDetachShader");
     //链接完shader之后，直接取消挂载（分离）shaders对象
     glDetachShader(programHandle, vs);
     glDetachShader(programHandle, fs);
     
-    checkGlError("before linkShader - glGetProgramiv");
     GLint linked = 0;
     glGetProgramiv(programHandle, GL_LINK_STATUS, &linked);
-    checkGlError("before linkShader - printInfoLog");
-    //此处应该不能在调用shader的信息，因为已经detached，这是一个bug
-    //printInfoLog(programHandle, "linking");
-    checkGlError("after linkShader - printInfoLog");
-        
-    if (!linked)
+    
+    printProgramInfoLog(programHandle);
+    if (!linked){
         throw runtime_error("fails to link shaders");
+    }
 }
 
 //整合的shaders pair的编译和链接程序
