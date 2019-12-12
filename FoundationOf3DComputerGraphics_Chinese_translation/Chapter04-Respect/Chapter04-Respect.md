@@ -10,9 +10,21 @@ $$ \large{ S =  \begin{bmatrix}
 \end{bmatrix} }$$
 现在我们要指定帧$\vec{\mathbf{f}}^t$。借助这个帧，点可以借助某种恰当的坐标矢量（coordinate vector）表示为$\tilde{p}=\vec{\mathbf{f}}^t\mathbf{c}$。如果我们使用这个矩阵去变换这个点，就如在第3章中所讲述的，我们获得$\vec{\mathbf{f}}^t\mathbf{c} \Rightarrow \vec{\mathbf{f}}^tS\mathbf{c}$。在这种情形中，矩阵的效用是从原点（origin）通过一个为2的伸缩因子（scale factor）变换点，沿着$\vec{\mathbf{f}}^t$第一个轴（x轴）的方向。
 
-Suppose we instead pick some other frame ⃗ a t , and suppose that this frame is related to the original one by the matrix equation ⃗ a t = f t A. We can express the original point in the new frame with a new coordinate vector ˜p = f t c = ⃗ a t d, where d = A −1 c.
-假设我们挑选另外某个帧$\vec{\mathbf{a}}^t$，同时假设这个帧关联于原来的帧，通过矩阵方程式$$
+假设我们挑选另外某个帧$\vec{\mathbf{a}}^t$，同时假设这个帧关联于原来的帧，通过矩阵方程式$\vec{\mathbf{a}}^t = \vec{\mathbf{f}}^tA$。我们可以在新帧中表达最初的点，借助一个新的坐标系$\tilde{p}=\vec{\mathbf{f}}^t\mathbf{c} = \vec{\mathbf{a}}^t\mathbf{d}$，此处$\mathbf{d}=A^{-1}\mathbf{c}$。
 
-Now if we use S to perform a transformation on the point represented with respect to ⃗ a t , we get ⃗ a t d ⇒ ⃗ a t Sd. In this case we have scaled the same point ˜p, but this time we have scaled it from the origin of ⃗ a t in direction of the ﬁrst (x) axis of ⃗ a t . This is a different transformation (see Figure 4.1). Figure 4.2 shows the same dependence on
+现在，如果我们关联于$\vec{\mathbf{a}}^t$使用矩阵S去执行在点上的变换，我们获得$\vec{\mathbf{a}}^t\mathbf{d} \Rightarrow \vec{\mathbf{a}}^tS\mathbf{d}$。在这种情形中，我们伸缩了相同的点$\tilde{p}$，但是这次我们已经从$\vec{\mathbf{a}}^t$的原点（origin）且在其第一个轴（x轴）的方向上伸缩（移动）了这个点。这是一个不一样的变换（参考图示$\text{Figure 4.1}$）。图示$\text{Figure4.2}$展示了在帧上旋转变换的相同依赖性，借助于一个固定的旋转矩阵R。
 
+The important thing to notice here is that the point is transformed (non uniform scaling in this case) with respect to the the frame that appears immediately to the left of the transformation matrix in the expression. Thus we call this the left of rule. We read
+
+˜p = f t c ⇒ f t Sc as “˜p is transformed by S with respect to f t ”. We read
+
+˜p = a t A −1 c ⇒ a t SA −1 c
+
+as “˜p is transformed by S with respect to ⃗ a t ”.
+
+We can apply the same reasoning to transformations of frames themselves. We read
+
+f t ⇒ f t S as “f t is transformed by S with respect to f t ”. We read
+
+f t = a t A −1 ⇒ a t SA −1 as “f t is transformed by S with respect to ⃗ a t ”
 
