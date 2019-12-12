@@ -89,7 +89,7 @@ g_arcballMat,
 g_pickingMat,
 g_lightMat;
 
-shared_ptr<Material> g_overridingMaterial;
+static shared_ptr<Material> g_overridingMaterial;
 
 // --------- Geometry
 typedef SgGeometryShapeNode<Geometry> MyShapeNode;
@@ -183,6 +183,7 @@ static void initSphere() {
 static void initMaterials(){
     Material diffuse("./shaders/basic-gl3.vshader","./shaders/diffuse-gl3.fshader");
     Material solid("./shaders/basic-gl3.vshader","./shaders/solid-gl3.fshader");
+    Material texture("./shaders/basic-gl3.vshader","./shaders/texture-gl3.fshader");
     
     Material bump("./shaders/normal-gl3.vshader","./shaders/normal-gl3.fshader");
     
@@ -194,29 +195,8 @@ static void initMaterials(){
     g_arcballMat->getRenderStates().polygonMode(GL_FRONT_AND_BACK, GL_LINE);
     
     //g_pickingMat,
-    g_lightMat.reset(new Material(diffuse));
+    g_lightMat.reset(new Material(texture));
 }
-
-
-
-//// takes a projection matrix and send to the the shaders
-//static void sendProjectionMatrix(const ShaderState& curSS, const Matrix4& projMatrix) {
-//    GLfloat glmatrix[16];
-//    projMatrix.writeToColumnMajorMatrix(glmatrix); // send projection matrix
-//    safe_glUniformMatrix4fv(curSS.h_uProjMatrix, glmatrix);
-//}
-
-//======================================================================
-// STEP 4: Changes the definition of sendProjectionMatrix to use Uniforms
-//         instead of ShaderState
-//=======================================================================
-
-// takes a projection matrix and send to the the shaders
-inline void sendProjectionMatrix(Uniforms& uniforms, const Matrix4& projMatrix) {
-    uniforms.put("uProjMatrix", projMatrix);
-}
-
-
 
 // update g_frustFovY from g_frustMinFov, g_windowWidth, and g_windowHeight
 static void updateFrustFovY() {
@@ -662,7 +642,7 @@ static void initGeometry() {
     initCubes();
     initSphere();
     
-    colorTex.reset(new ImageTexture("./shaders/Color_Tex.ppm",true));
+    colorTex.reset(new ImageTexture("./shaders/Fieldstone.ppm",true));
 }
 
 static void constructRobot(shared_ptr<SgTransformNode> base, shared_ptr<Material> material,const Cvec3& color) {

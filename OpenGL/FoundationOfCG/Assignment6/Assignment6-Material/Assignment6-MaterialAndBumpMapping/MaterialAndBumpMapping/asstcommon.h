@@ -71,4 +71,21 @@ inline void sendModelViewNormalMatrix(Uniforms& uniforms, const Matrix4& MVM, co
     uniforms.put("uNormalMatrix",NMVM);
 }
 
+//// takes a projection matrix and send to the the shaders
+//static void sendProjectionMatrix(const ShaderState& curSS, const Matrix4& projMatrix) {
+//    GLfloat glmatrix[16];
+//    projMatrix.writeToColumnMajorMatrix(glmatrix); // send projection matrix
+//    safe_glUniformMatrix4fv(curSS.h_uProjMatrix, glmatrix);
+//}
+
+//======================================================================
+// STEP 4: Changes the definition of sendProjectionMatrix to use Uniforms
+//         instead of ShaderState
+//=======================================================================
+
+// takes a projection matrix and send to the the shaders
+inline void sendProjectionMatrix(Uniforms& uniforms, const Matrix4& projMatrix) {
+    uniforms.put("uProjMatrix", projMatrix);
+}
+
 #endif
