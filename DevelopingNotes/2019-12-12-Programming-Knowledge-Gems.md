@@ -49,4 +49,28 @@ shared_ptr用于保证对象的高效使用，避免内存的无效占用。
     checkGlError("after validating Program");
 ```
 
+## 关于PPM文件格式的加载读取中的注意事项
+PPM文件为简单的RGB格式图像存储格式。
+
+
+```c
+	int width, height;
+   vector<PackedPixel> pixData;
+	ppmRead(ppmFileName.c_str(), width, height, pixData);
+        
+    
+   GLubyte pixels[width * height * 3];
+   int a=0;
+   for(PackedPixel pp:pixData){
+       pixels[a] = pp.r;
+       pixels[a+1] = pp.g;
+       pixels[a+2] = pp.b;
+
+       a += 3;
+   }
+```
+
+## 关于2D texture纹理的加载
+若使用三线性过滤器，但是没有设置渐近式纹理，那么获取不到色彩（black）。
+
 
