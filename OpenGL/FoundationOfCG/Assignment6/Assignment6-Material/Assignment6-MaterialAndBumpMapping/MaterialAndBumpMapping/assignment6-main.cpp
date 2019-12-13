@@ -332,7 +332,7 @@ static void drawStuff(const Uniforms& uniforms, bool picking){
         //这样代码的结构才体现出简洁高效
         Uniforms extraUniforms;
         extraUniforms.put("uLight", eyeLight1);
-        extraUniforms.put("uLight2", eyeLight1);
+        extraUniforms.put("uLight2", eyeLight2);
         sendProjectionMatrix(extraUniforms, projmat);
         
         Drawer drawer(invEyeRbt,extraUniforms);

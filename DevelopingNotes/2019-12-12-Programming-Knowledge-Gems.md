@@ -50,7 +50,7 @@ shared_ptr用于保证对象的高效使用，避免内存的无效占用。
 ```
 
 ## 关于PPM文件格式的加载读取中的注意事项
-PPM文件为简单的RGB格式图像存储格式。
+PPM文件为简单的RGB格式图像存储格式。以byte格式存储，一般读取后都以字符型数组形式存放。
 
 
 ```c
@@ -58,7 +58,7 @@ PPM文件为简单的RGB格式图像存储格式。
    vector<PackedPixel> pixData;
 	ppmRead(ppmFileName.c_str(), width, height, pixData);
         
-    
+   //用数组读出vetor数据，方便检测  
    GLubyte pixels[width * height * 3];
    int a=0;
    for(PackedPixel pp:pixData){
@@ -71,6 +71,6 @@ PPM文件为简单的RGB格式图像存储格式。
 ```
 
 ## 关于2D texture纹理的加载
-若使用三线性过滤器，但是没有设置渐近式纹理，那么获取不到色彩（black）。
+若使用三线性过滤器，但是没有设置渐近式纹理，那么将获取不到色彩（black）。
 
 

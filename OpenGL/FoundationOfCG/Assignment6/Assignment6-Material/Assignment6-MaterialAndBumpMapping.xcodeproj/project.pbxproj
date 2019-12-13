@@ -86,6 +86,7 @@
 		5C0F677D2295301500C3EE99 /* renderstates.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = renderstates.cpp; sourceTree = "<group>"; };
 		5C0F677F229530CF00C3EE99 /* material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = material.h; sourceTree = "<group>"; };
 		5C54F28821FDA1F000657C36 /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = readme.md; path = ../../../readme.md; sourceTree = "<group>"; };
+		5C65656023A317E700720926 /* texture-diffuse.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "texture-diffuse.glsl"; sourceTree = "<group>"; };
 		5C699D8E23A2790100E0E079 /* Fieldstone.ppm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Fieldstone.ppm; sourceTree = "<group>"; };
 		5C699D8F23A2790100E0E079 /* FieldstoneNormal.ppm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FieldstoneNormal.ppm; sourceTree = "<group>"; };
 		5C699D9223A27BB300E0E079 /* texture-gl3.fshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "texture-gl3.fshader"; sourceTree = "<group>"; };
@@ -155,6 +156,7 @@
 				5C6D4078229646CC007D01A8 /* normal-gl2.vshader */,
 				5C6D4077229646CC007D01A8 /* normal-gl3.fshader */,
 				5C6D4075229646CC007D01A8 /* normal-gl3.vshader */,
+				5C65656023A317E700720926 /* texture-diffuse.glsl */,
 				5C699D9223A27BB300E0E079 /* texture-gl3.fshader */,
 				5C800CBD21FA81C200DB8452 /* solid-gl3.fshader */,
 				5C800CBE21FA81C200DB8452 /* diffuse-gl3.fshader */,
