@@ -15,6 +15,8 @@
 
 using namespace std;
 
+extern shared_ptr<Material> g_overridingMaterial;
+
 //forward declaration
 class SgNodeVisitor;
 
@@ -160,7 +162,12 @@ public:
           color_=Cvec3(1,0,0);
       uniforms.put("uColor",color_);
       //所有的绘制动作都由material发动
-      material_->draw(*geometry_,extraUniforms);
+      
+      //如果存在全局的material，就使用其绘制。
+      if(g_overridingMaterial!=NULL)
+          g_overridingMaterial->draw(*geometry_,extraUniforms);
+      else
+          material_->draw(*geometry_,extraUniforms);
   }
 
 };

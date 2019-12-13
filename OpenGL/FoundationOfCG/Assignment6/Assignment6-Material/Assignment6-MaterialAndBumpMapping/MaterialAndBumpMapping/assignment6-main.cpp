@@ -46,7 +46,6 @@
 #include "drawer.h"
 #include "picker.h"
 
-//#include "geometrymaker.h"
 #include "geometry.h"
 #include "material.h"
 
@@ -54,6 +53,8 @@
 
 using namespace std;      // for string, vector, iostream, and other standard C++ stuff
 static void pick();
+
+extern shared_ptr<Material> g_overridingMaterial;
 
 // G L O B A L S ///////////////////////////////////////////////////
 
@@ -89,7 +90,7 @@ g_arcballMat,
 g_pickingMat,
 g_lightMat;
 
-static shared_ptr<Material> g_overridingMaterial;
+shared_ptr<Material> g_overridingMaterial = NULL;
 
 // --------- Geometry
 typedef SgGeometryShapeNode<Geometry> MyShapeNode;
@@ -194,8 +195,10 @@ static void initMaterials(){
     g_arcballMat->getUniforms().put("uColor", Cvec3(0.97f,0.1f,0.0f));
     g_arcballMat->getRenderStates().polygonMode(GL_FRONT_AND_BACK, GL_LINE);
     
-    //g_pickingMat,
     g_lightMat.reset(new Material(texture));
+    
+    g_pickingMat.reset(new Material("./shaders/normal-gl3.vshader","./shaders/pick-gl3.fshader"));
+    
 }
 
 // update g_frustFovY from g_frustMinFov, g_windowWidth, and g_windowHeight
@@ -420,10 +423,13 @@ static void display() {
     //Todo,temprarily declaring an Unifroms variable
     Uniforms uniforms;
     
-    if(g_pickingFlag)
+    if(g_pickingFlag){
+        g_overridingMaterial = g_pickingMat;
         pick();
-    else
+    }else{
+        g_overridingMaterial = NULL;
         drawStuff(uniforms,false);
+    }
     
 }
 

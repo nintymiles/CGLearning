@@ -50,9 +50,9 @@ bool Picker::visit(SgShapeNode& node) {
     shared_ptr<SgRbtNode> rbtNode = dynamic_pointer_cast<SgRbtNode>(baseNode);
     addToMap(idCounter_, rbtNode);
     if(selectedRbtNode_ == baseNode){
-        drawer_.getUniforms().put("uColor",Cvec3(0.3, 0.9, 0.5));
+        drawer_.getUniforms().put("uIdColor",Cvec3(0.3, 0.9, 0.5));
     }else{
-        drawer_.getUniforms().put("uColor",idColor);
+        drawer_.getUniforms().put("uIdColor",idColor);
     }
     
   return drawer_.visit(node);
