@@ -58,10 +58,6 @@ extern shared_ptr<Material> g_overridingMaterial;
 
 // G L O B A L S ///////////////////////////////////////////////////
 
-//indict whether to use source directly
-static const bool g_GlSourceFlag = false;
-
-
 static const float g_frustMinFov = 60.0;  // A minimal of 60 degree field of view
 static float g_frustFovY = g_frustMinFov; // FOV in y direction (updated by updateFrustFovY)
 
@@ -82,7 +78,6 @@ static int g_activeEyeFrame = 1;
 static GLFWwindow* window;
 
 // --------- Materials
-// This should replace all the contents in the Shaders section, e.g., g_numShaders, g_shaderFiles, and so on
 static shared_ptr<Material> g_redDiffuseMat,
 g_blueDiffuseMat,
 g_bumpFloorMat,
