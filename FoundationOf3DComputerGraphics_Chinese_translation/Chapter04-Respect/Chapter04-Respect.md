@@ -12,7 +12,7 @@
 $$ \large{ S =  \begin{bmatrix}
 2 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \\  0 & 0 & 0 & 1
 \end{bmatrix} }$$
-现在我们要指定帧$\vec{\mathbf{f}}^t$。借助这个帧，点可以借助某种恰当的坐标矢量（coordinate vector）表示为$\tilde{p}=\vec{\mathbf{f}}^t\mathbf{c}$。如果我们使用这个矩阵去变换这个点，就如在第3章中所讲述的，我们获得$\vec{\mathbf{f}}^t\mathbf{c} \Rightarrow \vec{\mathbf{f}}^tS\mathbf{c}$。在这种情形中，矩阵的效用是从原点（origin）通过一个为2的伸缩因子（scale factor）变换点，沿着$\vec{\mathbf{f}}^t$第一个轴（x轴）的方向。
+现在我们要指定帧$\vec{\mathbf{f}}^t$。借助这个帧，点可以借助某种恰当的坐标矢量（coordinate vector）表示为$\tilde{p}=\vec{\mathbf{f}}^t\mathbf{c}$。如果我们使用这个矩阵去变换这个点，就如在第3章中所讲述的，我们获得$\vec{\mathbf{f}}^t\mathbf{c} \Rightarrow \vec{\mathbf{f}}^tS\mathbf{c}$。在这种情形中，矩阵的效用是从原点（origin）通过一个值为2的伸缩因子（scale factor）变换点，沿着$\vec{\mathbf{f}}^t$第一个轴（x轴）的方向。
 
 假设我们挑选另外某个帧$\vec{\mathbf{a}}^t$，同时假设这个帧关联于原来的帧，通过矩阵方程式$\vec{\mathbf{a}}^t = \vec{\mathbf{f}}^tA$。我们可以在新帧中表达最初的点，借助一个新的坐标系$\tilde{p}=\vec{\mathbf{f}}^t\mathbf{c} = \vec{\mathbf{a}}^t\mathbf{d}$，此处$\mathbf{d}=A^{-1}\mathbf{c}$。
 
@@ -42,25 +42,25 @@ $$\vec{\mathbf{f}}^t \Rightarrow \vec{\mathbf{a}}^tSA^{-1}$$
 为“$\vec{\mathbf{f}}^t$关联于$\vec{\mathbf{a}}^t$被（矩阵）$S$变换”。
 
 ### 4.1.1 借助辅助帧（auxiliary frame）变换
-很多时候当我们希望以某种用矩阵M表达的特殊方式变换一个帧$\vec{\mathbf{f}}^t$，变换关联于某种辅助帧$\vec{\mathbf{a}}^t$。例如，我们可能正在借助某种帧（frame）建模行星地球，现在我们希望地球同时围绕太阳所在的帧（frame）旋转。
+很多时候当我们希望借助某种用矩阵M表达的特殊方式变换一个帧$\vec{\mathbf{f}}^t$，变换关联于某种辅助帧$\vec{\mathbf{a}}^t$。例如，我们可能正在借助某种帧（frame）建模行星地球，现在我们希望地球同时围绕太阳所在的帧（frame）旋转。
 
-这很容实现，只要我们知道关联$\vec{\mathbf{f}}^t$和$\vec{\mathbf{a}}^t$的矩阵。例如，我们已知这种关系
+这很容易实现，只要我们知道关联$\vec{\mathbf{f}}^t$和$\vec{\mathbf{a}}^t$的矩阵。例如，我们已知这种关系
 $$\vec{\mathbf{a}}^t = \vec{\mathbf{f}}^tA$$
 
 那么被变换的帧（frame）可以被表达为
-$$
+$$\large{
 \quad \vec{\mathbf{f}}^t  \qquad\qquad\qquad \quad (4.1)\\ 
 = \vec{\mathbf{a}}^tA^{-1} \qquad\qquad\quad (4.2) \\
 \Rightarrow \vec{\mathbf{a}}^tMA^{-1} \qquad\qquad (4.3) \\
 = \vec{\mathbf{f}}^tAMA^{-1} \qquad\qquad (4.4)
-$$
+}$$
 
 第一行中，我们借助帧（frame）$\vec{\mathbf{a}}^t$重写$\vec{\mathbf{f}}^t$。第二行中我们用“左侧规则（left of rule）“变换帧系统（frame system）；我们借助矩阵M关联于帧$\vec{\mathbf{a}}^t$进行变换。最后一行中，我们只是重写了表达式从而移除辅助帧（auxiliary frame）。
 
 ## 4.2 多重变换（Multiple Transformations）
 我们可以使用这种“左侧”规则解读多重变换序列。再次，回想一下，通常，矩阵乘法不可交换。在下列的2D例子中，让R为一个旋转矩阵，T为一个平移矩阵，这里平移矩阵具有在第一个轴上平移矢量的效用，而旋转矩阵拥有围绕帧的原点旋转$\theta$度的效果。（参考图示$\text{Figure 4.3}$）。
 
-我们现在会对下列的变换解读
+我们现在解读下列的变换
 $$\vec{\mathbf{f}}^t \Rightarrow \vec{\mathbf{f}}^tTR$$
 
 我们通过将变换切分为两个步骤来解读
@@ -72,7 +72,6 @@ $$\vec{\mathbf{f}}^t \Rightarrow \vec{\mathbf{f}}^tT = \vec{\mathbf{f}}'^t$$
 
 $$\vec{\mathbf{f}}^tT \Rightarrow \vec{\mathbf{f}}^tTR $$
 
-or equivalently
 或者等价地，
 
 $$\vec{\mathbf{f}}'^t \Rightarrow \vec{\mathbf{f}}'^tR $$
@@ -89,7 +88,7 @@ $$\vec{\mathbf{f}}^tR \Rightarrow \vec{\mathbf{f}}^tTR $$
 
 $\vec{\mathbf{f}}^{_ot}$关联于$\vec{\mathbf{f}}^t$被矩阵T变换。
 
-这些只是两个最后完全相同的合成变换的不同解释。1）先关联于$\vec{\mathbf{f}}^t$平移然后关联于中间帧（intermediate frame）旋转。2）先关联于$\vec{\mathbf{f}}^t$旋转再关联于最初帧$\vec{\mathbf{f}}^t$平移。
+这些只是对两个最后完全相同的合成变换的不同解释。1）先关联于$\vec{\mathbf{f}}^t$平移然后关联于中间帧（intermediate frame）旋转。2）先关联于$\vec{\mathbf{f}}^t$旋转再关联于最初帧$\vec{\mathbf{f}}^t$平移。
 
 这些类型的解释经常被总结如下：如果我们阅读变换从左侧到右侧，那么每个变换关联于新生成的“本地”帧（frame）被完成。如果我们阅读变换从右侧到左侧，那么每个变换关联于最初的“全局”帧（frame）被完成。
 
