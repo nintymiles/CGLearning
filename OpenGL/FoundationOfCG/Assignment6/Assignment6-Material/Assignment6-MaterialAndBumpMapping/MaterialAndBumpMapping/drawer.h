@@ -45,7 +45,7 @@ public:
     }
     
     //返回附加的uniforms（Material之外的）
-    const Uniforms& getUniforms() const {
+    virtual Uniforms& getUniforms(){
         return uniforms_;
     }
 };

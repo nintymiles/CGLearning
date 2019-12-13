@@ -252,17 +252,42 @@ static RigTForm getEyeRbt(){
 //         and occurences of `curSS' be replaced with `uniforms'
 //=========================================================================
 
-
-static void drawStuff(const Uniforms& uniforms, bool picking){
+//公用的属性可以放到extraUniforms中，可以供每个drawer使用。
+//这样代码的结构才体现出简洁高效
+//extraUniforms作为参数传递，意味着作为参数之前设置的参数更有通用性才对。
+static void drawStuff(Uniforms& extraUniforms, bool picking){
     // build & send proj. matrix to vshader
     const Matrix4 projmat = makeProjectionMatrix();
+    sendProjectionMatrix(extraUniforms, projmat);
+    
     
     // use the skyRbt as the eyeRbt
     const RigTForm eyeRbt = getEyeRbt();
     const RigTForm invEyeRbt = inv(eyeRbt);
     
+//    RigTForm mvmRbt = invEyeRbt * g_objectRbt[2];
+    
     const Cvec3 eyeLight1 = Cvec3(invEyeRbt * Cvec4(g_light1, 1)); // g_light1 position in eye coordinates
     const Cvec3 eyeLight2 = Cvec3(invEyeRbt * Cvec4(g_light2, 1)); // g_light2 position in eye coordinates
+    
+    //        g_lightMat->getUniforms().put("uLight", eyeLight1);
+    //        g_lightMat->getUniforms().put("uLight2", eyeLight2);
+    //
+    //        g_redDiffuseMat->getUniforms().put("uLight", eyeLight1);
+    //        g_redDiffuseMat->getUniforms().put("uLight2", eyeLight2);
+    //
+    //        g_blueDiffuseMat->getUniforms().put("uLight", eyeLight1);
+    //        g_blueDiffuseMat->getUniforms().put("uLight2", eyeLight2);
+    //
+    //        sendProjectionMatrix(g_lightMat->getUniforms(), projmat);
+    //
+    //        sendProjectionMatrix(g_redDiffuseMat->getUniforms(), projmat);
+    //        sendProjectionMatrix(g_blueDiffuseMat->getUniforms(), projmat);
+
+    //公用的属性可以放到extraUniforms中，可以供每个drawer使用。这样才可以借用uniforms存储即用的uniforms变量
+    extraUniforms.put("uLight", eyeLight1);
+    extraUniforms.put("uLight2", eyeLight2);
+    
     
     //draw arcball in wireframe
     RigTForm mvmRbt = invEyeRbt * g_objectRbt[2];
@@ -275,15 +300,11 @@ static void drawStuff(const Uniforms& uniforms, bool picking){
     
     sendProjectionMatrix(g_arcballMat->getUniforms(), projmat);
 
-    Uniforms extraUniforms;
     g_arcballMat->draw(*g_sphere, extraUniforms);
     
     
     //Material sphereMat("./shaders/normal-gl3.vshader","./shaders/normal-gl3.fshader");
     if (!picking) {
-        
-
-        RigTForm mvmRbt = invEyeRbt * g_objectRbt[2];
         
 //        Matrix4 MVM = rigTFormToMatrix(mvmRbt); //* scaleMatrix;
 //        Matrix4 NMVM = normalMatrix(MVM);
@@ -307,40 +328,17 @@ static void drawStuff(const Uniforms& uniforms, bool picking){
         
 //        Drawer ground_drawer(invEyeRbt,*g_lightMat);
 //        g_groundNode->accept(ground_drawer);
-//////
+        
 //        Drawer robot1_drawer(invEyeRbt,*g_arcballMat);
 //        g_robot1Node->accept(robot1_drawer);
 //        g_robot2Node->accept(ground_drawer);
-        
-        
-        
-//        g_lightMat->getUniforms().put("uLight", eyeLight1);
-//        g_lightMat->getUniforms().put("uLight2", eyeLight2);
-//
-//        g_redDiffuseMat->getUniforms().put("uLight", eyeLight1);
-//        g_redDiffuseMat->getUniforms().put("uLight2", eyeLight2);
-//
-//        g_blueDiffuseMat->getUniforms().put("uLight", eyeLight1);
-//        g_blueDiffuseMat->getUniforms().put("uLight2", eyeLight2);
-//
-//        sendProjectionMatrix(g_lightMat->getUniforms(), projmat);
-//
-//        sendProjectionMatrix(g_redDiffuseMat->getUniforms(), projmat);
-//        sendProjectionMatrix(g_blueDiffuseMat->getUniforms(), projmat);
-        
-        //公用的属性可以放到extraUniforms中，可以供每个drawer使用。
-        //这样代码的结构才体现出简洁高效
-        Uniforms extraUniforms;
-        extraUniforms.put("uLight", eyeLight1);
-        extraUniforms.put("uLight2", eyeLight2);
-        sendProjectionMatrix(extraUniforms, projmat);
-        
+
         Drawer drawer(invEyeRbt,extraUniforms);
         g_world->accept(drawer);
         
         
     }else {
-        Uniforms extraUniforms;
+
         Picker picker(invEyeRbt, extraUniforms,g_currentPickedRbtNode,g_world,getEyeRbt(),g_motionRbt);
         g_world->accept(picker);
         glFlush();
@@ -427,8 +425,6 @@ static void display() {
     else
         drawStuff(uniforms,false);
     
-    //   show the back buffer (where we rendered stuff)
-    //  glfwSwapBuffers(window);
 }
 
 static void reshape(GLFWwindow* window,const int w, const int h) {
@@ -746,7 +742,10 @@ static void pick() {
     //glUseProgram(g_shaderStates[PICKING_SHADER]->program);
     
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //drawStuff(*g_shaderStates[PICKING_SHADER], true);
+    
+    Uniforms extraUniforms;
+    
+    drawStuff(extraUniforms, true);
     
     // Uncomment below and comment out the glutPostRedisplay in mouse(...) call back
     // to see result of the pick rendering pass

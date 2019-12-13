@@ -24,5 +24,5 @@ vec4 color = texture(uTexColor, vTexCoord);
 
 vec4 intensity = color * diffuse;
 
-fragColor = intensity; //color ;//vec4(0,vTexCoord.x,vTexCoord.y,1);
+fragColor = intensity;
 }

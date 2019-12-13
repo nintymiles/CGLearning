@@ -155,7 +155,6 @@ public:
   }
 
   virtual void draw(Uniforms& extraUniforms){
-      //safe_glUniform3f(curSS.h_uColor, color_[0], color_[1], color_[2]);
       Uniforms uniforms = material_->getUniforms();
       if(color_ == NULL)
           color_=Cvec3(1,0,0);
