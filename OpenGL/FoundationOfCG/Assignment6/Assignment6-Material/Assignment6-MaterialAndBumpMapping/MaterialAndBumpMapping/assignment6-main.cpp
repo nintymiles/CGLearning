@@ -500,7 +500,7 @@ void cursor_position_callback( GLFWwindow* window, double x, double y )
 
 static void mouse(GLFWwindow* window, const int button, const int action, int mods) {
     g_mouseClickX = cursor_x;
-    g_mouseClickY = g_windowHeight - cursor_y - 1;  // conversion from GLUT window-coordinate-system to OpenGL window-coordinate-system
+    g_mouseClickY = g_windowHeight - cursor_y - 1;  // conversion from GLFW window-coordinate-system to OpenGL window-coordinate-system
     g_mouseLClickButton=g_mouseMClickButton=g_mouseRClickButton=false;
     
     g_mouseLClickButton |= (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS);
