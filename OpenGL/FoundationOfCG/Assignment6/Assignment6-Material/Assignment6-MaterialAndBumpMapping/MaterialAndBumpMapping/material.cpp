@@ -34,8 +34,11 @@ struct GlProgramDesc {
     //构造函数，执行链接vertex/fragement shader的任务，链接成功后获得并将uniform/attribute属性放入缓存中
     //知识点：program链接成功后，随即将其所使用的uniforms/attributes取出到缓存中，这种使用方式几乎是惯例
     GlProgramDesc(GLuint vsHandle, GLuint fsHandle) {
+        checkGlError("before GlProgramDesc - linkShader");
         linkShader(program, vsHandle, fsHandle);
+        checkGlError("after GlProgramDesc - linkShader");
         
+        checkGlError("before GlProgramDesc - glGetProgramiv");
         int numActiveUniforms, numActiveAttribs, uniformMaxLen, attribMaxLen;
         
         glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &numActiveUniforms);
@@ -43,6 +46,8 @@ struct GlProgramDesc {
         
         glGetProgramiv(program, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniformMaxLen);
         glGetProgramiv(program, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &attribMaxLen);
+        
+        checkGlError("after GlProgramDesc - glGetProgramiv");
         
         //通过API获取到的一些状态信息，根据信息设置缓存变量
         //将bufSize设置为uniform/attribute最大名称长度中的最大的值+1
@@ -60,6 +65,8 @@ struct GlProgramDesc {
             //将character buffer中被写入的字符转换为string
             uniforms[i].name = string(buffer.begin(), buffer.begin() + charsWritten);
             uniforms[i].location = glGetUniformLocation(program, &buffer[0]);
+            
+            
         }
         
         attribs.resize(numActiveAttribs);
@@ -75,7 +82,7 @@ struct GlProgramDesc {
         //这个api并不存在，可能是某个厂商的扩展接口
         //glBindFragDataLocation(program, 0, "fragColor");
         
-        checkGlError(__func__);
+        
     }
 };
 
@@ -197,10 +204,11 @@ static const char * getGlConstantName(GLenum c) {
 }
 
 //draw函数是material的关键函数
-void Material::draw(Geometry& geometry, const Uniforms& extraUniforms){
+void Material::draw(Geometry& geometry,const Uniforms& extraUniforms){
     //static storage duration最大textureImageUnits变量
     static GLint maxTextureImageUnits = 0;
     
+    checkGlError("before material glGetIntegerv-GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS");
     //使用API查询获得最大的texture image unit数目
     // Initialize maxTextureImageUnits if this is called for the first time
     if (maxTextureImageUnits == 0) {
@@ -210,10 +218,24 @@ void Material::draw(Geometry& geometry, const Uniforms& extraUniforms){
     }
     
     //制定当前的program
+    checkGlError("before material glUserProgram");
     glUseProgram(programDesc_->program);
+    checkGlError("after material glUserProgram");
+    
+//    glValidateProgram(programDesc_->program);
+//
+//    GLint validated = false;
+//    // Check the validate status
+//    glGetProgramiv ( programDesc_->program, GL_VALIDATE_STATUS, &validated );
+//
+//    if(!validated){
+//        printProgramInfoLog(programDesc_->program);
+//    }
+//    checkGlError("after validating Program");
     
     //应用当前render sates对象
     renderStates_.apply();  // transit to current states
+    checkGlError("after renderStates_.apply");
     
     // Step 1:
     // set the uniforms and bind the textures
@@ -271,6 +293,7 @@ void Material::draw(Geometry& geometry, const Uniforms& extraUniforms){
                         default:
                             //非texture的uniform数值绑定
                             u->apply(ud.location, ud.size, NULL);
+                            checkGlError("u->apply");
                     }
                 }
                 else {
@@ -325,18 +348,64 @@ void Material::draw(Geometry& geometry, const Uniforms& extraUniforms){
         }
     }
     
-    for (size_t i = 0; i < numAttribs; ++i) {
-        //只要有对应的属性Index，则开启vertex array方式
-        if (attribIndices[i] >= 0)
-            glEnableVertexAttribArray(attribIndices[i]);
+    
+    GLboolean debug_attr = true;
+    if(debug_attr){
+        int numActiveUniforms, numActiveAttribs, uniformMaxLen, attribMaxLen;
+        
+        GLint program = programDesc_->program;
+        
+        glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &numActiveUniforms);
+        glGetProgramiv(program, GL_ACTIVE_ATTRIBUTES, &numActiveAttribs);
+        
+        glGetProgramiv(program, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniformMaxLen);
+        glGetProgramiv(program, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &attribMaxLen);
+        
+        //checkGlError("after GlProgramDesc - glGetProgramiv");
+        
+        //通过API获取到的一些状态信息，根据信息设置缓存变量
+        //将bufSize设置为uniform/attribute最大名称长度中的最大的值+1
+        const int bufSize = max(uniformMaxLen, attribMaxLen) + 1;
+        //将bufSize用作名称buffer的尺寸
+        vector<GLchar> buffer(bufSize);
+        
+        string dname;
+        GLint dlocation;
+        GLenum dtype;
+        GLint dsize;
+        for (int i = 0; i < numActiveAttribs; ++i) {
+            GLsizei charsWritten;
+            glGetActiveAttrib(program, i, bufSize, &charsWritten, &dsize, &dtype, &buffer[0]);
+            assert(charsWritten + 1 <= bufSize);
+            dname = string(buffer.begin(), buffer.begin() + charsWritten);
+            dlocation = glGetAttribLocation(program, &buffer[0]);
+        }
     }
+    
+//    for (size_t i = 0; i < numAttribs; ++i) {
+//        //只要有对应的属性Index，则开启vertex array方式
+//        if (attribIndices[i] >= 0)
+//            glEnableVertexAttribArray(attribIndices[i]);
+//        checkGlError("after glEnableVertexAttribArray");
+//        printProgramInfoLog(programDesc_->program);
+//    }
     
     // Now let the geometry draw its self
     // 几何对象根据vbo/ibo中的数据绘制自身，这种方式支持多个VBO？
+    checkGlError("before geometry.draw");
     geometry.draw(attribIndices);
+    checkGlError("after geometry.draw");
     
-    for (size_t i = 0; i < numAttribs; ++i) {
-        if (attribIndices[i] >= 0)
-            glDisableVertexAttribArray(attribIndices[i]);
-    }
+    //此处Enable/DisableVertexAttribArray引出的问题不小，几乎所有glError(0x502)都是由其引起。
+//    for (size_t i = 0; i < numAttribs; ++i) {
+//        if (attribIndices[i] >= 0)
+//            glDisableVertexAttribArray(attribIndices[i]);
+//    }
+//    checkGlError("Material::draw endingPoint");
+    
+}
+
+void Material::draw(Geometry& geometry){
+    Uniforms extraUniforms;
+    draw(geometry, extraUniforms);
 }

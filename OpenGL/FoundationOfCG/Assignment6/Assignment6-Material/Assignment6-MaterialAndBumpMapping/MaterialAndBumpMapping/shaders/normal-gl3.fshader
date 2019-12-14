@@ -1,11 +1,12 @@
-#version 130
+#version 410 core
 
 uniform sampler2D uTexColor;
-uniform sampler2D uTexNormal;
+//uniform sampler2D uTexNormal;
 
 // lights in eye space
 uniform vec3 uLight;
 uniform vec3 uLight2;
+//uniform vec3 uColor;
 
 in vec2 vTexCoord;
 in mat3 vNTMat;
@@ -36,5 +37,7 @@ void main() {
 
   vec3 color = texture(uTexColor, vTexCoord).xyz * diffuse + specular * vec3(0.6, 0.6, 0.6);
 
-  fragColor = vec4(color, 1);
+  //fragColor = vec4(uColor, 1);
+
+  fragColor = vec4(color,1);
 }

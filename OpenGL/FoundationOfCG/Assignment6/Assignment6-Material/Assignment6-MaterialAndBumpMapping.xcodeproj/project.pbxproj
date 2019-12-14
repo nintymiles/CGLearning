@@ -29,6 +29,10 @@
 		5C5850D2230FB55A00AEDBB3 /* uniforms.h in Sources */ = {isa = PBXBuildFile; fileRef = 5C0F67762295285200C3EE99 /* uniforms.h */; };
 		5C5850D3230FB55A00AEDBB3 /* renderstates.h in Sources */ = {isa = PBXBuildFile; fileRef = 5C0F677C2295301500C3EE99 /* renderstates.h */; };
 		5C5850D4230FB55A00AEDBB3 /* geometry.h in Sources */ = {isa = PBXBuildFile; fileRef = 5C6D40792296475E007D01A8 /* geometry.h */; };
+		5C699D9023A2792100E0E079 /* Fieldstone.ppm in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C699D8E23A2790100E0E079 /* Fieldstone.ppm */; };
+		5C699D9123A2792100E0E079 /* FieldstoneNormal.ppm in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C699D8F23A2790100E0E079 /* FieldstoneNormal.ppm */; };
+		5C699D9323A27C0D00E0E079 /* texture-gl3.fshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C699D9223A27BB300E0E079 /* texture-gl3.fshader */; };
+		5C699D9423A28AE500E0E079 /* Color_Tex.ppm in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5CB883D623935C240027D8BF /* Color_Tex.ppm */; };
 		5C6D407B2296475E007D01A8 /* geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C6D407A2296475E007D01A8 /* geometry.cpp */; };
 		5C800CAC21FA810A00DB8452 /* perfMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C800CAA21FA810A00DB8452 /* perfMonitor.cpp */; };
 		5C800CB521FA815100DB8452 /* glsupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C800CB321FA815100DB8452 /* glsupport.cpp */; };
@@ -37,25 +41,37 @@
 		5C800CCA21FA85A200DB8452 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C800CC921FA85A200DB8452 /* IOKit.framework */; };
 		5C800CCF21FA85C400DB8452 /* libGLEW.2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C800CCD21FA85C400DB8452 /* libGLEW.2.1.0.dylib */; };
 		5C800CD021FA85C400DB8452 /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C800CCE21FA85C400DB8452 /* libglfw3.a */; };
-		5C800CD421FA921900DB8452 /* solid-gl3.fshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C800CBD21FA81C200DB8452 /* solid-gl3.fshader */; };
-		5C800CD521FA921900DB8452 /* diffuse-gl3.fshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C800CBE21FA81C200DB8452 /* diffuse-gl3.fshader */; };
-		5C800CD721FA921900DB8452 /* basic-gl3.vshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C800CC121FA81C200DB8452 /* basic-gl3.vshader */; };
-		5C800CD821FA923B00DB8452 /* pick-gl3.fshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C800CBF21FA81C200DB8452 /* pick-gl3.fshader */; };
+		5CB883CE239355200027D8BF /* normal-gl2.fshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C6D4076229646CC007D01A8 /* normal-gl2.fshader */; };
+		5CB883CF239355200027D8BF /* normal-gl2.vshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C6D4078229646CC007D01A8 /* normal-gl2.vshader */; };
+		5CB883D0239355200027D8BF /* normal-gl3.fshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C6D4077229646CC007D01A8 /* normal-gl3.fshader */; };
+		5CB883D1239355200027D8BF /* normal-gl3.vshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C6D4075229646CC007D01A8 /* normal-gl3.vshader */; };
+		5CB883D2239355200027D8BF /* solid-gl3.fshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C800CBD21FA81C200DB8452 /* solid-gl3.fshader */; };
+		5CB883D3239355200027D8BF /* diffuse-gl3.fshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C800CBE21FA81C200DB8452 /* diffuse-gl3.fshader */; };
+		5CB883D4239355200027D8BF /* pick-gl3.fshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C800CBF21FA81C200DB8452 /* pick-gl3.fshader */; };
+		5CB883D5239355200027D8BF /* basic-gl3.vshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C800CC121FA81C200DB8452 /* basic-gl3.vshader */; };
 		5CF9491821FEA0F1004D711B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CF9491721FEA0F1004D711B /* Cocoa.framework */; };
 		5CFA80472331EB1C0034E816 /* picker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CFA80452331EB1C0034E816 /* picker.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		5CDA258E21EF72CB00F2A6D1 /* CopyFiles */ = {
+		5CB883CD239354ED0027D8BF /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 12;
+			buildActionMask = 2147483647;
 			dstPath = ./shaders;
 			dstSubfolderSpec = 16;
 			files = (
-				5C800CD821FA923B00DB8452 /* pick-gl3.fshader in CopyFiles */,
-				5C800CD421FA921900DB8452 /* solid-gl3.fshader in CopyFiles */,
-				5C800CD521FA921900DB8452 /* diffuse-gl3.fshader in CopyFiles */,
-				5C800CD721FA921900DB8452 /* basic-gl3.vshader in CopyFiles */,
+				5C699D9423A28AE500E0E079 /* Color_Tex.ppm in CopyFiles */,
+				5C699D9323A27C0D00E0E079 /* texture-gl3.fshader in CopyFiles */,
+				5C699D9023A2792100E0E079 /* Fieldstone.ppm in CopyFiles */,
+				5C699D9123A2792100E0E079 /* FieldstoneNormal.ppm in CopyFiles */,
+				5CB883CE239355200027D8BF /* normal-gl2.fshader in CopyFiles */,
+				5CB883CF239355200027D8BF /* normal-gl2.vshader in CopyFiles */,
+				5CB883D0239355200027D8BF /* normal-gl3.fshader in CopyFiles */,
+				5CB883D1239355200027D8BF /* normal-gl3.vshader in CopyFiles */,
+				5CB883D2239355200027D8BF /* solid-gl3.fshader in CopyFiles */,
+				5CB883D3239355200027D8BF /* diffuse-gl3.fshader in CopyFiles */,
+				5CB883D4239355200027D8BF /* pick-gl3.fshader in CopyFiles */,
+				5CB883D5239355200027D8BF /* basic-gl3.vshader in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,6 +86,10 @@
 		5C0F677D2295301500C3EE99 /* renderstates.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = renderstates.cpp; sourceTree = "<group>"; };
 		5C0F677F229530CF00C3EE99 /* material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = material.h; sourceTree = "<group>"; };
 		5C54F28821FDA1F000657C36 /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = readme.md; path = ../../../readme.md; sourceTree = "<group>"; };
+		5C65656023A317E700720926 /* texture-diffuse.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "texture-diffuse.glsl"; sourceTree = "<group>"; };
+		5C699D8E23A2790100E0E079 /* Fieldstone.ppm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Fieldstone.ppm; sourceTree = "<group>"; };
+		5C699D8F23A2790100E0E079 /* FieldstoneNormal.ppm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FieldstoneNormal.ppm; sourceTree = "<group>"; };
+		5C699D9223A27BB300E0E079 /* texture-gl3.fshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "texture-gl3.fshader"; sourceTree = "<group>"; };
 		5C6D4075229646CC007D01A8 /* normal-gl3.vshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "normal-gl3.vshader"; sourceTree = "<group>"; };
 		5C6D4076229646CC007D01A8 /* normal-gl2.fshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "normal-gl2.fshader"; sourceTree = "<group>"; };
 		5C6D4077229646CC007D01A8 /* normal-gl3.fshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "normal-gl3.fshader"; sourceTree = "<group>"; };
@@ -100,6 +120,7 @@
 		5CA6586121F0CA790087B7F8 /* scenegraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scenegraph.cpp; sourceTree = "<group>"; };
 		5CA6586521F0CA790087B7F8 /* asstcommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asstcommon.h; sourceTree = "<group>"; };
 		5CA6586821F0CA790087B7F8 /* scenegraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scenegraph.h; sourceTree = "<group>"; };
+		5CB883D623935C240027D8BF /* Color_Tex.ppm */ = {isa = PBXFileReference; lastKnownFileType = file; path = Color_Tex.ppm; sourceTree = "<group>"; };
 		5CDA259021EF72CB00F2A6D1 /* Assignment6-MaterialAndBumpMapping */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Assignment6-MaterialAndBumpMapping"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CDA259321EF72CB00F2A6D1 /* assignment6-main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "assignment6-main.cpp"; sourceTree = "<group>"; };
 		5CF9491721FEA0F1004D711B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -128,10 +149,15 @@
 		5C800CBC21FA81C200DB8452 /* shaders */ = {
 			isa = PBXGroup;
 			children = (
+				5C699D8E23A2790100E0E079 /* Fieldstone.ppm */,
+				5C699D8F23A2790100E0E079 /* FieldstoneNormal.ppm */,
+				5CB883D623935C240027D8BF /* Color_Tex.ppm */,
 				5C6D4076229646CC007D01A8 /* normal-gl2.fshader */,
 				5C6D4078229646CC007D01A8 /* normal-gl2.vshader */,
 				5C6D4077229646CC007D01A8 /* normal-gl3.fshader */,
 				5C6D4075229646CC007D01A8 /* normal-gl3.vshader */,
+				5C65656023A317E700720926 /* texture-diffuse.glsl */,
+				5C699D9223A27BB300E0E079 /* texture-gl3.fshader */,
 				5C800CBD21FA81C200DB8452 /* solid-gl3.fshader */,
 				5C800CBE21FA81C200DB8452 /* diffuse-gl3.fshader */,
 				5C800CBF21FA81C200DB8452 /* pick-gl3.fshader */,
@@ -224,7 +250,7 @@
 			buildPhases = (
 				5CDA258C21EF72CB00F2A6D1 /* Sources */,
 				5CDA258D21EF72CB00F2A6D1 /* Frameworks */,
-				5CDA258E21EF72CB00F2A6D1 /* CopyFiles */,
+				5CB883CD239354ED0027D8BF /* CopyFiles */,
 			);
 			buildRules = (
 			);

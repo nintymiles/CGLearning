@@ -183,12 +183,13 @@ public:
             // us a new one without stalling the pipeline
             glBufferData(GL_ARRAY_BUFFER, size, NULL, GL_DYNAMIC_DRAW);
             glBufferSubData(GL_ARRAY_BUFFER, 0, size, vertices);
+            checkGlError("after glBufferSubData");
         }
         else {
             glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
         }
 #ifndef NDEBUG
-        checkGlError(__func__);
+        
 #endif
     }
 };
@@ -227,6 +228,7 @@ public:
         if (dynamicUsage) {
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, NULL, GL_DYNAMIC_DRAW);
             glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, size, indices);
+            checkGlError(__FUNCTION__);
         }
         else {
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
@@ -282,8 +284,7 @@ public:
     
     // Return if we are in indexed mode
     bool isIndexed() const {
-        //return ib_;  //??此处注释掉，是因为不知其含义
-        return ib_==NULL;
+        return (ib_!=NULL);
     }
     
     // Return the primitive types we are drawing using. Default is GL_TRIANGLES

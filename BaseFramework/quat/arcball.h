@@ -22,7 +22,7 @@ inline Cvec2 getScreenSpaceCoord(const Cvec3& p,
     //如果球体中心坐标（eye coordinate）的z值大于0，则这个点实际是位于眼睛之后，无法被投射
     //针对这种情况，输出warning信息，并默认返回屏幕中心作为球体中心投射坐标。这种默认值存在的意义？
     if (p[2] > -CS175_EPS) {
-        std::cerr << "WARNING: getScreenSpaceCoord of a point near or behind Z=0 plane. Returning screen-center instead." << std::endl;
+        //std::cerr << "WARNING: getScreenSpaceCoord of a point near or behind Z=0 plane. Returning screen-center instead." << std::endl;
         return Cvec2((screenWidth-1)/2.0, (screenHeight-1)/2.0);
     }
     //将球体中心的眼部坐标应用投射变换

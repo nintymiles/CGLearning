@@ -24,7 +24,7 @@ using namespace std;
 void checkGlError(const char* op) {
     //将GL error stack中的error逐一取出，直至stack中没有error
     for (GLint error = glGetError(); error; error= glGetError()) {
-        printf("after %s() glError (0x%x)\n", op, error);
+        printf("Error Occurs, %s() glError (0x%x)\n", op, error);
     }
 }
 
@@ -127,10 +127,11 @@ void linkShader(GLuint programHandle, GLuint vs, GLuint fs) {
     
     GLint linked = 0;
     glGetProgramiv(programHandle, GL_LINK_STATUS, &linked);
-    printInfoLog(programHandle, "linking");
     
-    if (!linked)
+    printProgramInfoLog(programHandle);
+    if (!linked){
         throw runtime_error("fails to link shaders");
+    }
 }
 
 //整合的shaders pair的编译和链接程序
@@ -140,6 +141,8 @@ void readAndCompileShader(GLuint programHandle, const char * vertexShaderFileNam
 
   readAndCompileSingleShader(vs, vertexShaderFileName);
   readAndCompileSingleShader(fs, fragmentShaderFileName);
+    
+    
 
   linkShader(programHandle, vs, fs);
 }

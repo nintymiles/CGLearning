@@ -4,12 +4,12 @@
 
 using namespace std;
 
-Picker::Picker(const RigTForm& initialRbt, Material& material)
-  : drawer_(initialRbt, material)
+Picker::Picker(const RigTForm& initialRbt, Uniforms& uniforms)
+  : drawer_(initialRbt, uniforms)
   , idCounter_(0)
   , srgbFrameBuffer_(true) {}
 
-Picker::Picker(const RigTForm& initialRbt, Material& material,shared_ptr<SgRbtNode> selectedNode,shared_ptr<SgRootNode> worldNode,RigTForm eyeRbt,RigTForm motionRbt):drawer_(initialRbt, material)
+Picker::Picker(const RigTForm& initialRbt, Uniforms& uniforms,shared_ptr<SgRbtNode> selectedNode,shared_ptr<SgRootNode> worldNode,RigTForm eyeRbt,RigTForm motionRbt):drawer_(initialRbt, uniforms)
 , idCounter_(0)
 , srgbFrameBuffer_(true)
 , selectedRbtNode_(selectedNode)
@@ -50,11 +50,9 @@ bool Picker::visit(SgShapeNode& node) {
     shared_ptr<SgRbtNode> rbtNode = dynamic_pointer_cast<SgRbtNode>(baseNode);
     addToMap(idCounter_, rbtNode);
     if(selectedRbtNode_ == baseNode){
-        //safe_glUniform3f(drawer_.getCurSS().h_uIdColor, 0.3, 0.9, 0.5);
-        //drawer_.getCurMat().getUniforms().put("uColor",0.3, 0.9, 0.5);
+        drawer_.getUniforms().put("uIdColor",Cvec3(0.3, 0.9, 0.5));
     }else{
-        //safe_glUniform3f(drawer_.getCurSS().h_uIdColor, idColor[0], idColor[1], idColor[2]);
-        //drawer_.getCurMat().getUniforms().put("uColor",idColor[0], idColor[1], idColor[2]);
+        drawer_.getUniforms().put("uIdColor",idColor);
     }
     
   return drawer_.visit(node);
