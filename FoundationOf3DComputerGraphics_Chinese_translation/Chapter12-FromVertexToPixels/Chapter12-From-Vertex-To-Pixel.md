@@ -41,19 +41,15 @@ $$\begin{matrix}
 全部变异变量（varying variables）都表达了在对象坐标$[x_o,y_o,z_o]^t$上的并行函数（affine functions），因此，借助B.5节中的推理，这些变量在$(x_c,y_c,z_c,w_c)$上也是并行函数。从而，如果新顶点位于两个三角形顶点的路径的某个分数比例-$\alpha$处，我们只需以“路径的$\alpha$比例”方式插值变异变量，同时借助这些新值设置这个顶点的变异变量。
 
 ## 12.2 背向面剔除（Backface Culling）
-Suppose we are using triangles to draw a closed solid object, such as a cube. Let us label the two sides of each triangle as “front” or “back”. No matter how we turn the cube, we will never see the back side of any triangle as it must be occluded by some triangle whose front side we are observing. (See Figure 12.5). As such, we may as well cull these back facing polygons as soon as possible. and not draw them at all. For a “non-watertight” geometric model, we may wish to see both sides of a triangle; in this case, backface culling would be inappropriate.
+假设我们正在借助三角形绘制一个闭合固态物体，比如一个立方体。让我们标记每个三角形的两面为“前”和“后”。不管我们如何转动立方体，我们将绝不会看到任何三角形的背面，因为它必然被某个我们正在观察到的三角形的前面所阻挡。（参考图示$\text{Figure 12.5}$）。如此，我们也可以尽可能地剔除这些背后面向的多边形。并且完全不绘制他们。对于“非水密”（可透水）几何模型，我们可能希望看到一个三角形的两边；在这种情形中，背面提出就会不合适。
 
-In OpenGL, backface culling is turned on by calling glEnable(GL CULL FACE). For each face, we need to somehow tell OpenGL which side is the front and which is the back. To do this, we use the conventionof ordering the three vertices so that they are counter clockwise (CCW) when looking at its front side. When drawing each triangle, we use this vertex ordering in the vertex buffer object.
+在OpenGL中，背面剔除通过调用`glEnable(GL_CULL_FACE)`开启。对于每个面，我们需要以某种方式告知OpenGL哪个面是前面，哪个面是后面。要做到这样，我们借助排序3个顶点顺序的方式，这种方式保证当我们观看其前面时，顶点是反时针方向（counter clockwise CCW）。当回至每个三角形时，我们在顶点缓存对象（vertex buffer object）中使用这种顶点排序。
 
-Using the normalized device coordinates of the vertices, OpenGL can now easily determine which side of a triangle we are observing in the current image. Here’s how (see Figure 12.6). Let ˜p 1 , ˜p 2 , and ˜p 3 be the three vertices of the triangle projected down to the (x n , y n , 0) plane. Deﬁne the vectors ⃗a = ˜p 3 − ˜p 2 and b = ˜p 1 − ˜p 2 . Next compute the cross product ⃗c = ⃗a × b. If the three vertices are counter clockwise in the plane, then ⃗c will be in the −z n direction. Otherwise it will be in the positive z n direction. In summary, all we need to do is compute the z coordinate of the cross product in normalized device coordinates. When all the dust settles, this coordinate is
+借助顶点的标准化设备坐标，现在OpenGL可以轻松地在当前图像中确定我们正在观察一个三角形的哪一面。这里展示了这是如何做到的（参考图示$\text{Figure 12.6}$）。让$\tilde{p_1},\tilde{p_2},\tilde{p_3}$为被投射到$(x_n,y_n,0)$平面上三角形的3个顶点。定义矢量$\vec{a}=\tilde{p_3}-\tilde{p_2}$和$\vec{b}=\tilde{p_1}-\tilde{p_2}$。接着结算向量积（cross product）$\vec{c}=\vec{a} \times \vec{b}$。如果3个顶点在平面上是反时针方向排序，那么$\vec{c}$将朝向$+z_n$方向。否则它将会朝向$-z_n$方向。总之，所以我们需要做的事情就是以标准化设备坐标（normalized device coordinates）计算向量积的z坐标。当所有尘埃落定，这个坐标为
 
-(x − x n 2 )(y n 1 − y n 2 ) − (y n 3 − y n 2 )(x 1 − x 2 ) n n
+$$\large{ (x_n^3 − x_n^2 )(y_n^1 − y_n^2 ) − (y_n^3 − y_ n^2 )(x_n^1 − x_n^2 ) \qquad\qquad (12.4) }$$
 
-3 n
-
-(12.4)
-
-To test if three vertices are counter clockwise, we simply compute the value of Equation (12.4). If it is positive then the vertices are counter clockwise as viewed from the camera.
+要验证是否3个顶点是反时针方向，我们只要计算方程（12.4）的值即可。如果值为正则当从相机视角观看时顶点为反时针方向。
 
 
 
