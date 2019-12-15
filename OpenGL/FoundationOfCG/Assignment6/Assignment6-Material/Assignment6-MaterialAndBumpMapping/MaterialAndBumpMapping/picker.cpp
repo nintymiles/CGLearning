@@ -4,6 +4,8 @@
 
 using namespace std;
 
+extern GLFWwindow *windows;
+
 Picker::Picker(const RigTForm& initialRbt, Uniforms& uniforms)
   : drawer_(initialRbt, uniforms)
   , idCounter_(0)
@@ -64,9 +66,19 @@ bool Picker::postVisit(SgShapeNode& node) {
 }
 
 shared_ptr<SgRbtNode> Picker::getRbtNodeAtXY(int x, int y) {
-    vector<char> image(3);
+    vector<char> image(1*1*3);
+//    GLubyte *pixels;
+//    pixels = ( GLubyte* ) malloc( 1 * 1 * 3 );
+    
     PackedPixel pixel;
+    
+    //glReadPixels函数无法正常读取
     glReadPixels(x,y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, &pixel);
+    checkGlError("glReadPixels");
+    
+    //cout << "selected coord is X="<<x<<",Y="<<y<<endl;
+    //cout << "selected pixel is R="<<pixel.r<<",G="<<pixel.g<<",B="<<pixel.b<<endl;
+    
     int colorId = colorToId(pixel);
     shared_ptr<SgRbtNode> jointNode = find(colorId);
   return jointNode;
