@@ -7,7 +7,7 @@
 最后做了最不想做的事，就是备份代码，然后将项目从git上恢复到上一次checkin时的状态，随后将一个个文件加进去，最初从main文件开始，一个个文件确认，最后确认只是material.h文件的末尾被xcode的fix功能莫名奇妙的加入了两个“\*\*”，由此而引出的抓耳挠腮式的调试过程。
 
 图示所呈现出的是南辕北辙式的错误信息，CPP编译器对非正常错误的自作多情是如此严重。
-![Screen Shot 2019-12-11 at 4.15.30 P](media/Screen%20Shot%202019-12-11%20at%204.15.30%20PM.png)
+![Figure1](media/2019-12-11-figure1.png)
 
-![Screen Shot 2019-12-11 at 4.14.45 P](media/Screen%20Shot%202019-12-11%20at%204.14.45%20PM.png)
+![Figure2](media/2019-12-11-figure2.png)
 
