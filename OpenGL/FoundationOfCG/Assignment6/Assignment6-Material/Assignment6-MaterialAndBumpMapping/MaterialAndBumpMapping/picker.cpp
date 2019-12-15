@@ -4,8 +4,6 @@
 
 using namespace std;
 
-extern GLFWwindow *windows;
-
 Picker::Picker(const RigTForm& initialRbt, Uniforms& uniforms)
   : drawer_(initialRbt, uniforms)
   , idCounter_(0)
