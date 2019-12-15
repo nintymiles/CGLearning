@@ -748,6 +748,7 @@ static void pick() {
     
     drawStuff(extraUniforms, true);
     
+    
     // Uncomment below and comment out the glutPostRedisplay in mouse(...) call back
     // to see result of the pick rendering pass
     // glutSwapBuffers();
@@ -805,6 +806,7 @@ int main(int argc, char * argv[]) {
             //cout << "Current FPS at timeinterval:" << glfwGetTime() << " is " << fps << endl;
             
             motion(cursor_x, cursor_y);
+
             
             glfwSwapBuffers( window );
             
