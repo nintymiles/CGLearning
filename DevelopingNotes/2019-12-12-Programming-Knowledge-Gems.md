@@ -99,4 +99,8 @@ extern int j = 0;
 > 声明和定义的区别：
 >> 一个声明只是确定变量的名称和类型。而一个定义则是在声明的基础上进一步关联了存储和初始值
 
+## 关于用glReadPixels从screen上读取像素的痛苦经历（OpenGL 4.1）
+一个简单的API调用glReadPixels无法读取像素。
+glReadPixels在Mac OS X无法读取screen pixels（default framebuffer）。根本原因是glReadPixels需要framebuffer和在同一个OpenGL context中。
+也就是说如果借助glReadPixels进行Picking操作，那么这种方式将无法进行。
 
