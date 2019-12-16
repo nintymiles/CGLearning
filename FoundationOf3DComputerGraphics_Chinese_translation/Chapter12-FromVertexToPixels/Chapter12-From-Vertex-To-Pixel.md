@@ -52,55 +52,58 @@ $$\large{ (x_n^3 − x_n^2 )(y_n^1 − y_n^2 ) − (y_n^3 − y_ n^2 )(x_n^1 −
 要验证是否3个顶点是反时针方向，我们只要计算方程（12.4）的值即可。如果值为正则当从相机视角观看时顶点为反时针方向。
 
 
-## 12.3 Viewport
-当前，我们希望定位我们的三角形在图像屏幕上并且决定哪些像素会位于三角形内。因此，我们希望从抽象设备坐标（normalized device coordinates）变换到所谓的窗口坐标（window coordinates），在其上每个像素中心拥有一个整型坐标（integer coordinate）。这会让随后的像素计算更加自然。
+## 12.3 视口变换（Viewport）
+当前，我们希望将我们的三角形定位在图像屏幕上并且决定哪些像素会位于三角形内。因此，我们希望从抽象设备坐标（normalized device coordinates）变换到所谓的窗口坐标（window coordinates），在其上每个像素中心拥有一个整型坐标（integer coordinate）。这会让随后的像素计算更加自然。
 
-回忆一下，在标准化设备坐标（normalized deviec coordinates）中，我们图像的范围是经典正方形（canonical square），拥有左下角坐标$[-1,-1]^t$,右上角坐标$[1,1]^t$。现在让我们假设我们的窗口为W像素宽和H像素高。我们想让左下角像素中心拥有一个为$[0,0]^t$2D窗口坐标,右上角像素中心拥有$[W-1,H-1]^t$坐标。我们认为每个像素拥有范围为正负0.5像素单位长度的，在水平和垂直方向延伸的不动产建筑（real estate）。因此，在这个模型中，我们认为每个像素为一个1像素乘1像素的单位正方型（unit square），其中心为整型坐标（integer coordinates）。如此被所有像素组合在一起所覆盖的2D窗口矩型就是从从左下角$[-0.5,-0.5]^t$到右上角$[W-0.5,H-0.5]^t$的窗口坐标。参考图示${\text{Figure 12.7}}$。
+回忆一下，在标准化设备坐标（normalized deviec coordinates）中，我们图像的范围是经典正方形（canonical square），拥有左下角坐标$[-1,-1]^t$,右上角坐标$[1,1]^t$。现在让我们假设我们的窗口为W像素宽和H像素高。我们想让左下角像素中心拥有一个值为$[0,0]^t$的2D窗口坐标,右上角像素中心拥有$[W-1,H-1]^t$坐标。我们认为每个像素拥有范围为正负0.5像素单位长度的，在水平和垂直方向延伸的不动产建筑（real estate）。因此，在这个模型中，我们认为每个像素为一个1像素乘1像素的单位正方型（unit square），其中心为整型坐标（integer coordinates）。如此被所有像素组合在一起所覆盖的2D窗口矩型就是从从左下角$[-0.5,-0.5]^t$到右上角$[W-0.5,H-0.5]^t$的窗口坐标。参考图示${\text{Figure 12.7}}$。
 
-All that we need now is a transformation that performs the appropriate vertical and horizontal scales and shifts, such that it maps the canonical square to the window’s rectangle. We can verify that the following matrix provides the (unique) solution:
-现在所有我们需要做的就是执行合适的水平和垂直伸缩及平移合成变换，以便于它将经典正方形映射为窗口矩型。
+现在所有我们需要做的就是执行合适的水平和垂直伸缩及平移合成变换，以便于它将经典正方形映射为窗口矩型。我们可以验证下面的矩阵提供了（唯一）方案：
 
-⎡ ⎤ ⎡ ⎤⎡ ⎤ x w W/2 0 0 (W − 1)/2 x n ⎢ y w ⎥ ⎢ 0 H/2 0 (H − 1)/2 ⎥ ⎢ y n ⎥ ⎢ ⎥ ⎢ ⎥ ⎢ ⎥ (12.5) ⎣ z w ⎦ = ⎣ 0 0 1/2 1/2 ⎦ ⎣ z n ⎦ 1 0 0 0 1 1
+$$ \Large{ \begin{bmatrix} x_w \\ y_w \\ z_w \\ 1  \end{bmatrix} = 
+\begin{bmatrix} W/2 & 0 & 0 & (W-1)/2 \\ 0 & H/2 & 0 & (H-1)/2 \\ 0 & 0 & 1/2 & 1/2 \\ 0 & 0 & 0 & 1  \end{bmatrix} 
+\begin{bmatrix} x_n \\ y_n \\ z_n \\ 1  \end{bmatrix} }  \large{  \qquad\qquad (12.5)}
+$$
 
-This matrix is called the viewport matrix, and it implements the viewport transformation. In OpenGL, we set up this viewport matrix with the call glViewport(0,0,W,H).
+此矩阵被称为视口矩阵（viewport matrix），并且它实现了视口变换（viewport transformation
+）。在OpenGL中，我们借助API调用`glViewport(0,0,W,H)`设置视口矩阵。
 
-(A functionally equivalent model, that we will not use, but is often used in OpenGL documentation, deﬁnes the window x, y coordinates as ranging from [0, 0] t to [W, H] t , while thinking of each pixel center as have half-integer coordinates. In this model, we use a different matrix and we also use different coordinates to address the pixels. )
+（还有一个我们不会使用的功能性等价模型，但是经常用于OpenGL文档中，定义了窗口同时将每个x,y坐标范围为从$[0,0]^t$到$[W,H]^t$，同时将每个像素中心认为是拥有半整型坐标（half-integer coordinates）。在这种模型中，我们使用一个不同的矩阵，同时我们也借助了不同的坐标用于定位像素。）
 
-The third row of this matrix is used to map the [−1..1] range of z n values to the more convenient [0..1] range. And thus in our conventions, z w = 0 is far and z w = 1 is near. Thus we must also tell OpenGL that when we clear the z-buffer, we should set it to 0; we do this with the call glClearDepth(0.0).
+这个矩阵的第三行被用于映射$z_n$值原本的$[-1..1]$范围到更方便的$[0..1]$范围。因此在我们的习惯中，$z_w = 0$为远值，$z_w = 1$为近值。从而当清理z-buffer时，我们也必须告诉OpenGL这种情形，我们应该将其设置为0；通过API调用`glClearDepth(0.0)`来实现。
 
-12.3.1 Texture Viewport
+12.3.1 纹理视口变换（Texture Viewport）
+由于某种（可能不太好的）原因，纹理的抽象域不是经典正方形（canonical square），而是单位正方形（unit square），以$[x^t,y^t]^t$纹理坐标表示。其左下角为$[0,0]^t$,右上角为$[1,1]^t$。再次假设纹理图像为W像素宽乘H像素高，在这种情形中，坐标变换矩阵为
+$$ \Large{ \begin{bmatrix} x_w \\ y_w \\ - \\ 1  \end{bmatrix} = 
+\begin{bmatrix} W & 0 & 0 & -1/2 \\ 0 & H & 0 & -1/2 \\ - & - & - & - \\ 0 & 0 & 0 & 1  \end{bmatrix} 
+\begin{bmatrix} x_t \\ y_t \\ - \\ 1  \end{bmatrix} }  \large{  \qquad\qquad (12.6)}
+$$
 
-For some (probably not very good) reason, the abstract domain for textures is not the canonical square, but instead is the unit square in [x t , y t ] t texture coordinates. Its lower left corner is [0, 0] t and upper right corner is [1, 1] t . Again assuming that the texture image is W pixels wide by H pixels high, in this case the coordinate transformation matrix is ⎡ ⎤ ⎡ ⎤⎡ ⎤ x w W 0 0 −1/2 x t ⎢ y w ⎥ ⎢ 0 H 0 −1/2 ⎥ ⎢ y t ⎥ ⎢ ⎥ ⎢ ⎥ ⎢ ⎥ (12.6) ⎣ − ⎦ = ⎣ − − − − ⎦⎣ − ⎦ 1 0 0 0 1 1
+这些带有多个“1/2”字样的细节可能看起来有点吹毛求疵，但是如果你想要确切知道你的图像中像素在哪里，那么理解它们就是关键的。
 
-These details with the 1/2s and all may seem a bit picky, but understanding them is essential if you want to know exactly where the pixels are in your images and textures.
+## 12.4 光栅化（Rasterization）
+光栅化是一种接受三角形的顶点同时填充进像素的处理。始于三角形3个顶点的窗口坐标，光栅化器（rasterizer）需要指出哪些像素中心（pixel-centers）位于三角形内。（随后在小节16.3中，我们将探索借助一个像素正方形区域内多个空间样本以确定其色彩的可能性）。
 
-12.4 Rasterization
+存在很多光栅化方式，在这些方式中光栅化既可以用硬件也可以用软件来实现。举个例子，这里是一种简单暴力方式（simple brute force approach）。参考图示$\text{Figure 12.8}$。每个屏幕上的三角形可以被定义为3个半屏面。每个这样的半平面被一条线定义，其重合于三角形的一条边，并且可以借助如下的一种“边缘函数（edge function）”被验证 
 
-Rasterization is the process of taking the vertices of a triangle and ﬁlling in the pixels. Starting from the window coordinates for the three vertices, the rasterizer needs to ﬁgure out which pixel-centers are inside of the triangle. (Later in Section 16.3, we will explore the possibility of using numerous spatial samples within a pixel’s square to determine its color).
+$$\Large{ edge = ax_w + by_w + c }$$
 
-There are many ways that rasterization can be done in either hardware of software. Here, for example, is a simple brute force approach. See Figure 12.8. Each triangle on the screen can be deﬁned as the intersection of three half-spaces. Each such halfspace is deﬁned by a line that coincides with one of the edges of the triangle, and can be tested using an “edge function” of the from
+这里(a,b,c)是依赖于边缘（函数）几何形状的常量。一个在一个拥有坐标$[x_w,y_w]^t$的像素上的这种函数的正值意味着这个函数位于指定的半空间（halfspace）之内。如果所有三个检测都通过，那么这个像素位于三角形内。
 
-edge = ax w + by w + c
+这种暴力方式可以以多种方式被加速。举个例子，我们可以借助3个顶点的$(x_w,y_w)$的最小和最大值确定一个三角形的约束盒子（bounding box）。只有位于这个约束盒子内的像素才需要被检测。
 
-where the (a, b, c) are constants that depend on the geometry of the edge. A positive value of this function at a pixel with coordinates [x w , y w ] t means that the pixel is inside the speciﬁed halfspace. If all three tests pass, then the pixel is inside the triangle.
+另外，要减少“像素在三角形内（pixel-in-triangle）”检测的次数，存在多种方式去设计一种简单保守检测（simple conservative test），用以确定是否一整块像素完全位于或者超出一个三角形。只有当这种检测不确定时，单独的像素才需要被检测。作为另一种优化，我们注意到一旦我们在一个像素上评估了这样一个线性函数（linear function），我们就可以在临近像素上以渐增的方式进行评估。举个例子，当我们水平地移动一个像素，我们只需要给被评估的边缘函数增加一个a值的数量。
 
-This brute force approach can be sped up in many ways. For example, we can use the minimum and maximum x w and y w values of the three vertices to determine a bounding box of the triangle. Only pixels within this bounding box need to be tested.
+作为光栅化的输入，每个顶点同时拥有和其关联的辅助数据（auxiliary data）。这个数据包含一个$z_w$值，同时还有被关联的其它值，但是不同于变异变量（varying variables），参考第13章。线性插值（linearly interpolate）这种数据也是三角形上光栅化器（rasterizer）的工作。
 
-In addition, to reduce the number of “pixel-in-triangle” tests, there are ways to design a simple conservative test that determines if an entire block of pixels is entirely inside or outside a triangle. Individual pixels only need to be tested when this test is inconclusive. As another optimization, we note that once we have evaluated such a linear function at, say, one pixel, we can then evaluate it at a neighboring pixel incrementally. For example, as we step one pixel horizontally, we just need to increment the evaluated edge function by the value a.
+每个被线性插值（linearly interpolated）的这样的值v，都可以被表达为如下形式的在屏幕空间上的并行函数
 
-As input to rasterization, each vertex also has some auxiliary data associated with it. This data includes a z w value, as well as other data that is related, but not identical to the varying variables (see Chapter 13). It is also the job of the rasterizer to linearly interpolate this data over the triangle.
+$$\Large{ v = ax_w + by_w + c   \qquad\qquad } \large{(12.7) }$$
 
-Each such value v to be linearly interpolated can be represented as an afﬁne function over screen space with the form
+(a, b, c) 常量可以借助附录B种方程式（B.2）被确定。并行函数可以轻松地在每个像素上被光栅化器评估。确实，和刚才所说的变异检测函数的评估没有区别。
 
-v = ax w + by w + c
+在光栅化过程中，仔细对待边缘情形（boundary cases）是重要的。实际上，假设顺着一个边缘的一个网格（mesh）上的两个三角形，其投射刚好落在一个像素上。如果这个像素不被绘制，那么一个缝隙就会出现在被投射的网格上。如果这个像素被绘制两次，在我们借助alpha混合（belnding）建模透明（transparency）时就可能引起问题（参考小节16.4）。边缘规则（boundary rules）必须仔细地被实现，以确保这样一个像素仅被这对三角形绘制一次。
 
-(12.7)
-
-The (a, b, c) constants can be determined using Equation (B.2) in Appendix B. An afﬁne function can be easily evaluated at each pixel by the rasterizer. Indeed, this is no different from evaluating the edge test functions just described.
-
-During rasterization, it is important to carefully treat the boundary cases. In particular, suppose two triangles in a mesh abut along one edge whose projection lands exactly on a pixel. If the pixel is not drawn, then a gap will appear in the projected mesh. If the pixel is drawn twice, this can cause problems if we are modeling transparency using alpha blending (see Section 16.4). Boundary rules must be implemented carefully to ensure that such a pixel is only drawn once by this pair of triangles.
-
-A related topic to triangle rasterization is line/curve rasterization. In this case, we are not looking for pixels “inside” of a 2D shape such as a triangle, but instead pixels “near” a 1D shape. Thus even deﬁning the problem is a bit trickier and one which we will not delve into here. The interested reader can consult [5].
+三角形光栅化的相关主题为线/曲线（line/curve）光栅化。在这种情形中，我们没有寻找位于类似一个三角形这样的形状”之内“的像素，而是寻找“接近（near）”一个1D形状的像素。因此即便定义这种问题都有一点更难以理解（trickier），所有此处我们不会深入进去。有兴趣的读者可以参考[5]。
 
 
 
