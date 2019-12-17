@@ -208,7 +208,6 @@ void Material::draw(Geometry& geometry,const Uniforms& extraUniforms){
     //static storage duration最大textureImageUnits变量
     static GLint maxTextureImageUnits = 0;
     
-    checkGlError("before material glGetIntegerv-GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS");
     //使用API查询获得最大的texture image unit数目
     // Initialize maxTextureImageUnits if this is called for the first time
     if (maxTextureImageUnits == 0) {
@@ -218,9 +217,7 @@ void Material::draw(Geometry& geometry,const Uniforms& extraUniforms){
     }
     
     //制定当前的program
-    checkGlError("before material glUserProgram");
     glUseProgram(programDesc_->program);
-    checkGlError("after material glUserProgram");
     
 //    glValidateProgram(programDesc_->program);
 //
@@ -235,8 +232,6 @@ void Material::draw(Geometry& geometry,const Uniforms& extraUniforms){
     
     //应用当前render sates对象
     renderStates_.apply();  // transit to current states
-    checkGlError("after renderStates_.apply");
-    
     // Step 1:
     // set the uniforms and bind the textures
     int textureUnit = 0;
@@ -293,7 +288,6 @@ void Material::draw(Geometry& geometry,const Uniforms& extraUniforms){
                         default:
                             //非texture的uniform数值绑定
                             u->apply(ud.location, ud.size, NULL);
-                            checkGlError("u->apply");
                     }
                 }
                 else {

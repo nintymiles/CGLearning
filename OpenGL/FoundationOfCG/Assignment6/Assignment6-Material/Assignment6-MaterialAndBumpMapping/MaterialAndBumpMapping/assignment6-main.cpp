@@ -53,6 +53,92 @@
 
 using namespace std;      // for string, vector, iostream, and other standard C++ stuff
 static void pick();
+extern unsigned int fboId;
+
+
+#define TEXTURE_WIDTH 512*4
+#define TEXTURE_HEIGHT 512*4
+unsigned int fboId;
+int textureId;
+int depthTextureId;
+
+unsigned int generateTexture(int width,int height,bool isDepth)
+{
+    unsigned int texId;
+    glGenTextures(1, &texId);
+    glBindTexture(GL_TEXTURE_2D, texId);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    if (isDepth){
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, width, height, 0,GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+        
+    }
+    else{
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+    }
+    
+    int error;
+    error=glGetError();
+    if(error != 0)
+        {
+        std::cout << "Error: Fail to generate texture." << error << std::endl;
+        }
+    glBindTexture(GL_TEXTURE_2D,0);
+    return texId;
+}
+
+//! This function create the FBO in which it uses the Frame buffer's depth buffer for depth testing.
+void GenerateFBO()
+{
+    // create a framebuffer object
+    glGenFramebuffers(1, &fboId);
+    glBindFramebuffer(GL_FRAMEBUFFER, fboId);
+    
+    //Create color and depth buffer texture object
+    textureId = generateTexture(TEXTURE_WIDTH,TEXTURE_HEIGHT,false);
+    depthTextureId = generateTexture(TEXTURE_WIDTH,TEXTURE_HEIGHT, true);
+    
+    // attach the texture to FBO color attachment point
+    glFramebufferTexture2D(GL_FRAMEBUFFER,        // 1. fbo target: GL_FRAMEBUFFER
+                           GL_COLOR_ATTACHMENT0,  // 2. Color attachment point
+                           GL_TEXTURE_2D,         // 3. tex target: GL_TEXTURE_2D
+                           textureId,             // 4. color texture ID
+                           0);                    // 5. mipmap level: 0(base)
+    
+    // attach the texture to FBO color attachment point
+    glFramebufferTexture2D(GL_FRAMEBUFFER,        // 1. fbo target: GL_FRAMEBUFFER
+                           GL_DEPTH_ATTACHMENT,   // 2. Depth attachment point
+                           GL_TEXTURE_2D,         // 3. tex target: GL_TEXTURE_2D
+                           depthTextureId,        // 4. depth texture ID
+                           0);                    // 5. mipmap level: 0(base)
+    
+    // check FBO status
+    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if(status != GL_FRAMEBUFFER_COMPLETE){
+        printf("Framebuffer creation fails: %d", status);
+    }
+    
+    // Bind to default buffer
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void BlitTextures()
+{
+    // set the fbo for reading，在这里把读写目的的缓存位fbo设置为读取目标位的fbo
+    glBindFramebuffer ( GL_DRAW_FRAMEBUFFER, 0 );
+    glBindFramebuffer ( GL_READ_FRAMEBUFFER, fboId);
+    
+    // Copy the output red buffer to lower left quadrant
+    glBlitFramebuffer ( 0, 0, TEXTURE_WIDTH, TEXTURE_HEIGHT,
+                       0, 0, TEXTURE_WIDTH, TEXTURE_HEIGHT,
+                       GL_COLOR_BUFFER_BIT, GL_LINEAR );
+    
+    checkGlError("BlitTextures");
+    printProgramInfoLog(3);
+}
+
 
 extern shared_ptr<Material> g_overridingMaterial;
 
@@ -122,7 +208,7 @@ static RigTForm g_motionRbt;
 //for new assignments - variables
 static Cvec3f g_objectColors[3] = {Cvec3f(1, 0, 0),Cvec3f(0, 0, 1),Cvec3f(0.5, 0.5, 0)};
 
-shared_ptr<Texture> colorTex;
+shared_ptr<Texture> colorTex,normalTex;
 
 ///////////////// END OF G L O B A L S //////////////////////////////////////////////////
 
@@ -190,7 +276,11 @@ static void initMaterials(){
     g_arcballMat->getUniforms().put("uColor", Cvec3(0.97f,0.1f,0.0f));
     g_arcballMat->getRenderStates().polygonMode(GL_FRONT_AND_BACK, GL_LINE);
     
-    g_lightMat.reset(new Material(texture));
+    g_lightMat.reset(new Material(bump));
+    g_lightMat->getUniforms().put("uTexColor",colorTex);
+    g_lightMat->getUniforms().put("uTexNormal",normalTex);
+    g_lightMat->getRenderStates().polygonMode(GL_FRONT, GL_FILL);
+    g_lightMat->getUniforms().put("uColor",Cvec3{0.1,1,0.1});
     
     g_pickingMat.reset(new Material("./shaders/normal-gl3.vshader","./shaders/pick-gl3.fshader"));
     
@@ -254,6 +344,8 @@ static RigTForm getEyeRbt(){
 //这样代码的结构才体现出简洁高效
 //extraUniforms作为参数传递，意味着作为参数之前设置的参数更有通用性才对。
 static void drawStuff(Uniforms& extraUniforms, bool picking){
+    //glBindFramebuffer(GL_FRAMEBUFFER,fboId);
+    
     // build & send proj. matrix to vshader
     const Matrix4 projmat = makeProjectionMatrix();
     sendProjectionMatrix(extraUniforms, projmat);
@@ -313,14 +405,11 @@ static void drawStuff(Uniforms& extraUniforms, bool picking){
 
         //extraUniforms.put("uTexColor",colorTex);
         
-        g_lightMat->getUniforms().put("uTexColor",colorTex);
-        
-        g_lightMat->getRenderStates().polygonMode(GL_FRONT, GL_FILL);
         g_redDiffuseMat->getRenderStates().polygonMode(GL_FRONT, GL_FILL);
         g_blueDiffuseMat->getRenderStates().polygonMode(GL_FRONT, GL_FILL);
         //sphereMat.draw(*g_cube, extraUniforms);
         
-        g_lightMat->getUniforms().put("uColor",Cvec3{0.1,1,0.1});
+        
         g_redDiffuseMat->getUniforms().put("uColor",Cvec3{0.9,0.1,0.1});
         g_blueDiffuseMat->getUniforms().put("uColor",Cvec3{0.1,1,0.1});
         
@@ -333,12 +422,13 @@ static void drawStuff(Uniforms& extraUniforms, bool picking){
 
         Drawer drawer(invEyeRbt,extraUniforms);
         g_world->accept(drawer);
-        
+        //BlitTextures();
         
     }else {
 
         Picker picker(invEyeRbt, extraUniforms,g_currentPickedRbtNode,g_world,getEyeRbt(),g_motionRbt);
         g_world->accept(picker);
+        //BlitTextures();
         glFlush();
         g_currentPickedRbtNode = picker.getRbtNodeAtXY(g_pickingMouseX, g_pickingMouseY);
         if (g_currentPickedRbtNode == g_groundNode)
@@ -640,6 +730,7 @@ static void initGeometry() {
     initSphere();
     
     colorTex.reset(new ImageTexture("./shaders/Fieldstone.ppm",true));
+    normalTex.reset(new ImageTexture("./shaders/FieldstoneNormal.ppm",true));
 }
 
 static void constructRobot(shared_ptr<SgTransformNode> base, shared_ptr<Material> material,const Cvec3& color) {
@@ -780,6 +871,7 @@ int main(int argc, char * argv[]) {
         initGeometry();
         initMaterials();
         initScene();
+        GenerateFBO();
         
         //      // open current directory:
         //      unique_ptr<DIR> pDir(opendir("."));
@@ -823,3 +915,4 @@ int main(int argc, char * argv[]) {
         return -1;
     }
 }
+

@@ -3,6 +3,7 @@
 #include "picker.h"
 
 using namespace std;
+extern unsigned int fboId;
 
 Picker::Picker(const RigTForm& initialRbt, Uniforms& uniforms)
   : drawer_(initialRbt, uniforms)
@@ -64,18 +65,21 @@ bool Picker::postVisit(SgShapeNode& node) {
 }
 
 shared_ptr<SgRbtNode> Picker::getRbtNodeAtXY(int x, int y) {
-    vector<char> image(1*1*3);
+//    vector<char> image(512*512*3);
 //    GLubyte *pixels;
 //    pixels = ( GLubyte* ) malloc( 1 * 1 * 3 );
     
     PackedPixel pixel;
-    
+        
     //glReadPixels函数无法正常读取
+    //glReadPixels(x,y, 512, 512, GL_RGB, GL_UNSIGNED_BYTE, &image[0]);
     glReadPixels(x,y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, &pixel);
     checkGlError("glReadPixels");
     
-    //cout << "selected coord is X="<<x<<",Y="<<y<<endl;
-    //cout << "selected pixel is R="<<pixel.r<<",G="<<pixel.g<<",B="<<pixel.b<<endl;
+    cout << "selected coord is X="<<x<<",Y="<<y<<endl;
+    cout << "selected pixel is R="<<pixel.r<<",G="<<pixel.g<<",B="<<pixel.b<<endl;
+    
+    //glBindFramebuffer(GL_FRAMEBUFFER,0);  
     
     int colorId = colorToId(pixel);
     shared_ptr<SgRbtNode> jointNode = find(colorId);

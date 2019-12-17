@@ -1,7 +1,7 @@
 #version 410 core
 
 uniform sampler2D uTexColor;
-//uniform sampler2D uTexNormal;
+uniform sampler2D uTexNormal;
 
 // lights in eye space
 uniform vec3 uLight;
@@ -15,9 +15,13 @@ in vec3 vEyePos;
 out vec4 fragColor;
 
 void main() {
-  // TODO: replace the following line with loading of normal from uTexNormal
-  //       transforming to eye space, and normalizing
-  vec3 normal = vec3(0, 0, 1);
+
+  //loading normal from uTexNormal
+  vec3 texNormal = texture(uTexNormal, vTexCoord).xyz;
+  //transforming to eye space, and normalizing
+  vec3 normal = normalize(vNTMat * (2*texNormal-1.0));
+
+  //vec3 normal = vec3(0, 0, 1);
 
   vec3 viewDir = normalize(-vEyePos);
   vec3 lightDir = normalize(uLight - vEyePos);
@@ -38,6 +42,5 @@ void main() {
   vec3 color = texture(uTexColor, vTexCoord).xyz * diffuse + specular * vec3(0.6, 0.6, 0.6);
 
   //fragColor = vec4(uColor, 1);
-
   fragColor = vec4(color,1);
 }
