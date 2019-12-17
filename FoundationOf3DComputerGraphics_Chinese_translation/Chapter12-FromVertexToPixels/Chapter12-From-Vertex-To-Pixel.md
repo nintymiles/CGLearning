@@ -71,7 +71,7 @@ $$
 
 这个矩阵的第三行被用于映射$z_n$值原本的$[-1..1]$范围到更方便的$[0..1]$范围。因此在我们的习惯中，$z_w = 0$为远值，$z_w = 1$为近值。从而当清理z-buffer时，我们也必须告诉OpenGL这种情形，我们应该将其设置为0；通过API调用`glClearDepth(0.0)`来实现。
 
-12.3.1 纹理视口变换（Texture Viewport）
+### 12.3.1 纹理视口变换（Texture Viewport）
 由于某种（可能不太好的）原因，纹理的抽象域不是经典正方形（canonical square），而是单位正方形（unit square），以$[x^t,y^t]^t$纹理坐标表示。其左下角为$[0,0]^t$,右上角为$[1,1]^t$。再次假设纹理图像为W像素宽乘H像素高，在这种情形中，坐标变换矩阵为
 $$ \Large{ \begin{bmatrix} x_w \\ y_w \\ - \\ 1  \end{bmatrix} = 
 \begin{bmatrix} W & 0 & 0 & -1/2 \\ 0 & H & 0 & -1/2 \\ - & - & - & - \\ 0 & 0 & 0 & 1  \end{bmatrix} 
