@@ -1,15 +1,16 @@
-# 变异变量（Varying Variables） - 较难
-In order to represent functions that vary across a triangle, we need to interpolate the varying variable data from the three vertices of a triangle to each pixel inside of the triangle. In this chapter we explore how this is properly done. Surprisingly, this innocuous looking step is actually a bit complicated. Before reading this chapter, you should be familiar with the material in Appendix B.
+# 变异变量（Varying Variables）- 较难理解
 
-## 13.1 Motivating The Problem
+为了表示跨越一个三角形的函数，在图形管线中从一个三角形顶点进行到这个三角形内的每个像素的阶段中，我们需要插值变异变量（varying variables）。本章中，我们探索这种插值如何被正确完成。令人吃惊地，这种看似寻常的步骤实际上是有点儿复杂的。阅读本章之前，你应该熟悉附录B中的材料。
 
-We already saw above in Figure 11.4, that we cannot determine the correct z e value at a point using linear interpolation. Here is another motivating example. Let us look at the simple case of mapping an image of a checkerboard pattern onto the +z face of a cube (See Figure 13.1). This face is made up of two triangles. We wish to glue to each triangle the appropriate triangular half of the checkerboard image. We do this by associating [x t , y t ] t texture coordinates for each vertex. In the interior of a triangle, we wish [x t , y t ] t to be determined as the unique interpolant functions over the triangle that are afﬁne in (x o , y o , z o ). These interpolated texture coordinates can then be used to fetch color data from that point in the texture image. Texture mapping and its variants are discussed more fully in Chapter 15.
+## 13.1 解决问题的动机（Motivating The Problem）
 
-If we view the cube face perpendicularly, then the appropriate part of our window should look just like the original checkerboard image. If the face is angled away from us, as in Figure 13.1, then we expect to see some “foreshortening”; farther squares on the board should appear smaller, and parallel lines in object space should appear to converge at a vanishing point in the image.
+在之前的图示$\text{Figure 11.4}$中，我们已经看到我们不能借助线性插值确定出一个点的正确的$z_e$值。这里有另一个激发解决问题的例子。让我们观察映射一个棋盘图案图片到一个立方体+z面的例子（参考图示$\text{Figure 13.1}$。这个面由两个三角形组成。我们希望给每个三角形粘贴上合适的棋盘图片的三角形状的一半。借助为每个顶点关联纹理坐标$[x_t,y_t]^t$来实现。在三角形内不，我们希望$[x_t,y_t]^t$被确定为三角形上的唯一线性插值体函数（unique interpolant functions），其在$[x_o,y_o,z_o]^t$坐标中并行。这些被插值的纹理坐标随后被用来获取色彩数据，这些数据位于纹理图像中的对应点。纹理映射和其变体在第15章中会被更详细地讲述。
 
-How does OpenGL obtain this correct image? Suppose we attempt to determine [x t , y t ] t at the pixels by simply linearly interpolating them over the screen. Then, as we move by some ﬁxed 2D vector displacement on the screen, the texture coordinates will be updated by some ﬁxed 2D vector displacement in texture coordinates. In this case, all of the squares of the texture will map to equal sized parallelograms. This will clearly give us the wrong image (see Figure 13.2). Moreover, because incorrect things happen on each of the two triangles of our face, the two halves of the texture will meet up in an unexpected way over the face’s diagonal.
+如果我们以正交的方式观察这个立方体面，那么我们窗口的合适部分应该看起来就像是原始的棋盘图像。如果这个面以某种角度远离我们，正如图示$\text{Figure 13.1}$,那么我们期望看到某种“透视”效果；棋盘上越远的正方形应该显得越小，同时物体空间中的平行线应该显示要交汇于图像中正要消失的点。
 
-## 13.2 Rational Linear Interpolation
+OpenGL是如何获得这种正确图像呢？假设我们尝试在屏幕上通过简单线性插值以确定出像素上的$[x_t,y_t]^t$坐标。随后，当我们以某种固定的2D矢量位移（vector displacement）移动时，纹理坐标会被以某种固定的2D矢量位移在纹理坐标中被更新。这种情形中，所有纹理中的正方形会被映射为等尺寸的平行四边形。这会毫无疑问地给出我们错误图像（参考图示$\text{Figure 13.2}$）。甚至，因为不正确的事情发生在所观察面上两个三角形中的每一个之上，纹理的两半将会以不可预期的方式在这个面的对角线上相遇。
+
+## 13.2 合理线性插值（Rational Linear Interpolation）
 
 The problems just described arise because our desired functions (texture coordinates in this case) are simply not afﬁne functions over the screen variables (x w , y w ). If we use linear interpolation to blend the values on the screen, we are treating them as if they were, and get the wrong answer.
 
