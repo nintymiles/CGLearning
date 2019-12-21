@@ -1,5 +1,5 @@
 # Note
-这是对**Foundation of 3D Computer Graphics**第2章的翻译，本章讲解了点、矢量、坐标系和旋转、伸缩等线性变换的基本概念，重点是基于矢量的线性变换相关知识内容。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教ninetymiles@icloud.com 
+这是对**MIT.Foundation of 3D Computer Graphics**第2章的翻译，本章讲解了点、矢量、坐标系和旋转、伸缩等线性变换的基本概念，重点是基于矢量的线性变换相关知识内容。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教ninetymiles@icloud.com 
 
 > 注：文章中相关内容归原作者所有，翻译内容仅供学习参考。
 
@@ -28,9 +28,9 @@ $$ \Large{ \begin{bmatrix}
 **Figure 2.1:** 几何数据类型：点被表示为圆点，矢量表示为箭头。矢量连接两个原点同时当平移时不被改变。帧（frame）表达一个坐标系，其由一个原点和一个由$d$个矢量组成的基构成。坐标矢量是实数的3元组。
 
 ## 2.2 矢量（Vectors），坐标矢量（Coordinate Vectors）, 和基（Bases）
-让我们从明确地区分矢量和坐标矢量开始。本书中，矢量将总是一个抽象的几何实体（abstract geometry entity），其表达了世界中两点间的运动。这样一个矢量的矢量会是“向东一英里”。坐标矢量是一个实数集合，一旦我们认可了一个坐标系，这个集合就可以用来指定一个矢量。
+让我们从明确地区分矢量和坐标矢量开始。本书中，矢量将总是一个抽象的几何实体（abstract geometry entity），其表达了世界中两点间的运动。这样一个矢量的实例会是“向东一英里”。坐标矢量是一个实数集合，一旦我们认可了一个坐标系，这个集合就可以用来指定一个矢量。
 
-正式地讲，矢量空间（vector space）V是满足某些规则的某种矢量$\vec{v}$元素集合。实际上我们需要定义一个加法操作，其接受两个矢量并将它们映射为第三个矢量。也需要定义一个标量（scalar）乘以一个矢量的乘法操作，其获得了另一个矢量。
+正式地讲，矢量空间（vector space）V是满足某些规则的某种矢量元素$\vec{v}$的集合。实际上我们需要定义一个加法操作，其接受两个矢量并将它们映射为第三个矢量。也需要定义一个标量（scalar）乘以一个矢量的乘法操作，其获得了另一个矢量。
 
 要成为一个有效的矢量空间，还有大量其它规则必须要满足，这里我们不会太详细叙述这些规则。例如，加法操作必须是可组合的（associative）和可互换的（commutative）。另一个例子，标量乘法必须可跨矢量加法分布。
 $$ \large{
@@ -38,9 +38,9 @@ $$ \large{
 }$$
 诸如此类等等，可参考书目[40]。
 
-存在很多对象（object）家族，它们都拥有矢量空间的结构。但是在本书中，我们的兴趣在于由实际几何（地）点间的实际运动所构成的矢量空间。实际上，我们不会将矢量看作是3个实数的集合。
+存在很多对象（object）家族，它们都拥有矢量空间的结构。但是在本书中，我们的兴趣在于由实际几何（地）点间的实际运动所构成的矢量空间。**实际上，我们不会将矢量看作是3个实数的集合。**
 
-坐标系，或者称为基（basis），为一个小的矢量集合，从这个集合上可以借助矢量操作生成整个矢量集合。（更正式地，我们说如果存在标量$\alpha_1...\alpha_n$,使得$\Sigma_i\alpha_i\vec{b}_i=\vec{0}$,那么我们就称矢量集合$\vec{b}_1...\vec{b}_n$是线性依赖的（linearly dependent）。如果矢量集合不是线性依赖的，那么我们称它们为线性独立的（linearly independent）。如果$\vec{b}_1...\vec{b}_n$是线性独立的并且在其上我们可以借助加法和标量乘法生成矢量空间V的所有元素，那么集合$\vec{b}_i$被称为矢量空间V的基，同时我们说n为这个基或空间的维度。）针对空间中的自由运动，维度为3.我们也会称每个基矢量为一个轴（axis），实际上我们称第一个轴为x轴，第二个为y轴，第三个为z轴。
+坐标系，或者称为基（basis），为一个小的矢量集合，从这个集合上可以借助矢量操作生成整个矢量集合。（更正式地，我们说如果存在标量$\alpha_1...\alpha_n$,使得$\Sigma_i\alpha_i\vec{b}_i=\vec{0}$,那么我们就称矢量集合$\vec{b}_1...\vec{b}_n$是线性依赖的（linearly dependent）。如果矢量集合不是线性依赖的，那么我们称它们为线性独立的（linearly independent）。如果$\vec{b}_1...\vec{b}_n$是线性独立的并且在其上我们可以借助加法和标量乘法生成矢量空间V的所有元素，那么集合$\vec{b}_i$被称为矢量空间V的基，同时我们说n为这个基或空间的维度。）针对空间中的自由运动，维度为3。我们也会称每个基矢量为一个轴（axis），实际上我们称第一个轴为x轴，第二个为y轴，第三个为z轴。
 
 用基作用一种方式，我们可以生成空间中的任意矢量。这个矢量可以借助一个唯一的坐标集合$c_i$表示如下。
 $$\large{ \vec{v} = \sum_i c_i\vec{b}_i }$$
@@ -48,37 +48,36 @@ $$\large{ \vec{v} = \sum_i c_i\vec{b}_i }$$
 $$\large{ 
 	\vec{v} = \sum_i c_i\vec{b}_i =
 	\begin{bmatrix} \vec{b}_1 & \vec{b}_2 & \vec{b}_3 \end{bmatrix}
-	\begin{bmatrix} c_1 \\ c_2 \\ c_3 \end{bmatrix}
+	\begin{bmatrix} c_1 \\ c_2 \\ c_3 \end{bmatrix} \qquad\qquad (2.1)
 }$$
-最右侧表达的解读可以借用线性代数中矩阵-矩阵乘法的标准规则。这里每一项$c_i\vec{b}_i$都是一个实数标量被一个抽象矢量相乘。我们可以生成一个简写方式，记为
+这个公式最右侧表达的解读可以借用线性代数中矩阵-矩阵乘法的标准规则。这里每一项$c_i\vec{b}_i$都是一个实数标量被一个抽象矢量相乘。我们可以生成一个简写方式，记为
 $$\large{ \vec{v} = \vec{\mathbf{b}}^t\mathbf{c} }$$
 这里$\vec{v}$是一个矢量，$\vec{\mathbf{b}}^t$为一行基矢量，$\mathbf{c}$为一（列）坐标矢量。
 
-## 2.3 线性变换和3$\times $3矩阵（Linear Transformations and 3 by 3 Matrices）
-线性变换$\iota $只是从线性空间V到线性空间V的一种变换，满足下列两个属性。
-$$ \large{
-\iota(\vec{v}+\vec{u}) = \iota(\vec{v})+\iota(\vec{u}) \\
-\iota(\alpha\vec{v})=\alpha\iota(\vec{v})
+## 2.3 线性变换和$3\times3$矩阵（Linear Transformations and 3 by 3 Matrices）
+线性变换$\iota$只是从线性空间V到线性空间V的一种变换，满足下列两个属性。
+$$\large{
+\iota(\vec{v}+\vec{u}) = \iota(\vec{v})+\iota(\vec{u}) \\ \iota(\alpha\vec{v}) =\alpha\iota(\vec{v})
 }$$
-我们借用标记$\vec{v} \Rightarrow \iota(\vec{v})$表示矢量$\vec{v}$通过$\iota$被变换为矢量$\iota{\vec{v}}$。
+我们借用标记$\vec{v} \Rightarrow \iota(\vec{v})$表示矢量$\vec{v}$通过$\iota$被变换为矢量$\iota(\vec{v})$。
 
-线性变换的变换完全就是可用矩阵表达的这类变换。这是因为线性变换可以完全通过告知其在基矢量上的效果被指定。让我们考察一下这是如何起作用的：
+线性变换所对应的变换完全就是可用矩阵表达的这类变换。这是因为线性变换可以完全通过告知其在基矢量上的效果被指定。让我们考察一下这是如何起作用的：
 
 变换的线性暗示了下列关系
 $$ \large{
 \vec{v} \Rightarrow \iota(\vec{v}) = \iota(\sum_i c_i\vec{b}_i)=\sum_i c_i\iota(\vec{b}_i)
 }$$
 
-上面表达我们可以借助方程（2.1）用实力代数标记法写作
-$$ \large{
-\begin{bmatrix} \vec{b}_1 & \vec{b}_2 & \vec{b}_3 \end{bmatrix}
-	\begin{bmatrix} c_1 \\ c_2 \\ c_3 \end{bmatrix}
-\Rightarrow
+上面表达我们可以借助方程式（2.1）用矢量代数标记法写作
+$$ \large{ 
+ \begin{bmatrix} \vec{b}_1 & \vec{b}_2 & \vec{b}_3 \end{bmatrix}
+	\begin{bmatrix} c_1 \\ c_2 \\ c_3 \end{bmatrix} 
+\Rightarrow 
 \begin{bmatrix} \iota(\vec{b}_1) & \iota(\vec{b}_2) & \iota(\vec{b}_3) \end{bmatrix}
 	\begin{bmatrix} c_1 \\ c_2 \\ c_3 \end{bmatrix}
-}$$
+ }$$
 
-3个新矢量$\iota(\vec{b}_i)$中的每个本身就是线性空间V中的一个元素，可以最终被写作用最初基矢量表达的某种线性组合。例如，使用某中合适的$M_{j,1}$值的集合，我们可以写
+3个新矢量$\iota(\vec{b}_i)$中的每个本身就是线性空间V中的一个元素，可以最终被写作用最初基矢量表达的某种线性组合。例如，使用某种合适的$M_{j,1}$值的集合，我们可以写
 $$
 \iota(\vec{b}_1) = 
 \begin{bmatrix} \vec{b}_1 & \vec{b}_2 & \vec{b}_3 \end{bmatrix}
@@ -91,14 +90,14 @@ $$ \large{
 }$$
 
 将这些汇总到一起，我们明白应用到一个矢量上的线性变换操作可以被表示为：
-$$ \large{
+$$ \large{ \begin{array}{c}
 \begin{bmatrix} \vec{b}_1 & \vec{b}_2 & \vec{b}_3 \end{bmatrix}
 	\begin{bmatrix} c_1 \\ c_2 \\ c_3 \end{bmatrix}  \\
 \Rightarrow
 \begin{bmatrix} \vec{b}_1 & \vec{b}_2 & \vec{b}_3 \end{bmatrix}
 \begin{bmatrix}M_{1,1} & M_{1,2} & M_{1,3} \\ M_{2,1} & M_{2,2} & M_{3,2} \\ M_{3,1} & M_{3,2} & M_{3,3}\end{bmatrix}
 	\begin{bmatrix} c_1 \\ c_2 \\ c_3 \end{bmatrix}
-}$$
+\end{array} }$$
 
 总之，我们可以用一个矩阵把一个矢量变换为另一个
 $$\large{ \vec{\mathbf{b}}^t\mathbf{c} \Rightarrow \vec{\mathbf{b}}^tM\mathbf{c} }$$
@@ -119,9 +118,11 @@ $$\large{ \vec{\mathbf{b}}^t \Rightarrow \vec{\mathbf{b}}^tM }$$
 $$\mathbf{c} \Rightarrow M\mathbf{c}$$
 
 ![Figure2.2](media/Figure2.2.png)
+
 **Figure 2.2:** 矢量经历了线性变换$\vec{\mathbf{b}}^t\mathbf{c} \Rightarrow \vec{\mathbf{b}}^tM\mathbf{c}$。矩阵M依赖于被选择的线性变换。
 
 ![Figure2.3](media/Figure2.3.png)
+
 **Figure 2.3:** 基经历了线性变换$\vec{\mathbf{b}}^t \Rightarrow \vec{\mathbf{b}}^tM$
 
 ## 2.3.1 同一和反转变换（Identity and Inverse）
@@ -130,14 +131,14 @@ $$ \large{
 I = \begin{bmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix}
 }$$
 
-矩阵$M$的反转是指存在唯一的矩阵$M^{-1}$，并且满足属性$MM^{-1}=M^{-1}M=I$。这表达对于矢量的反转变换。如果一个线性变换碰巧将多于一个的输入矢量转换为相同的输出矢量，那么这个变换将不是可反转的（invertible）同时其关联的矩阵不会有反转矩阵。在计算机图形学中，当我们选择从3D到3D的线性变换在空间中来回移动物体（也可以伸缩它们），使用一个不可反转的变换几乎没有意义。所以，除非被明确指出，本书中我们所处理的所有矩阵都可以反转。
+矩阵$M$的反转是指存在唯一的矩阵$M^{-1}$，并且满足属性$MM^{-1}=M^{-1}M=I$。这种表达对应于矢量的反转变换。如果一个线性变换碰巧将多于一个的输入矢量转换为相同的输出矢量，那么这个变换将不是可反转的（invertible）同时其关联的矩阵不会有反转矩阵。在计算机图形学中，当我们选择从3D到3D的线性变换在空间中来回移动物体（也可以伸缩它们），使用一个不可反转的变换几乎没有意义。所以，除非被明确指出，本书中我们所处理的所有矩阵都可以反转。
 
 ## 2.3.2 用于基变化的矩阵（Matrices for Basis Changes）
 在一对基或者矢量之间，矩阵除了被用于描述变换（$\Rightarrow$）关系之外，也可以用来描述相等（=）关系。实际上，在上面方程（2.2）中，我门已经看了这种形式的一种表达
-$$\large{ 
+$$\large{ \begin{array}{r}
 \qquad\quad\vec{\mathbf{a}}^t = \vec{\mathbf{b}}^tM  \qquad\qquad(2.3) \\
-\;\;\vec{\mathbf{a}}^tM^{-1} = \vec{\mathbf{b}}^t \qquad\qquad\quad\;(2.4)
-}$$
+\;\;\vec{\mathbf{a}}^tM^{-1} = \vec{\mathbf{b}}^t \qquad\qquad\quad(2.4)
+\end{array} }$$
 这其实表达了在指定的基$\vec{\mathbf{a}}^t$和$\vec{\mathbf{b}}^t$之间的相等关系。
 
 假如在一个特定的基中，矢量用一个特定的坐标矢量表达为：$\vec{v}=\vec{\mathbf{b}}^t\mathbf{c}$。假设给出方程（2.3），你可以写作
@@ -150,7 +151,7 @@ $$\large{ \vec{v}.\vec{w} }$$
 其接收两个矢量然后返回一个实数。这种点积运算允许我们定义一个矢量的平方长（squared lengh），也被称作平方态（squared norm）
 $$\large{ \|\vec{v}\|^2 = \vec{v}.\vec{v} }$$
 
-点击和两个矢量之间的角度$\theta \in [0..\pi]$关联为
+点积和两个矢量之间的角度$\theta \in [0..\pi]$关联为
 $$\large{ cos(\theta) = \frac{\vec{v}.\vec{w}}{\|\vec{v}\|\|\vec{w}\|} }$$
 
 如果$ \vec{v}.\vec{w} = 0$,我们就说两个矢量正交（orthogonal）。
@@ -168,7 +169,7 @@ $$\large{ \begin{array}{rrl}
 
 此处第二行中，我们使用点积（dot product）的双线性（bi-linearity）特征，而在第三行中我们使用基正交标准化（orthonormality）特性。
 
-我们说一个2D正交标准基是右手性的（right handed），如果其第二个基矢量可以通过从第一个以90度反时针方向旋转获得的话（这里基上矢量的顺序毫无疑问很重要）。
+我们说一个2D正交标准基是右手性的（right handed），如果其第二个基矢量可以通过从第一个以90度反时针方向旋转获得的话（这里基矢量的顺序毫无疑问很重要）。
 
 如果三个（有序的）基矢量按照图示$\text{Figure 2.4}$的方式排列，而不是相反地以图示$\text{Figure 2.5}$的方式排列，那么我们就说这个3D正交标准基是右手性的。实际上，在一个右手性的基中，如果你让右手张开，让手指指向第一个基矢量的方向，以这种方式弯曲你的手指使得它们指向第二个基矢量的方向，那么你的拇指将指向第三个基矢量的方向。
 
@@ -251,10 +252,10 @@ $$ \large{
 围绕y轴的旋转可以借助下面的矩阵完成
 $$ \large{ \begin{bmatrix}  c & 0 & s  \\  0 & 1 & 0 \\ -s & 0 & c  \end{bmatrix} }$$
 
-在某种意义上，这也是要获得任意的3D旋转所有你需要的东西。首先，旋转的合成为另一个旋转。同时，它也表现为我们可以通过应用一个x轴，一个y轴和一个z轴旋转来合成随意的任何旋转。3个旋转的角度量被称为xyz-欧拉角(xyz-Euler angles)。欧拉角可以通过想象一个平衡环（gimbals）的方式来可视化，这种平衡环有3个可活动的轴，可以使用3种设置来确定任何想要得到的旋转（参考图示$\text{Figure 2.6}$）。
+在某种意义上，这也是要获得任意的3D旋转所有你需要的东西。首先，旋转的组合为另一个旋转。同时，它也表现为我们可以通过应用一个x轴，一个y轴和一个z轴旋转来合成随意的任何旋转。3个旋转的角度量被称为xyz-欧拉角(xyz-Euler angles)。欧拉角可以通过想象一个平衡环（gimbals）的方式来可视化，这种平衡环有3个可活动的轴，可以使用3种设置来确定任何想要得到的旋转（参考图示$\text{Figure 2.6}$）。
 
 ![Figure2.6](media/Figure2.6.png)
-**Figure 2.6:** 通过恰当地设置3个轴中每一个的旋转数量，我们可以将金盘放置为任何想要的方位。
+**Figure 2.6:** 通过恰当地设置3个轴中每一个的旋转数量，我们可以将金色盘放置为任何想要的方位。
 
 还有一个表达一个随意旋转的更直接方式，就是挑选任意单位矢量$\vec{k}$作为旋转轴，同时直接围绕那个轴应用一个$\theta$度的旋转。让$\vec{k}$的坐标通过单位长度坐标矢量$[k_x,k_y,k_z]^t$给出。那么这个旋转可以借助下面的矩阵表达
 $$ \large{ \begin{bmatrix}
@@ -269,7 +270,7 @@ k_zk_xv-k_ys & k_zk_yv+k_xs & k_z^2v+c
 随后在这本书中，我们会引入针对旋转的四元数（quaternion）表达，对于方位间的平滑过渡动画，这种表达会发挥用处。
 
 ## 2.6 伸缩（Scales）
-为了建模几何物体，我们法线对矢量和基应用伸缩操作十分有用。要通过$\alpha$因子伸缩任何矢量，我们可以使用矩阵
+为了建模几何物体，我们发现对矢量和基应用伸缩操作十分有用。要通过$\alpha$因子伸缩任何矢量，我们可以使用矩阵
 $$ \large{
   \begin{array}{l}
 	& \begin{bmatrix} \vec{b}_1 & \vec{b}_2 & \vec{b}_3\end{bmatrix} 
@@ -291,6 +292,6 @@ $$ \large{
 	\end{array}
 }$$
 
-这种操作很有用处，例如，假定我们已经知道如何建模一个球体，我们可以用这种矩阵来建模一个椭球体。
+这种操作很有用处，例如，假定我们已经知道如何建模一个球体，我们就可以借助这种矩阵来建模一个椭球体。
 
 
