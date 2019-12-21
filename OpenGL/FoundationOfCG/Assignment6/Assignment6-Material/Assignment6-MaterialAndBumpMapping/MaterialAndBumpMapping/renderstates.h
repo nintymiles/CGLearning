@@ -16,7 +16,7 @@
 
 class RenderStates {
     //The number of render state flags that are supported here need to be speically maintained. That means how many flags are encoded here, those then are be supported.
-    GLenum glPolygonModeValue; // for polygonMode , Notes,for OpenGL,glPloygonMode only receive one face enum GL_FRONT_AND_BLACK
+    GLenum glPolygonModeValue; // for polygonMode , Notes,for OpenGL,glPloygonMode only accept one face enum GL_FRONT_AND_BLACK
     GLenum glBlendSrcFactor, glBlendDstFactor; // for blendFunc
     GLenum glCullFaceMode; // for cullFace
     unsigned int flags;

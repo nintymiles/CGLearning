@@ -1,12 +1,14 @@
 #include <cassert>
 #include <algorithm>
-#include <string>
 #include <vector>
 #include <sstream>
 
+#include "material.h"
+
 #include "glsupport.h"
 #include "asstcommon.h"
-#include "material.h"
+#include "cvec.h"
+#include "matrix4.h"
 
 using namespace std;
 
@@ -28,17 +30,19 @@ struct GlProgramDesc {
     //默认构造函数初始化，同时生成OpenGL program object
     GlProgram program;
     
+    //用来存储shader中对应的uniform变量信息
     vector<UniformDesc> uniforms;
+    //shader中的attribute变量信息
     vector<AttribDesc> attribs;
     
-    //构造函数，执行链接vertex/fragement shader的任务，链接成功后获得并将uniform/attribute属性放入缓存中
-    //知识点：program链接成功后，随即将其所使用的uniforms/attributes取出到缓存中，这种使用方式几乎是惯例
+    //构造函数，执行链接vertex/fragement shader的任务，
+    //链接成功后获得并将uniform/attribute属性放入缓存中。
+    //知识点：program链接成功后，随即将其所使用的uniforms/attributes取出到缓存中，
+    //这种使用方式几乎是惯例
     GlProgramDesc(GLuint vsHandle, GLuint fsHandle) {
-        checkGlError("before GlProgramDesc - linkShader");
+        //执行shader链接操作
         linkShader(program, vsHandle, fsHandle);
-        checkGlError("after GlProgramDesc - linkShader");
         
-        checkGlError("before GlProgramDesc - glGetProgramiv");
         int numActiveUniforms, numActiveAttribs, uniformMaxLen, attribMaxLen;
         
         glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &numActiveUniforms);
@@ -46,8 +50,6 @@ struct GlProgramDesc {
         
         glGetProgramiv(program, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniformMaxLen);
         glGetProgramiv(program, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &attribMaxLen);
-        
-        checkGlError("after GlProgramDesc - glGetProgramiv");
         
         //通过API获取到的一些状态信息，根据信息设置缓存变量
         //将bufSize设置为uniform/attribute最大名称长度中的最大的值+1
@@ -65,10 +67,11 @@ struct GlProgramDesc {
             //将character buffer中被写入的字符转换为string
             uniforms[i].name = string(buffer.begin(), buffer.begin() + charsWritten);
             uniforms[i].location = glGetUniformLocation(program, &buffer[0]);
-            
+            //至此，每个uniform的uniformDesc信息填写完整
             
         }
         
+        //获取program中每个attribute属性的信息并设置到attribs缓存中
         attribs.resize(numActiveAttribs);
         for (int i = 0; i < numActiveAttribs; ++i) {
             GLsizei charsWritten;
@@ -78,18 +81,15 @@ struct GlProgramDesc {
             attribs[i].location = glGetAttribLocation(program, &buffer[0]);
         }
         
-//        if (!g_Gl2Compatible)
-        //这个api并不存在，可能是某个厂商的扩展接口
-        //glBindFragDataLocation(program, 0, "fragColor");
-        
-        
     }
 };
 
-//GLProgramLibrary的目的？将所有OpenGL管线porgram对象管理起来，方便使用。用map维护program和shader缓存
+//GLProgramLibrary的目的？将所有OpenGL管线porgram对象管理起来，方便使用。
+//用map维护program和shader缓存
 //GLProgramLibrary的组织方式？ 将program和shader放在缓存中维护和使用，然后暴露singleton实例
 //GLProgramLibrary的设计目的？实现为无头文件方式，意味着专注于在material类内部使用
 class GlProgramLibrary {
+    //首先使用typedef声明两种类型
     typedef map<pair<string, GLenum>, shared_ptr<GlShader> > GlShaderMap;
     typedef map<pair<string, string>, shared_ptr<GlProgramDesc> > GlProgramDescMap;
     
@@ -114,6 +114,7 @@ public:
         
         GlProgramDescMap::iterator i = programMap.find(key);
         if (i == programMap.end()) {
+            //注意，此处GLProgramDesc()需要两个GLShader变量，而不是其shared_ptr指针
             //知识点：shared_ptr类型变量的初始化
             shared_ptr<GlProgramDesc> program(new GlProgramDesc(*getShader(vsFilename, GL_VERTEX_SHADER), *getShader(fsFilename, GL_FRAGMENT_SHADER)));
             programMap[key] = program;
@@ -122,7 +123,7 @@ public:
         }
         else {
             //否则直接返回map中的programDesc值
-            //知识点：cpp中map类型对与每个key-value属性都有直接的变量指向他们
+            //知识点：cpp中map类型对于每个key-value属性都有直接的变量指向他们
             return i->second;
         }
     }
@@ -130,32 +131,29 @@ public:
 protected:
     shared_ptr<GlShader> getShader(const string& filename, GLenum shaderType) {
         string f = filename;
-        //根据bool flag设置对应的文件名后缀
-//        if (g_Gl2Compatible) { // optionally change -gl3 to -gl3 in the end of the filename
-//            size_t pos = f.rfind("-gl3");
-//            if (pos != string::npos) {
-//                f[pos+3] = '2';
-//            }
-//        }
         
         //shader缓存的使用和维护
-        GlShaderMap::key_type key(f, shaderType);  //key_type的类型对应于GlShaderMap定义中的key
+        //此处key_type为Map模版实例化时为GlShaderMap所指定的类型pair<string, GLenum>
+        GlShaderMap::key_type key(f, shaderType);
+        //在map中查找key值是否存在
         GlShaderMap::iterator i = shaderMap.find(key);
-        if (i == shaderMap.end()) { //如果shaderMap中不存在，则加载shader并存入map
-            //shared_ptr<GLShader>声明及初始化语法
+        if (i == shaderMap.end()) { //如果shaderMap缓存中不存在，则加载shader并存入map
+            //shared_ptr<GLShader>声明及初始化语法，注意此处shared_ptr类型的直接声明
             shared_ptr<GlShader> shader(new GlShader(shaderType));
+            //注意shader对象的使用方法，也就是说shared_ptr其实质就是指针
             readAndCompileSingleShader(*shader, f.c_str());
             shaderMap[key] = shader;
             return shader;
         }
-        else {
+        else { //如果shaderMap缓存中已经存在这个key，则直接返回对应的shader指针
             return i->second;
         }
     }
 };
 
 //Material构造函数实现
-//用GLProgramLibrary中的方法初始化shader files，并准备ProgramDesc对象
+//构造函数在初始化时，首先尝试用GlProgramLibrary从缓存中寻找GLProgram对象，如果没有则生成新的并缓存化。
+//GLProgramLibrary中有方法初始化shader files，并准备ProgramDesc对象
 //Material对象的作用即是加载shaders、构造对应的Programs，填充uniforms。最后基于这些信息构造进行绘制。
 Material::Material(const string& vsFilename, const string& fsFilename)
 : programDesc_(GlProgramLibrary::getSingleton().getProgramDesc(vsFilename, fsFilename))

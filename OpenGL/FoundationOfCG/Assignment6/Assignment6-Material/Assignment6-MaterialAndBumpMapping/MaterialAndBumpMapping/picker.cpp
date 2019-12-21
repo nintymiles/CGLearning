@@ -45,6 +45,7 @@ bool Picker::postVisit(SgTransformNode& node) {
 bool Picker::visit(SgShapeNode& node) {
   // We will increment idcounter every time visit a shape node
     ++idCounter_;
+    //将int类型的id对应为特定的色彩，并且这种色彩可以反转变换为对应的id
     Cvec3 idColor = idToColor(idCounter_);
 
     shared_ptr<SgNode> baseNode = nodeStack_.back();

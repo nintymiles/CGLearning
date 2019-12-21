@@ -10,6 +10,7 @@
 
 class Drawer : public SgNodeVisitor {
 protected:
+    //the bottom of rbtStack_ will always be a viewing (inverted eye)rbt
     std::vector<RigTForm> rbtStack_;
     Uniforms& uniforms_;
 public:
@@ -31,11 +32,13 @@ public:
   //scenegraph中包含了modelview矩阵信息，故而modelview相关矩阵要从extraUniforms中送入shader，否则linked tree结构无法发挥作用。
     virtual bool visit(SgShapeNode& shapeNode) {
         //back() function return the last element in the container
+        //shapeNode.getAffineMatrix corresponds to matrix O'
         Matrix4 MVM = rigTFormToMatrix(rbtStack_.back()) * shapeNode.getAffineMatrix();
         Matrix4 NMVM = normalMatrix(MVM);
-        //sendModelViewNormalMatrix(material_.getUniforms(), MVM, NMVM);
         
+        //sendModelViewNormalMatrix(material_.getUniforms(), MVM, NMVM);
         sendModelViewNormalMatrix(uniforms_, MVM, NMVM);
+        
         shapeNode.draw(uniforms_);
         return true;
     }

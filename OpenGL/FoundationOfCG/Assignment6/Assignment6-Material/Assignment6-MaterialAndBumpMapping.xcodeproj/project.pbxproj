@@ -96,6 +96,8 @@
 		5C6D4078229646CC007D01A8 /* normal-gl2.vshader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "normal-gl2.vshader"; sourceTree = "<group>"; };
 		5C6D40792296475E007D01A8 /* geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = geometry.h; sourceTree = "<group>"; };
 		5C6D407A2296475E007D01A8 /* geometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = geometry.cpp; sourceTree = "<group>"; };
+		5C7D405723AC68D400EF464C /* normalmap.fs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = normalmap.fs.glsl; sourceTree = "<group>"; };
+		5C7D405823AC68D400EF464C /* normalmap.vs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = normalmap.vs.glsl; sourceTree = "<group>"; };
 		5C800CAA21FA810A00DB8452 /* perfMonitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = perfMonitor.cpp; path = ../../../../../../BaseFramework/perfMonitor/perfMonitor.cpp; sourceTree = "<group>"; };
 		5C800CAB21FA810A00DB8452 /* perfMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = perfMonitor.h; path = ../../../../../../BaseFramework/perfMonitor/perfMonitor.h; sourceTree = "<group>"; };
 		5C800CAD21FA812600DB8452 /* quat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = quat.h; path = ../../../../../../BaseFramework/quat/quat.h; sourceTree = "<group>"; };
@@ -156,6 +158,8 @@
 				5C6D4078229646CC007D01A8 /* normal-gl2.vshader */,
 				5C6D4077229646CC007D01A8 /* normal-gl3.fshader */,
 				5C6D4075229646CC007D01A8 /* normal-gl3.vshader */,
+				5C7D405723AC68D400EF464C /* normalmap.fs.glsl */,
+				5C7D405823AC68D400EF464C /* normalmap.vs.glsl */,
 				5C65656023A317E700720926 /* texture-diffuse.glsl */,
 				5C699D9223A27BB300E0E079 /* texture-gl3.fshader */,
 				5C800CBD21FA81C200DB8452 /* solid-gl3.fshader */,

@@ -107,7 +107,7 @@ public:
   SgRootNode() {}
 
   virtual RigTForm getRbt() {
-    return RigTForm();
+    return RigTForm(); //the default constructor returns an identity rbt
   }
 };
 

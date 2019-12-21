@@ -182,14 +182,15 @@ void BufferObjectGeometry::processWiring() {
         map<shared_ptr<FormattedVbo>, int>::iterator j = vbIdx.find(vb);
         int idx = 0; // idx of vbo in perVbWiring_, to be set
         if (j == vbIdx.end()) {
-            idx = perVbWirings_.size();
+            //将size_t类型强制转型为int类型使用
+            idx = (int)perVbWirings_.size();
             vbIdx[vb] = idx;
             perVbWirings_.push_back(PerVbWiring(vb.get()));
         }
         else {
             idx = j->second;
         }
-        const int globalIdx = vertexAttribNames_.size(); // idx within vertexAttribNames_
+        const int globalIdx = (int)vertexAttribNames_.size(); // idx within vertexAttribNames_
         
         perVbWirings_[idx].vb2GeoIdx.push_back(make_pair(vfd.getAttribIndexForName(i->second.second), globalIdx));
         

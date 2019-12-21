@@ -10,7 +10,9 @@ public:
     virtual GLenum getSamplerType() const = 0;
     
     // Binds the texture. (The caller is responsible for setting the active texture unit)
-    //基础知识点：shader在执行texture api方法时，使用texture unit为基础索引。具体，sampler uniform variables会被指定一个texture unit的值，比如激活GL_TEXTURE0，则sampler变量则被设置为0，激活GL_TEXTURE2,则sampler被设置为2
+    //基础知识点：shader在执行texture api方法时，使用texture unit为基础索引。
+    //具体，sampler uniform variables会被指定一个texture unit的值，
+    //比如激活GL_TEXTURE0，则sampler变量则被设置为0，激活GL_TEXTURE2,则sampler被设置为2
     virtual void bind() const = 0;
         
     virtual ~Texture() {}

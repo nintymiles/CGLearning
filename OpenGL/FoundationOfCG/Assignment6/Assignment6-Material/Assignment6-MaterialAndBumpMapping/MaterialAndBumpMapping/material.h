@@ -1,18 +1,14 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
-#include <cstddef>
-#include <vector>
-#include <map>
+#include <string>
 #include <memory>
-#include <stdexcept>
 
-#include "cvec.h"
-#include "matrix4.h"
-#include "glsupport.h"
 #include "uniforms.h"
 #include "renderstates.h"
 #include "geometry.h"
+
+using namespace std;
 
 struct GlProgramDesc;
 
@@ -20,7 +16,7 @@ struct GlProgramDesc;
 class Material {
 public:
     //构造函数，接收两个shader源文件
-    Material(const std::string& vsFilename, const std::string& fsFilename);
+    Material(const string& vsFilename, const string& fsFilename);
     //绘制接口，传入geometry和uniforms封装参数
     void draw(Geometry& geometry, const Uniforms& extraUniforms);
     void draw(Geometry& geometry);
@@ -33,7 +29,7 @@ public:
     const RenderStates& getRenderStates() const { return renderStates_; }
     
 protected:
-    std::shared_ptr<GlProgramDesc> programDesc_;
+    shared_ptr<GlProgramDesc> programDesc_;
     
     Uniforms uniforms_;
     
