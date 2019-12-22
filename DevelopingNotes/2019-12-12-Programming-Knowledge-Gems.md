@@ -93,6 +93,8 @@ We can now understand why virtual functions must have the same parameter list in
  C++中，virtual函数是动态绑定方式调用的关键。
  
 ## Mac中使用VSCode+BasicTex的环境配置
+LaTex为文档格式表达语言，被广泛应用于书籍的撰写和排版。
+
 基本LaTex环境的安装
 
 1. BasicTeX􏰘􏳆􏳇 `brew cask install basictex`或者直接下载BasicTeX.pkg包安装，默认安装目录为`\Libarary\Tex`
