@@ -31,21 +31,46 @@
 | --- | --- | --- |
 | 矢量的表达 | `$\vec{x}$`|  $\quad \vec{c} \quad 、 \mathbf{\vec{c}}$  |
 | 用到的拉丁字母 | `$\alpha$ 、$\lambda$ 、$\Omega$` | $\alpha 、 \lambda 、 \Omega$ |
-| 上下标 | 使用\^和\_，如`$x\i$ ,x^2$`;若上下标长度超过1，将内容放入{}，例如 `$x_{123}$` | $C^2 、 C_m 、 C_{123m}$  |
+| 上下标 | 使用\^和\_，如`$x_i$ ,x^2$`;若上下标长度超过1，将内容放入{}中，例如 `$x_{123m}$` | $x_i 、 x^2 、 x_{123m}$  |
 | 分数形式表达 | `$\frac{分子}{分母}$` | $\frac{1}{.45}$ |
-| 矩阵表达 |`$\begin{[p/b/B/v/V]matrix} row1a&row1b&row1c \\ row2a&row2b&row2c \\ row3a&row3b&row3c \end{[p/b/B/v/V]matrix}$`,若matrix之前没有字母则生成的矩阵没有包围符号，若有，则p表示包围符号(),b表示包围符号[],B表示包围符号{},V表示包围符号"∥∥" | $\begin{Vmatrix} row1a&&row1b&&row1c \\ row2a&&row2b&&row2c \\ row3a&&row3b&&row3c \end{Vmatrix}$ |
-| 求和表达式 | `$\sum_i^ja_ib_i$`,如果想让i下标在求和符号的下方，请使用`$$\sum_ia_ib_i$$`方式表达 | $$\sum_ia_i\vec{b}_i$$|
 
-#### 3. 复杂数学公式（方程式）的对齐排列以及特殊位置分隔符的设置
+
+#### 3. 求和表达式$\sum$如何让下标出现在正上下方
+在求和表达式中,如果想让下标出现在求和符号的上下方，请使用`$$`符号围住公式表达`$$\sum_i^j$$`。
+
+实例及效果
+
+```latex
+$$\sum_ia_i\vec{b}_i$$
+```
+$$\sum_i^ja_i\vec{b}_j$$
+
+#### 4. 矩阵表达
+矩阵表达的语法格式为`$\begin{[p/b/B/v/V]matrix} row1a&row1b&row1c \\ row2a&row2b&row2c \\ row3a&row3b&row3c \end{[p/b/B/v/V]matrix}$`。
+
+其中`&`为行元素分隔符，`\\`为整列分隔符。
+
+若matrix之前没有字母则生成的矩阵没有包围符号，若有，则p表示包围符号(),b表示包围符号[],B表示包围符号{},v表示单竖线包围符号，V表示双竖线包围符号。
+
+实例及效果
+
+```latex
+$$\begin{Vmatrix} 
+row1a&&row1b&&row1c \\ row2a&&row2b&&row2c \\ row3a&&row3b&&row3c
+\end{Vmatrix}$$ 
+```
+$\begin{Vmatrix} row1a&&row1b&&row1c \\ row2a&&row2b&&row2c \\ row3a&&row3b&&row3c \end{Vmatrix}$ 
+
+#### 5. 复杂数学公式（方程式）的对齐排列以及特殊位置分隔符的设置
 翻译过程中，经常会碰到一些多行数学公式的排版十分复杂，要求不同的对齐方式，还会要求一些特殊的分隔符。
 
-`array`函数可以十分完美的完成这个任务。实际上matrix可以看作是array的特例。在array中可以针对每一列公式设置对齐方式，并添加分隔符。
+`array`函数可以十分完美的完成这个任务。实际上matrix可以看作是array的特例。在array中可以针对每一列公式设置对齐方式，并添加分隔符。(加入水平线和竖线后，其实这意味着array也可以轻松生成数学表格）
 
 比如一个表达有三列内容，针对每一列设置一种对齐方式，并在第二列后添加一个竖线分隔符，这样写`$$\begin{array}{cl|r} ... & content & ... \end{array}$$`。其中c代表居中对齐，l代表做对齐，r代表右对齐，`|`代表竖线分隔符。
 
 从中可见array函数的排版功能十分强大，这里只是一角。
 
-下面举一个真实例子并且展示其效果
+实例及效果
 
 ```latex
 $$ 

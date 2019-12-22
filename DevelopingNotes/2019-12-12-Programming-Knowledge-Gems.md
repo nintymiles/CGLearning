@@ -91,4 +91,17 @@ We can now understand why virtual functions must have the same parameter list in
  In C++, dynamic binding happens when a virtual function is called through a reference (or a pointer) to a base class.
  
  C++中，virtual函数是动态绑定方式调用的关键。
+ 
+## Mac中使用VSCode+BasicTex的环境配置
+基本LaTex环境的安装
+
+1. BasicTeX􏰘􏳆􏳇 `brew cask install basictex`或者直接下载BasicTeX.pkg包安装，默认安装目录为`\Libarary\Tex`
+2. 􏳈􏳉BasicTeX􏲰􏳊􏳋􏰃 `sudo tlmgr update --self`
+3. latexmk `sudo tlmgr install latexmk`,这一步骤比较关键，因为BasicTex相比完整的MacTex（4G的臃肿体型）缺少了这个VSCode所需要的关键部件（需要确认）
+4. VSCode中安装3个插件LaTexWorkshop，LaTex Language support，LaTex Preview
+
+**使用方式**
+
+安装成功后，VSCode会对.tex后缀的文件进行识别，此时在左侧栏工具条上会出现Tex菜单项，点开后就可以进行LaTex文件的编译，日志查看，预览等动作。
+ 
 
