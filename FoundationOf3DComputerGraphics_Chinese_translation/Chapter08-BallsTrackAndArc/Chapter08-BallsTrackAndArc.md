@@ -5,21 +5,22 @@
 
 让我们假设我们正在关联于帧$\vec{\mathbf{a}}^t=\vec{\mathbf{w}}^t(O)_T(E)_R$移动物体，就如我们在小节5.2.1中所作。用户点击在屏幕上并且拖动鼠标。我们希望去解读这种用户运动为某种旋转Q，这种选择会被关联于$\vec{\mathbf{a}}^t$被应用。本章中，为了计算变换Q的值，我们将描述两种不同的方法，轨迹球和弧形球。
 
-## 8.1 The Interfaces
+## 8.1 接口定义（The Interfaces）
+我们假设拥有某种选定半径的球体，其中心在$\tilde{o}$，$\vec{\mathbf{o}}^t$的原点。通常，在实际中围绕对象用线框图绘制球体是很用的，用户可以更好的感知发生了什么。假设用户在屏幕上点击图像中球体上的像素$s_1$，我们可以解读这个动作为用户在球体上选定了某个3D点$\tilde{p}_1$。假设用户随后又移动到在球体上的另一个像素$s_2$，这个点我们解读为球体上的第二个对应点$\tilde{p}_2$。
 
-We imagine a sphere of some chosen radius that is centered at ˜o, the origin of ⃗ o t . Often, it is useful to actually draw this sphere in wireframe surrounding the object so that the user can better feel what is happening. Suppose the user clicks on the screen at some pixel s 1 over the sphere in the image, we can interpret this as the user selecting some 3D point ˜p 1 on the sphere. Suppose the user then moves the mouse to some other pixel s 2 over the sphere, which we interpret as a second point ˜p 2 on the sphere.
+给出这两个点，定义出两个矢量$\vec{v}_1,\vec{v}_2$为单位矢量（unit vectors），它们分别位于矢量$\tilde{p}_1 - \tilde{o}$和$\tilde{p}_2-\tilde{o}$的方向上。定义角度$\phi = \arccos(\vec{v}_1.\vec{v}_2)$和轴$\vec{k}=normalize(\vec{v}_1 \times \vec{v}_2)$。（参考图示$\text{Figure 8.1}$。）
 
-Given these two points, deﬁne the two vectors ⃗v 1 , ⃗v 2 as the unit length vectors in the directions of the vectors ˜p 1 − ˜o and ˜p 2 − ˜o respectively. Deﬁne the angle φ = arccos(⃗v 1 · ⃗v 2 ) and the axis k = normalize(⃗v 1 × ⃗v 2 ). (See Figure 8.1.)
+在轨迹球接口中，我们定义Q为围绕轴$\vec{k}$旋转$\phi$角度的变换。而在弧形球中，我们定义Q为围绕轴$\vec{k}$旋转$2\phi$角度的变换。
 
-In the trackball interface, we deﬁne Q as the rotation of φ degrees about the axis k. In the arcball interface, we deﬁne Q as the rotation of 2φ degrees about the axis k.
+## 8.2 属性（Properties）
+轨迹球接口是十分自然的；感觉就像用户只是抓住了一个球体的真实的某个点然后来回拖动。但是也存在一个无法预料的后果，如果用户在屏幕上从$s_1$移动到$s_2$，然后又从$s_2$移动到$s_3$，合成的轨迹球旋转将不同于直接从$s_1$移动到$s_3$的旋转！在两种情形中，点$\tilde{p}_1$都会被旋转到$\tilde{p}_3$，但是两种结果可通过某种围绕轴$\tilde{o}-\tilde{p}_3$的“扭转”区分。这种路径依赖也存在于小节6.5中的简单旋转接口中。
 
-## 8.2 Properties
-
-The trackball interface is quite natural; it feels like the user is simply grabbing a physical point on a sphere and dragging it around. But there is an unexpected consequence, if the user ﬁrst moves her mouse on the screen from s 1 to s 2 , and then from s 2 to s 3 , the composed trackball rotations will be different from the result of moving the mouse directly from s 1 to s 3 ! In both cases, the point ˜p 1 will be rotated to ˜p 3 , but the two results can differ by some “twist” about the axis ˜o − ˜p 3 . This path dependence also exists in our simple rotation interface in Section 6.5.
-
-The arcball interface has somewhat opposite properties. On the one hand, the object appears to spin twice as fast as expected. But, on the other hand, the arcball interface is indeed path independent. We can see this easily using quaternion operations. The rotation of 2φ degrees about the axis k can be represented by the quaternion ) * ) * ) *) * cos(φ) 0 0 vˆ 1 · vˆ 2 = = (8.1) sin(φ)k vˆ 1 × vˆ 2 vˆ 2 −ˆv 1
-
-where k, vˆ 1 and vˆ 2 are the coordinate 3-vectors representing the vectors k, ⃗v 1 and ⃗v 2 with respect to the frame a t .
+弧形球接口拥有某种程度上互相对立的属性。一方面，物体看起来以预期两倍快的速度旋转，另一方面，弧形球接口确实是路径独立的。我们可以轻易地借助四元数（quaternion）操作来明白这点。围绕轴$\vec{k}$进行$2\phi$角度的旋转可以用四元数表达为
+$$
+\begin{bmatrix}cos(\phi) \\ sin(\phi)\vec{k}\end{bmatrix} = 
+\begin{bmatrix}\hat{V}_1.\hat{V}_2 \\ \hat{V}_1 \times \hat{V}_2\end{bmatrix} = \begin{bmatrix} 0 \\ \hat{V}_2 \end{bmatrix} \begin{bmatrix} 0 \\ -\hat{V}_1 \end{bmatrix}  \qquad \qquad (8.1)
+$$
+其中$\vec{k},\hat{V}_1,\hat{V}_2$为3部件坐标矢量（coordinate 3-vectors）表达关联于帧$\vec{\mathbf{a}}^t$的矢量$\vec{k},\vec{v}_1,\vec{k}_2$。
 
 If we compose two arcball rotations, corresponding to motion from ˜p 1 to ˜p 2 followed by motion from ˜p 2 to ˜p 3 , we get ) *) * vˆ 2 · vˆ 3 vˆ 1 · vˆ 2 vˆ 2 × vˆ 3 vˆ 1 × vˆ 2
 
