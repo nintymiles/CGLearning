@@ -3,7 +3,7 @@
 
 旋转运动的指定就有一点儿不直观了；存在很多方式将鼠标运动链接为旋转变换，对于用户来说，这其中的每一种都让人有稍微不同的感觉。之前，在小节6.5中，我们描述了将鼠标位移解读为围绕x轴和y轴的某种特定旋转序列。本节中，我们会描述两种更加成熟的接口：弧形球（arcball）和轨迹球（trackball）。轨迹球的主要优势在于其让人感觉在空中移动一个真实的球体。弧形球的主要优点在于，如果用户在一个点开始移动鼠标，然后在另一个点结束，最终的选择变换不依赖于在这两点之间鼠标所采用的路径。
 
-Let us assume that we are moving an object with respect to the frame⃗a t = w t (O) T (E) R , as we did in Section 5.2.1. The user clicks on the screen and drags the mouse. We wish to interpret this user motion as some rotation Q that is applied to o t with respect to ⃗ a t . In this chapter, we will describe two different methods, trackball and arcball, for computing a value of Q.
+让我们假设我们正在关联于帧$\vec{\mathbf{a}}^t=\vec{\mathbf{w}}^t(O)_T(E)_R$移动物体，就如我们在小节5.2.1中所作。用户点击在屏幕上并且拖动鼠标。我们希望去解读这种用户运动为某种旋转Q，这种选择会被关联于$\vec{\mathbf{a}}^t$被应用。本章中，为了计算变换Q的值，我们将描述两种不同的方法，轨迹球和弧形球。
 
 ## 8.1 The Interfaces
 
