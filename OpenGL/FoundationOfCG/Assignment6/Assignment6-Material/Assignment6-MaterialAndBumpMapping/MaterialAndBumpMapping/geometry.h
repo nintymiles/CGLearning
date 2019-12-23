@@ -354,12 +354,11 @@ private:
 struct VertexPN {
     Cvec3f p, n;
     
-    //常量FORMAT为struct定义范围内的存在
+    //常量FORMAT为本struct对象定义范围内的存在
     static const VertexFormat FORMAT;
     
     VertexPN() {}
     
-    //参数的初始赋值方式就可以节省很多代码
     VertexPN(float x, float y, float z,
              float nx, float ny, float nz)
     : p(x,y,z), n(nx, ny, nz) {}

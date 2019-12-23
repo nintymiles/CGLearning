@@ -33,58 +33,24 @@ At integer coordinates, we have I(i, j) = I[i][j]; the reconstructed continuous 
 
 Let us look at the a bit more closely at the 1-by-1 square with coordinates i < x < i + 1, j < y < j + 1 for some ﬁxed i and j. Over this square, we can express the reconstruction as
 
-$$\normalsize{ \begin{array}{rl}
-I(i + x_f , j + y_f ) & \leftarrow  & (1 − y_f )((1 − x_f )I[i][j] + (x_f)I[i + 1][j])  \\
- & & +(y_f)((1 − x_f )I[i][j + 1] + (x_f)I[i + 1][j + 1]) 
-\end{array} \qquad\qquad \tag{17.1} }$$
+I(i + x f , j + y f )
+
+←
+
+(1 − y f ) ((1 − x f )I[i][j] + (x f )I[i + 1][j]) (17.1) +(y f ) ((1 − x f )I[i][j + 1] + (x f )I[i + 1][j + 1])
 
 where x f and y f are the fracx and fracy above. Rearranging the terms we get
 
-$$\normalsize{ \begin{array}{rrl}
-I(i + x_f , j + y_f) & \leftarrow & I[i][j]\\
-&& + (−I[i][j] + I[i + 1][j])x_f \\
-&& + (−I[i][j] + I[i][j + 1])y_f \\
-&& + (I[i][j] − I[i][j + 1] − I[i + 1][j] + I[i + 1][j + 1])x_fy_f
-\end{array} }$$
+I(i + x f , j + y f )
+
+←
+
+I[i][j] + (−I[i][j] + I[i + 1][j]) x f + (−I[i][j] + I[i][j + 1]) y f + (I[i][j] − I[i][j + 1] − I[i + 1][j] + I[i + 1][j + 1]) x f y f
 
 Doing this, we see that the reconstructed function has terms that are constant, linear, and bilinear terms in the variables (x f , y f ), and thus also in (x, y). This is where the name bilinear comes from. It is also clear that this reconstruction is symmetric with respect to the horizontal and vertical directions and thus the horizontal-ﬁrst ordering in the pseudo-code is not critical.
 同时这也清晰无误地表明了这种重建对于水平和垂直方向是对成的，因而伪码中水平优先的顺序表达不是影响对错的关键因素。
 
 ##17.3 基础函数（Basis Functions）
-
-To get some more insight on the general form of our reconstruction methods, we can go back to Equation (17.1) and rearrange it to obtain
-
-$$\normalsize{ \begin{array}{rrl}
-I(i + x_f , j + y_f) & \leftarrow & (1 − x_f − y_f + x_fy_f)I[i][j] \\
-&& +(x_f − x_fy_f)I[i + 1][j] \\
-&& +(y_f − x_fy_f)I[i][j + 1] \\
-&& +(x_fy_f)I[i + 1][j + 1]
-\end{array} }$$
-
-In this form, we see that for a ﬁxed position (x, y), the color of the continuous reconstruction is linear in the discrete pixel values of I. Since this is true at all (x, y), we see that our reconstruction in fact must be of the form 
-$$
-I(x, y) \leftarrow \sum_{i,j}B_{i,j}(x, y)I[i][j] \tag{17.2}
-$$
-
-for some appropriate choice of functions B i,j (x, y). These B are called basis functions; they describe how much pixel i,j inﬂuences the continuous image at [x, y] t .
-
-In the case of bilinear reconstruction, these B functions are called tent functions. They are deﬁned as follows: let H i (x) be a univariate hat function deﬁned as
-
-$$ \begin{array}{c}
-H_i(x) & =  & x−i+1  & for & i−1<x<i  \\
-				&& −x+i+1 & for & i<x<i+1 \\
-				&& 0  & else &
-\end{array}$$
-
-See Figure 17.2. (In 1D, the hat basis can be used to take a set of values on the integers and linearly interpolate them to obtain a continuous univariate function.) Then, let T i,j (x, y) be the bivariate function
-
-$$T_{i,j}(x, y) = H_i(x)H_j(y)$$
-
- This is called a tent function (see Figure 17.3). It can be veriﬁed that plugging these tent functions into Equation (17.2) gives us the result of the bilinear reconstruction algorithm.
-
-Constant reconstruction can be modeled in this form as well, but in this case, the basis function, B i,j (x, y), is a box function that is zero everywhere except for the unit square surrounding the coordinates (i, j), where it has constant value 1.
-
-More generally, we can choose basis functions with all kinds of sizes and shapes. In high quality image editing tools, for example, reconstruction is done using some set of bi-cubic basis functions [50]. In this sense, a pixel is not really a little square. It is simply a discrete value that is used in conjunction with a set of basis functions to obtain a continuous function.
 
 
 ###17.3.1 边缘保留（Edge Preservation）
