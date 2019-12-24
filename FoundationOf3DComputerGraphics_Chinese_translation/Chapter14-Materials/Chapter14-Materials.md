@@ -1,12 +1,13 @@
 # Note
-这是对**Foundation of 3D Computer Graphics**第14章的翻译，本章以简洁明了的方式给出了计算机图形学中光和材料的基本讲解。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教ninetymiles@icloud.com 
+这是对**MIT Foundation of 3D Computer Graphics**第14章的翻译，本章以简洁明了的方式给出了计算机图形学中光和材料的基本讲解。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教ninetymiles@icloud.com 
 
 > 注：文章中相关内容归原作者所有，翻译内容仅供学习参考。
+> 另：Github项目[CGLearning](https://github.com/nintymiles/CGLearning)中拥有相关翻译的完整资料、内容整理、课程项目实现。
 
 # 材料（Materials）
-碎片着色器（fragment shader)的职责是决定一个三角形上的点，这个点对应于图像中的一个像素。碎片着色器（fragment shader）拥有对于被插值的变异变量（varying variables）的访问权限，同时还有以uniform变量形式来自于用户程序的数据。Uniforms（统一参数）变量经常被用于描述像某种光源位置这类的内容，这些值不会逐像素变化。变异变量（varying variables）经常被用于描述点的坐标矢量（比方说，关联于眼睛帧（eye frame）），还有用于点的法线和描述这个点上材料属性的参数（正如底层的材料色）。碎片着色器（fragment shader）随后接收这些数据并且同时模拟光如何从这种材料反弹出去，同时产生一个图像中的色彩。本章中，我们将覆盖最常见的这种用于材料模拟的着色就算（shading calculations）。随后的章节中，我们会探索在碎片着色器（fragment shader）中完成的其它主要计算方式：纹理着色。
+碎片着色器（fragment shader)的职责是决定一个三角形上的点，这个点对应于图像中的一个像素。碎片着色器（fragment shader）拥有对于被插值的变异变量（varying variables）的访问权限，同时还有以uniform（统一参数）变量形式来自于用户程序的数据。Uniforms变量经常被用于描述诸如某种光源位置这类东西，这些值不会逐像素变化。变异变量（varying variables）经常被用于描述点的坐标矢量（比方说，关联于眼睛帧（eye frame）），还有用于点的法线，以及描述这个点上材料属性的参数（比如底层的材料色）。碎片着色器（fragment shader）随后接收这些数据并且同时模拟光如何从这种材料反弹出去，同时产生一个图像中的色彩。本章中，我们将覆盖最常见的这种用于材料模拟的着色就算（shading calculations）。随后的章节中，我们会探索在碎片着色器（fragment shader）中完成的其它主要计算方式：纹理映射。
 
-碎片着色（fragment shading）拥有非常丰富的主题，且处于让计算机生成的图形拥有如它们实际般那样细致和真实的效果的核心位置。在OpenGL渲染中也是一个核心主题，并且你应该计划要学习更多关于我们在这本书中所覆盖的材料主题。一本好的参考书是**CG Tutorial [19]**；这本书使用CG着色语言而不是我们选择的GLSL，但是在这两种语言间的平移几乎是直接的。另一本好的参考书是**Real-Time Rendering [2]**。更详细的材料描述可以在**Digital Modeling of Material Appearance [17]**书中被找到。
+碎片着色（fragment shading）拥有非常丰富的主题，且处于让计算机生成的图形拥有如它们实际般那样细致和真实效果的核心位置。在OpenGL渲染中也是一个核心主题，并且你应该计划学习更多关于我们在这本书中所覆盖的材料主题。一本好的参考书是**CG Tutorial [19]**；这本书使用CG着色语言而不是我们选择的GLSL，但是在这两种语言间的平移几乎是直接的。另一本好的参考书是**Real-Time Rendering [2]**。更详细的材料描述可以在**Digital Modeling of Material Appearance [17]**书中被找到。
 
 ## 14.1 基本假设（Basic Assumptions）
 当光线照射在一个物理材料上，会在多个外出方向被散射。不同种类的材料以不同的模式散射光线并且这会导致眼睛或者相机所看到的不同外观。有些材料可能看起来明亮，而另一些则显得模糊。通过模拟这种散射处理，我们能够针对一个被渲染的3D物体给出真实的物理外观。

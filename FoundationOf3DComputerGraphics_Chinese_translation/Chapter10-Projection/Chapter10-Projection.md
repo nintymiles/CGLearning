@@ -1,8 +1,7 @@
 # 投射（Projection）
-
 Until now, we have described our objects and eye in 3 dimensions. Our next step is to understand how to turn this into a 2D image as would be seen from the eye. To do this we will need to model a simple camera. Throughout, we will assume that the camera is placed at the origin of the eye frame ⃗ e t , and that it is looking down the eye’s negative z-axis. We will use the notation [x e , y e , z e , 1] t to refer to the eye coordinates of a point.
 
-10.1 Pinhole Camera
+# 10.1 针孔相机（Pinhole Camera）
 
 The simplest possible camera is a pinhole camera (see Figure 10.1). As light travels towards the ﬁlm plane, most is blocked by an opaque surface placed at the z e = 0 plane. But we place a very small hole in the center of the surface, at the point with eye coordinates [0, 0, 0, 1] t . Only rays of light that pass through this point reach the ﬁlm plane and have their intensity recorded on ﬁlm. The image is recorded at a ﬁlm plane placed at, say, z e = 1.
 

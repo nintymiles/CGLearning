@@ -1,7 +1,8 @@
 # Note
-这是对**Foundation of 3D Computer Graphics**第15章的翻译，本章讲解了纹理映射的基本概念以及多种纹理映射技术的基础。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教ninetymiles@icloud.com 
+这是对**MIT Foundation of 3D Computer Graphics**第15章的翻译，本章讲解了纹理映射的基本概念以及多种纹理映射技术的基础。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教ninetymiles@icloud.com 
 
 > 注：文章中相关内容归原作者所有，翻译内容仅供学习参考。
+> 另：Github项目[CGLearning](https://github.com/nintymiles/CGLearning)中拥有相关翻译的完整资料、内容整理、课程项目实现。
 
 # 纹理映射（Texture Mapping）
 在第14章中，我们看到了在光和材料之间的一个简单交互模型是如何被用来计算一个像素的色彩。在碎片着色器（fragment shader）中还有一种常常被用来计算一个像素色彩的重要工具，就是从一个被称作纹理的辅助图像中提取数据。在本章中我们会探索基本纹理映射行为（basic texture mapping），同时还会包含它的多个变体。这样的技术正是让我们的渲染显得细致和内容丰富的主要工具。
