@@ -20,209 +20,69 @@ $$
 对一个点应用线性变换同样有意义。例如我们可以想象一个点围绕某个固定原点的旋转。而且平移点也是有意义的（但是这个概念对于矢量没有任何意义）。要表达平移，我们需要开发仿射变换（或并行变换 affine transformation）的概念。要完成这个任务，我们借助$4 \times 4$矩阵。这些矩阵不仅对于处理本章的仿射（并行）变换很方便，而且对于描述（随后在第十章会看到的）相机投射变换也是很有帮助。
 
 ### 3.1.1 帧（Frames）
-
-In an afﬁne space, we describe any point ˜p by ﬁrst starting from some origin point ˜o, and then adding to it a linear combination of vectors. These vectors are expressed using coordinates c i and a basis of vectors.
-
-˜p = ˜o +
-
-&
-
-i
-
-⃗
-
-c i b i
-
-=
-
-'
-
-⃗
-
-b 1
-
-⃗
-
-b 3
-
-⃗
-
-b 2
-
-˜o
-
-⃗
-
-b 3
-
-˜o
-
-(
-
-⎡ ⎢
-
-⎢ ⎣
-
-c 1
-
-c 2 c 3
-
-1
-
-⎤
-
-⎥ ⎥ ⎦ =
-
-⃗ f
-
-t c
-
-where 1˜o is deﬁned to be ˜o.
-
-The row
-
-'
-
-⃗
-
-b 1
-
-⃗
-
-b 2
-
-(
-
-=f
-
-t
-
-is called an afﬁne frame; it is like a basis, but it is made up of three vectors and a single point.
-
-In order to specify a point using a frame, we use a coordinate 4-vector with four entries, with the last entry always being a one. To express a vector using an afﬁne frame, we use a coordinate vector with a 0 as the fourth coordinate (i.e., it is simply a sum of the basis vectors). The use of coordinate 4-vectors to represent our geometry (as well as 4-by-4 matrices) will also come in handy in Chapter 10 when we model the behavior of a pinhole camera.
-
-3.2 Afﬁne transformations and Four by Four Matrices
-
-Similar to the case of linear transformations, we would like to deﬁne a notion of afﬁne transformations on points by placing an appropriate matrix between a coordinate 4vector and a frame.
-
-Let us deﬁne an afﬁne matrix to be a 4 by 4 matrix of the form ⎡ ⎤ a b c d ⎢ e f g h ⎥
-We apply an afﬁne transform to a point ˜p = f t c as follows
-
-'
-
-'
-
-⃗
-
-b 1
-
-⃗
-
-b 1
-
-⃗
-
-b 2
-
-⃗
-
-b 2
-
-⃗
-
-b 3
-
-⃗
-
-b 3
-
-˜o
-
-˜o
-
-(
-
-(
-
-⎡ ⎢
-
-⎢ ⎣
-
-⎡ ⎢
-
-⎢ ⎣
-
-c 1
-
-c 2 c 3
-
-1
-
-a e i
-
-0
-
-⎤
-
-⎥ ⎥ ⎦
-
-⇒
-
-b f j
-
-c g k
-
-0
-
-d h l
-
-1
-
-⎤⎡
-
-⎥⎢ ⎥⎢ ⎦⎣
-
-c 1 c 2 c 3
-
-1
-
-⎤
-
-0
-
-⎥ ⎥ ⎦
-
-or for short
-
-f t c ⇒ f t Ac
-
-We can verify that the second line of the above describes a valid point, since the multiplication of ⎡ ′ ⎤ ⎡ ⎤⎡ ⎤ x a b c d x ⎢ ⎢ y ′ ⎥ ⎥ ⎢ ⎢ e f g h ⎥ ⎥ ⎢ ⎢ y ⎥ ⎥ = ⎣ z ′ ⎦ ⎣ i j k l ⎦ ⎣ z ⎦
-
-1
-
-0
-
-0
-
-0
-
-1
-
-1
-
-gives us a coordinate 4-vector with a 1 as the fourth entry. Alternatively, we can see that the multiplication of ⎡ ⎤ a b c d ' ( ' ( ⎢ e f g h ⎥ b 1 ′ b 2 ′ b 3 ′ ˜o ′ = b 1 b 2 b 3 ˜o ⎣ ⎢ ⎦ ⎥ i j k l 0 0 0 1
-
-where 0˜o is deﬁned to be 0, gives a valid frame made up of three vectors and a point.
-
-Also note that if the last row of the matrix were not [0, 0, 0, 1] it would generally give us an invalid result.
-
-Similar to the case of linear transform, we can apply an afﬁne transformation to a frame as ⎡ ⎤ a b c d ' ( ' ( e f g h ⎥ ⎢ ⎢ ⎥ b 1 b 2 b 3 ˜o ⇒ b 1 b 2 b 3 ˜o ⎣ ⎦
-
-or for short
-
-f t ⇒ f t A
-
-3.3 Applying Linear Transformations to Points
+在仿射空间（affine space）中，我们描述任何点$\tilde{p}$首先从某个原点$\tilde{o}$开始，然后给其加上一个矢量的线性组合。这些矢量使用坐标$c_i$和一个矢量基（basis of vectors）来表示。
+
+$$
+\tilde{p} = \tilde{o} + \sum_i c_i\vec{b}_i = 
+\begin{bmatrix} \vec{b}_1 & \vec{b}_2 & \vec{b}_3 & \tilde{o} \end{bmatrix}
+\begin{bmatrix} c_1 \\ c_2 \\ c_3 \\ 1 \end{bmatrix} = 
+\vec{\mathbf{f}}^t\mathbf{c}
+$$
+此处$1\tilde{o}$被定义为$\tilde{o}$。
+
+而下面这行表达
+$$\begin{bmatrix} \vec{b}_1 & \vec{b}_2 & \vec{b}_3 & \tilde{o} \end{bmatrix} = \vec{\mathbf{f}}^t$$
+被称为一个仿射帧（affine space）；它就像一个基（basis），但是由3个矢量和一个点组成。
+
+为了借助一个帧指定一个点，我们使用拥有4个条目（entries）的部件坐标矢量（coordinate 4-vector），其中最后一个条目总为1。要借助一个帧表达一个矢量，我们使用一个让0作为第4坐标的坐标矢量（也就是说，它只是基矢量之和）。当我们建模针孔相机的行为时，要表达几何形状（还有$4 \times 4$矩阵），4部件坐标矢量的使用都会很便利。
+
+## 3.2 仿射变换和$4\times4$矩阵（Afﬁne transformations and Four by Four Matrices）
+相似于线性变换的情形，我们想要通过在一个4部件坐标矢量和一个帧之间放置一个合适的矩阵的形式，来定义出仿射变换的概念。
+
+让我们将仿射矩阵定义为一个如下形式的$4 \times 4$矩阵
+$$
+\begin{bmatrix} a & b & c & d \\ e & f & g & h \\ i & j & k & l \\ 0 & 0 & 0 & 1 \end{bmatrix} 
+$$
+
+然后我们对一个点$\tilde{p} = \vec{\mathbf{f}}^t\mathbf{c}$应用仿射变换如下
+$$ \begin{array}{rl}
+& \begin{bmatrix} \vec{b}_1 & \vec{b}_2 & \vec{b}_3 & \tilde{o} \end{bmatrix}
+\begin{bmatrix} c_1 \\ c_2 \\ c_3 \\ 1 \end{bmatrix} \\
+\Rightarrow & \begin{bmatrix} \vec{b}_1 & \vec{b}_2 & \vec{b}_3 & \tilde{o} \end{bmatrix}
+\begin{bmatrix} a & b & c & d \\ e & f & g & h \\ i & j & k & l \\ 0 & 0 & 0 & 1 \end{bmatrix} 
+\begin{bmatrix} c_1 \\ c_2 \\ c_3 \\ 1 \end{bmatrix}
+\end{array}$$
+
+或者简写为
+$$ \vec{\mathbf{f}}^t\mathbf{c} \Rightarrow \vec{\mathbf{f}}^tA\mathbf{c}$$
+
+我们可以验证上面表达的第二行描述了一个有效的点，因为乘法
+$$
+\begin{bmatrix} x' \\ y' \\ z' \\ 1 \end{bmatrix} =
+\begin{bmatrix} a & b & c & d \\ e & f & g & h \\ i & j & k & l \\ 0 & 0 & 0 & 1 \end{bmatrix} 
+\begin{bmatrix} c_1 \\ c_2 \\ c_3 \\ 1 \end{bmatrix}
+$$
+给出了我们一个带有1作为第4条目的4部件坐标矢量。另一方面，我们也能够看到乘法
+$$ 
+\begin{bmatrix} \vec{b}_1' & \vec{b}_2' & \vec{b}_3' & \tilde{o} \end{bmatrix} =
+\begin{bmatrix} \vec{b}_1 & \vec{b}_2 & \vec{b}_3 & \tilde{o} \end{bmatrix}
+\begin{bmatrix} a & b & c & d \\ e & f & g & h \\ i & j & k & l \\ 0 & 0 & 0 & 1 \end{bmatrix}
+$$
+此处$0\tilde{o}$被定义为$\tilde{o}$，给出了一个由3个矢量和一个原点组成的有效帧。
+
+同时也要注意到，如果矩阵的最后一行不是$[0,0,0,1]$这种形式，变换就通常给出一个无效的结果。
+
+类似于线性变换的情形，我们可以针对一个帧应用仿射变换（affine transformation）为
+$$ 
+\begin{bmatrix} \vec{b}_1 & \vec{b}_2 & \vec{b}_3 & \tilde{o} \end{bmatrix} \Rightarrow
+\begin{bmatrix} \vec{b}_1 & \vec{b}_2 & \vec{b}_3 & \tilde{o} \end{bmatrix}
+\begin{bmatrix} a & b & c & d \\ e & f & g & h \\ i & j & k & l \\ 0 & 0 & 0 & 1 \end{bmatrix}
+$$
+
+或者简写为
+$$ \vec{\mathbf{f}}^t \Rightarrow \vec{\mathbf{f}}^tA$$
+
+## 3.3 对点应用线性变换（Applying Linear Transformations to Points）
 
 Suppose we have a 3 by 3 matrix representing a linear transformation. we can embed it into the upper left hand corner of a 4 by 4 matrix, and use this larger matrix to apply the transformation to a point (or frame).
 
