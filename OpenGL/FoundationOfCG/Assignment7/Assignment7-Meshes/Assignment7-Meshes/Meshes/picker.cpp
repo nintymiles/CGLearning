@@ -3,7 +3,6 @@
 #include "picker.h"
 
 using namespace std;
-extern unsigned int fboId;
 
 Picker::Picker(const RigTForm& initialRbt, Uniforms& uniforms)
   : drawer_(initialRbt, uniforms)

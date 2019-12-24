@@ -43,6 +43,9 @@
 		5C800CD021FA85C400DB8452 /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C800CCE21FA85C400DB8452 /* libglfw3.a */; };
 		5CA8C32723ADA9D700B28678 /* normalmap.fs.glsl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5CA8C32523ADA98C00B28678 /* normalmap.fs.glsl */; };
 		5CA8C32823ADA9D700B28678 /* normalmap.vs.glsl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5CA8C32623ADA98C00B28678 /* normalmap.vs.glsl */; };
+		5CB7107A23B2169200EBF31F /* cube.mesh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C35D4A523AB5C6A0061D97B /* cube.mesh */; };
+		5CB7107B23B2169200EBF31F /* specular-gl3.fshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C35D4A623AB5C6A0061D97B /* specular-gl3.fshader */; };
+		5CB7107D23B2209B00EBF31F /* subdivision.vs.glsl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5CB7107C23B21F5E00EBF31F /* subdivision.vs.glsl */; };
 		5CB883D0239355200027D8BF /* normal-gl3.fshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C6D4077229646CC007D01A8 /* normal-gl3.fshader */; };
 		5CB883D1239355200027D8BF /* normal-gl3.vshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C6D4075229646CC007D01A8 /* normal-gl3.vshader */; };
 		5CB883D2239355200027D8BF /* solid-gl3.fshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C800CBD21FA81C200DB8452 /* solid-gl3.fshader */; };
@@ -60,6 +63,9 @@
 			dstPath = ./shaders;
 			dstSubfolderSpec = 16;
 			files = (
+				5CB7107D23B2209B00EBF31F /* subdivision.vs.glsl in CopyFiles */,
+				5CB7107A23B2169200EBF31F /* cube.mesh in CopyFiles */,
+				5CB7107B23B2169200EBF31F /* specular-gl3.fshader in CopyFiles */,
 				5CA8C32723ADA9D700B28678 /* normalmap.fs.glsl in CopyFiles */,
 				5CA8C32823ADA9D700B28678 /* normalmap.vs.glsl in CopyFiles */,
 				5C699D9423A28AE500E0E079 /* Color_Tex.ppm in CopyFiles */,
@@ -123,6 +129,7 @@
 		5CA6586821F0CA790087B7F8 /* scenegraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scenegraph.h; sourceTree = "<group>"; };
 		5CA8C32523ADA98C00B28678 /* normalmap.fs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = normalmap.fs.glsl; sourceTree = "<group>"; };
 		5CA8C32623ADA98C00B28678 /* normalmap.vs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = normalmap.vs.glsl; sourceTree = "<group>"; };
+		5CB7107C23B21F5E00EBF31F /* subdivision.vs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = subdivision.vs.glsl; sourceTree = "<group>"; };
 		5CB883D623935C240027D8BF /* Color_Tex.ppm */ = {isa = PBXFileReference; lastKnownFileType = file; path = Color_Tex.ppm; sourceTree = "<group>"; };
 		5CDA259021EF72CB00F2A6D1 /* Assignment7-Meshes */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Assignment7-Meshes"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CDA259321EF72CB00F2A6D1 /* assignment7-main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "assignment7-main.cpp"; sourceTree = "<group>"; };
@@ -167,6 +174,7 @@
 				5C800CBE21FA81C200DB8452 /* diffuse-gl3.fshader */,
 				5C800CBF21FA81C200DB8452 /* pick-gl3.fshader */,
 				5C800CC121FA81C200DB8452 /* basic-gl3.vshader */,
+				5CB7107C23B21F5E00EBF31F /* subdivision.vs.glsl */,
 			);
 			path = shaders;
 			sourceTree = "<group>";

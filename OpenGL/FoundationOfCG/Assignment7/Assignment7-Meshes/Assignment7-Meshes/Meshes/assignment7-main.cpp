@@ -2,8 +2,7 @@
 //  main.cpp
 //  Assignment4-RobotsAndPartPicking
 //
-//  Created by SeanRen on 2019/1/16.
-//  Copyright © 2019 zxtech. All rights reserved.
+//  Created by SeanRen on 2019/12/20.
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -26,7 +25,7 @@
 
 
 //--------------------------------------------------------------------------------
-//  GLEW的作用就是将合适版本的OpenGL版本对应的头文件引入，以方便调用对应的OpenGL功能。若不想使用glew
+//  GLEW的作用就是将合适的OpenGL版本对应的头文件引入，以方便调用对应的OpenGL功能。若不想使用glew
 //  则在对应OS上引入合适的OpenGL头文件即可
 //--------------------------------------------------------------------------------
 #include <GL/glew.h>
@@ -51,94 +50,10 @@
 
 #include "perfMonitor.h"
 
+#include "mesh.h"
+
 using namespace std;      // for string, vector, iostream, and other standard C++ stuff
 static void pick();
-extern unsigned int fboId;
-
-
-#define TEXTURE_WIDTH 512*4
-#define TEXTURE_HEIGHT 512*4
-unsigned int fboId;
-int textureId;
-int depthTextureId;
-
-unsigned int generateTexture(int width,int height,bool isDepth)
-{
-    unsigned int texId;
-    glGenTextures(1, &texId);
-    glBindTexture(GL_TEXTURE_2D, texId);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    if (isDepth){
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, width, height, 0,GL_DEPTH_COMPONENT, GL_FLOAT, 0);
-        
-    }
-    else{
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-    }
-    
-    int error;
-    error=glGetError();
-    if(error != 0)
-        {
-        std::cout << "Error: Fail to generate texture." << error << std::endl;
-        }
-    glBindTexture(GL_TEXTURE_2D,0);
-    return texId;
-}
-
-//! This function create the FBO in which it uses the Frame buffer's depth buffer for depth testing.
-void GenerateFBO()
-{
-    // create a framebuffer object
-    glGenFramebuffers(1, &fboId);
-    glBindFramebuffer(GL_FRAMEBUFFER, fboId);
-    
-    //Create color and depth buffer texture object
-    textureId = generateTexture(TEXTURE_WIDTH,TEXTURE_HEIGHT,false);
-    depthTextureId = generateTexture(TEXTURE_WIDTH,TEXTURE_HEIGHT, true);
-    
-    // attach the texture to FBO color attachment point
-    glFramebufferTexture2D(GL_FRAMEBUFFER,        // 1. fbo target: GL_FRAMEBUFFER
-                           GL_COLOR_ATTACHMENT0,  // 2. Color attachment point
-                           GL_TEXTURE_2D,         // 3. tex target: GL_TEXTURE_2D
-                           textureId,             // 4. color texture ID
-                           0);                    // 5. mipmap level: 0(base)
-    
-    // attach the texture to FBO color attachment point
-    glFramebufferTexture2D(GL_FRAMEBUFFER,        // 1. fbo target: GL_FRAMEBUFFER
-                           GL_DEPTH_ATTACHMENT,   // 2. Depth attachment point
-                           GL_TEXTURE_2D,         // 3. tex target: GL_TEXTURE_2D
-                           depthTextureId,        // 4. depth texture ID
-                           0);                    // 5. mipmap level: 0(base)
-    
-    // check FBO status
-    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-    if(status != GL_FRAMEBUFFER_COMPLETE){
-        printf("Framebuffer creation fails: %d", status);
-    }
-    
-    // Bind to default buffer
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
-
-void BlitTextures()
-{
-    // set the fbo for reading，在这里把读写目的的缓存位fbo设置为读取目标位的fbo
-    glBindFramebuffer ( GL_DRAW_FRAMEBUFFER, 0 );
-    glBindFramebuffer ( GL_READ_FRAMEBUFFER, fboId);
-    
-    // Copy the output red buffer to lower left quadrant
-    glBlitFramebuffer ( 0, 0, TEXTURE_WIDTH, TEXTURE_HEIGHT,
-                       0, 0, TEXTURE_WIDTH, TEXTURE_HEIGHT,
-                       GL_COLOR_BUFFER_BIT, GL_LINEAR );
-    
-    checkGlError("BlitTextures");
-    printProgramInfoLog(3);
-}
-
 
 extern shared_ptr<Material> g_overridingMaterial;
 
@@ -149,11 +64,13 @@ static float g_frustFovY = g_frustMinFov; // FOV in y direction (updated by upda
 
 static const float g_frustNear = -0.1;    // near plane
 static const float g_frustFar = -50.0;    // far plane
+
 static const float g_groundY = -2.0;      // y coordinate of the ground
 static const float g_groundSize = 10.0;   // half the ground length
 
 static int g_windowWidth = 512;
 static int g_windowHeight = 512;
+
 static bool g_mouseClickDown = false;    // is the mouse button pressed
 static bool g_mouseLClickButton, g_mouseRClickButton, g_mouseMClickButton;
 static int g_mouseClickX, g_mouseClickY,g_pickingMouseX,g_pickingMouseY; // coordinates for mouse click event
@@ -169,12 +86,14 @@ g_blueDiffuseMat,
 g_bumpFloorMat,
 g_arcballMat,
 g_pickingMat,
-g_lightMat;
+g_lightMat,
+g_subdivisionMat; //the material used by mesh&subdivision assignment
 
+//global material vaiable to support picking style drawing
 shared_ptr<Material> g_overridingMaterial = NULL;
 
 // --------- Geometry
-typedef SgGeometryShapeNode<Geometry> MyShapeNode;
+typedef SgGeometryShapeNode<Geometry> MyShapeNode; //the basic shapeNode used by this project
 
 // ===================================================================
 // Declare the scene graph and pointers to suitable nodes in the scene
@@ -190,9 +109,14 @@ static shared_ptr<SgRbtNode> g_currentPickedRbtNode; // used later when you do p
 
 // Buffered Geometry Object instances
 static shared_ptr<SimpleIndexedGeometryPNTBX> g_ground, g_cube, g_sphere;
+static shared_ptr<SimpleGeometryPN>g_subdivisionMesh;
+
 // define two lights positions in world space=
 static const Cvec3 g_light1(2.0, 3.0, 14.0), g_light2(-2, -3.0, -5.0);
+
+// used as an eye frame
 static RigTForm g_skyRbt = RigTForm::makeTranslation(0.0, 0.25, 4.0);
+
 //初始tramsformation，将object frame的原点保持不动，每个cube使用一个object matrix。由于在shader中使用了offset，故此处对象帧的起点都为原点。
 static RigTForm g_objectRbt[3] = {RigTForm(Cvec3(0,0,0)),RigTForm(Cvec3(0,0,0)),RigTForm(Cvec3(0,0,0))};
 
@@ -208,6 +132,7 @@ static RigTForm g_motionRbt;
 //for new assignments - variables
 static Cvec3f g_objectColors[3] = {Cvec3f(1, 0, 0),Cvec3f(0, 0, 1),Cvec3f(0.5, 0.5, 0)};
 
+//texture objects
 shared_ptr<Texture> colorTex,normalTex;
 
 ///////////////// END OF G L O B A L S //////////////////////////////////////////////////
@@ -262,6 +187,40 @@ static void initSphere() {
     g_sphere.reset(new SimpleIndexedGeometryPNTBX(&vtx[0], &idx[0], vtx.size(), idx.size()));
 }
 
+static void initSubDivisionCube() {
+    Mesh mesh;
+    mesh.load("./shaders/cube.mesh");
+    int nVertices = mesh.getNumVertices();
+    
+    int nFaces = mesh.getNumFaces();
+    
+    
+    
+    vector<VertexPN> vtx;
+    for(int i=0;i<nFaces;i++){
+        Mesh::Face face = mesh.getFace(i);
+        //int nFaceVtx = face.getNumVertices();
+        
+        //for first triangle
+        VertexPN vtxPN0(face.getVertex(0).getPosition(),face.getNormal());
+        vtx.push_back(vtxPN0);
+        VertexPN vtxPN1(face.getVertex(1).getPosition(),face.getNormal());
+        vtx.push_back(vtxPN1);
+        VertexPN vtxPN2(face.getVertex(2).getPosition(),face.getNormal());
+        vtx.push_back(vtxPN2);
+        
+        //for second triangle
+        vtx.push_back(vtxPN0);
+        vtx.push_back(vtxPN2);
+        VertexPN vtxPN3(face.getVertex(3).getPosition(),face.getNormal());
+        vtx.push_back(vtxPN3);
+    }
+    
+    //int nEdges = mesh.getNumEdges();
+    
+    g_subdivisionMesh.reset(new SimpleGeometryPN(&vtx[0], vtx.size()));
+}
+
 static void initMaterials(){
     Material diffuse("./shaders/basic-gl3.vshader","./shaders/diffuse-gl3.fshader");
     Material solid("./shaders/basic-gl3.vshader","./shaders/solid-gl3.fshader");
@@ -269,12 +228,18 @@ static void initMaterials(){
     
     Material bump("./shaders/normalmap.vs.glsl","./shaders/normalmap.fs.glsl");
     
+    Material subdivision("./shaders/subdivision.vs.glsl","./shaders/solid-gl3.fshader");
+    
     g_redDiffuseMat.reset(new Material(diffuse));
     g_blueDiffuseMat.reset(new Material(diffuse));
     //g_bumpFloorMat,
     g_arcballMat.reset(new Material(solid));
     g_arcballMat->getUniforms().put("uColor", Cvec3(0.97f,0.1f,0.0f));
     g_arcballMat->getRenderStates().polygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    
+    g_subdivisionMat.reset(new Material(subdivision));
+    g_subdivisionMat->getUniforms().put("uColor", Cvec3(0.0f,0.1f,0.97f));
+    g_subdivisionMat->getRenderStates().polygonMode(GL_FRONT_AND_BACK, GL_FILL);
     
     g_lightMat.reset(new Material(bump));
     g_lightMat->getUniforms().put("uTexColor",colorTex);
@@ -393,6 +358,13 @@ static void drawStuff(Uniforms& extraUniforms, bool picking){
     g_arcballMat->draw(*g_sphere, extraUniforms);
     
     
+    //draw the cube supported by subdivision Mesh data structure
+    sendModelViewNormalMatrix(g_subdivisionMat->getUniforms(), MVM, NMVM);
+    
+    sendProjectionMatrix(g_subdivisionMat->getUniforms(), projmat);
+    g_subdivisionMat->draw(*g_subdivisionMesh,extraUniforms);
+    
+    
     //Material sphereMat("./shaders/normal-gl3.vshader","./shaders/normal-gl3.fshader");
     if (!picking) {
         
@@ -435,71 +407,6 @@ static void drawStuff(Uniforms& extraUniforms, bool picking){
             g_currentPickedRbtNode = shared_ptr<SgRbtNode>();   // set to NULL
     }
 }
-
-//static void drawStuff() {
-//    // short hand for current shader state
-//    const ShaderState& curSS = *g_shaderStates[g_activeShader];
-//    
-//    // build & send proj. matrix to vshader
-//    const Matrix4 projmat = makeProjectionMatrix();
-//    sendProjectionMatrix(curSS, projmat);
-//    
-//    // use the skyRbt as the eyeRbt
-//    const RigTForm eyeRbt = g_skyRbt;
-//    const RigTForm invEyeRbt = inv(eyeRbt);
-//    
-//    const Cvec3 eyeLight1 = Cvec3(invEyeRbt * Cvec4(g_light1, 1)); // g_light1 position in eye coordinates
-//    const Cvec3 eyeLight2 = Cvec3(invEyeRbt * Cvec4(g_light2, 1)); // g_light2 position in eye coordinates
-//    safe_glUniform3f(curSS.h_uLight, eyeLight1[0], eyeLight1[1], eyeLight1[2]);
-//    safe_glUniform3f(curSS.h_uLight2, eyeLight2[0], eyeLight2[1], eyeLight2[2]);
-//    
-//    // draw ground
-//    // ===========
-//    //
-//    const RigTForm groundRbt = RigTForm::identity();  // identity
-//    Matrix4 MVM = rigTFormToMatrix(invEyeRbt * groundRbt);
-//    Matrix4 NMVM = normalMatrix(MVM);
-//    sendModelViewNormalMatrix(curSS, MVM, NMVM);
-//    safe_glUniform3f(curSS.h_uColor, 0.1, 0.95, 0.1); // set color
-//    g_ground->draw(curSS);
-//    
-//    // draw cubes
-//    // ==========
-//    RigTForm mvmRbt = invEyeRbt * g_objectRbt[0];
-//    MVM = rigTFormToMatrix(mvmRbt);
-//    NMVM = normalMatrix(MVM);
-//    sendModelViewNormalMatrix(curSS, MVM, NMVM);
-//    safe_glUniform3f(curSS.h_uColor, g_objectColors[0][0], g_objectColors[0][1], g_objectColors[0][2]);
-//    g_cube->draw(curSS);
-//    if(g_activeCube == 0){
-//        if(g_arcballUpdateFlag)
-//            g_arcballScale = computeArcballScale(Cvec4(mvmRbt.getTranslation(),0));
-//    }
-//    
-//    mvmRbt = invEyeRbt * g_objectRbt[1];
-//    MVM = rigTFormToMatrix(mvmRbt);
-//    NMVM = normalMatrix(MVM);
-//    sendModelViewNormalMatrix(curSS, MVM, NMVM);
-//    safe_glUniform3f(curSS.h_uColor, g_objectColors[1][0], g_objectColors[1][1], g_objectColors[1][2]);
-//    g_cube->draw(curSS);
-//    if(g_activeCube == 1){
-//        if(g_arcballUpdateFlag)
-//            g_arcballScale = computeArcballScale(Cvec4(mvmRbt.getTranslation(),0));
-//    }
-//    
-//    // draw sphere
-//    //initSphere(); //the raidus of sphere changed constantly,but calling this method frequetly is not effective
-//    float screenRadiusScale = g_arcballScreenRadius*g_arcballScale;
-//    Matrix4 scaleMatrix = Matrix4::makeScale(Cvec3(screenRadiusScale,screenRadiusScale,screenRadiusScale));
-//    mvmRbt = invEyeRbt * g_objectRbt[2];
-//    MVM = rigTFormToMatrix(mvmRbt) * scaleMatrix;
-//    NMVM = normalMatrix(MVM);
-//    sendModelViewNormalMatrix(curSS, MVM, NMVM);
-//    safe_glUniform3f(curSS.h_uColor, g_objectColors[2][0], g_objectColors[2][1], g_objectColors[2][2]);
-//    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // draw wireframe
-//    g_sphere->draw(curSS);
-//    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // draw filled again
-//}
 
 static void display() {
     //glUseProgram(g_shaderStates[g_activeShader]->program);
@@ -728,6 +635,7 @@ static void initGeometry() {
     initGround();
     initCubes();
     initSphere();
+    initSubDivisionCube();
     
     colorTex.reset(new ImageTexture("./shaders/Fieldstone.ppm",true));
     normalTex.reset(new ImageTexture("./shaders/FieldstoneNormal.ppm",true));
@@ -871,7 +779,6 @@ int main(int argc, char * argv[]) {
         initGeometry();
         initMaterials();
         initScene();
-        GenerateFBO();
         
         //      // open current directory:
         //      unique_ptr<DIR> pDir(opendir("."));
