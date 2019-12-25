@@ -102,7 +102,7 @@ typedef SgGeometryShapeNode<Geometry> MyShapeNode; //the basic shapeNode used by
 
 //basic scene variable
 static shared_ptr<SgRootNode> g_world;
-static shared_ptr<SgRbtNode> g_skyNode, g_groundNode, g_robot1Node, g_robot2Node;
+static shared_ptr<SgRbtNode> g_skyNode, g_groundNode, g_robot1Node, g_robot2Node,g_subvisionNode;
 static shared_ptr<SgRbtNode> g_currentPickedRbtNode; // used later when you do picking
 
 #pragma mark - Scene Variables
@@ -191,34 +191,89 @@ static void initSubDivisionCube() {
     Mesh mesh;
     mesh.load("./shaders/cube.mesh");
     int nVertices = mesh.getNumVertices();
+//    Mesh::Vertex vertex = mesh.getVertex(0);
+//    vertex.getNormal();
     
     int nFaces = mesh.getNumFaces();
     
+    //The valence of a vertex is simply the number of edges that use that vertex. For a regular quadrilateral mesh the valence of each vertex will be four.
+    //calculate averate normal
+//    Cvec3 normal(0,0,0);
+//    for(int i=0;i<nFaces;i++){
+//        Mesh::Face face = mesh.getFace(i);
+//        //int nFaceVtx = face.getNumVertices();
+//        normal = normal + face.getNormal();
+//
+//        for(int j=0;j<face.getNumVertices();j++){
+//            face.getVertex(j).setNormal(normal);
+//        }
+//
+//    }
     
+    //The valence of a vertex is simply the number of edges that use that vertex. For a regular quadrilateral mesh the valence of each vertex will be four.
+    //calculate average normal at a vertex
+    for (int i = 0; i < mesh.getNumVertices(); ++i) {
+        const Mesh::Vertex v = mesh.getVertex(i);
+        
+        Cvec3 normal(0,0,0);
+        Mesh::VertexIterator it(v.getIterator()), it0(it);
+        do{
+            //[...]                                               // can use here it.getVertex(), it.getFace()
+            //Mesh::Vertex vv=it.getVertex();
+            Mesh::Face vf=it.getFace();
+            normal = normal + vf.getNormal();
+        }while (++it != it0);                                  // go around once the 1ring
+        
+        v.setNormal(normal);
+    }
     
+    //for task 1
+//    //each face is composed by a quad,so we need to dice them into two triangles
+//    vector<VertexPN> vtx;
+//    for(int i=0;i<nFaces;i++){
+//        Mesh::Face face = mesh.getFace(i);
+//        //int nFaceVtx = face.getNumVertices();
+//
+//        //for first triangle
+//        VertexPN vtxPN0(face.getVertex(0).getPosition(),face.getNormal());
+//        vtx.push_back(vtxPN0);
+//        VertexPN vtxPN1(face.getVertex(1).getPosition(),face.getNormal());
+//        vtx.push_back(vtxPN1);
+//        VertexPN vtxPN2(face.getVertex(2).getPosition(),face.getNormal());
+//        vtx.push_back(vtxPN2);
+//
+//        //for second triangle
+//        vtx.push_back(vtxPN0);
+//        vtx.push_back(vtxPN2);
+//        VertexPN vtxPN3(face.getVertex(3).getPosition(),face.getNormal());
+//        vtx.push_back(vtxPN3);
+//    }
+    
+    //int nEdges = mesh.getNumEdges();
+    
+    // for task 2
+    //each face is composed by a quad,so we need to dice them into two triangles
     vector<VertexPN> vtx;
     for(int i=0;i<nFaces;i++){
         Mesh::Face face = mesh.getFace(i);
-        //int nFaceVtx = face.getNumVertices();
+        double vtxValence = face.getNumVertices();
         
         //for first triangle
-        VertexPN vtxPN0(face.getVertex(0).getPosition(),face.getNormal());
+        VertexPN vtxPN0(face.getVertex(0).getPosition(),face.getVertex(0).getNormal()/vtxValence);
         vtx.push_back(vtxPN0);
-        VertexPN vtxPN1(face.getVertex(1).getPosition(),face.getNormal());
+        VertexPN vtxPN1(face.getVertex(1).getPosition(),face.getVertex(1).getNormal()/vtxValence);
         vtx.push_back(vtxPN1);
-        VertexPN vtxPN2(face.getVertex(2).getPosition(),face.getNormal());
+        VertexPN vtxPN2(face.getVertex(2).getPosition(),face.getVertex(2).getNormal()/vtxValence);
         vtx.push_back(vtxPN2);
         
         //for second triangle
         vtx.push_back(vtxPN0);
         vtx.push_back(vtxPN2);
-        VertexPN vtxPN3(face.getVertex(3).getPosition(),face.getNormal());
+        VertexPN vtxPN3(face.getVertex(3).getPosition(),face.getVertex(3).getNormal()/vtxValence);
         vtx.push_back(vtxPN3);
     }
     
-    //int nEdges = mesh.getNumEdges();
-    
-    g_subdivisionMesh.reset(new SimpleGeometryPN(&vtx[0], vtx.size()));
+    g_subdivisionMesh.reset(new SimpleGeometryPN(&vtx[0], (int)vtx.size()));
 }
 
 static void initMaterials(){
@@ -228,7 +283,7 @@ static void initMaterials(){
     
     Material bump("./shaders/normalmap.vs.glsl","./shaders/normalmap.fs.glsl");
     
-    Material subdivision("./shaders/subdivision.vs.glsl","./shaders/solid-gl3.fshader");
+    Material subdivision("./shaders/subdivision.vs.glsl","./shaders/specular-gl3.fshader");
     
     g_redDiffuseMat.reset(new Material(diffuse));
     g_blueDiffuseMat.reset(new Material(diffuse));
@@ -359,10 +414,10 @@ static void drawStuff(Uniforms& extraUniforms, bool picking){
     
     
     //draw the cube supported by subdivision Mesh data structure
-    sendModelViewNormalMatrix(g_subdivisionMat->getUniforms(), MVM, NMVM);
-    
-    sendProjectionMatrix(g_subdivisionMat->getUniforms(), projmat);
-    g_subdivisionMat->draw(*g_subdivisionMesh,extraUniforms);
+//    sendModelViewNormalMatrix(g_subdivisionMat->getUniforms(), MVM, NMVM);
+//    
+//    sendProjectionMatrix(g_subdivisionMat->getUniforms(), projmat);
+//    g_subdivisionMat->draw(*g_subdivisionMesh,extraUniforms);
     
     
     //Material sphereMat("./shaders/normal-gl3.vshader","./shaders/normal-gl3.fshader");
@@ -721,11 +776,16 @@ static void initScene() {
     g_robot1Node.reset(new SgRbtNode(RigTForm(Cvec3(-2, 1, 0))));
     g_robot2Node.reset(new SgRbtNode(RigTForm(Cvec3(2, 1, 0))));
     
+    g_subvisionNode.reset(new SgRbtNode(RigTForm(Cvec3(0, 1, 0))*RigTForm::makeYRotation(50)));
+    g_subvisionNode->addChild(shared_ptr<MyShapeNode>(
+                                                      new MyShapeNode(g_subdivisionMesh,g_subdivisionMat, Cvec3(0.1, 0.95, 0.1))));
+    
     constructRobot(g_robot1Node,g_redDiffuseMat, Cvec3(1, 0, 0)); // a Red robot
     constructRobot(g_robot2Node,g_blueDiffuseMat, Cvec3(0, 1, 0)); // a Blue robot
     
     g_world->addChild(g_skyNode);
     g_world->addChild(g_groundNode);
+    g_world->addChild(g_subvisionNode);
     g_world->addChild(g_robot1Node);
     g_world->addChild(g_robot2Node);
 }

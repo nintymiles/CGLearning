@@ -1,4 +1,4 @@
-#version 130
+#version 410 core
 
 uniform vec3 uLight, uLight2, uColor;
 
