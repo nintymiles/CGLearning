@@ -16,7 +16,7 @@
 
 下面，我们描述相关的用于基础纹理映射所需的着色器（shaders）。在这个基础的纹理映射例子里，顶点着色器（vertex shader）只是将纹理坐标作为变异变量传递到碎片着色器（fragment shader）中。
 
-```
+```glsl
 #version 330
 uniform mat4 uProjMatrix; 
 uniform mat4 uModelViewMatrix;
@@ -35,7 +35,7 @@ void main(){
 
 下面列出的碎片着色器（fragment shader）接着使用这些被插值的纹理坐标来从纹理中寻找想要的色彩数据，并且将其设置到帧缓存（framebuffer）中。
 
-```
+```glsl
 #version 330
 uniform sampler2D uTexUnit0;
 
@@ -54,7 +54,7 @@ void main(){
 在这种最简单的理想化情形中，我们只是从纹理中获取r、g、b的数值并且直接发送它们到帧缓存（framebuffer）中。可选地，纹理数据可以被解释为，比方说，不同的表面点的材料色，这然后会跟着被在14.2节中所描述的漫射表面计算所使用。
 
 ![Figure15.1](media/Figure15.1.png)
-**Figure 15.1:** 顶部：一个三角形的每个顶点都被给出x，y纹理坐标。这些坐标指向纹理图像中。底部：这些坐标被在像素解析时插值为变异变量（varying variables）。在碎片着色器（fragment shader）中，我们通过这些纹理坐标抓取其所指向的色彩，同时在渲染中使用这个色彩（右侧）。参考[65],ACM。
+**Figure 15.1:** 顶部：一个三角形的每个顶点都被给出x，y纹理坐标。这些坐标指向纹理图像中。底部：这些坐标在像素解析时作为变异变量（varying variables）被插值。在碎片着色器（fragment shader）中，我们通过这些纹理坐标抓取其所指向的色彩，同时在渲染中使用这个色彩（右侧）。参考[65],ACM。
 
 ## 15.2 法线映射（Normal Mapping）
 来自一个纹理的数据也可以更有趣的方式被解读。在法线映射中，来自一个纹理的r、g、b数值被解读为当前点的法线的3个坐标。这种法线数据随后会被用作某种材料模拟计算的一部分，就如在14章中所描述的。参看这种情形的实例图示$\text{Figure 15.2}$
