@@ -106,4 +106,35 @@ LaTex为文档格式表达语言，被广泛应用于书籍的撰写和排版。
 
 安装成功后，VSCode会对.tex后缀的文件进行识别，此时在左侧栏工具条上会出现Tex菜单项，点开后就可以进行LaTex文件的编译，日志查看，预览等动作。
  
+## 实现VBO缓存的定时刷新
+如果要动态更新VBO数据，通常的方式是使用相同的缓存，但是动态更新缓存中的数据。
+
+```cpp
+void upload(){
+
+if (dynamicUsage) {
+            // We always call glBufferData with a NULL ptr here, so that OpenGL knows
+            // that we're done with old data, and that if the old vbo is in use, it can
+            // allocate us a new one without stalling the pipeline
+            glBufferData(GL_ARRAY_BUFFER, size, NULL, GL_DYNAMIC_DRAW);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, size, vertices);
+        }
+        else {
+            glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+        }
+
+}
+
+
+static void animateVerticesOfSubdivision(){
+    vector<VertexPN> vtx;
+    int size = (int)g_divisionVtx.size();
+    for(int i=0;i<size;i++){
+        float scale=sin(CS175_PI/2)*(globalElapseTime/TIME_INTERVAL);
+        VertexPN vtxPN = g_divisionVtx[i];
+        vtx.push_back(VertexPN(vtxPN.p*scale,vtxPN.n));
+    }
+    g_subdivisionMesh->upload(&vtx[0], (int)vtx.size());
+}
+```
 
