@@ -79,6 +79,8 @@ static bool g_pickingFlag = false;
 static int g_activeEyeFrame = 1;
 
 static GLFWwindow* window;
+static float globalElapseTime;
+static const float TIME_INTERVAL = 5.0f;
 
 // --------- Materials
 static shared_ptr<Material> g_redDiffuseMat,
@@ -104,6 +106,8 @@ typedef SgGeometryShapeNode<Geometry> MyShapeNode; //the basic shapeNode used by
 static shared_ptr<SgRootNode> g_world;
 static shared_ptr<SgRbtNode> g_skyNode, g_groundNode, g_robot1Node, g_robot2Node,g_subvisionNode;
 static shared_ptr<SgRbtNode> g_currentPickedRbtNode; // used later when you do picking
+
+vector<VertexPN> g_divisionVtx;
 
 #pragma mark - Scene Variables
 
@@ -253,27 +257,38 @@ static void initSubDivisionCube() {
     
     // for task 2
     //each face is composed by a quad,so we need to dice them into two triangles
-    vector<VertexPN> vtx;
     for(int i=0;i<nFaces;i++){
         Mesh::Face face = mesh.getFace(i);
         double vtxValence = face.getNumVertices();
         
         //for first triangle
         VertexPN vtxPN0(face.getVertex(0).getPosition(),face.getVertex(0).getNormal()/vtxValence);
-        vtx.push_back(vtxPN0);
+        g_divisionVtx.push_back(vtxPN0);
         VertexPN vtxPN1(face.getVertex(1).getPosition(),face.getVertex(1).getNormal()/vtxValence);
-        vtx.push_back(vtxPN1);
+        g_divisionVtx.push_back(vtxPN1);
         VertexPN vtxPN2(face.getVertex(2).getPosition(),face.getVertex(2).getNormal()/vtxValence);
-        vtx.push_back(vtxPN2);
+        g_divisionVtx.push_back(vtxPN2);
         
         //for second triangle
-        vtx.push_back(vtxPN0);
-        vtx.push_back(vtxPN2);
+        g_divisionVtx.push_back(vtxPN0);
+        g_divisionVtx.push_back(vtxPN2);
         VertexPN vtxPN3(face.getVertex(3).getPosition(),face.getVertex(3).getNormal()/vtxValence);
-        vtx.push_back(vtxPN3);
+        g_divisionVtx.push_back(vtxPN3);
     }
     
-    g_subdivisionMesh.reset(new SimpleGeometryPN(&vtx[0], (int)vtx.size()));
+    g_subdivisionMesh.reset(new SimpleGeometryPN(&g_divisionVtx[0], (int)g_divisionVtx.size()));
+}
+
+static void animateVerticesOfSubdivision(){
+    static float amplify = 1.3;
+    vector<VertexPN> vtx;
+    int size = (int)g_divisionVtx.size();
+    for(int i=0;i<size;i++){
+        float scale=sin((CS175_PI)*(globalElapseTime/TIME_INTERVAL)) * amplify;
+        VertexPN vtxPN = g_divisionVtx[i];
+        vtx.push_back(VertexPN(vtxPN.p*scale,vtxPN.n));
+    }
+    g_subdivisionMesh->upload(&vtx[0], (int)vtx.size());
 }
 
 static void initMaterials(){
@@ -293,7 +308,7 @@ static void initMaterials(){
     g_arcballMat->getRenderStates().polygonMode(GL_FRONT_AND_BACK, GL_LINE);
     
     g_subdivisionMat.reset(new Material(subdivision));
-    g_subdivisionMat->getUniforms().put("uColor", Cvec3(0.0f,0.1f,0.97f));
+    g_subdivisionMat->getUniforms().put("uColor", Cvec3(0.1f,0.0f,0.57f));
     g_subdivisionMat->getRenderStates().polygonMode(GL_FRONT_AND_BACK, GL_FILL);
     
     g_lightMat.reset(new Material(bump));
@@ -415,7 +430,7 @@ static void drawStuff(Uniforms& extraUniforms, bool picking){
     
     //draw the cube supported by subdivision Mesh data structure
 //    sendModelViewNormalMatrix(g_subdivisionMat->getUniforms(), MVM, NMVM);
-//    
+//
 //    sendProjectionMatrix(g_subdivisionMat->getUniforms(), projmat);
 //    g_subdivisionMat->draw(*g_subdivisionMesh,extraUniforms);
     
@@ -786,8 +801,8 @@ static void initScene() {
     g_world->addChild(g_skyNode);
     g_world->addChild(g_groundNode);
     g_world->addChild(g_subvisionNode);
-    g_world->addChild(g_robot1Node);
-    g_world->addChild(g_robot2Node);
+    //g_world->addChild(g_robot1Node);
+    //g_world->addChild(g_robot2Node);
 }
 
 static void pick() {
@@ -858,19 +873,39 @@ int main(int argc, char * argv[]) {
         OpenGL_Helper::PerfMonitor perfMonitor;
         float fps;
         
+        //set timer interval
+        globalElapseTime = TIME_INTERVAL;
+        float previous = glfwGetTime();
+        
         //mac os x的窗口调用会限制帧数
         while( !glfwWindowShouldClose(window) ){
+            animateVerticesOfSubdivision();
+            
             display();
             perfMonitor.Update(fps);
             //cout << "Current FPS at timeinterval:" << glfwGetTime() << " is " << fps << endl;
             
             motion(cursor_x, cursor_y);
+            
+            // common part, do this only once
+            float now = glfwGetTime();
+            float delta = now - previous;
+            previous = now;
+            
+            // for each timer do this
+            globalElapseTime -= delta;
+            if (globalElapseTime <= 0.f){
+                cout << "Timer triggered: " << globalElapseTime << endl;
+                
+                globalElapseTime = TIME_INTERVAL;
+            }
 
             
             glfwSwapBuffers( window );
             
-            //glfwPollEvents();
-            glfwWaitEvents(); //if window is put in background,then didn't return immediatetly until at least one available window event is call.
+            glfwPollEvents(); //this call will keep glfw application running,so if run a timer,this mode shuld be turned on
+            
+            //glfwWaitEvents(); //if window is put in background,then didn't return immediatetly until at least one available window event is call.
         }
         
         glfwTerminate();
