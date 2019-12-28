@@ -194,9 +194,8 @@ static void initSphere() {
 static void initSubDivisionCube() {
     Mesh mesh;
     mesh.load("./shaders/cube.mesh");
+    
     int nVertices = mesh.getNumVertices();
-//    Mesh::Vertex vertex = mesh.getVertex(0);
-//    vertex.getNormal();
     
     int nFaces = mesh.getNumFaces();
     
@@ -216,19 +215,38 @@ static void initSubDivisionCube() {
     
     //The valence of a vertex is simply the number of edges that use that vertex. For a regular quadrilateral mesh the valence of each vertex will be four.
     //calculate average normal at a vertex
-    for (int i = 0; i < mesh.getNumVertices(); ++i) {
+    //this approach may have some logical problems
+//    for (int i = 0; i < mesh.getNumVertices(); ++i) {
+//        const Mesh::Vertex v = mesh.getVertex(i);
+//
+//        Cvec3 normal(0,0,0);
+//        Mesh::VertexIterator it(v.getIterator()), it0(it);
+//        do{
+//            //[...]                                               // can use here it.getVertex(), it.getFace()
+//            //Mesh::Vertex vv=it.getVertex();
+//            Mesh::Face vf=it.getFace();
+//            normal = normal + vf.getNormal();
+//        }while (++it != it0);                                  // go around once the 1ring
+//
+//        v.setNormal(normal);
+//    }
+    
+    //So actually the two average normal calculation approach has the same effect
+    Cvec3 zeroNormal(0,0,0);
+    for (int i = 0; i < nVertices; ++i) {
         const Mesh::Vertex v = mesh.getVertex(i);
-        
-        Cvec3 normal(0,0,0);
-        Mesh::VertexIterator it(v.getIterator()), it0(it);
-        do{
-            //[...]                                               // can use here it.getVertex(), it.getFace()
-            //Mesh::Vertex vv=it.getVertex();
-            Mesh::Face vf=it.getFace();
-            normal = normal + vf.getNormal();
-        }while (++it != it0);                                  // go around once the 1ring
-        
-        v.setNormal(normal);
+        v.setNormal(zeroNormal);
+
+    }
+
+    for(int i=0;i<nFaces;i++){
+        Mesh::Face face = mesh.getFace(i);
+        double vtxValence = face.getNumVertices();
+
+        for(int j=0;j<vtxValence;j++){
+            Mesh::Vertex v=face.getVertex(j);
+            v.setNormal(v.getNormal()+face.getNormal());
+        }
     }
     
     //for task 1
