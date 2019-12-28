@@ -353,7 +353,6 @@ void Material::draw(Geometry& geometry,const Uniforms& extraUniforms){
         glGetProgramiv(program, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniformMaxLen);
         glGetProgramiv(program, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &attribMaxLen);
         
-        //checkGlError("after GlProgramDesc - glGetProgramiv");
         
         //通过API获取到的一些状态信息，根据信息设置缓存变量
         //将bufSize设置为uniform/attribute最大名称长度中的最大的值+1
@@ -374,26 +373,11 @@ void Material::draw(Geometry& geometry,const Uniforms& extraUniforms){
         }
     }
     
-//    for (size_t i = 0; i < numAttribs; ++i) {
-//        //只要有对应的属性Index，则开启vertex array方式
-//        if (attribIndices[i] >= 0)
-//            glEnableVertexAttribArray(attribIndices[i]);
-//        checkGlError("after glEnableVertexAttribArray");
-//        printProgramInfoLog(programDesc_->program);
-//    }
-    
     // Now let the geometry draw its self
     // 几何对象根据vbo/ibo中的数据绘制自身，这种方式支持多个VBO？
-    checkGlError("before geometry.draw");
     geometry.draw(attribIndices);
-    checkGlError("after geometry.draw");
+    //checkGlError("after geometry.draw");
     
-    //此处Enable/DisableVertexAttribArray引出的问题不小，几乎所有glError(0x502)都是由其引起。
-//    for (size_t i = 0; i < numAttribs; ++i) {
-//        if (attribIndices[i] >= 0)
-//            glDisableVertexAttribArray(attribIndices[i]);
-//    }
-//    checkGlError("Material::draw endingPoint");
     
 }
 
