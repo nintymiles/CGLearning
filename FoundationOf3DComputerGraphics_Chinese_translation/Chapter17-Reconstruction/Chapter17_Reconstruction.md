@@ -1,12 +1,28 @@
-#重建（Reconstruction）
-Now let us look at the opposite problem: given a discrete image I[i][j], how do we create a continuous image I(x, y)? As we will see, this problem is central to resizing images and to texture mapping. For example, in our fragment shader, we may wish to fetch a color from a texture using texture coordinates that fall in between the texture’s pixels. In this case we need to decide what texture colors to use. This process is called reconstruction.
+# 重建（Reconstruction）
+现在让我们关注对立问题：假定一个具体图像$I[i][j]$，我们怎样生成一个连续图像$I(x,y)$？正如我们将会看到的，这个问题对于图像尺寸调整以及纹理映射是中心问题。例如，在碎片着色器中，我们可能希望借助落入（两个）纹理像素之间的纹理坐标从纹理中获取色彩。在这种情形中，我们需要决定使用什么纹理色彩。这个处理被称为重建。
 
-##17.1 常量重建（Constant）
+## 17.1 常量重建（Constant）
+
+Let us again assume that our pixels correspond to integer valued (x, y) locations, and we that wish to determine a color at some fractional valued location. Perhaps the easiest image reconstruction approach is the constant reconstruction (or nearest neighbor) method. In this method, a real valued image coordinate is assumed to have the color of the closest discrete pixel. This method can be described by the following pseudo-code
+
+
+```c
+color constantReconstruction(float x, float y, color image[][]){ 
+	int i = (int) (x + .5); //四舍五入到整型值
+	int j = (int) (y + .5);  
+	
+	return image[i][j] 
+}
+```
+
+The “(int)” typecast rounds a number p to the nearest integer not larger than p.
+
+We can think of this method as deﬁning a continuous image over the continuous (x, y) domain. We call this “constant reconstruction”, since the resulting continuous image is made up of little squares of constant color. For example, the image has the constant value of I[0][0] in the square shaped region: −.5 < x < .5 and −.5 < y < .5. Each pixel has an inﬂuence region of 1 by 1. See Figure 17.1, left.
 
 ![Figure17.1](media/Figure17.1.png)
 Figure 17.1: Top row: a 64-by-64 discrete image. Bottom left: reconstructed using constant reconstruction. Bottom right: reconstructed using bilinear reconstruction.$copyright$Yasuhiro Endo.
 
-##17.2 双线性重建（Bilinear）
+## 17.2 双线性重建（Bilinear）
 Constant reconstruction produces blocky looking images. We can create a smoother looking reconstruction using bilinear interpolation. Bilinear interpolation is obtained by applying linear interpolation in both the horizontal and vertical directions. It can be described by the following code:
 
 
@@ -50,7 +66,7 @@ I(i + x_f , j + y_f) & \leftarrow & I[i][j]\\
 Doing this, we see that the reconstructed function has terms that are constant, linear, and bilinear terms in the variables (x f , y f ), and thus also in (x, y). This is where the name bilinear comes from. It is also clear that this reconstruction is symmetric with respect to the horizontal and vertical directions and thus the horizontal-ﬁrst ordering in the pseudo-code is not critical.
 同时这也清晰无误地表明了这种重建对于水平和垂直方向是对成的，因而伪码中水平优先的顺序表达不是影响对错的关键因素。
 
-##17.3 基础函数（Basis Functions）
+## 17.3 基础函数（Basis Functions）
 
 To get some more insight on the general form of our reconstruction methods, we can go back to Equation (17.1) and rearrange it to obtain
 
@@ -87,8 +103,7 @@ Constant reconstruction can be modeled in this form as well, but in this case, t
 More generally, we can choose basis functions with all kinds of sizes and shapes. In high quality image editing tools, for example, reconstruction is done using some set of bi-cubic basis functions [50]. In this sense, a pixel is not really a little square. It is simply a discrete value that is used in conjunction with a set of basis functions to obtain a continuous function.
 
 
-###17.3.1 边缘保留（Edge Preservation）
-Linear methods, those that reconstruct an image using Equation (17.2) naively ﬁll in the space between the discrete pixels. When we look closely at the reconstructed continuous image, the edges appear to blur out. There are more advanced and non-linear techniques that attempt to maintain sharp edges even in the reconstruction, but these are beyond our scope. For more on this, see [18] and references therein.
-线性方法，尤其那些借助方程（17.2）重建一张图像的线性方法仅只是在具体像素间进行简单填充。当我们靠近观察重建的连续图像，边缘会显得模糊。存在有更高级的非线性技术，这些技术甚至在重建时也尝试维护锋利（立即过度）的边缘，但是超越了我们的学习范围。关于这个主题的更多资料，参考$[18]$及其中的参考文献。
+### 17.3.1 边缘保留（Edge Preservation）
+线性方法，尤其那些借助方程（17.2）重建一张图像的线性方法，仅只是在具体像素之间进行简单填充。当我们靠近观察重建的连续图像，边缘会显得模糊掉了。存在有更高级的非线性技术，这些技术甚至在重建时也尝试维护锋利（立即过渡）的边缘，但是超越了我们的学习范围。关于这个主题的更多资料，参考$[18]$及其中的参考文献。
 
 
