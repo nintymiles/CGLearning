@@ -383,10 +383,10 @@ void Material::draw(Geometry& geometry,const Uniforms& extraUniforms){
 //    }
     
     // Now let the geometry draw its self
-    // 几何对象根据vbo/ibo中的数据绘制自身，这种方式支持多个VBO？
-    checkGlError("before geometry.draw");
+    // 几何对象根据vbo/ibo中的数据绘制自身，这种方式支持多个VBO
+    //checkGlError("before geometry.draw");
     geometry.draw(attribIndices);
-    checkGlError("after geometry.draw");
+    //checkGlError("after geometry.draw");
     
     //此处Enable/DisableVertexAttribArray引出的问题不小，几乎所有glError(0x502)都是由其引起。
 //    for (size_t i = 0; i < numAttribs; ++i) {
