@@ -1,6 +1,6 @@
 //
 //  main.cpp
-//  Assignment4-RobotsAndPartPicking
+//  Assignment8-Fur
 //
 //  Created by SeanRen on 2019/12/27.
 //
@@ -128,23 +128,24 @@ static double g_furHeight = 0.21;
 static double g_hairyness = 0.7;
 
 
-// define two lights positions in world space=
+// define two lights positions in world space
 static const Cvec3 g_light1(2.0, 3.0, 14.0), g_light2(-2, -3.0, -5.0);
 
 // used as an eye frame
 static RigTForm g_skyRbt = RigTForm::makeTranslation(0.0, 0.25, 4.0);
 
-//初始tramsformation，将object frame的原点保持不动，每个cube使用一个object matrix。由于在shader中使用了offset，故此处对象帧的起点都为原点。
-static RigTForm g_objectRbt[3] = {RigTForm(Cvec3(0,0,0)),RigTForm(Cvec3(0,0,0)),RigTForm(Cvec3(0,0,0))};
+//初始tramsformation，将object frame的原点保持不动，故此处对象帧的起点都为原点。
+static RigTForm g_objectRbt = RigTForm(Cvec3(0,0,0));
 
 static RigTForm g_auxiliaryRbt;
 
+static RigTForm g_motionRbt;
+
+// for arcball settings
 static const float g_sphereRaidusScreenRatio = 0.3;
 static float g_arcballScale;
 static float g_arcballScreenRadius = g_sphereRaidusScreenRatio * min(g_windowWidth,g_windowHeight);
 static bool g_arcballUpdateFlag = true;
-
-static RigTForm g_motionRbt;
 
 //for new assignments - variables
 static Cvec3f g_objectColors[3] = {Cvec3f(1, 0, 0),Cvec3f(0, 0, 1),Cvec3f(0.5, 0.5, 0)};
@@ -152,22 +153,18 @@ static Cvec3f g_objectColors[3] = {Cvec3f(1, 0, 0),Cvec3f(0, 0, 1),Cvec3f(0.5, 0
 //texture objects
 shared_ptr<Texture> colorTex,normalTex;
 
-///////////////// END OF G L O B A L S //////////////////////////////////////////////////
-
 //--------------------------------------------------------------------------------
 //  GLFW global variables
 //--------------------------------------------------------------------------------
 GLfloat cursor_x        = 0.f;
 GLfloat cursor_y        = 0.f;
 
+
+///////////////// END OF G L O B A L S //////////////////////////////////////////////////
+
+
 #pragma mark - Geometry Helper Function
 
-//======================================================================
-// STEP 3: Replace initGround(), initCube(), and  initSphere() functions
-//         with the following defintion. This ensures VertexPNTBX and
-//         SimpleIndexedGeometryPNTBX are used, which provides extra
-//         vertex attributes used for Bump Mapping later
-//=======================================================================
 static void initGround() {
     int ibLen, vbLen;
     getPlaneVbIbLen(vbLen, ibLen);
@@ -265,20 +262,64 @@ static void updateShellGeometryData(){
             Cvec3f pos = originVtx.p + averageNormal;
             Cvec2f texCoord;
             
+            //单位长等腰三角形，意味着从lower left corner开始逆时针有3种组合。
+            //disorder
+//            switch (i%3) {
+//                case 0:
+//                    texCoord = Cvec2f(0.f,g_hairyness);
+//                    break;
+//                case 1:
+//                    texCoord = Cvec2f(0.f,0.f);
+//                    break;
+//                case 2:
+//                    texCoord = Cvec2f(g_hairyness,g_hairyness);
+//                    break;
+//                default:
+//                    break;
+//            }
+              //triangle ordering 0,1,3
+//            switch (i%3) {
+//                case 0:
+//                    texCoord = Cvec2f(0.f,0.f);
+//                    break;
+//                case 1:
+//                    texCoord = Cvec2f(g_hairyness,0.f);
+//                    break;
+//                case 2:
+//                    texCoord = Cvec2f(0,g_hairyness);
+//                    break;
+//                default:
+//                    break;
+//            }
+            //triangle ordering 0,1,2
+//            switch (i%3) {
+//                case 0:
+//                    texCoord = Cvec2f(0.f,0.f);
+//                    break;
+//                case 1:
+//                    texCoord = Cvec2f(g_hairyness,0.f);
+//                    break;
+//                case 2:
+//                    texCoord = Cvec2f(g_hairyness,g_hairyness);
+//                    break;
+//                default:
+//                    break;
+//            }
+            //triangle ordering 0,2,3
             switch (i%3) {
                 case 0:
-                    texCoord = Cvec2f(0.f,1.f);
-                    break;
-                case 1:
                     texCoord = Cvec2f(0.f,0.f);
                     break;
+                case 1:
+                    texCoord = Cvec2f(0.f,g_hairyness);
+                    break;
                 case 2:
-                    texCoord = Cvec2f(1.f,1.f);
+                    texCoord = Cvec2f(g_hairyness,0.f);
                     break;
                 default:
                     break;
             }
-            
+        
             vtPNXs.push_back(VertexPNX(pos, vNormal, texCoord));
         }
         
@@ -363,6 +404,12 @@ static void initMaterials(){
     g_redDiffuseMat.reset(new Material(diffuse));
     g_blueDiffuseMat.reset(new Material(diffuse));
     
+    g_redDiffuseMat->getRenderStates().polygonMode(GL_FRONT, GL_FILL);
+    g_blueDiffuseMat->getRenderStates().polygonMode(GL_FRONT, GL_FILL);
+    
+    g_redDiffuseMat->getUniforms().put("uColor",Cvec3{0.9,0.1,0.1});
+    g_blueDiffuseMat->getUniforms().put("uColor",Cvec3{0.1,1,0.1});
+    
     //g_bumpFloorMat,
     g_arcballMat.reset(new Material(solid));
     g_arcballMat->getUniforms().put("uColor", Cvec3(0.97f,0.1f,0.0f));
@@ -384,7 +431,7 @@ static void initMaterials(){
     g_bunnyMat.reset(new Material(bunny));
     g_bunnyMat->getUniforms().put("uColor", Cvec3(0.1f,0.0f,0.57f));
     g_bunnyMat->getUniforms().put("uColorAmbient", Cvec3f(0.45f, 0.3f, 0.3f));
-    g_bunnyMat->getUniforms().put("uColorDiffuse", Cvec3(0.1f,0.1f,0.67f));
+    g_bunnyMat->getUniforms().put("uColorDiffuse", Cvec3(0.2f,0.2f,0.2f));
     g_bunnyMat->getRenderStates().polygonMode(GL_FRONT_AND_BACK, GL_FILL);
     
     //shell texture
@@ -473,7 +520,6 @@ static RigTForm getEyeRbt(){
 //这样代码的结构才体现出简洁高效
 //extraUniforms作为参数传递，意味着作为参数之前设置的参数更有通用性才对。
 static void drawStuff(Uniforms& extraUniforms, bool picking){
-    //glBindFramebuffer(GL_FRAMEBUFFER,fboId);
     
     // build & send proj. matrix to vshader
     const Matrix4 projmat = makeProjectionMatrix();
@@ -509,7 +555,7 @@ static void drawStuff(Uniforms& extraUniforms, bool picking){
     
     
     //draw arcball in wireframe
-    RigTForm mvmRbt = invEyeRbt * g_objectRbt[2];
+    RigTForm mvmRbt = invEyeRbt * g_objectRbt;
     g_arcballScale = computeArcballScale(Cvec4(mvmRbt.getTranslation(),0));
     float screenRadiusScale = g_arcballScreenRadius*g_arcballScale;
     Matrix4 scaleMatrix = Matrix4::makeScale(Cvec3(screenRadiusScale,screenRadiusScale,screenRadiusScale));
@@ -541,13 +587,6 @@ static void drawStuff(Uniforms& extraUniforms, bool picking){
 
         //extraUniforms.put("uTexColor",colorTex);
         
-        g_redDiffuseMat->getRenderStates().polygonMode(GL_FRONT, GL_FILL);
-        g_blueDiffuseMat->getRenderStates().polygonMode(GL_FRONT, GL_FILL);
-        //sphereMat.draw(*g_cube, extraUniforms);
-        
-        
-        g_redDiffuseMat->getUniforms().put("uColor",Cvec3{0.9,0.1,0.1});
-        g_blueDiffuseMat->getUniforms().put("uColor",Cvec3{0.1,1,0.1});
         
 //        Drawer ground_drawer(invEyeRbt,*g_lightMat);
 //        g_groundNode->accept(ground_drawer);
@@ -609,7 +648,7 @@ static void motion(const float x, const float y) {
     
     Cvec2 startScreenPos = Cvec2(g_mouseClickX,g_mouseClickY);
     Cvec2 endScreenPos = Cvec2(x,g_windowHeight - y - 1); //convert from window coordnate to OpenGL window coordinate.
-    Cvec2 centerScreenPos = getScreenSpaceCoord(g_objectRbt[0].getTranslation(),makeProjectionMatrix(), 0.0, 0.0, g_windowWidth, g_windowHeight);
+    Cvec2 centerScreenPos = getScreenSpaceCoord(g_objectRbt.getTranslation(),makeProjectionMatrix(), 0.0, 0.0, g_windowWidth, g_windowHeight);
     Quat arcballQuat = arcball(Cvec3(centerScreenPos,0), g_arcballScreenRadius, startScreenPos, endScreenPos);
     
     const double dx = x - g_mouseClickX;
@@ -700,6 +739,26 @@ static void error_callback(int error, const char* description)
 static void keyboard(GLFWwindow* window, int key, int scancode, int action, int mods) {
     if(action == GLFW_PRESS){
         switch (key) {
+            case GLFW_KEY_UP:
+                g_hairyness += 0.1;
+                if(g_hairyness>10)
+                    g_hairyness = 0.7;
+                break;
+            case GLFW_KEY_DOWN:
+                g_hairyness -= 0.1;
+                if(g_hairyness==0.f)
+                    g_hairyness = 0.f;
+                break;
+            case GLFW_KEY_RIGHT:
+                g_furHeight += 0.1;
+                if(g_furHeight>10.f)
+                    g_furHeight = 0.21;
+                break;
+            case GLFW_KEY_LEFT:
+                g_furHeight -= 0.1;
+                if(g_furHeight==0.f)
+                    g_furHeight = 0.f;
+                break;
             case GLFW_KEY_ESCAPE:
                 glfwSetWindowShouldClose(window, GLFW_TRUE);//exit(0);   // ESC
             case GLFW_KEY_H:
@@ -992,6 +1051,7 @@ int main(int argc, char * argv[]) {
         //mac os x的窗口调用会限制帧数
         while( !glfwWindowShouldClose(window) ){
             animateVerticesOfSubdivision();
+            updateShellGeometryData();
             
             display();
             perfMonitor.Update(fps);
