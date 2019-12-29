@@ -16,6 +16,7 @@
 - [第八章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter08-BallsTrackAndArc.pdf)
 - [第九章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter09-Smooth-Interpolation.pdf)
 - [第十章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter10-Projection.pdf)
+- 第十一章 进行中...
 - [第十二章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter12-From-Vertex-To-Pixel.pdf)
 - [第十三章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter13-Rational-Linear-Interpolation.pdf)
 - [第十四章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter14-Materials.pdf)
@@ -29,6 +30,7 @@
 - [凹凸映射（bump mapping）中法线映射（normal map）纹理数据的解读和使用](DevelopingNotes/the-normal-map-of-bump-mapping-2019-12-19.md)
 - [GLSL中，如何对matrix类型进行初始化](DevelopingNotes/Matrix-Initialization-In-GLSL-2019-12-20.md)
 - [在OpenGL中用Projection Matrix 分别左乘和右乘均匀或不均匀Scale Matrix的效果](DevelopingNotes/About-ProjectionMatrix-Left-Right-Multiplied-By-Diff-Scale-Matrix.md)
+- [OpenGL/OpenGLES中的调试问题](DevelopingNotes/opengl_debugging_notes.md)
 - [在GLFW中实现定时器](DevelopingNotes/about_glfw_timer_and_vertice_animation.md)
 - [关于在Windows上使用OpenGLES 3.0进行开发的环境设置](DevelopingNotes/OpenGLES_Development_Environment_Setting_Issues.md)
 
