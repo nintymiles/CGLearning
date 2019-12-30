@@ -29,11 +29,11 @@ $$ \begin{array}{c}
 
 投射变换有一点儿可笑；例如，上面的情形中，任何具有$z_e=0$的点将会引起“被0除”的情形。在这个时点，关于投射变换（参数在下面给出）我们需要知道的最重要的事情为它们保留了点的同线性（co-linearity）和同平面性（co-planarity），参考图示$\text{Figure 11.2}$和图示$\text{Figure 11.3}$。同线性意味着如果3个或更多的点位于一条线上，被变换的点也会在某条线上。
 
-As a result of this preservation of co-planarity, we know that for points on a ﬁxed triangle, we will have z n = ax n + by n + c, for some ﬁxed a, b and c. Thus, the correct z n value for a point can be computed using linear interpolation over the 2D image domain as long as we know its value at the three vertices of the triangle (see Appendix B for more on linear interpolation.)
+作为这种同平面性保留的结果，我们知道针对一个固定三角形上的点，针对某种固定的a，b和c，我们会有这种表达$z_n=ax_n+by_n+c$。因而，对于一个点正确的$z_n$值可，只要我们知道其在三角形中3个顶点的值，就可以借助在2D图像域上的线性插值来计算它（关于线性插值的更多内容，请参考附录B）。
 
-Note, though, that distances are not preserved by a projective transform. Looking again at Figures 11.2 and 11.3, we see that evenly spaced pixels on the ﬁlm do not correspond to evenly spaced points on the geometry in eye-space. Meanwhile, such evenly spaced pixels do correspond to evenly spaced points in normalized device coordinates.
+然而，要注意，距离并没有被投射变换保留。再次观察$\text{Figure 11.2}$和$\text{Figure 11.3}$，我们看到在成像面上平均间隔的像素并没有对应于眼睛空间几何体上平均间隔的点。同时，这种平均间隔的像素确实对应于标准化设备坐标中平均间隔的点。
 
-As a result of this distance-distortion, linear interpolation of z e values over the screen would give the wrong answer. Consider the 2D drawing of Figure 11.4, with interpenetrating segments, one orange and one blue. The z e values of the vertices are shown. The two segments cross right at the midpoint of the image plane, so in the correct image, the top half should be blue and the bottom half should be orange. Suppose we linearly interpolated the z e values in each segment in image space. All of the blue pixels would have interpolated z e values of −1. On the orange triangle, going from bottom (with z e = −0.1) to top (with z e = −1000000 or so), the interpolated z e value would become less than −1 almost immediately. Thus in the z-buffered image, almost the entire image would be blue! In Chapter 13 we will see how we can properly interpolate the z e value over a triangle on the screen.
+作为距离扭曲的结果，在屏幕上进行$z_e$值的线性插值会给出错误答案。考虑图示$\text{Figure 11.4}$中的2D绘制，对于互相渗透的线段，一个橙色的和一个蓝色的。顶点的$z_e$值被展示。两个线段右侧相交在图像平面的中点，所以在正确的图像中，上半部分应该是蓝色的而下半部分应该是橙色的。假设在图像空间中我们在每个线段上线性插值$z_e$值。所有蓝色像素会插值出值为-1的$z_e$值。而在橙色三角形上，从底部（$z_e=-1$）开始到顶部（大约$z_e=-1000000$），被插值的$z_e$值将会立即小于-1。因此，在z-缓存图像中，几乎整个图像都会是蓝色的！在第13章中，我们会看到我们如何正确地在屏幕上的一个三角形中插值出$z_e$值。
 
 ### Lines are preserved by projective transforms (optional)
 
