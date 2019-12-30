@@ -1,46 +1,33 @@
-# 
+
 
 # 深度（Depth）
 
-## 11.1 Visibility
+## 11.1 可视性（Visibility）
+在真实物理世界中，如果物体A处于物体B的前方，那么来自物体B的光线会被物体A阻挡，从而无法到达相机（成像），因而它将不会显示在图像中（比如，图示$\text{Figure 10.2}$的蓝色六边形）。在计算机图形中，我们需要以可计算方式建模这种情形。
 
-In the physical world, if object A is in front of object B, then the light from object B will be blocked by object A before reaching the camera, and it will not appear in the image (for example, the blue hexagon of ﬁgure 10.2). In computer graphics, we need to model this computationally.
+存在多种方式可以用来确保只有对相机可见的表面出现在图像中。一种思路是通过深度排序三角形，然后以从后到前的顺序绘制它们。这种思路的关键是，最前边的三角形将会在被遮挡的三角形之上重绘从而产生正确图像。这种所谓的画家方式存在好多个难题。例如，场景可能包含互相渗透的三角形。也可能包含非互相渗透三角形的可视循环情形，这种情形被展示在图示$\text{Figure 11.1}$。
 
-There are a variety of approaches that can be used to ensure that only surfaces that are visible to the camera appear in the image. One idea is to sort the triangles by their depths, and then draw them in back to front order. The idea is, that the frontmost triangles will redraw over the occluded triangles and produce the correct image. There are a number of difﬁculties with this so-called painter’s approach. For example, a scene may include interpenetrating triangles. It may also include visibility cycles of non interpenetrating triangles such as shown in Figure 11.1.
+另一种通用型非常好的情形，我们会在第20章中讨论，为光线投射方式（ray casting）。这种方式中，对于每个像素，顺着像素的视线，我们明确计算每个被看到的场景点。最近的相交点随后被用于给像素上色。
 
-Another very general approach, which we will discuss in Chapter 20, is ray casting. In this approach, for each pixel, we explicitly calculate every scene point observed along the pixel’s line of sight. The closest intersected point is then used to color the pixel.
+在一个类似OpenGL这样的光栅化渲染器中，我们借助某种被称作z-buffer（z-缓存）的机制来执行我们的可视性计算。这种方式中，可以以任何顺序绘制三角形。在帧缓存的每个像素上，我们不仅存储一个色彩值而且还有一个“当前深度”值。这个值表达了用于设置像素当前值的几何体的深度。当一个新三角形尝试设置一个像素的色彩时，我们首先将其深度和存储在z-缓存中的值进行比较。只有这个三角形中被观察到的点更接近（眼睛）时，我们才会覆写这个像素的色彩和深度值。因为这种动作完成在每像素的基础上，其可以正确地处理互相渗透的三角形情形。
 
-In a rasterization-based renderer such as OpenGL, we use something called a zbuffer to perform our visibility calculations. In this approach, the triangles can be drawn in any order. At each pixel of our framebuffer, we store not only a color value but also a “current depth” value. This represents the depth of the geometry that was used to set the current value of the pixel. When a new triangle tries to set the color of a pixel, we ﬁrst compare its depth to the value stored in the z-buffer. Only if the observed point in this triangle is closer do we overwrite the color and depth values of this pixel. Since this is done on a per-pixel basis, it can properly handle interpenetrating triangles.
+### 可视性计算的其它用法（Other Uses of Visibility Calculations）
+可视性计算在计算一个被观察点的色彩时也可能是重要的。实际上，在决定是否被观察点可以直接看到某种“光源”或者是否在阴影中等方面也是重要的。在OpenGL中这可以借助阴影映射算法来完成，在小节15.5.2中。在光线追踪的环境中，我们只要使用射线相交代码就可以看到什么几何体被从始于被观察点到光源的射线相交。
 
-### Other Uses of Visibility Calculations
+可视性计算也可以被用于加速渲染处理。如果我们知道某个物体相对于相机被遮挡，那么我们首先就不必去渲染这个物体。这可能被用于室内场景的例子，其中我们通常不能看得太远以至于超出周围的房间。在这种环境中，我们可以使用一种保守可视性检测；这种检测会快速告知我们是否某个物体可能或者明确不可见。如果物体可能可见，那么我们就继续使用z-缓存渲染。但是如果物体明显不可视，那么我们可以完全跳过这种绘制。
 
-Visibility calculations can also be important when calculating the color of an observed point. In particular, it may be important to determine if the observed point can directly see some “light source” or whether it is in shadow. In OpenGL this can be done using an algorithm called shadow mapping, described in Section 15.5.2. In the context of ray tracing, we can simply use our ray intersection code to see what geometry is intersected by the ray going from the observed point towards the light.
-
-Visibility computation can also be used to speed up the rendering process. If we know that some object is occluded from the camera, then we don’t have to render the object in the ﬁrst place. This might be used for example in an indoor scene where we can typically not see too far past the surrounding room. In this context, we can use a conservative visibility test; such a test quickly tells us whether some object may be, or is deﬁnitely not visible. If the object may be visible, then we continue and render the object with our z-buffer. But if the object is deﬁnitely not visible, then we can skip its drawing entirely.
-
-## 11.2 Basic Mathematical Model
-
-In OpenGL, we use a z-buffer to compute visibility. To use a z-buffer, in addition to the [x n , y n ] coordinates of a point, we also need a depth value. To accomplish this, for every point described in eye-coordinates, we deﬁne its [x n , y n , z n ] t coordinates using the following matrix expression.
-
+## 11.2 基础数学模型（Basic Mathematical Model）
+在OpenGL中，我们借助z-缓存计算可视性。要使用z-缓存，除了一个点的$[x_n,y_n]^t$外，我们还需要一个深度值。要完成这个任务，针对每个用眼睛坐标描述的点，我们借助下列矩阵表达定义其$[x_n,y_n,z_n]^t$坐标。
 $$ \begin{array}{c}
 \begin{bmatrix} x_nw_n \\ y_nw_n \\ z_nw_n \\ w_n \end{bmatrix}  = \begin{bmatrix} x_c \\ y_c \\ z_c \\ w_c \end{bmatrix}  =  \begin{bmatrix} s_x & 0 & -c_x & 0 \\ 0 & s_y & -c_y & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & -1 & 0 \end{bmatrix}\begin{bmatrix} x_e \\ y_e \\ z_e \\ 1 \end{bmatrix}  \tag{11.1}
 \end{array} $$
+再次，原始的输出被称作裁切坐标，并且和以前一样，要获得$x_n$和$y_n$的值，我们需要除以$w_n$值。但是现在我们还得到了$z_n=\frac{-1}{z_e}$值。我们计划使用这个$z_n$在z-缓存中进行深度比较。
 
-Again, the raw output are called the clip coordinates, and as before, to obtain the values of x n and y n , we need to divide by the w n value. But now we also have the value z
+让我们首先验证从方程式（11.1）中获得的$z_n$值确实可以被用于做深度比较。假定两个点$\tilde{p}_1$和$\tilde{p}_2$，分别有眼睛坐标$[x_e^1,y_e^1,z_e^1,1]^t$和$[x_e^2,y_e^2,z_e^2,1]^t$。假设它们都位于眼前，也就是说$z_e^1<0$和$z_e^2<0$。同时假设$\tilde{p}_1$比$\tilde{p}_2$更靠近眼睛，也就是说$z_e^2<z_e^1$。因而$-\frac{1}{z_e^2}<-\frac{1}{z_e^1}$,这就意味着$z_n^2<z_n^1$。
 
-n
+总之，我们可以把将从眼睛坐标给出的点转换为以标准化设备坐标所给出的点的处理当作是一种诚实的3D几何变换。这种变换即不是线性的也不是放射的，但是在某种意义上被称为3D投射变换。
 
-= −1 z . Our plan is to use this z n value to do depth comparisons in our z-buffer. e
-
-First let us verify that the z n values resulting from Equation (11.1) can indeed be used for depth comparison. Given two points ˜p 1 and ˜p 2 with eye coordinates [x e 1 , y e 1 , z e 1 , 1] t and [x e 2 , y e 2 , z e 2 , 1] t . Suppose that they both are in front of the eye, i.e., 2 1 z e 1 < 0 and z e 2 < 0. And suppose that ˜p 1 is closer to the eye than ˜p 2 , that is z e < z e . 2 1 Then − z 1 2 < − z 1 1 , meaning z n < z n .
-
-e
-
-e
-
-All together, we can now think of the process of taking points given by eye coordinates to points given by normalized device coordinates as an honest to goodness 3D geometric transformation. This kind of transformation is generally neither linear nor afﬁne, but is something called a 3D projective transformation.
-
-Projective transformations are a bit funny; for example, in the above case, any point with z e = 0 will cause a “divide by zero”. At this juncture, the most important thing we need to know about projective transformations (the argument is given below) is that they preserve co-linearity and co-planarity of points (See Figures 11.2 and 11.3). Colinearity means that, if three or more points are on single line, the transformed points will also be on some single line.
+投射变换有一点儿可笑；例如，上面的情形中，任何具有$z_e=0$的点将会引起“被0除”的情形。在这个时点，关于投射变换（参数在下面给出）我们需要知道的最重要的事情为它们保留了点的同线性（co-linearity）和同平面性（co-planarity），参考图示$\text{Figure 11.2}$和图示$\text{Figure 11.3}$。同线性意味着如果3个或更多的点位于一条线上，被变换的点也会在某条线上。
 
 As a result of this preservation of co-planarity, we know that for points on a ﬁxed triangle, we will have z n = ax n + by n + c, for some ﬁxed a, b and c. Thus, the correct z n value for a point can be computed using linear interpolation over the 2D image domain as long as we know its value at the three vertices of the triangle (see Appendix B for more on linear interpolation.)
 
