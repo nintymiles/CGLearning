@@ -115,6 +115,9 @@ vector<VertexPN> g_divisionVtx;
 static shared_ptr<SimpleIndexedGeometryPNTBX> g_ground, g_cube, g_sphere;
 static shared_ptr<SimpleGeometryPN>g_subdivisionMesh;
 
+static Mesh g_OrignCubeMesh;
+static Mesh g_CubeMesh;
+
 // define two lights positions in world space=
 static const Cvec3 g_light1(2.0, 3.0, 14.0), g_light2(-2, -3.0, -5.0);
 
@@ -192,12 +195,14 @@ static void initSphere() {
 }
 
 static void initSubDivisionCube() {
-    Mesh mesh;
-    mesh.load("./shaders/cube.mesh");
+    g_OrignCubeMesh.load("./shaders/cube.mesh");
+    g_CubeMesh = g_OrignCubeMesh;
     
-    int nVertices = mesh.getNumVertices();
+    int nVertices = g_OrignCubeMesh.getNumVertices();
     
-    int nFaces = mesh.getNumFaces();
+    int nFaces = g_OrignCubeMesh.getNumFaces();
+    
+    
     
     //The valence of a vertex is simply the number of edges that use that vertex. For a regular quadrilateral mesh the valence of each vertex will be four.
     //calculate averate normal
@@ -234,13 +239,12 @@ static void initSubDivisionCube() {
     //So actually the two average normal calculation approach has the same effect
     Cvec3 zeroNormal(0,0,0);
     for (int i = 0; i < nVertices; ++i) {
-        const Mesh::Vertex v = mesh.getVertex(i);
+        const Mesh::Vertex v = g_OrignCubeMesh.getVertex(i);
         v.setNormal(zeroNormal);
-
     }
 
     for(int i=0;i<nFaces;i++){
-        Mesh::Face face = mesh.getFace(i);
+        Mesh::Face face = g_OrignCubeMesh.getFace(i);
         double vtxValence = face.getNumVertices();
 
         for(int j=0;j<vtxValence;j++){
@@ -276,7 +280,7 @@ static void initSubDivisionCube() {
     // for task 2
     //each face is composed by a quad,so we need to dice them into two triangles
     for(int i=0;i<nFaces;i++){
-        Mesh::Face face = mesh.getFace(i);
+        Mesh::Face face = g_OrignCubeMesh.getFace(i);
         double vtxValence = face.getNumVertices();
         
         //for first triangle
@@ -298,7 +302,7 @@ static void initSubDivisionCube() {
 }
 
 static void animateVerticesOfSubdivision(){
-    static float amplify = 1.3;
+    static float amplify = 1.8;
     vector<VertexPN> vtx;
     int size = (int)g_divisionVtx.size();
     for(int i=0;i<size;i++){
@@ -307,6 +311,134 @@ static void animateVerticesOfSubdivision(){
         vtx.push_back(VertexPN(vtxPN.p*scale,vtxPN.n));
     }
     g_subdivisionMesh->upload(&vtx[0], (int)vtx.size());
+}
+
+static void subdivide() {
+    g_divisionVtx.clear();
+    
+    static const int VTX_VALENCE = 4;
+    
+    //compute new face vertex geometries
+    int nFaces = g_CubeMesh.getNumFaces();
+    for(int i=0;i<nFaces;i++){
+        Mesh::Face face = g_CubeMesh.getFace(i);
+        double vtxValence = face.getNumVertices();
+        
+        Cvec3 accumVtxPos;
+        for(int j=0;j<vtxValence;j++){
+            Mesh::Vertex v=face.getVertex(j);
+            accumVtxPos += v.getPosition();
+        }
+        g_CubeMesh.setNewFaceVertex(face, accumVtxPos/vtxValence);
+    }
+    
+    //compute edge vertex geometries
+    int nEdges = g_CubeMesh.getNumEdges();
+    for(int i=0;i<nEdges;i++){
+        Mesh::Edge edge= g_CubeMesh.getEdge(i);
+        Mesh::Face eface0 = edge.getFace(0);
+        Mesh::Face eface1 = edge.getFace(1);
+        Mesh::Vertex evtx0 = edge.getVertex(0);
+        Mesh::Vertex evtx1 = edge.getVertex(0);
+        
+        Cvec3 accumPos = g_CubeMesh.getNewFaceVertex(eface0) + g_CubeMesh.getNewFaceVertex(eface1) + evtx0.getPosition() + evtx1.getPosition();
+        
+        g_CubeMesh.setNewEdgeVertex(edge, accumPos/VTX_VALENCE);
+    }
+    
+    
+    int nVertices = g_CubeMesh.getNumVertices();
+    //compute edge vertex geometries
+    for (int i = 0; i < nVertices; ++i) {
+        const Mesh::Vertex v = g_CubeMesh.getVertex(i);
+        
+        Cvec3 accumVVPos;
+        Cvec3 accumFVPos;
+        Mesh::VertexIterator it(v.getIterator()), it0(it);
+        do{
+            //can use here it.getVertex(), it.getFace()
+            Mesh::Vertex vv=it.getVertex();
+            Mesh::Face vf=it.getFace();
+            
+            accumVVPos += vv.getPosition();
+            accumFVPos += g_CubeMesh.getNewFaceVertex(vf);
+        }while (++it != it0);// go around once the 1ring
+        
+        g_CubeMesh.setNewVertexVertex(v, v.getPosition()/2 + accumVVPos/16 + accumVVPos/16);
+    }
+    
+    g_CubeMesh.subdivide();
+    
+    //flat shading data
+//    nFaces = g_CubeMesh.getNumFaces();
+//    for(int i=0;i<nFaces;i++){
+//        Mesh::Face face = g_CubeMesh.getFace(i);
+//
+//        //for first triangle
+//        VertexPN vtxPN0(face.getVertex(0).getPosition(),face.getNormal());
+//        g_divisionVtx.push_back(vtxPN0);
+//        VertexPN vtxPN1(face.getVertex(1).getPosition(),face.getNormal());
+//        g_divisionVtx.push_back(vtxPN1);
+//        VertexPN vtxPN2(face.getVertex(2).getPosition(),face.getNormal());
+//        g_divisionVtx.push_back(vtxPN2);
+//
+//        //for second triangle
+//        g_divisionVtx.push_back(vtxPN0);
+//        g_divisionVtx.push_back(vtxPN2);
+//        VertexPN vtxPN3(face.getVertex(3).getPosition(),face.getNormal());
+//        g_divisionVtx.push_back(vtxPN3);
+//    }
+    
+    // smooth shading
+    Cvec3 zeroNormal(0,0,0);
+    for (int i = 0; i < nVertices; ++i) {
+        const Mesh::Vertex v = g_CubeMesh.getVertex(i);
+        v.setNormal(zeroNormal);
+    }
+
+    for(int i=0;i<g_CubeMesh.getNumFaces();i++){
+        Mesh::Face face = g_CubeMesh.getFace(i);
+        double vtxValence = face.getNumVertices();
+
+        for(int j=0;j<vtxValence;j++){
+            Mesh::Vertex v=face.getVertex(j);
+            v.setNormal(v.getNormal()+face.getNormal());
+        }
+    }
+    //calculate average normals by vertex iterator
+//    for (int i = 0; i < g_CubeMesh.getNumFaces(); ++i) {
+//        const Mesh::Vertex v = g_CubeMesh.getVertex(i);
+//
+//        Cvec3 normal(0,0,0);
+//        Mesh::VertexIterator it(v.getIterator()), it0(it);
+//        do{
+//            Mesh::Face vf=it.getFace();
+//            normal = normal + vf.getNormal();
+//        }while (++it != it0);     // go around once the 1ring
+//
+//        v.setNormal(normal);
+//    }
+    //each face is composed by a quad,so we need to dice them into two triangles
+    for(int i=0;i<g_CubeMesh.getNumFaces();i++){
+        Mesh::Face face = g_CubeMesh.getFace(i);
+        double vtxValence = face.getNumVertices();
+
+        //for first triangle
+        VertexPN vtxPN0(face.getVertex(0).getPosition(),face.getVertex(0).getNormal()/vtxValence);
+        g_divisionVtx.push_back(vtxPN0);
+        VertexPN vtxPN1(face.getVertex(1).getPosition(),face.getVertex(1).getNormal()/vtxValence);
+        g_divisionVtx.push_back(vtxPN1);
+        VertexPN vtxPN2(face.getVertex(2).getPosition(),face.getVertex(2).getNormal()/vtxValence);
+        g_divisionVtx.push_back(vtxPN2);
+
+        //for second triangle
+        g_divisionVtx.push_back(vtxPN0);
+        g_divisionVtx.push_back(vtxPN2);
+        VertexPN vtxPN3(face.getVertex(3).getPosition(),face.getVertex(3).getNormal()/vtxValence);
+        g_divisionVtx.push_back(vtxPN3);
+    }
+    
+    g_subdivisionMesh->upload(&g_divisionVtx[0], (int)g_divisionVtx.size());
 }
 
 static void initMaterials(){
@@ -648,8 +780,8 @@ static void keyboard(GLFWwindow* window, int key, int scancode, int action, int 
             case GLFW_KEY_P:
                 g_pickingFlag ^= true;
                 break;
-            case GLFW_KEY_F:
-//                g_activeShader ^= 1;
+            case GLFW_KEY_I:
+                subdivide();
                 break;
             case GLFW_KEY_V:
                 g_activeEyeFrame++;

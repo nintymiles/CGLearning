@@ -275,6 +275,9 @@ public:
     int getNumVertices() const {
       return m_.fn__(f_);
     }
+      
+    //the normal of each face is obtained by cross product of two vectors (p1-p0,p2-p0)
+    //the normals of each face are the same
     Cvec3 getNormal() const {
       return cross(m_.vertex_[m_.face_[f_].vertex_[1]].position_ - m_.vertex_[m_.face_[f_].vertex_[0]].position_,
                    m_.vertex_[m_.face_[f_].vertex_[2]].position_ - m_.vertex_[m_.face_[f_].vertex_[0]].position_).normalize();
