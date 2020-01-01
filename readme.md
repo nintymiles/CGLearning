@@ -3,8 +3,23 @@
 
 > 虽然这本教科书的实例代码和作业项目都是基于OpenGL，并且也是基于OpenGL管线进行了相关的原理讲解，但是这本教材中并没有任何OpenGL本身的学习内容。书中涉及的图形技术并没有使用OpenGL中的高级特征，只需要具备基本的现代可编程管线特征的版本即可。这意味着可以从一个精简版本的OpenGL着手（可以完全抛掉OpenGL中那些传统功能性编程的老古董），减少基于OpenGL学习CG技术的初始曲线的陡峭度，比如从OpenGL ES 3.0开始入手学习。本书中所有的实例几乎都可以无缝地移植到OpenGL ES3.0环境中。
 
-## 已经完成的作业项目（assignment project）
-除了picking由于OpenGL的进化，目前已经无法通过在屏幕（默认帧缓存)中通过读取像素的方式实现外（正在考虑使用射线相交的方式实现），assignment1-6已经完成，assignment7-8也在实现中，但由于catmull-clark和shell渲染算法还在学习中，目前只是实现基础材料的渲染。
+## 作业项目（assignment project）
+### 一些问题
+
+1. 由于OpenGL的进化，目前Picking已经无法通过在屏幕（默认帧缓存)中通过读取像素的方式实现（正在考虑使用射线相交的方式实现）。  
+2. 目前所有的项目已经实现了Mac环境下的运行，部分实现了iOS版本，windows版本正在进行中...
+3. 网站所给出的项目模版基于glut和较早期的OpenGL（4.0之前）版本，在实现课后项目时，我将其更换为GLFW版本，并对一些版本不兼容错误做出了改正（比如绘制时必须具备VAO对象）
+
+### 项目情况
+| Project | Description |
+| --- | --- | 
+| Assignment2 Hello World 3D| 已完成 |   |
+| Assignment3 Quaternion and Arcball| 已完成 |   |
+| Assignment4 Hierarchical Transformations and Pickin| Picking部分未完成，需要新方法 |   |
+| Assignment5 Keyframe Animation| 部分完成，不少地方需要改进 |   |
+| Assignment6 Materials and Bump Mapping| 部分完成，Picking部分未完成 |   |
+| Assignment7 Meshes and Subdivision Surfaces| 初步完成，Catmull-clark规则的实现需要改进 |   |
+| Assignment8 Furry Animation| 初步完成，不少地方需要改进 |   |
 
 ## 正在进行的**Foundation of 3D Computer Graphics**的翻译项目
 已经完成的章节
@@ -16,7 +31,7 @@
 - [第八章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter08-BallsTrackAndArc.pdf)
 - [第九章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter09-Smooth-Interpolation.pdf)
 - [第十章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter10-Projection.pdf)
-- 第十一章 进行中...
+- [第十一章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter11-Depth.pdf)
 - [第十二章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter12-From-Vertex-To-Pixel.pdf)
 - [第十三章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter13-Rational-Linear-Interpolation.pdf)
 - [第十四章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter14-Materials.pdf)
