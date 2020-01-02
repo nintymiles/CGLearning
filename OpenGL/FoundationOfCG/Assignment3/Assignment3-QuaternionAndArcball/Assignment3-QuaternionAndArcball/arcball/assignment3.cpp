@@ -113,77 +113,6 @@ static const char * const g_shaderFiles[g_numShaders][2] = {
   {"./shaders/basic-gl3.vshader", "./shaders/diffuse-gl3.fshader"}
 };
 
-const char* basicVert = GLSL
-(
- 410 core,
- 
- uniform mat4 uProjMatrix;
- uniform mat4 uModelViewMatrix;
- uniform mat4 uNormalMatrix;
- uniform float uXCoordOffset;
- 
- in vec3 aPosition;
- in vec3 aNormal;
- 
- out vec3 vNormal;
- out vec3 vPosition;
- 
- void main() {
-     vNormal = vec3(uNormalMatrix * vec4(aNormal, 0.0));
-     
-     // send position (eye coordinates) to fragment shader
-     vec4 tPosition = uModelViewMatrix * vec4(aPosition, 1.0);
-     vPosition = vec3(tPosition);
-     gl_Position = uProjMatrix * tPosition; 
-     gl_Position.x += uXCoordOffset;
- }
- 
- );
-
-const char* solidVert = GLSL
-(
- 410 core,
- 
- uniform vec3 uColor;
- 
- out vec4 fragColor;
- 
- void main() {
-     fragColor = vec4(uColor, 1.0);
- }
- );
-
-const char* diffuseVert = GLSL
-(
- 410 core,
- 
- uniform vec3 uLight;
- uniform vec3 uLight2;
- uniform vec3 uColor;
- 
- in vec3 vNormal;
- in vec3 vPosition;
- 
- out vec4 fragColor;
- 
- void main() {
-     vec3 tolight = normalize(uLight - vPosition);
-     vec3 tolight2 = normalize(uLight2 - vPosition);
-     vec3 normal = normalize(vNormal);
-     
-     float diffuse = max(0.0, dot(normal, tolight));
-     diffuse += max(0.0, dot(normal, tolight2));
-     vec3 intensity = uColor * diffuse;
-     
-     fragColor = vec4(intensity, 1.0f);
- }
- );
-
-static const char * const g_shaderSources[g_numShaders][2] = {
-  {basicVert, diffuseVert},
-  {basicVert, solidVert}
-};
-
 static vector<shared_ptr<ShaderState> > g_shaderStates; // our global shader states
 
 // --------- Geometry
@@ -646,7 +575,7 @@ static void initShaders() {
     g_shaderStates.resize(g_numShaders);
     for (int i = 0; i < g_numShaders; ++i) {
         if (g_GlSourceFlag)
-            g_shaderStates[i].reset(new ShaderState(g_shaderSources[i][0], g_shaderSources[i][1],g_GlSourceFlag));
+            g_shaderStates[i].reset(new ShaderState(g_shaderFiles[i][0], g_shaderFiles[i][1],g_GlSourceFlag));
         else
             g_shaderStates[i].reset(new ShaderState(g_shaderFiles[i][0], g_shaderFiles[i][1],g_GlSourceFlag));
     }
