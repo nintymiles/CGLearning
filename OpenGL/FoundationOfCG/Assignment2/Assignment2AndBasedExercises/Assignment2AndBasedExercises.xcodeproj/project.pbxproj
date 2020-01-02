@@ -99,7 +99,6 @@
 		5C2FD75721DAF61000E70862 /* ppm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ppm.cpp; sourceTree = "<group>"; };
 		5C45262821F40AEA00966DD0 /* Ex.31-33 verifying */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Ex.31-33 verifying"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C45262921F40EFC00966DD0 /* ex31-33verifying.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "ex31-33verifying.cpp"; sourceTree = "<group>"; };
-		5C45262B21F4161F00966DD0 /* projection matrix left and right multiply scale or uniformity diagonal matrix.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = "projection matrix left and right multiply scale or uniformity diagonal matrix.md"; path = "../../projection matrix left and right multiply scale or uniformity diagonal matrix.md"; sourceTree = "<group>"; };
 		5C950D0121DCAA1A00C536A0 /* libGLEW.2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.1.0.dylib; path = ../../../../../usr/local/lib/libGLEW.2.1.0.dylib; sourceTree = "<group>"; };
 		5C96C94C21EA10EC00223694 /* glsupport.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glsupport.cpp; path = "../../../../../FoundationOfCG-MIT/Common/glsupport.cpp"; sourceTree = "<group>"; };
 		5C96C94D21EA10EC00223694 /* glsupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glsupport.h; path = "../../../../../FoundationOfCG-MIT/Common/glsupport.h"; sourceTree = "<group>"; };
@@ -210,7 +209,6 @@
 		5CD4E2EB21D8D59800DBFCE3 /* Assignment2AndBasedExercises */ = {
 			isa = PBXGroup;
 			children = (
-				5C45262B21F4161F00966DD0 /* projection matrix left and right multiply scale or uniformity diagonal matrix.md */,
 				5CFAFDBD21EC2A67000803C1 /* Ex.31-33 verifying */,
 				5CFAFDC321EC2A87000803C1 /* tesellatedsphere */,
 				5CE2BC1621E8295C003B5B50 /* perfMonitor.cpp */,
