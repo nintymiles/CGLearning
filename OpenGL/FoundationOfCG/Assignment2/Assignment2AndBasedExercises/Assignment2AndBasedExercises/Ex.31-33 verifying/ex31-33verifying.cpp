@@ -386,7 +386,6 @@ static void display() {
 
   drawStuff();
 
-  //glutSwapBuffers();
 //   show the back buffer (where we rendered stuff)
 //  glfwSwapBuffers(window);
 
@@ -633,6 +632,7 @@ int main(int argc, char * argv[]) {
           
           motion(cursor_x, cursor_y);
           
+          //exchange between front and back buffer
           glfwSwapBuffers( window );
           //glfwPollEvents();
           glfwWaitEvents();

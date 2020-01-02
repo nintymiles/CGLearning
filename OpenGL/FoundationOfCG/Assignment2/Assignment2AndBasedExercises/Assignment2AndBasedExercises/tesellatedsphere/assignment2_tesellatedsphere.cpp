@@ -666,6 +666,7 @@ int main(int argc, char * argv[]) {
           
           motion(cursor_x, cursor_y);
           
+          //exchange between front and back buffer after drawing
           glfwSwapBuffers( window );
           //glfwPollEvents();
           glfwWaitEvents();

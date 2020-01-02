@@ -383,8 +383,8 @@ static void display() {
 
     drawStuff();
 
-    //glutSwapBuffers();
-    //   show the back buffer (where we rendered stuff)
+    //show the back buffer (where we rendered stuff)
+    glfwSwapBuffers(window);
 
 }
 
@@ -590,7 +590,6 @@ int main(int argc, char * argv[]) {
   try {
       //initGlutState(argc,argv);
       
-      
       //initGLFW
       initGlfwState();
 
@@ -616,6 +615,8 @@ int main(int argc, char * argv[]) {
       initGeometry();
       initShaders();
       
+      //在Mac环境下窗口的刷新回调并不是绘制窗口的刷新率，而好像只是回调了一次，
+      //所以这种调用不能保证绘制窗口的刷新率，此处调用可以舍弃
       glfwSetWindowRefreshCallback(window, displayWindow);
       
       OpenGL_Helper::PerfMonitor perfMonitor;
@@ -629,7 +630,8 @@ int main(int argc, char * argv[]) {
           
           motion(cursor_x, cursor_y);
           
-          glfwSwapBuffers( window );
+          //交换前后缓存，缓存的交换要确保在绘制后交换，若绘制后交换多于一次就会导致窗口闪烁
+          //glfwSwapBuffers( window );
           //glfwPollEvents();
           glfwWaitEvents();
       }
