@@ -55,17 +55,17 @@ $$\large{ \vec{v} = \vec{\mathbf{b}}^t\mathbf{c} }$$
 这里$\vec{v}$是一个矢量，$\vec{\mathbf{b}}^t$为一行基矢量，$\mathbf{c}$为一（列）坐标矢量。
 
 ## 2.3 线性变换和$3\times3$矩阵（Linear Transformations and 3 by 3 Matrices）
-线性变换$\iota$只是从线性空间V到线性空间V的一种变换，满足下列两个属性。
+线性变换$\mathcal{L}$只是从线性空间V到线性空间V的一种变换，满足下列两个属性。
 $$\large{
-\iota(\vec{v}+\vec{u}) = \iota(\vec{v})+\iota(\vec{u}) \\ \iota(\alpha\vec{v}) =\alpha\iota(\vec{v})
+\mathcal{L}(\vec{v}+\vec{u}) = \mathcal{L}(\vec{v})+\mathcal{L}(\vec{u}) \\ \mathcal{L}(\alpha\vec{v}) =\alpha\mathcal{L}(\vec{v})
 }$$
-我们借用标记$\vec{v} \Rightarrow \iota(\vec{v})$表示矢量$\vec{v}$通过$\iota$被变换为矢量$\iota(\vec{v})$。
+我们借用标记$\vec{v} \Rightarrow \mathcal{L}(\vec{v})$表示矢量$\vec{v}$通过$\mathcal{L}$被变换为矢量$\mathcal{L}(\vec{v})$。
 
 线性变换所对应的变换完全就是可用矩阵表达的这类变换。这是因为线性变换可以完全通过告知其在基矢量上的效果被指定。让我们考察一下这是如何起作用的：
 
 变换的线性暗示了下列关系
 $$ \large{
-\vec{v} \Rightarrow \iota(\vec{v}) = \iota(\sum_i c_i\vec{b}_i)=\sum_i c_i\iota(\vec{b}_i)
+\vec{v} \Rightarrow \mathcal{L}(\vec{v}) = \mathcal{L}(\sum_i c_i\vec{b}_i)=\sum_i c_i\mathcal{L}(\vec{b}_i)
 }$$
 
 上面表达我们可以借助方程式（2.1）用矢量代数标记法写作
@@ -73,13 +73,13 @@ $$ \large{
  \begin{bmatrix} \vec{b}_1 & \vec{b}_2 & \vec{b}_3 \end{bmatrix}
 	\begin{bmatrix} c_1 \\ c_2 \\ c_3 \end{bmatrix} 
 \Rightarrow 
-\begin{bmatrix} \iota(\vec{b}_1) & \iota(\vec{b}_2) & \iota(\vec{b}_3) \end{bmatrix}
+\begin{bmatrix} \mathcal{L}(\vec{b}_1) & \mathcal{L}(\vec{b}_2) & \mathcal{L}(\vec{b}_3) \end{bmatrix}
 	\begin{bmatrix} c_1 \\ c_2 \\ c_3 \end{bmatrix}
  }$$
 
-3个新矢量$\iota(\vec{b}_i)$中的每个本身就是线性空间V中的一个元素，可以最终被写作用最初基矢量表达的某种线性组合。例如，使用某种合适的$M_{j,1}$值的集合，我们可以写
+3个新矢量$\mathcal{L}(\vec{b}_i)$中的每个本身就是线性空间V中的一个元素，可以最终被写作用最初基矢量表达的某种线性组合。例如，使用某种合适的$M_{j,1}$值的集合，我们可以写
 $$
-\iota(\vec{b}_1) = 
+\mathcal{L}(\vec{b}_1) = 
 \begin{bmatrix} \vec{b}_1 & \vec{b}_2 & \vec{b}_3 \end{bmatrix}
 	\begin{bmatrix} M_{1,1} \\ M_{2,1} \\ M_{3,1} \end{bmatrix}
 $$
