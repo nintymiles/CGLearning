@@ -1,3 +1,9 @@
+# Note
+这是对**MIT Foundation of 3D Computer Graphics**第7章的翻译，本章讲解了方位插值、四元数表达(quaternion representation)、slerp（球体线性插值）/lerp操作等基础知识，重点是如何使用四元数替换旋转矩阵。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教ninetymiles@icloud.com 
+
+> 注：文章中相关内容归原作者所有，翻译内容仅供学习参考。
+> 另：Github项目[CGLearning](https://github.com/nintymiles/CGLearning)中拥有相关翻译的完整资料、内容整理、课程项目实现。
+
 # 四元数（Quaternions）专业性多一点(a bit technical)
 本章中，我们会探讨将旋转的四元数表达作为对旋转矩阵的代替
 $$
@@ -6,31 +12,30 @@ $$
 针对四元数，我们的主要用处是协助我们以自然的方式在方位间插值。对于驱动（动画）从空中飞过的物体十分有用。如果你不打算针对实际应用插值出旋转，那么这种表达不是必须的。
 
 ## 7.1 插值（Interpolation）
+让我们假设我们拥有一个想要的物体帧（object frame），在时刻“time=0”：$\vec{\mathbf{o}}_0^t=\vec{\mathbf{w}}^tR_0$，同时还有一个想要的物体帧，在时刻“time=1”：$\vec{\mathbf{o}}_1^t=\vec{\mathbf{w}}^tR_1$，此处$R_0$和$R_1$都是$4 \times 4$的旋转矩阵。假设针对$\alpha \in [0..1]$，我们希望找到一系列帧$\vec{\mathbf{o}}_{\alpha}^t$，其自然地从$\vec{\mathbf{o}}_{0}^t$旋转到$\vec{\mathbf{o}}_{1}^t$。
 
-⃗ Let us suppose we have a desired object frame for “time=0”: ⃗ o 0 t = w t R 0 , and a desired ⃗ object frame for “time=1”: ⃗ o 1 t = w t R 1 , where R 0 and R 1 are 4 by 4 rotation matrices. Suppose we wish to ﬁnd a sequence of frames ⃗ o t , for α ∈ [0..1], that naturally rotates α from ⃗ o t to ⃗ o t . 0 1
+一种思路是定义$R_{\alpha}=(1-\alpha)R_0 + (\alpha)R_1$，然后设置$\vec{\mathbf{o}}_{\alpha}^t=\vec{\mathbf{w}}^tR_{\alpha}$。问题是，根据矩阵线性插值，每个矢量只是沿着一条直线移动。参考图示$\text{Figure 7.1}$。这种情形中，中间的$R_{\alpha}$值甚至都不是旋转矩阵；这很明显是不可接受的。更进一步，（特别在3D空间中），非常不容易以某种方式找出一种真正的旋转矩阵近似这种被插值的矩阵，从而去除这种挤压。
 
-⃗ One idea would be to deﬁne R α := (1 − α)R 0 + (α)R 1 and then set ⃗ o α t = w t R α . The problem is that, under matrix linear interpolation, each vector simply moves along a straight line. See Figure 7.1. In this case, the intermediate R α are not rotation matrices; this is clearly unacceptable. Moreover, (especially in 3D), it is not very easy to remove this squashing by somehow ﬁnding a true rotation matrix that approximates this interpolated matrix.
+另一种思路，不值得过于深入探究，是以某种方式将$R_0$和$R_1$都分解为3个所谓的欧拉角（Euler angles，参考小节2.5）。这3个标量值每个都可以借助$\alpha$被线性插值。被插值的欧拉角随后被用于生成中间的旋转。可以证实（turn out）当插值欧拉角时，被插值的旋转序列不管从物理方式还是几何方式都不是特别自然。例如，对于基的变化不是不变性（invariant）的（后面会定义）。
 
-Another idea, not worth pursuing too deeply is to somehow to factor both R 0 and R 1 into 3, so-called, Euler angles (See section 2.5). These three scalar values could each be linearly interpolated using α. The interpolated Euler angles could then be used to generate intermediate rotations. It turns out that when interpolating Euler angles, the sequence of interpolated rotations is not particularly natural in any physical or geometric way. For example, it is not invariant to basis changes (deﬁned below).
+我们真正想做的是首先生成一个过渡矩阵$R_1R_0$。这种矩阵，可以为任何旋转矩阵，能够当作围绕某个轴$[k_x,k_y,k_z]^t$旋转某个角度$\theta$，就如方程式(2.5)所示。让我们想象我们已经拥有一种操作$(R_1R_0)^{\alpha}$，而这种操作给出我们一个围绕$[k_x,k_y,k_z]^t$进行$\alpha.\theta$角度的旋转。那么定义下面的操作就变得自然
 
-−1 What we would really like to do is to ﬁrst create a single transition matrix R 1 R 0 . This matrix can, as any rotation matrix, be thought of as a rotation of some θ degrees about some axis [k x , k y , k z ] t , as in Equation (2.5). Let us now imagine that we had −1 an operation (R 1 R 0 ) α which gave us a rotation about [k x , k y , k z ] t by α · θ degrees instead. Then it would be natural to deﬁne
 
 $$
-r_{\alpha} := (R_1R_0^{-1})^{\alpha}R_0 \tag{7.1}
+R_{\alpha} := (R_1R_0^{-1})^{\alpha}R_0 \tag{7.1}
 $$
 
-
-and set
+同时设置
 
 $$\vec{\mathbf{o}}_{\alpha}^t = \vec{\mathbf{w}}^tR_{\alpha}$$
 
-Doing so, we would get a sequence of frames that rotates more and more about a single axis, as we increase α, until it reaches its desired resting pose. Clearly, at the beginning −1 ⃗ −1 we have w ⃗ t (R 1 R 0 ) 0 R 0 = w ⃗ t R 0 = ⃗ o 0 , and at the end we have w t (R 1 R 0 ) 1 R 0 = w ⃗ t R 1 = ⃗ o 1 , as desired.
+如此，我们会得到一系列帧，当我们增加$\alpha$值，这些帧就会围绕一个单轴旋转的程度越来越大，直到其到达想要的静止姿态。很清晰地，在开始处我们有$\vec{\mathbf{w}}^t(R_1R_0^{-1})^{0}R_0 = \vec{\mathbf{w}}^t R_0 =\vec{\mathbf{o}}_0^t$，而在结尾处我们有$\vec{\mathbf{w}}^t(R_1R_0^{-1})^{1}R_0 = \vec{\mathbf{w}}^t R_1 =\vec{\mathbf{o}}_1^t$。
 
-−1 The hard part here is to factor a transition rotation matrix, like R 1 R 0 , into its axis/angle form. The idea behind the quaternion representation is to keep track of the axis and angle at all times so that no such factoring is needed. On the other hand, with the quaternion representation, we can still do all of the necessary manipulations that we can do with rotation matrices.
+这其中最难的部分为分解一个过渡矩阵，比如$R_1R_0$，为轴/角度形式。四元数表达背后的思路就是时时刻刻跟踪轴和角度以致于不再需要这种分解。在另一方面，借助四元数表达，我们还可以执行所有必要的可以用旋转矩阵来完成的操作（manipulation）。
 
-### 7.1.1 Cycles
 
-−1 We need to clarify one detail here. The matrix R 1 R 0 matrix can, in fact, be thought of as a rotation of some θ + n2π degrees for any integer n. When looking at the effect of this rotation acting as a linear transform on a vector, these extra factors of 2π are irrelevant. But when deﬁning a power operator that gives us “a sequence of frames that rotate more and more about a single axis, until it reaches its desired resting pose”, we −1 need to decide how to choose a value of n given the matrix R 1 R 0 . For interpolation, the natural choice is to choose n such that |θ + n2π| is minimal. In particular, this means that, for this choice of n, we have θ + n2π ∈ [−π..π]. Additionally, this choice is unambiguous (except in the case that θ = π + n2π, in which case we would need to choose arbitrarily between −π and π). Indeed, this choice of n will come up below in Section 7.4.
+### 7.1.1 循环（Cycles）
+此处我们需要澄清一个细节。事实上，矩阵$R_1R_0^{-1}$可以被当作某一个$\theta+n2\pi$角度的旋转，$n$为任意整数。当观察这种旋转充当施加在一个矢量上的线性变换的效果时，这些额外的$2\pi$因子是不相关的。但是当定义一个幂操作符，这个操作符给了我们“一系列围绕一个单一轴旋转程度越来越大的帧，直到其到达要求的终止姿态”，我们就需要确定怎样选择一个所给定矩阵$R_1R_0^{-1}$的$n$值。对于插值，自然的选择为选择n使得$|\theta+n2\pi|$是最小的。实际上这意味着，对于n的选择，我们让$\theta + n2\pi \in [-\pi..\pi]$。另外，这种选择是没有歧义的（除了在$\theta = \pi + n2\pi $的情形，这种情形中我们会需要在$-\pi$和$\pi$之间任意选择一种）。确实，这种$n$值的选择在后面的小节7.4中会被提出。
 
 ### 7.1.2 Invariance
 
