@@ -315,8 +315,7 @@ $$ \begin{array}{rl}
 
 给出这种基础结构，我们能够借助我们的新数据类型重新编码函数`doQtoOwrtA(RigTForm Q, RigTform 0, RigTForm A)`。
 
-Finally, in order to communicate with the vertex shader using 4 by 4 matrices, we need a procedure Matrix4 makeRotation(quat q) which implements Equation (2.5). Then, the matrix for a rigid body transform can be computed as
-
+最终，为了和顶点着色器沟通，需要使用$4\times4$矩阵，我们需要一个程序`doQtoOwrtA(RigTForm Q, RigTform 0, RigTForm A)`实现方程式(2.5)。然后，用于刚体变换的矩阵可以被计算为
 
 ```cpp
 matrix4 makeTRmatrix(const RigTform& rbt){ 
@@ -325,8 +324,7 @@ matrix4 makeTRmatrix(const RigTform& rbt){
 	return T * R; 
 }
 ```
-
-Thus, our drawing code starts with
+从而，我们的绘制代码以下列代码开始
 
 ```cpp
 Matrix4 MVM = makeTRmatrix(inv(eyeRbt) * objRbt); 
@@ -334,8 +332,7 @@ Matrix4 MVM = makeTRmatrix(inv(eyeRbt) * objRbt);
 Matrix4 NMVM = normalMatrix(MVM); 
 sendModelViewNormalMatrix(MVM,NMVM);
 ```
+注意，我们构造计算的方式，我们不再需要任何代码，这些代码接受一个矩阵并将其转换为一个`Quat`。
 
-Note that, the way we have structured our computation, we will not need any code that takes a Matrix4 and convertes it to a Quat.
-
-Other than switching from the Matrix4 data type to the RigTForm type, the rest of our code, which keeps track of the various rigid body frames, does not need to be altered. In this new implementation, a scale is still represented by a Matrix4.
+除了从`Matrix4`数据类型切换到`RigTForm`类型，我们的其余代码，这些代码保持不停地追踪多个刚体帧，不需要被改变。在新实现中，伸缩仍然要被`Matrix4`类型表达。
 
