@@ -275,17 +275,22 @@ Given two RBTs O 0 = (O 0 ) T (O 0 ) R and O 1 = (O 1 ) T (O 1 ) R , we can inte
 
 It is important to note that this RBT interpolant is not right invariant. If you change the object frames and interpolate between them using this method, the new origin will travel in a straight line, while the old origin will trace out a curved path. (See Fig-ure 7.5.) Thus, this method makes the most sense where there is a meaningful notion of “center” for the object being interpolated. In cases where there is no such center, the most natural answer is less obvious (but see for example [35]).
 
-### 7.6.2 Operations
+### 7.6.2 操作（Operations）
+返回到小节6.2中我们的绘制代码中，我们现在可以借助`RigTform`数据类型而不是`Matrix4`类型来表达`eyeRBT`和`objRBT`。
 
-Going back to our drawing code of Section 6.2, we can now represent the eyeRBT and objRBT RBTs using the RigTform data type instead of Matrix4.
+要生成有效的坚固形体（刚体）变换，我们需要下列的操作
 
-To create useful rigid body transforms, we need the following operations
+```
+RigTForm identity(); 
+RigTForm makeXRotation(const double ang); 
+RigTForm makeYRotation(const double ang); 
+RigTForm makeZRotation(const double ang); 
+RigTForm makeTranslation(const double tx, const double ty, const double tz);
+```
 
-RigTForm identity(); RigTForm makeXRotation(const double ang); RigTForm makeYRotation(const double ang); RigTForm makeZRotation(const double ang); RigTForm makeTranslation(const double tx, const double ty, const double tz);
+我们需要编码`RigTForm A`和`Cvec4 c`的乘积，它会返回结果`A.r * c + A.t`。
 
-We need to code the product of a RigTForm A and a Cvec4 c, which returns A.r * c + A.t.
-
-Next, we need to code the product of two RigTForm. To understand how to do this, let us look at the product of two such rigid body transforms.
+接着，我们需要编码两个`RigTForm`的乘积。要理解如何完成这个计算，让我们观察两个这样的刚体变换的乘积。
 
 $$ \begin{array}{rl}
 \begin{bmatrix} i & t_1 \\ 0 & 1 \end{bmatrix} \begin{bmatrix} r_1 & 0 \\ 0 & 1 \end{bmatrix} \begin{bmatrix} i & t_2 \\ 0 & 1 \end{bmatrix} \begin{bmatrix} r_2 & 0 \\ 0 & 1 \end{bmatrix} & =  \\
@@ -294,9 +299,9 @@ $$ \begin{array}{rl}
 \begin{bmatrix} i & t_1+r_1t_2 \\ 0 & 1 \end{bmatrix} \begin{bmatrix} r_1r_2 & 0 \\ 0 & 1 \end{bmatrix}
 \end{array}$$
 
-From this we see that the result is a new rigid transform with translation t 1 + r 1 t 2 and rotation r 1 r 2 .
+从这种表达我们看到结果为一个新的刚体变换拥有平移$t_1 + r_1t_2$和旋转$r_1r_2$。
 
-Next, we need to code the inverse operator for this data type. If we look at the inverse of a rigid body transform, we see that
+接着，我们需要为这种数据类型编码倒数（inverse）操作符。如果我们观察一个刚体变换的倒数，我们会看到
 
 $$ \begin{array}{rl}
 \left(\begin{bmatrix} i & t \\ 0 & 1 \end{bmatrix} \begin{bmatrix} r & 0 \\ 0 & 1 \end{bmatrix}\right)^{-1}  & =  \\
@@ -306,9 +311,9 @@ $$ \begin{array}{rl}
 \begin{bmatrix} i & -r^{-1}t \\ 0 & 1 \end{bmatrix} \begin{bmatrix} r^{-1} & 0 \\ 0 & 1 \end{bmatrix}
 \end{array}$$
 
-Thus, we see that the result is a new rigid body transform with translation −r −1 t and rotation r −1 .
+因此，我们看到结果为一个新的刚体变换，拥有平移$-r^{-1}t$和旋转$r^{-1}$。
 
-Given this infrastructure, we can now recode the function doQtoOwrtA(RigTForm Q, RigTform 0, RigTForm A) using our new data type.
+给出这种基础结构，我们能够借助我们的新数据类型重新编码函数`doQtoOwrtA(RigTForm Q, RigTform 0, RigTForm A)`。
 
 Finally, in order to communicate with the vertex shader using 4 by 4 matrices, we need a procedure Matrix4 makeRotation(quat q) which implements Equation (2.5). Then, the matrix for a rigid body transform can be computed as
 
