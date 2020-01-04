@@ -37,75 +37,60 @@ $$\vec{\mathbf{o}}_{\alpha}^t = \vec{\mathbf{w}}^tR_{\alpha}$$
 ### 7.1.1 循环（Cycles）
 此处我们需要澄清一个细节。事实上，矩阵$R_1R_0^{-1}$可以被当作某一个$\theta+n2\pi$角度的旋转，$n$为任意整数。当观察这种旋转充当施加在一个矢量上的线性变换的效果时，这些额外的$2\pi$因子是不相关的。但是当定义一个幂操作符，这个操作符给了我们“一系列围绕一个单一轴旋转程度越来越大的帧，直到其到达要求的终止姿态”，我们就需要确定怎样选择一个所给定矩阵$R_1R_0^{-1}$的$n$值。对于插值，自然的选择为选择n使得$|\theta+n2\pi|$是最小的。实际上这意味着，对于n的选择，我们让$\theta + n2\pi \in [-\pi..\pi]$。另外，这种选择是没有歧义的（除了在$\theta = \pi + n2\pi $的情形，这种情形中我们会需要在$-\pi$和$\pi$之间任意选择一种）。确实，这种$n$值的选择在后面的小节7.4中会被提出。
 
-### 7.1.2 Invariance
+### 7.1.2 不变性（Invariance）
+相关于方程式（7.1）的围绕单轴，常量角速率方式的运动，存在很多自然的事物。举一个例子，一个飞过空中的物体在没有外力施加于其上时会让其质心沿着直线运动，同时其方位围绕着一个固定轴旋转。另外，这种方位插值满足左侧和右侧不变性，这一点我们现在就来解释。
 
-There are many natural things about the single-axis, constant angular velocity motion of Equation (7.1). For one thing, an object ﬂying through space with no forces acting on it has its center of mass follow a straight line and its orientation spins along a ﬁxed axis. Additionally, this kind of orientation interpolation satisﬁes both left and right invariance, which we will now explain.
+假设我们有一个可替换的世界帧$\vec{\mathbf{w}}'^t$使得$\vec{\mathbf{w}}^t=\vec{\mathbf{w}}'^tR_l$，其中$R_l$为某种固定的“左侧”旋转矩阵。借助这种帧，我们可以再表达我们最初的插值问题为在$\vec{\mathbf{o}}_0^t=\vec{\mathbf{w}}'^tR_lR_0$和$\vec{\mathbf{o}}_1^t=\vec{\mathbf{w}}'^tR_lR_1$之间进行插值的一种行为。如果这种再表达不改变插值结果，我们说插值满足“左侧”不变性：如果最初的插值给了我们$\vec{\mathbf{o}}^t_{\alpha}=\vec{\mathbf{w}}^tR_{\alpha}$，对于某种$R_{\alpha}$，那么再表达的插值给出了我们$\vec{\mathbf{w}}'^tR_lR_{\alpha}$，这就导致了完全相同的$\vec{\mathbf{o}}^t$。（参考图示$\text{Figure 7.2}$。）换句话说，只要一个插值方案仅仅依赖帧$\vec{\mathbf{o}}^t_0$和$\vec{\mathbf{o}}^t_1$的几何特征，而不是世界帧（world frame）和最终的$R_0$和$R_1$的选择，就可以说它是左侧不变的。左侧不变性是一种想要的非常自然的属性；存在非常少的情形，其中对于插值依赖世界帧的选择会有意义。
 
-⃗ ⃗ ⃗ Suppose we have an alternate world frame w ′t such that w t = w ′t R l with R l being some ﬁxed “left” rotation matrix. Using this frame, we can re-express our ⃗ original interpolation problem as one of interpolating between ⃗ o 0 := w ′t R l R 0 and ⃗ o 1 := w ′t R l R 1 . We say that our interpolation satisﬁes left invariance if this re⃗ expression does not change the interpolated answer: if the original interpolation gave ⃗ us ⃗ o α = w t R α , with some R α , then the re-expressed interpolation problem gives us w ⃗ ′t R l R α , which thus results in the exact same ⃗ o t . (See Figure 7.2.) In other words, an α interpolation scheme is left invariant if it depends only on the geometry of the frames ⃗ o 0 and ⃗ o 1 , not on the choice of world frame and the resulting R 0 and R 1 . Left invariance is a very natural property to desire; there are very few cases where it makes any sense for the interpolation to depend on the choice of world frame.
+我们可以看到使用方程(7.1)的插值满足左侧不变性如后面所述。“过渡”仿射变换映射一个帧$\vec{\mathbf{o}}^t_0$为$\vec{\mathbf{o}}^t_1$，总是唯一的。在我们的情形中，因为我们的帧都是右手性的，正交标准性的，并且共享原点，这种变换一定是一种旋转。同时，我们刚刚定义的旋转的幂操作符（也就是说，保持轴不变但伸缩角度）是一种内生的几何操作，能够不参考任何坐标被描述。因而这种插值方案不依赖于世界帧的选择，那么是左侧不变的。
 
-We can see that the interpolation using Equation (7.1) satisﬁes left invariance as follows. The “transition” afﬁne transform that that maps one frame, ⃗ o t , into another, 0 ⃗ o t , is always unique. In our case, since our frames are both right handed, orthonormal 1 and share an origin, this transform must be a rotation. Meanwhile, the power operator on rotations that we just deﬁned (namely, keep the axis but scale the angle) is an intrinsic geometric operation, and can be described without reference to any coordinates. Thus this interpolation scheme does not depend on the choice of world frame and is left invariant.
+右侧不变性，在另一方面，意味着一个物体的插值确实改变了，即便是我们改变了被使用的物体帧。实际上，假如我们固定一个“右侧”旋转矩阵$R_r$，同时使用其定义新的物体帧，在时刻“time=0”和“time=1”分别为：$\vec{\mathbf{o}}'^t_0=\vec{\mathbf{o}}^t_0R_r$和$\vec{\mathbf{o}}'^t_1=\vec{\mathbf{o}}^t_1R_r$。因为我们不想让物体的姿态本身产生改变，我们用$\mathbf{c}'=R^{-1}_r\mathbf{c}$恰当地重新赋值其所有顶点的物体-坐标（object-coordinates）。我们说我们的插值满足右侧不变性，只要这种物体基（object basis）的改变不影响旋转物体本身的插值。换句话说，如果最初的插值给出了我们$\vec{\mathbf{o}}_{\alpha}^t=\vec{\mathbf{w}}^tR_{\alpha}$，对于某个$R_{\alpha}$，那么新的插值给了我们$\vec{\mathbf{w}}^tR_{\alpha}R_r$。因而物体的插值（借助新物体坐标$\mathbf{c}'$）是不变的。（参考图示$\text{Figure 7.3}$）。右侧不变性是一种合理的自然属性。但是我们下面会看到，当我们同时和旋转一起包含平移时，我们可能想要插值依赖物体帧原点的旋转。
 
-Right invariance, on the other hand, means that the interpolation of an object does change, even if we change the object frame being used. In particular, suppose we ﬁx a “right” rotation matrix R r , and use this to deﬁne new object frames for time=0 and t t time=1: o ′ 0 = o 0 t R r and o ′ 1 = o t R r . Since we don’t want our object’s pose itself 1
-
-to change, we appropriately reassign the object-coordinates of all of its vertices using −1 c ′ = R r c. We say that our interpolation satisﬁes right invariance if this change of object basis has no impact on the interpolation of the rotating object itself. In other ⃗ words, if the original interpolation gave us ⃗ o α = w t R α , with some R α , then the new ⃗ interpolation gives us w t R α R r . Thus the object’s interpolation (using the new object coordinates c ′ ) are unchanged. (See Figure 7.3). Right invariance is a reasonably natural property. But we will see below, that when we also include translations along with our rotations, we may want to the interpolation to depend on the choice of the object frame’s origin.
-
-We can directly see that the interpolation using Equation (7.1) satisﬁes right invariance as
-
+我们能够直接看出使用方程（7.1）的插值满足右侧不变性如下
 $$
 ((R_1R_r)(R_r^{-1}R_0^{-1}))^{\alpha}R_0R_r = (R_1R_0^{-1})^{\alpha}R_0R_r=R^{\alpha}R_r
 $$
 
-## 7.2 The Representation
+## 7.2 表达（The Representation）
+一个四元数（quaternion）只是实数的四元组，我们会很快在其上定义合适的操作。
 
-A quaternion is simply a four-tuple of real numbers, on which we will soon deﬁne suitable operations.
-
-We write a quaternion as
-
+我们把一个四元数写作
 $$ \large{
 \begin{bmatrix} w \\ \hat{c} \end{bmatrix}
 }$$
+此处$w$是一个标量而$\hat{c}$是一个3部件坐标矢量（coordinate 3-vector）。我们已经把“帽子”标记添加到$\hat{c}$以和一个四部件坐标矢量进行区分。
 
-where w is a scalar and ˆc is a coordinate 3-vector. We have added the “hat” notation to ˆc to distinguish it from a coordinate 4-vector.
-
-To represent a rotation of θ degrees about a unit length axis k, we use the quaternion 
-
+要表达围绕一个单位长度（unit length）轴$\vec{k}$进行$\theta$角度的旋转，我们使用如下四元数
 $$ \large{
 \begin{bmatrix} cos(\frac{\theta}{2}) \\ sin(\frac{\theta}{2})\hat{k} \end{bmatrix}
 }$$
 
-The division by 2 looks a bit surprising but it makes the quaternion operations, described later, work out properly. Note that a rotation of −θ degrees about the axis −k gives us the same quaternion. A rotation of θ + 4π degrees about an axis k also gives us the same quaternion. So far so good. Oddly, a rotation of θ + 2π degrees about an axis k, which in fact is the same rotation, gives us the negated quaternion 
+除以2的除法看起来有一点儿让人吃惊，但是正是它让四元数操作可以正确工作，后面会讲述。**注意围绕$-\vec{k}$轴$-\theta$角度的旋转为我们给出了相同的四元数。**一个围绕轴$\vec{k}$轴$\theta+4\pi$角度的旋转同样也给出了相同的四元数。目前为止很好。奇怪的是，一个围绕轴$\vec{k}$轴$\theta+2\pi$角度的旋转给出了负的四元数，而其实际上是完全相同的四元数
 
 $$ \large{
 \begin{bmatrix} -cos(\frac{\theta}{2}) \\ -sin(\frac{\theta}{2})\hat{k} \end{bmatrix}
 }$$
+在我们随后定义幂操作符时，这种怪异将会让事情更复杂一点。
 
-This oddity will complicate matters a bit later on when we deﬁne the power operator.
-
-The quaternions
-
+四元数
 $$ \large{
 \begin{bmatrix} 1 \\ \hat{0} \end{bmatrix},\begin{bmatrix} -1 \\ \hat{0} \end{bmatrix}
 }$$
+表达了同一旋转矩阵（identity rotation matrix）。
 
-represent the identity rotation matrix.
-
-The quaternions
-
+四元数
 $$ \large{
 \begin{bmatrix} 0 \\ \hat{k} \end{bmatrix},\begin{bmatrix} 0 \\ -\hat{k} \end{bmatrix}
 }$$
+表达了围绕轴$\vec{k}$的180度的旋转。
 
-represent a 180 ◦ rotation about k.
-
-Any quaternion of the form
-
+任何这种形式的四元数
 $$ \large{
 \begin{bmatrix} cos(\frac{\theta}{2}) \\ sin(\frac{\theta}{2})\hat{k} \end{bmatrix}
 }$$
+都拥有值为1（四个条目的平方和的平方根）的态(norm)。反过来说，任何这样的单位态的四元数（**和其负值一起**）都可以被解读为一个唯一的旋转矩阵。
 
-has a norm (square root of sum of squares of the four entries) of 1. Conversely, any such unit norm quaternion can be interpreted (along with its negation) as a unique rotation matrix.
-
-## 7.3 Operations
+## 7.3 各种操作（Operations）
 
 Multiplication of a (not necessarily unit norm) quaternion by a scalar is deﬁned as 
 
