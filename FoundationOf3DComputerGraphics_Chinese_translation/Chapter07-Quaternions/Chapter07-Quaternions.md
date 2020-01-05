@@ -91,69 +91,56 @@ $$ \large{
 都拥有值为1（四个条目的平方和的平方根）的态(norm)。反过来说，任何这样的单位态的四元数（**和其负值一起**）都可以被解读为一个唯一的旋转矩阵。
 
 ## 7.3 各种操作（Operations）
-
-Multiplication of a (not necessarily unit norm) quaternion by a scalar is deﬁned as 
-
+一个四元数（不必然是单位态(unit norm)）乘以一个标量的乘法被定义如下
 $$ \large{
 \alpha \begin{bmatrix} w \\ \hat{c} \end{bmatrix} = \begin{bmatrix} \alpha w \\ \alpha \hat{c} \end{bmatrix}
 }$$
 
-Multiplication between two (not necessarily unit norm) quaternions is deﬁned using the following strange looking operation
-
+两个四元数（不必然是单位态）间的乘法借助下列有着奇怪外观的操作被定义 
 $$ \large{
  \begin{bmatrix} w_1 \\ \hat{c}_1 \end{bmatrix} \begin{bmatrix} w_2 \\ \hat{c}_2 \end{bmatrix} = \begin{bmatrix} w_1 w_2 - \hat{c}_1.\hat{c}_2\\ w_1\hat{c}_2 + w_2\hat{c}_1 + \hat{c}_1 \times \hat{c}_2 \end{bmatrix} \tag{7.2}
 }$$
+此处$.$和$\times$为3维坐标矢量上的点积和向量积。这种外观奇怪的乘法拥有下列有用的属性：如果$[w_i,\hat{c}_i]^t$代表旋转矩阵$R_i$，那么乘积$[w_1,\hat{c}_1]^t[w_2,\hat{c}_2]^t$就代表旋转矩阵$R_1R_2$。这个表达可以通过一系列不是特别直观的计算被验证。
 
-where · and × are the dot and cross product on 3 dimensional coordinate vectors. This strange multiplication possesses the following useful property: if [w i ,ˆc i ] t represents the rotation matrix R i , then the product [w 1 ,ˆc 1 ] t [w 2 ,ˆc 2 ] t represents the rotation matrix R 1 R 2 . This can be veriﬁed through a series of not particularly intuitive calculations.
-
-The multiplicative inverse of a unit norm quaternion is
-
+一个单位态四元数的乘法反转（倒数）为
 $$ \large{
 \begin{bmatrix} cos(\frac{\theta}{2}) \\ sin(\frac{\theta}{2})\hat{k} \end{bmatrix}^{-1} = \begin{bmatrix} cos(\frac{\theta}{2}) \\ -sin(\frac{\theta}{2})\hat{k} \end{bmatrix}
 }$$
+这个四元数只是围绕相同轴旋转了$-\theta$角度。（倒数也可以针对非单位态四元数定义，但是我们这里不需要）。
 
-This quaternion simply rotates by −θ around the same axis. (Inverses can also be deﬁned for non-unit norm quaternions, but we will not need this).
-
-Importantly, we can use quaternion multiplication in order to apply a rotation to a coordinate vector. Suppose we have the 4-coordinate vector c = [ˆc, 1] t , and we left multiply it by a 4 by 4 rotation matrix R, to get
-
+更重要的是，我们能够借助四元数操作针对一个坐标实例应用旋转操作。假设我们拥有4部件坐标矢量$\mathbf{c} = [\hat{c},1]^t$，同时我们使用一个$4\times4$旋转矩阵$R$左乘这个坐标矢量来获得
 $$\mathbf{c}' = R \mathbf{c}$$
-
-where the resulting 4-coordinate vector is of the form c ′ = [ˆc ′ , 1] t . To do this with quaternions, let R be represented with the unit norm quaternion 
-
+这里最终的4部件坐标矢量为这种形式$\mathbf{c}' = [\hat{c}',1]^t$。要使用四元数完成这个操作，我们让$R$借助单位态四元数被表达 
 $$ \large{
 \begin{bmatrix} cos(\frac{\theta}{2}) \\ sin(\frac{\theta}{2})\hat{k} \end{bmatrix}
 }$$
 
-Let us take the 3-coordinate vector ˆc and use it to create the non unit norm quaternion 
-
+让我们拿3部件坐标矢量$\hat{c}$并且使用它生成一个非单位态四元数
 $$ \large{
 \begin{bmatrix} 0 \\ \hat{c} \end{bmatrix}
 }$$
-
-Next we perform the following triple quaternion multiplication:
-
+接着我们执行下面的三重四元数乘法：
 $$ \large{
 \begin{bmatrix} cos(\frac{\theta}{2}) \\ sin(\frac{\theta}{2})\hat{k} \end{bmatrix} 
 \begin{bmatrix} 0 \\ \hat{c} \end{bmatrix}
 \begin{bmatrix} cos(\frac{\theta}{2}) \\ sin(\frac{\theta}{2})\hat{k} \end{bmatrix}^{-1} \tag{7.3}
 }$$
+这个公式可以通过一系列不是特别直观的计算验证出这种三重四元数的乘积事实上为下面形式的四元数
+$$ \large{
+\begin{bmatrix} 0 \\ \hat{c}' \end{bmatrix}
+}$$
+此处$\hat{c}'$为要求结果的3部件坐标矢量表达。
 
-It can again be veriﬁed through a series of not particularly intuitive calculations that the result of this triple quaternion product is in fact a quaternion of the form ) * 0 ˆc ′
+因此，四元数一方面明确地封装了旋转轴和角度，而另一方面又具备允许我们像旋转矩阵一样操纵他们的各种操作。
 
-where ˆc ′ is the 3-coordinate vector of the desired answer.
-
-Thus quaternions on the one hand explicitly encode the rotation axis and angle, while on the other hand possess operations that allow us to easily manipulate them like rotations.
-
-7.4 Power
-
-Given a unit norm quaternion representing a rotation, we can raise it to the power α as follows. We ﬁrst extract the unit axis k by normalizing the three last entries of the quaternion. Next, we extract θ using the atan2 function. This gives us a unique value θ/2 ∈ [−π..π], and thus a unique θ ∈ [−2π..2π]. Then we deﬁne
-
+7.4 幂操作定义（Power）
+给出一个表达一个旋转的单位态四元数，我们能够将其提升为幂$\alpha$操作如后所述。我们首先通过标准化四元数的后3个条目提取出单位轴$\vec{k}$。接着，我们使用$atan2$函数提取出$\theta$。这样就给出了我们一个唯一的值$\theta/2 \in [-\pi..\pi]$，从而确定了一个唯一的角度$\theta \in [-2\pi..2\pi]$。那么我们定义如下
 $$ \large{
 \begin{bmatrix} cos(\frac{\theta}{2}) \\ sin(\frac{\theta}{2})\hat{k} \end{bmatrix}^{\alpha} = \begin{bmatrix} cos(\frac{\alpha\theta}{2}) \\ sin(\frac{\alpha\theta}{2})\hat{k} \end{bmatrix}
 }$$
+当$\alpha$从0变换到1，我们获得一系列角度在0和$\theta$之间变化的旋转。
 
-As α goes from from 0 to 1, we get a series of rotations with angles going between 0 and θ.
-
+如果$\cos(\theta) > 0$，我们得到$\theta/2 \in [-\pi/2..\pi/2]$，从而$\theta \in [-\pi..\pi]$。在这种情形中，当我们使用$\alpha \in [0..1]$去在两个方位间插值，我们会在方位间的“短路径”上插值$\theta$。反过来说，如果
 If cos( θ ) > 0, we get θ/2 ∈ [−π/2..π/2], and thus θ ∈ [−π..π]. In this case, when 2 we use α ∈ [0..1] to interpolate between two orientations, we will be interpolating the θ “short way” between the orientations. Conversely, if cos( 2 ) < 0, then |θ| ∈ [π..2π], and we will be interpolating the “long way” (greater than 180 degrees). In general, it is more natural to interpolate the short way between two orientations, and so when given a quaternion with negative ﬁrst coordinate, we always negate the quaternion before applying the power operation.
 
 ### 7.4.1 Slerp and Lerp
