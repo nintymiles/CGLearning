@@ -60,7 +60,9 @@ static bool g_mouseClickDown = false;    // is the mouse button pressed
 static bool g_mouseLClickButton, g_mouseRClickButton, g_mouseMClickButton;
 static int g_mouseClickX, g_mouseClickY; // coordinates for mouse click event
 static int g_activeShader = 1;
-static int g_activeCube = 0;
+static int g_activeObject = 0;
+static int g_activeView = 0;
+static int g_activeEgoMotion = 0;
 
 static GLFWwindow* window;
 
@@ -197,6 +199,9 @@ static RigTForm g_objectRbt[3] = {RigTForm(Cvec3(0,0,0)),RigTForm(Cvec3(0,0,0)),
 static Cvec3f g_objectColors[3] = {Cvec3f(1, 0, 0),Cvec3f(0, 0, 1),Cvec3f(0.5, 0.5, 0)};
 static RigTForm g_auxiliaryRbt;
 
+//defaultly use the skyRbt as the eyeRbt
+static RigTForm g_eyeRbt=g_skyRbt;
+
 static const float g_sphereRaidusScreenRatio = 0.35;
 static float g_arcballScale;
 static float g_arcballScreenRadius = g_sphereRaidusScreenRatio * min(g_windowWidth,g_windowHeight);
@@ -301,9 +306,7 @@ static void drawStuff() {
     const Matrix4 projmat = makeProjectionMatrix();
     sendProjectionMatrix(curSS, projmat);
     
-    // use the skyRbt as the eyeRbt
-    const RigTForm eyeRbt = g_skyRbt;
-    const RigTForm invEyeRbt = inv(eyeRbt);
+    const RigTForm invEyeRbt = inv(g_eyeRbt);
     
     const Cvec3 eyeLight1 = Cvec3(invEyeRbt * Cvec4(g_light1, 1)); // g_light1 position in eye coordinates
     const Cvec3 eyeLight2 = Cvec3(invEyeRbt * Cvec4(g_light2, 1)); // g_light2 position in eye coordinates
@@ -330,7 +333,7 @@ static void drawStuff() {
     sendModelViewNormalMatrix(curSS, MVM, NMVM);
     safe_glUniform3f(curSS.h_uColor, g_objectColors[0][0], g_objectColors[0][1], g_objectColors[0][2]);
     g_cube->draw(curSS);
-    if(g_activeCube == 0){
+    if(g_activeObject == 0){
         if(g_arcballUpdateFlag)
             g_arcballScale = computeArcballScale(Cvec4(mvmRbt.getTranslation(),0));
     }
@@ -342,7 +345,7 @@ static void drawStuff() {
     sendModelViewNormalMatrix(curSS, MVM, NMVM);
     safe_glUniform3f(curSS.h_uColor, g_objectColors[1][0], g_objectColors[1][1], g_objectColors[1][2]);
     g_cube->draw(curSS);
-    if(g_activeCube == 1){
+    if(g_activeObject == 1){
         if(g_arcballUpdateFlag)
             g_arcballScale = computeArcballScale(Cvec4(mvmRbt.getTranslation(),0));
     }
@@ -397,35 +400,56 @@ static void motion(const float x, const float y) {
     
     g_arcballUpdateFlag = true;
     
-    RigTForm m;
+    RigTForm m,t,r;
     if (g_mouseLClickButton && !g_mouseRClickButton) { // left button down?
                                                        //    m = RigTForm::makeXRotation(-dy) * RigTForm::makeYRotation(dx);
-        m = RigTForm(arcballQuat);
+        r = RigTForm(arcballQuat);
     }
     else if (g_mouseRClickButton && !g_mouseLClickButton) { // right button down?
-        m = RigTForm(Cvec3(dx, dy, 0) * g_arcballScale/**0.01*/);
+        t = RigTForm(Cvec3(dx, dy, 0) * g_arcballScale/**0.01*/);
     }
     else if (g_mouseMClickButton || (g_mouseLClickButton && g_mouseRClickButton)) {  // middle or (left and right) button down?
-        m = RigTForm(Cvec3(0, 0, -dy) * g_arcballScale /**0.01*/);
+        t = RigTForm(Cvec3(0, 0, -dy) * g_arcballScale /**0.01*/);
         g_arcballUpdateFlag = false;
     }
     
     
+    m=t*r;
     if (g_mouseClickDown) {
-        if(g_activeCube == 0){
+        if(g_activeObject == 0){
+            if(g_activeView==0){ // sky camera
+                                 //sky-cube frame
+                g_auxiliaryRbt = makeMixedFrame(g_objectRbt[0], g_skyRbt);
+            }else{
+                //cube-cube frame
+                g_auxiliaryRbt = makeMixedFrame(g_objectRbt[0], g_objectRbt[1]);
+            }
             //g_objectRbt[0] *= m; // Simply right-multiply is WRONG
-            g_auxiliaryRbt = makeMixedFrame(g_objectRbt[0], g_skyRbt);
             g_objectRbt[0] = doQtoOwrtA(m, g_objectRbt[0], g_auxiliaryRbt);
-            
-        }else if(g_activeCube == 1){
-            g_auxiliaryRbt = makeMixedFrame(g_objectRbt[1], g_skyRbt);
+        }else if(g_activeObject == 1){
+            if(g_activeView==0){
+                g_auxiliaryRbt = makeMixedFrame(g_objectRbt[1], g_skyRbt);
+            }else{
+                g_auxiliaryRbt = makeMixedFrame(g_objectRbt[1], g_objectRbt[0]);
+            }
             g_objectRbt[1] = doQtoOwrtA(m, g_objectRbt[1], g_auxiliaryRbt);
         }else{
-            RigTForm invMouseMotionMatrix = inv(m);
-            g_skyRbt = doQtoOwrtA(m, g_skyRbt, g_skyRbt);
+            if(g_activeView==0){
+                if(g_activeEgoMotion){  //ego motion
+                    m=t*inv(r);
+                    g_skyRbt = doQtoOwrtA(m, g_skyRbt, g_skyRbt);
+                }else{  // world-sky as auxilirary frame
+                    m=inv(t)*inv(r);
+                    g_auxiliaryRbt = makeMixedFrame(RigTForm(), g_skyRbt);
+                    g_skyRbt = doQtoOwrtA(m, g_skyRbt, g_auxiliaryRbt);
+                }
+                
+                g_eyeRbt = g_skyRbt;
+            }
         }
-        
     }
+    
+    
     
     g_mouseClickX = x;
     g_mouseClickY = g_windowHeight - y - 1;
@@ -487,31 +511,37 @@ static void keyboard(GLFWwindow* window, int key, int scancode, int action, int 
                 writePpmScreenshot(g_windowWidth, g_windowHeight, "out.ppm");
                 break;
             case GLFW_KEY_O:
-                g_activeCube++;
-                if(g_activeCube > 2)
-                    g_activeCube=0;
+                g_activeObject++;
+                if(g_activeObject > 2)
+                    g_activeObject=0;
                 break;
             case GLFW_KEY_F:
                 g_activeShader ^= 1;
                 break;
+            case GLFW_KEY_M:
+                g_activeEgoMotion ^= 1;
+                break;
+            case GLFW_KEY_V:
+                g_activeView++;
+                if(g_activeView>2)
+                    g_activeView=0;
+                switch (g_activeView) {
+                    case 0:
+                        g_eyeRbt=g_skyRbt;
+                        break;
+                    case 1:
+                        g_eyeRbt=transFact(g_objectRbt[0])*RigTForm::makeYRotation(-45);
+                        break;
+                    case 2:
+                        g_eyeRbt=transFact(g_objectRbt[1]);
+                        break;
+                    default:
+                        break;
+                }
+                break;
         }
     }
 }
-
-//static void initGlutState(int argc, char * argv[]) {
-//  glutInit(&argc, argv);                                  // initialize Glut based on cmd-line args
-//  glutInitDisplayMode(GLUT_RGBA|GLUT_DOUBLE|GLUT_DEPTH);  //  RGBA pixel channels and double buffering
-//  glutInitWindowSize(g_windowWidth, g_windowHeight);      // create a window
-//done  glutCreateWindow("Assignment 2");                       // title the window
-//
-// GLFW在mainloop中使用while语句不停的循环，fps能跑多高跑多高
-//done  glutDisplayFunc(display);                               // display rendering callback
-//done  glutReshapeFunc(reshape);                               // window reshape callback
-//done  glutMotionFunc(motion);                                 // mouse movement callback
-//done  glutMouseFunc(mouse);                                   // mouse click callback
-//done  glutKeyboardFunc(keyboard);
-//}
-
 
 static int initGlfwState(){
    if(!glfwInit())
@@ -560,13 +590,16 @@ static void initGLState() {
     glClearDepth(0.f);
     //glClear(GL_DEPTH_BUFFER_BIT);
     
-    //  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    //  glPixelStorei(GL_PACK_ALIGNMENT, 1);
+    
     //  glCullFace(GL_BACK);
     //  glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_GREATER);
-    //  glReadBuffer(GL_BACK);
+    
+    // used for picking？
+    glReadBuffer(GL_BACK);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glPixelStorei(GL_PACK_ALIGNMENT, 1);
     
     glEnable(GL_FRAMEBUFFER_SRGB);
 }
@@ -639,7 +672,7 @@ int main(int argc, char * argv[]) {
       while( !glfwWindowShouldClose(window) ){
           display();
           perfMonitor.Update(fps);
-          cout << "Current FPS at timeinterval:" << glfwGetTime() << " is " << fps << endl;
+          //cout << "Current FPS at timeinterval:" << glfwGetTime() << " is " << fps << endl;
           
           motion(cursor_x, cursor_y);
           
