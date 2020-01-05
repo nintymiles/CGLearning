@@ -50,7 +50,9 @@ static bool g_mouseClickDown = false;    // is the mouse button pressed
 static bool g_mouseLClickButton, g_mouseRClickButton, g_mouseMClickButton;
 static int g_mouseClickX, g_mouseClickY; // coordinates for mouse click event
 static int g_activeShader = 1;
-static int g_activeCube = 1;
+static int g_activeObject = 0;
+static int g_activeView = 0;
+static int g_activeEgoMotion = 0;
 
 static GLFWwindow* window;
 
@@ -263,6 +265,7 @@ static Matrix4 g_skyRbt = Matrix4::makeTranslation(Cvec3(0.0, 0.25, 4.0));
 static Matrix4 g_objectRbt[2] = {Matrix4::makeTranslation(Cvec3(0,0,0)),Matrix4::makeTranslation(Cvec3(0,0,0))};
 static Cvec3f g_objectColors[1] = {Cvec3f(1, 0, 0)};
 static Matrix4 g_auxiliaryRbt;
+static Matrix4 g_eyeRbt=g_skyRbt;
 
 ///////////////// END OF G L O B A L S //////////////////////////////////////////////////
 
@@ -338,8 +341,8 @@ static void drawStuff() {
     sendProjectionMatrix(curSS, projmat);
     
     // use the skyRbt as the eyeRbt
-    const Matrix4 eyeRbt = g_skyRbt;
-    const Matrix4 invEyeRbt = inv(eyeRbt);
+    //g_eyeRbt = g_skyRbt;
+    const Matrix4 invEyeRbt = inv(g_eyeRbt);
     
     const Cvec3 eyeLight1 = Cvec3(invEyeRbt * Cvec4(g_light1, 1)); // g_light1 position in eye coordinates
     const Cvec3 eyeLight2 = Cvec3(invEyeRbt * Cvec4(g_light2, 1)); // g_light2 position in eye coordinates
@@ -405,26 +408,49 @@ static void motion(const float x, const float y) {
   const double dx = x - g_mouseClickX;
   const double dy = g_windowHeight - y - 1 - g_mouseClickY;
 
-  Matrix4 m;
+  Matrix4 m,r,t;
   if (g_mouseLClickButton && !g_mouseRClickButton) { // left button down?
-    m = Matrix4::makeXRotation(-dy) * Matrix4::makeYRotation(dx);
+    r = Matrix4::makeXRotation(-dy) * Matrix4::makeYRotation(dx);
   }
   else if (g_mouseRClickButton && !g_mouseLClickButton) { // right button down?
-    m = Matrix4::makeTranslation(Cvec3(dx, dy, 0) * 0.01);
+    t = Matrix4::makeTranslation(Cvec3(dx, dy, 0) * 0.01);
   }
   else if (g_mouseMClickButton || (g_mouseLClickButton && g_mouseRClickButton)) {  // middle or (left and right) button down?
-    m = Matrix4::makeTranslation(Cvec3(0, 0, -dy) * 0.01);
+    t = Matrix4::makeTranslation(Cvec3(0, 0, -dy) * 0.01);
   }
 
-    
+  m=t*r;
   if (g_mouseClickDown) {
-      if(g_activeCube == 0){
+      if(g_activeObject == 0){
+          if(g_activeView==0){ // sky camera
+              //sky-cube frame
+              g_auxiliaryRbt = makeMixedFrame(g_objectRbt[0], g_skyRbt);
+          }else{
+              //cube-cube frame
+              g_auxiliaryRbt = makeMixedFrame(g_objectRbt[0], g_objectRbt[1]);
+          }
           //g_objectRbt[0] *= m; // Simply right-multiply is WRONG
-          g_auxiliaryRbt = makeMixedFrame(g_objectRbt[0], g_skyRbt);
           g_objectRbt[0] = doQtoOwrtA(m, g_objectRbt[0], g_auxiliaryRbt);
-      }else{
-          g_auxiliaryRbt = makeMixedFrame(g_objectRbt[1], g_skyRbt);
+      }else if(g_activeObject == 1){
+          if(g_activeView==0){
+              g_auxiliaryRbt = makeMixedFrame(g_objectRbt[1], g_skyRbt);
+          }else{
+              g_auxiliaryRbt = makeMixedFrame(g_objectRbt[1], g_objectRbt[0]);
+          }
           g_objectRbt[1] = doQtoOwrtA(m, g_objectRbt[1], g_auxiliaryRbt);
+      }else{
+          if(g_activeView==0){
+              if(g_activeEgoMotion){  //ego motion
+                  m=t*inv(r);
+                  g_skyRbt = doQtoOwrtA(m, g_skyRbt, g_skyRbt);
+              }else{  // world-sky as auxilirary frame
+                  m=inv(t)*inv(r);
+                  g_auxiliaryRbt = makeMixedFrame(Matrix4(), g_skyRbt);
+                  g_skyRbt = doQtoOwrtA(m, g_skyRbt, g_auxiliaryRbt);
+              }
+              
+              g_eyeRbt = g_skyRbt;
+          }
       }
   }
 
@@ -488,11 +514,35 @@ static void keyboard(GLFWwindow* window, int key, int scancode, int action, int 
                 writePpmScreenshot(g_windowWidth, g_windowHeight, "out.ppm");
                 break;
             case GLFW_KEY_O:
-                g_activeCube ^= 1;
+                g_activeObject++;
+                if(g_activeObject>2)
+                    g_activeObject=0;
                 break;
             case GLFW_KEY_F:
                 g_activeShader ^= 1;
                 break;
+            case GLFW_KEY_M:
+                g_activeEgoMotion ^= 1;
+                break;
+            case GLFW_KEY_V:
+                g_activeView++;
+                if(g_activeView>2)
+                    g_activeView=0;
+                switch (g_activeView) {
+                    case 0:
+                        g_eyeRbt=g_skyRbt;
+                        break;
+                    case 1:
+                        g_eyeRbt=transFact(g_objectRbt[0])*Matrix4::makeYRotation(-45);
+                        break;
+                    case 2:
+                        g_eyeRbt=transFact(g_objectRbt[1]);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+                
         }
     }
 }
@@ -564,9 +614,9 @@ static void initGLState() {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_GREATER);
     
-    //  glReadBuffer(GL_BACK);
-    //  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    //  glPixelStorei(GL_PACK_ALIGNMENT, 1);
+//      glReadBuffer(GL_BACK);
+//      glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+//      glPixelStorei(GL_PACK_ALIGNMENT, 1);
     
     glEnable(GL_FRAMEBUFFER_SRGB);
 }

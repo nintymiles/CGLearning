@@ -11,9 +11,9 @@
 3. 网站所给出的项目模版基于glut和较早期的OpenGL（4.0之前）版本，在实现课后项目时，我将其更换为GLFW版本，并对一些版本不兼容错误做出了改正（比如绘制时必须具备VAO对象）
 
 ### 项目情况
-| Project | Description |
-| --- | --- | 
-| Assignment2 Hello World 3D| 已完成 |   |
+| Project | Description | Detail |
+| --- | --- | --- | 
+| Assignment2 Hello World 3D| 已完成 | [详情](OpenGL/FoundationOfCG/Assignment2/readme.md)  |
 | Assignment3 Quaternion and Arcball| 已完成 |   |
 | Assignment4 Hierarchical Transformations and Pickin| Picking部分未完成，需要新方法 |   |
 | Assignment5 Keyframe Animation| 部分完成，不少地方需要改进 |   |
