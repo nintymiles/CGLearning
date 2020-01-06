@@ -205,7 +205,7 @@ static RigTForm g_eyeRbt=g_skyRbt;
 static const float g_sphereRaidusScreenRatio = 0.35;
 static float g_arcballScale;
 static float g_arcballScreenRadius = g_sphereRaidusScreenRatio * min(g_windowWidth,g_windowHeight);
-static bool g_arcballUpdateFlag = true;
+static bool g_arcballUpdateFlag = false;
 
 ///////////////// END OF G L O B A L S //////////////////////////////////////////////////
 
@@ -350,6 +350,9 @@ static void drawStuff() {
             g_arcballScale = computeArcballScale(Cvec4(mvmRbt.getTranslation(),0));
     }
     
+    if(!g_arcballUpdateFlag)
+        g_arcballScale = computeArcballScale(Cvec4(invEyeRbt.getTranslation(),0));
+    
     // draw sphere
     //initSphere(); //the raidus of sphere changed constantly,but calling this method frequetly is not effective
     safe_glUniform1f(curSS.h_uXCoordOffset, 0.f);
@@ -398,7 +401,7 @@ static void motion(const float x, const float y) {
     const double dx = x - g_mouseClickX;
     const double dy = g_windowHeight - y - 1 - g_mouseClickY;
     
-    g_arcballUpdateFlag = true;
+    g_arcballUpdateFlag = false;
     
     RigTForm m,t,r;
     if (g_mouseLClickButton && !g_mouseRClickButton) { // left button down?
@@ -410,7 +413,7 @@ static void motion(const float x, const float y) {
     }
     else if (g_mouseMClickButton || (g_mouseLClickButton && g_mouseRClickButton)) {  // middle or (left and right) button down?
         t = RigTForm(Cvec3(0, 0, -dy) * g_arcballScale /**0.01*/);
-        g_arcballUpdateFlag = false;
+        g_arcballUpdateFlag = true;
     }
     
     
