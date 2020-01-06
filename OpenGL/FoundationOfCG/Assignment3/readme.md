@@ -16,6 +16,10 @@ RigTForm类封装了一个平移坐标矢量和一个四元数作为基础数据
 
 ![Assignment3-Arcball-1](media/Assignment3-Arcball-1.png)
 
+同时将运动控制中，关于旋转的部分更换为经由arcball接口产生旋转变换。
 
+## 关于线框球体更新的控制
+实现arcball可视化线框球体的变化绘制。当摁下鼠标中键移远或者移近两个立方体时，线框球体会随着距离变大或者缩小，但释放摁键后会弹回原来的大小，用于提供深度变化的线索。
+![Assignment3-Arcball-2](media/Assignment3-Arcball-2.png)
 
 
