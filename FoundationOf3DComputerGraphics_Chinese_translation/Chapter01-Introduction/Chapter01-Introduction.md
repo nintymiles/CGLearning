@@ -8,36 +8,55 @@ OpenGL开始时作为一种API，用于实现3D计算机图形的一种非常专
 
 在当前的OpenGL程序中，实际的3D图形很大程度（但不是全部）由你所写的着色器完成，不再是OpenGL API本身的真正组成部分。在这种意义上，OpenGL更多的是关于组织你的数据和着色器而更少关于3D计算机图形。在这部分的余下内容里，我们会给出由OpenGL完成的主要处理步骤的概要。但是我们也会给出多种关于着色器通常是怎么被用于这些步骤中实现来3D计算机图形的高级描述。
 
+在OpenGL中我们表达我们的几何体为三角形的集合。一方面，三角形足够简单可以被OpenGL非常高效地处理，而另一方面，借助很多三角形的集合，我们可以近似出复杂形状的表面（参考图示$\text{Figure 1.1}$）。如果我们的计算机图形程序使用了一种更抽象的几何表达，在OpenGL可以绘制这个几何体之前，它一定要首先被转换为三角形集合。
 
-In OpenGL we represent our geometry as a collection of triangles. On the one hand, triangles are simple enough to be processed very efﬁciently by OpenGL, while on the other hand, using collections of many triangles, we can approximate surfaces with complicated shapes (see Figure 1.1). If our computer graphics program uses a more abstract geometric representation, it must ﬁrst be turned into a triangle collection before OpenGL can draw the geometry.
+![Figure1.1](media/Figure1.1.png)
+**Figure 1.1:** 猫的头部使用三角形集合描述。其中一些顶点使用黑色的圆点高亮显示。来自于参考书目[64]，©️Eurographics c and Blackwell Publishing Ltd。
 
-Brieﬂy stated, the computation in OpenGL determines the screen position for each vertex of each of the triangles, ﬁgures out which screen dots, called pixels, lie within each triangle, and then performs some computation to determine the desired color of that pixel. We now walk through these steps in a bit more detail.
+简要概述，OpenGL的计算决定了每一个三角形中每个顶点的屏幕位置，指出了哪些屏幕（圆）点，被称作像素，位于每个三角形之内，同时执行某种计算决定那个像素想要的色彩。我们现在更详细一点地参观一下这些步骤。
 
-Each triangle is made up of 3 vertices. We associate some numerical data with each vertex. Each such data item is called an attribute. At the very least, we need to specify the location of the vertex (using 2 numbers for 2D geometry or 3 numbers for 3D geometry). We can use other attributes to associate other kinds of data with our vertices that we will use to determine their ultimate appearances. For example, we may associate a color (using 3 numbers representing amounts of red, green and blue) with each vertex. Other attributes might be used to represent relevant material properties describing, say, how shiny the surface at the vertex is.
+每个三角形由三个顶点组成。我们为每个顶点关联了一些数值数据。每个这样的数据条目被称为一个属性（attribute）。最少情形下，我们需要指定出顶点的位置（2D几何体使用2个数字，3D几何体使用3个数字）。我们可以使用其它属性为顶点关联其它种类的数据，我们可以使用这些数据确定它们（三角形顶点）的最终外观。例如，我们可以为每个顶点关联一个色彩（使用3个数字表达红色、绿色和蓝色的数量）。其它属性可以用于表示相关的材料属性，比如说，描述这个顶点的表面是多么闪亮。
 
-Transmitting the vertex data from the CPU to the graphics hardware (the GPU) is an expensive process, so it is typically done as infrequently as possible. There are speciﬁc API calls to transfer vertex data over to OpenGL which stores this data in a vertex buffer
+把顶点数据从CPU传输到图形硬件（GPU）是一种昂贵的处理，所以通常尽可能不频繁地使用。存在专有的API调用传输顶点数据到OpenGL，然后这些数据被存储到一个顶点缓存中。
 
-Once the vertex data has been given to OpenGL, at any subsequent time we can send a draw call to OpenGL. This commands OpenGL to walk down the appropriate vertex buffers and draw each vertex triplet as a triangle.
+一旦顶点数据被给到OpenGL，在任何随后的时间点我们可以发出一个绘制调用（draw call）到OpenGL。这要求OpenGL依次访问合适部分的顶点缓存并且绘制每个顶点3元组为一个三角形。
 
-Once the OpenGL draw call has been issued, each vertex (i.e., all of its attributes) gets processed independently by your vertex shader (See Figure 1.2). Besides the attribute data, the shader also has access to things called uniform variables. These are variables that are set by your program, but you can only set them in between OpenGL draw calls, and not per vertex.
+一旦OpenGL绘制调用被发出，每个顶点（也就是说，所有它的属性）被你的顶点着色器独立地处理（参考图示$\text{Figure 1.2}$）。在这些属性数据之外，着色器对称为uniform变量的内容也有访问权限。这些你的程序所设置的变量，但是你只能在多个OpenGL绘制调用之间设置它们，而不是每顶点时。
 
-The vertex shader is your own program, and you can put whatever you want in it. The most typical use of the vertex shader is to determine the ﬁnal position of the vertices on the screen. For example, a vertex can have its own abstract 3D position stored as an attribute. Meanwhile, a uniform variable can be used to describe a virtual camera that maps abstract 3D coordinates to the actual 2D screen. We will cover the details of this kind of computation in Chapters 2- 6 and Chapter 10.
+![Figure1.2](media/Figure1.2.png)
+**Figure 1.2:** 顶点以顶点缓存（vertex buffer）方式存储。当一个绘制调用被发出，每个顶点都会通过顶点着色器。关于顶点着色器的输入，每个顶点（黑色表示）都有关联的属性。关于输出，每个顶点（青色表示）都有一个gl_Position值和对应的变异变量。
 
-Once the vertex shader has computed the ﬁnal position of the vertex on the screen, it assigns this value to the the reserved output variable called gl Position. The x and y coordinates of this variable are interpreted as positions within the drawing window. The lower left corner of the window has coordinates (−1, −1), and the upper right corner has coordinates (1, 1). Coordinates outside of this square represent locations outside of the drawing area.
+顶点着色器是你自己的程序，并且你可以将任何你想要的内容放入其中。顶点着色器最典型的用法是确定屏幕上顶点的最终位置。例如，顶点可以让自己的抽象3D位置被存为属性。同时，uniform变量可以被用于描述虚拟相机，其映射抽象3D地址到实际的2D屏幕。我们会在第2章到第6章以及第10章涵盖这种计算的细节。
 
-The vertex shader can also output other variables that will be used by the fragment shader to determine the ﬁnal color of each pixel covered by the triangle. These outputs are called varying variables since as we will soon explain, their values can vary as we look at the different pixels within a triangle.
+一旦顶点着色器计算出了屏幕上顶点的最终位置，它把这个值赋给保留的被称作`gl_Position`的输出变量。这个变量的x和y坐标被解读为绘制窗口内的位置。这个窗口的左下角拥有坐标$(-1,-1)$，右上角拥有坐标$(1,1)$。这个正方形之外的坐标表达绘制区域之外的地址。
 
-Once processed, these vertices along with their varying variables are collected by the triangle assembler, and grouped together in triplets.
+顶点着色器也可以输出其它变量，这些变量会被用于碎片着色器来决定三角形所覆盖的每个像素的最终色彩。这些输出被称为变异变量（varying variables），因为就如我们马上会解释的，当我们查看一个三角形内的不同像素时，它们的值会变化。
 
-OpenGL’s next job is to draw each triangle on the screen (see Figure 1.3). This step is called rasterization. For each triangle, it uses the three vertex positions to place the triangle on the screen. It then computes which of the pixels on the screen are inside of this triangle. For each such pixel, the rasterizer computes an interpolated value for each of the varying variables. This means that the value for each varying variable is set by blending the three values associated with the triangle’s vertices. The blending ratios used are related to the pixel’s distance to each of the three vertices. We will cover the exact method of blending in Chapter 13. Because rasterization is such a specialized and highly optimized operation, this step has not been made programmable.
+一旦被处理，这些顶点和它们的变异变量一起被三角形组装器收集，同时以三元组的形式聚集在一起。
 
-Finally, for each pixel, this interpolated data is passed through a fragment shader (see Figure 1.4). A fragment shader is another program that you write in the GLSL language and hand off to OpenGL. The job of the fragment shader is to determine the drawn color of the pixel based on the information passed to it as varying and uniform variables. This ﬁnal color computed by the fragment shader is placed in a part of GPU memory called a framebuffer. The data in the framebuffer is then sent to the display, where it is drawn on the screen.
+OpenGL接下来的工作是在屏幕上绘制每个三角形（参考图示$\text{Figure 1.3}$）。这个步骤被称作光栅化（rasterization）。对于每个三角形，它使用3个顶点位置把三角形放置在屏幕上。它随后计算屏幕上哪个像素位于三角形之内。针对每个这样的像素，光栅化器对每个变异变量计算出一个被插值的值。这意味着针对每个变异变量的这种值通过混合关联于三角形顶点的3个值被设置。使用的混合比率和像素到3个顶点中的每一个的距离有关系。我们会在第13章中讲述进行混合的准确方式。因为光栅化是这样一种专有的和高度优化的操作，这个步骤没有被实现为可编程方式。
 
-In 3D graphics, we typically determine a pixel’s color by computing a few equations that simulate the way that light reﬂects off of some material’s surface. This calculation may use data stored in varying variables that represent the material and geometric properties of the material at that pixel. It may also use data stored in uniform variables that represent the position and color of the light sources in the scene. By changing the program in the fragment shader, we can simulate light bouncing off of different types of materials, this can create a variety of appearances for some ﬁxed geometry, as shown in Figure 1.5. We discuss this process in greater detail in Chapter 14.
+![Figure1.3](media/Figure1.3.png)
+**Figure 1.3:** gl_Positon中的数据被用于将一个三角形的三个地址放置在一个虚拟屏幕上。光栅化器（rasterizer）指出哪些像素（橙色）位于三角形之内同时从顶点到这些像素插值出变异变量。
 
-As part of this color computation, we can also instruct fragment shader to fetch color data from an auxiliary stored image. Such an image is called a texture and is pointed to by a uniform variable. Meanwhile, varying variables called texture coordinates tell the fragment shader where to select the appropriate pixels from the texture. Using this process called texture mapping, one can simulate the “gluing” of a some part of a texture image onto each triangle. This process can be used to give high visual complexity to a simple geometric object deﬁned by only a small number of triangles. See Figure 1.6 for such an example. This is discussed further in Chapter 15.
+最后，对于每个像素，这种被插值的数据会经历一个碎片着色器（参考图示$\text{Figure 1.4}$）。碎片着色器是你以GLSL所写的另一个程序并且亲手将其传递给OpenGL。碎片着色器的职责是基于作为变异变量和uniform变量被传递给它的信息来决定被绘制的色彩。碎片着色器所计算的最终色彩被放置到被称为帧缓存（framebuffer）的GPU内存中。帧缓存中的数据随后被发送到显示设备，在这里它被绘制在屏幕之上。
 
-When colors are drawn to the framebuffer, there is a process called merging which determines how the “new” color that has just been output from the fragment shader is mixed in with the “old” color that may already exist in the framebuffer. When zbuffering is enabled a test is applied to see whether the geometric point just processed by the fragment shader is closer to, or farther from the viewer, than the point that was used to set the existing color in the framebuffer. The framebuffer is then updated only if the new point is closer. Z-buffering is very useful in creating images of 3D scenes. We discuss z-buffering in Chapter 11. In addition, OpenGL can also be instructed to blend the old and new colors together using various ratios. This can be used for example to model transparent objects. This process is called alpha blending and is discussed further in Section 16.4. Because this merging step involves reading and writing to shared memory (the framebuffer), this step has not been made programmable, but is instead controlled by various API calls.
+![Figure1.4](media/Figure1.4.png)
+**Figure 1.4:** 每个像素都经历了碎片着色器，其计算了像素（粉色）的最终色彩。像素随后被放置在帧缓存中用于显示。
 
-In Appendix A we walk through an actual code fragment that implements a simple OpenGL program that performs some simple 2D drawing with texture mapping. The goal there is not to learn 3D graphics, but to get an understanding of the API itself and the processing steps used in OpenGL. You will need to go through this Appendix in detail at some point before you get to Chapter 6.
+在3D图像中，我们通过计算几个方程式来决定一个像素的色彩，这些方程式模拟了光线从某种材料表面反射的方式。这种计算可以使用存储在变异变量中的数据，这些数据表达了在那个像素处表面的材料和几何属性。它也可以使用以uniform变量方式存储的数据，这些数据表达了场景中光源的位置和色彩。通过改变在碎片着色器中的程序，我们可以模拟光线从不同类型的表面反弹的情形，这可以针对某种固定的几何体生成多种外观，就如在图示$\text{Figure 1.5}$所展示的。我们在第14章中会更详细地讨论这种处理。
+
+![Figure1.5](media/Figure1.5.png)
+**Figure 1.5:** 通过改变我们的碎片着色器，我们可以模拟光从不同种类的材料反射。
+
+作为这种色彩计算的部分，我们也能指示着色器从一个辅助存储图像中获取色彩数据。这样一个图像被称作纹理，并且被一个uniform变量所指向。同时，被称为纹理坐标的变异变量告诉碎片着色器从纹理的什么地方选择合适的像素。借助称作纹理映射的这种处理，你可以模拟“粘贴”纹理图像的某个局部到每个三角形上。针对由少量三角形所定义的简单几何物体，这种处理可以被用于给出高度的视觉复杂性。关于这种例子请参考图示$\text{Figure 1.6}$。随后在第15章中这会被讨论。
+
+![Figure1.6](media/Figure1.6.png)
+**Figure 1.6:** 纹理映射。左侧：简单的用少量三角形描述的几何物体。中间：称作纹理的辅助图形。右侧：纹理的局部被粘贴到每个三角形上，这给出了一种更复杂的外观。来自于[65]，©️ACM。
+
+当色彩被绘制到帧缓存时，存在一种称作合并（merging）的处理，这种处理决定了刚从碎片着色器输出的“新”色彩如何与帧缓存中可能已经存在“旧”色彩混合在一起。当z-缓存化（z-buffering）被启用，一个检测被应用来查看刚被碎片着色器处理的几何点，相比于帧缓存中用于设置已经存在色彩的点，更靠近还是更远离观察者。z-缓存化在生成3D场景的图像时非常有用。我们会在第11章讨论z-缓存化操作。另外，OpenGL也可以被指示使用多种比率将新旧色彩混合在一起。这可以用于建模透明物体。这种处理被称作alpha混合，并且会在后面的小节16.4中讨论。因为这种合并步骤涉及对共享内存（帧缓存）的读写，所以这种步骤没有被实现为可编程的，而是被多种API调用所控制。
+
+附录A中我们参观了一个实现了简单OpenGL程序的实际代码片段，这个程序使用纹理映射执行某种简单的2D绘制。那里的目标不是学习3D图形，而是理解API和OpenGL中使用的处理步骤本身。在到达第6章之前，你将需要在某个时间详细浏览这个附录。
+
+
 
