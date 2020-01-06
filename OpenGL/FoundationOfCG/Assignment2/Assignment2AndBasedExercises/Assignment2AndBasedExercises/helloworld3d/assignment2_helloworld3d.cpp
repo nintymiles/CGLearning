@@ -471,11 +471,11 @@ static void mouse(GLFWwindow* window, const int button, const int action, int mo
     
     g_mouseLClickButton |= (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS);
     g_mouseRClickButton |= (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS);
-    g_mouseMClickButton |= (button == GLFW_MOUSE_BUTTON_4 && action == GLFW_PRESS);
+    g_mouseMClickButton |= (button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS);
     
     g_mouseLClickButton &= !(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE);
     g_mouseRClickButton &= !(button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE);
-    g_mouseMClickButton &= !(button == GLFW_MOUSE_BUTTON_4 && action == GLFW_RELEASE);
+    g_mouseMClickButton &= !(button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_RELEASE);
     
     g_mouseClickDown = g_mouseLClickButton || g_mouseRClickButton || g_mouseMClickButton;
 }
@@ -676,7 +676,7 @@ int main(int argc, char * argv[]) {
       while( !glfwWindowShouldClose(window) ){
           display();
           perfMonitor.Update(fps);
-          cout << "Current FPS at " << glfwGetTime() << " is " << fps << endl;
+          //cout << "Current FPS at " << glfwGetTime() << " is " << fps << endl;
           
           motion(cursor_x, cursor_y);
           
