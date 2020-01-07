@@ -4,7 +4,7 @@
 > 注：文章中相关内容归原作者所有，翻译内容仅供学习参考。
 > 另：Github项目[CGLearning](https://github.com/nintymiles/CGLearning)中拥有相关翻译的完整资料、内容整理、课程项目实现。
 
-# 四元数（Quaternions）(专业性多一点)
+# 四元数（Quaternions）(偏技术性一点)
 本章中，我们会探讨将旋转的四元数表达作为对旋转矩阵的代替
 $$
 R = \begin{bmatrix} r & 0 \\ 0 & 1\end{bmatrix}
@@ -43,7 +43,7 @@ $$\vec{\mathbf{o}}_{\alpha}^t = \vec{\mathbf{w}}^tR_{\alpha}$$
 ### 7.1.2 不变性（Invariance）
 相关于方程式（7.1）的围绕单轴，常量角速率方式的运动，存在很多自然的事物。举一个例子，一个飞过空中的物体在没有外力施加于其上时会让其质心沿着直线运动，同时其方位围绕着一个固定轴旋转。另外，这种方位插值满足左侧和右侧不变性，这一点我们现在就来解释。
 
-假设我们有一个可替换的世界帧$\vec{\mathbf{w}}'^t$使得$\vec{\mathbf{w}}^t=\vec{\mathbf{w}}'^tR_l$，其中$R_l$为某种固定的“左侧”旋转矩阵。借助这种帧，我们可以再表达我们最初的插值问题为在$\vec{\mathbf{o}}_0^t=\vec{\mathbf{w}}'^tR_lR_0$和$\vec{\mathbf{o}}_1^t=\vec{\mathbf{w}}'^tR_lR_1$之间进行插值的一种行为。如果这种再表达不改变插值结果，我们说插值满足“左侧”不变性：如果最初的插值给了我们$\vec{\mathbf{o}}^t_{\alpha}=\vec{\mathbf{w}}^tR_{\alpha}$，对于某种$R_{\alpha}$，那么再表达的插值给出了我们$\vec{\mathbf{w}}'^tR_lR_{\alpha}$，这就导致了完全相同的$\vec{\mathbf{o}}^t$。（参考图示$\text{Figure 7.2}$。）换句话说，只要一个插值方案仅仅依赖帧$\vec{\mathbf{o}}^t_0$和$\vec{\mathbf{o}}^t_1$的几何特征，而不是世界帧（world frame）和最终的$R_0$和$R_1$的选择，就可以说它是左侧不变的。左侧不变性是一种想要的非常自然的属性；存在非常少的情形，其中对于插值依赖世界帧的选择会有意义。
+假设我们有一个可替换的世界帧$\vec{\mathbf{w}}'^t$使得$\vec{\mathbf{w}}^t=\vec{\mathbf{w}}'^tR_l$，其中$R_l$为某种固定的“左侧”旋转矩阵。借助这种帧，我们可以再表达我们最初的插值问题为在$\vec{\mathbf{o}}_0^t=\vec{\mathbf{w}}'^tR_lR_0$和$\vec{\mathbf{o}}_1^t=\vec{\mathbf{w}}'^tR_lR_1$之间进行插值的一种行为。如果这种再表达不改变插值结果，我们说插值满足“左侧”不变性：如果最初的插值给了我们$\vec{\mathbf{o}}^t_{\alpha}=\vec{\mathbf{w}}^tR_{\alpha}$，对于某种$R_{\alpha}$，那么再表达的插值给出了我们$\vec{\mathbf{w}}'^tR_lR_{\alpha}$，这就导致了完全相同的$\vec{\mathbf{o}}_{\alpha}^t$。（参考图示$\text{Figure 7.2}$。）换句话说，只要一个插值方案仅仅依赖帧$\vec{\mathbf{o}}^t_0$和$\vec{\mathbf{o}}^t_1$的几何特征，而不是世界帧（world frame）和最终的$R_0$和$R_1$的选择，就可以说它是左侧不变的。左侧不变性是一种想要的非常自然的属性；存在非常少的情形，其中对于插值依赖世界帧的选择会有意义。
 
 ![Figure7.2](media/Figure7.2.png)
 **Figure 7.2:** 当我们将$\vec{\mathbf{w}}^t$替换为$\vec{\mathbf{w}}'^t$，插值结果不变，这种插值就满足左侧不变性。（这里我们只是处理旋转的情形，这里我们添加的平移效果只是为了视觉上的清晰。）
@@ -220,7 +220,7 @@ A & = & TR \\
 \end{array}$$
 因此，我们可以将此表示为一个对象：
 ```cpp
-class RigTform{ 
+class RigTForm{ 
 	Cvec4 t; 
 	Quat r; 
 };
@@ -236,7 +236,7 @@ class RigTform{
 **Figure 7.5:** 这里我们改变物体帧（从绿色变为蓝色），但是在时刻time=0和time=1借助新的物体坐标绘制相同的正方形。我们的RBT插值不满足右侧不变性。针对中间值的$\alpha$，蓝色正方形和绿色正方形出现偏离的情形。
 
 ### 7.6.2 操作（Operations）
-返回到小节6.2中我们的绘制代码中，我们现在可以借助`RigTform`数据类型而不是`Matrix4`类型来表达`eyeRBT`和`objRBT`。
+返回到小节6.2中我们的绘制代码中，我们现在可以借助`RigTForm`数据类型而不是`Matrix4`类型来表达`eyeRBT`和`objRBT`。
 
 要生成有效的坚固形体（刚体）变换，我们需要下列的操作
 
@@ -273,12 +273,12 @@ $$ \begin{array}{rl}
 
 因此，我们看到结果为一个新的刚体变换，拥有平移$-r^{-1}t$和旋转$r^{-1}$。
 
-给出这种基础结构，我们能够借助我们的新数据类型重新编码函数`doQtoOwrtA(RigTForm Q, RigTform 0, RigTForm A)`。
+给出这种基础结构，我们能够借助我们的新数据类型重新编码函数`doQtoOwrtA(RigTForm Q, RigTForm 0, RigTForm A)`。
 
-最终，为了和顶点着色器沟通，需要使用$4\times4$矩阵，我们需要一个程序`doQtoOwrtA(RigTForm Q, RigTform 0, RigTForm A)`实现方程式(2.5)。然后，用于刚体变换的矩阵可以被计算为
+最终，为了和顶点着色器沟通，需要使用$4\times4$矩阵，我们需要一个程序`doQtoOwrtA(RigTForm Q, RigTForm 0, RigTForm A)`实现方程式(2.5)。然后，用于刚体变换的矩阵可以被计算为
 
 ```cpp
-matrix4 makeTRmatrix(const RigTform& rbt){ 
+matrix4 makeTRmatrix(const RigTForm& rbt){ 
 	matrix4 T = makeTranslation(rbt.t); 
 	matrix4 R = makeRotation(rbt.r); 
 	return T * R; 
