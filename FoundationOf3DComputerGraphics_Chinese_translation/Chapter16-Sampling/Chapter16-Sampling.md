@@ -1,39 +1,36 @@
 # 采样（Sampling）
-It is now time for us to focus a bit more on how we treat images. There are really two notions of images that we have implicitly been using so far, discrete (also called, digital) and continuous. In these chapters we will investigate this dichotomy more closely, and discuss the appropriate ways to move back and forth between the discrete and continuous model.
+现在是时候让我们更聚焦一点在我们对待图形的方式上。目前为止，存在两种我们已经隐含使用的图像概念，具体（也称作，数码）图像和连续图像。在后面的章节中，我们会更靠近地调查这种对立性，同时讨论在具体和连续模型之间自由变换的合适方式。
 
-In this chapter, we will focus on variety of visual artifacts that can arise when creating a digital image in computer graphics. These artifacts include distracting jagged patterns at triangle boundaries, and go by the name: aliasing artifacts. Aliasing artifacts can occur when, in some sense, there is too much visual complexity to ﬁt in a single pixel. In this case, when we try to determine the pixel’s color value by looking at only a single point location in the image domain, we can get a less than optimal result. As we will see, these artifacts can be mitigated by averaging together the colors over many sample locations within the pixel’s square. This process is known as anti-aliasing.
+本章中，我们会聚焦在多种计算机图形中生成电子图像时可能出现的视觉失真。这些失真包括在三角形边缘令人烦恼的锯齿形失真，并且可经由其名称:锯齿状失真（aliasing artifacts）来判断。在某种意义上，锯齿状失真可能发生在大量视觉复杂性填充在一个单一像素中时。在这种情形中，当我们尝试通过观察图像中一个单一点地址来决定像素的色彩值时，我们可能得到一个不是最优的结果。就如我们会看到的，这些失真可以通过将像素正方形区域在多个采样地址的色彩平均在一起来减轻。这种处理被称作抗锯齿。
 
-## 16.1 Two Models
+## 16.1 两种模型（Two Models）
+连续图像，$I(x_w,y_w)$，为双变量函数。正如在小节12.3中所讨论的，函数的域，$\Omega = [-.5..W-.5] \times [-.5..H-.5]$，为实数值化的2D窗口坐标$[x_w,y_w]^t$。（在本章剩下的内容和下一章中，除非被需要，否则我们去掉"w"下标。）函数的范围是一个色彩空间，我们使用一种RGB(线性）色彩空间。
 
-A continuous image, I(x w , y w ), is a bivariate function. As discussed in Section 12.3, the domain, Ω = [−.5..W − .5] × [−.5..H − .5], of the function are real valued 2D window coordinates [x w , y w ] t . (In the rest of this chapter and the next, we drop the “w” subscript unless needed.) The range of the function is a color space, for which we use an RGB (linear) color space.
+具体图像$I[i][j]$是色彩值的两维数组。每个这样的数组条目被称为一个像素。数组的尺寸为宽W乘以高H，因而i是一个整数，区间为$[0..W-1]$，j也是一个整数，区间为$[0..H-1]$。我们为每对连续图像坐标$x_w=i$和$y_w=j$关联一对整数$i,j$，也就是说，碰巧为整数值的实数坐标。每个色彩值为色彩空间中表达一个色彩的标量三元组。再次，我们借助一个RGB（线性）色彩空间。最终，每个R，G，B坐标被表达为某种数值格式。
 
-A discrete image I[i][j] is a two dimensional array of color values. Each such array entry is called a pixel. The array’s size is W in width by H in height, thus i is an integer in [0..W − 1], j is an integer in [0..H − 1]. We associate each pair of integers i,j, with the continuous image coordinates x w = i and y w = j, i.e., real coordinates that happen to have integer values. Each color value is a triplet of scalars representing a color in a color space. Again, we use an RGB (linear) color space. Finally, each of the R, G, and B coordinates is represented in some numerical format.
-
-In OpenGL, we describe a scene using shaded triangles in 3D. Under projection, these map to colored triangles in the continuous 2D image domain, and thus deﬁne a continuous image. Ultimately we wish to display this image on a monitor, or save it in an image ﬁle. As such, we need to know how to transform the continuous image into a discrete one.
+在OpenGL中，我们借助3D中被着色的三角形描述一个场景。根据投射，这些映射到连续2D图像域中上色的三角形，因而定义了一个连续图像。最终我们希望把这个图像显示到一台监视器上，或者把它保存到一个图像文件中。如此，我们需要知道如何把连续图像转换为具体图像。
 
 ## 16.2 问题（The Problem）
 从连续图像到具体图像转换的最简单和最直观的方式为借助点采样，也就是说，要获得像素$i,j$的值，我们采样位于整数值化的域地址处的连续图像函数：
-$$ I[i][j] \leftarrow I(i, j)$$
+$$\large{ I[i][j] \leftarrow I(i, j)  }$$
 
 可以证实存在很多点采样导致的不想看到的失真情形。例如，考虑一个由黑和白三角形组成的场景。当点采样图像时，在接近黑白三角形边缘的地方，图像会显示出某种阶梯状的图案；这种失真被称为“锯齿”。（参考图示$\text{Figure 16.6}$）。在动画过程中，某些像素值会突然从黑变到白，同时锯齿状的边缘图案会显示为爬行的样子。这被称作“爬行的锯齿（the crawing jaggies）”。
 
 当处理非常小的三角形时，我们还会得到另外的糟糕失真情形。假如我们正在渲染一张由一群斑马组成的图片（或者是一张正在远离观察者的棋盘上的小的黑白正方形）。假设一只斑马在背景中远离，很远以至于其只覆盖一个单一像素。那个像素的色彩会是什么？如果这种点采样碰巧落在一个黑色三角形上，那么像素会是黑的，如果碰巧落在一个白色三角形上，那么像素会是白的。（参考图示$\text{Figure 16.1}$。）如果我们运气不好，最终的像素色彩会组成某种令人烦恼的“云纹（moire）”图案，就如图示$\text{16.6}$中所示。在动画过程中，如果斑马移动，这些像素将会呈现黑白变换的模式。这种失真被称为“闪烁（flickering）”。假如一个细节高度清晰的纹理被应用在某个屏幕上的小区域，那么在纹理映射中也会出现这种失真。（参考图示$\text{Figure 18.3}$）。
 
-当在一个小区域连续图像有很多细节，那么这些类型的错误就会出现。在斑马例子中，连续图像在几个像素的空间中就包含了整群斑马（的细节）。对于锯齿三角形例子，连续图像具有可以立即过渡的精确锋利的边缘，而不是渐变的边缘。处于技术原因，这些种问题被统称为锯齿（aliasing）。
+当在一个小区域连续图像有很多细节，那么这些类型的错误就会出现。在斑马例子中，连续图像在几个像素的空间中就包含了整群斑马（的细节）。对于锯齿三角形例子，连续图像具有可以立即过渡的精确锋利的边缘，而不是渐变的边缘。出于技术原因，这些种问题被统称为锯齿（aliasing）。
 
 16.3 解决方案（The Solution）
+当在小区域存在大量细节，我们能够在具体（图像）表达中维护所有信息是不可能的。但是仅通过采纳单一样本来决定我们正在生成的像素的色彩会让事情变得更糟，很可能只是拿到了一个没有意义的值。有意义的行为是我们最好借助在某种合适的区域中的平均值设置这个像素的值。在斑马例子中，可能我们最好只是设置这个像素为灰色。
 
-When there is a lot of detail in a small region, it is unlikely that we can maintain all of the information in our discrete representation. But by taking only a single sample to determine the pixel’s color we are making matters even worse for ourselves, possibly just picking a meaningless value. It seems sensible that we would be better off setting the pixel value using some kind of average value over some appropriate region. In the zebra example, perhaps we would be better just setting the pixel to gray.
+存在很多方法以数学方式建模这种问题并寻求最优解。例如，采用“傅立叶分析”，你可以观察哪些“频率”使用一定数目的像素能够表达，以及处理不可表达频率的最好方式。针对这样的讨论，参考课后书目[6]。从一个最优化的观点，你可以尝试最小化原始连续图像和最终在屏幕上显示的光图像之间的差异。（在屏幕上，每个像素被绘制在有限范围内，因此我们可以将光图像当作屏幕上的合成连续图像。）
 
-There are a variety of ways to mathematically model this problem and look for an optimal solution. For example, using “Fourier analysis”, one could look at which “frequencies” are representable with a certain number of pixels and how to best deal with the unrepresentable frequencies. For such a discussion, see [6]. From an optimization point of view, one could try to minimize the difference between the original continuous image with the light pattern that is ultimately displayed on the screen. (On the screen, each pixel is drawn with a ﬁnite extent and thus we can think of the light pattern on the screen as a synthesized continuous image.)
+从这些多种观点，对这些观点我们这里不追求细节，证实了最好借助下面这种形式的表达来设置像素值：
+$$ \large{
+I[i][j] \leftarrow \iint_\Omega dxdyI(x,y)F_{i,j}(x,y) \tag{16.1}
+}$$
+此处$F_{i,j}(x,y)$为某种函数，其告知我们$[x,y]^t$的图像值应该多么强烈影响$i,j$处的像素值。在这种设置中，函数$F_{i,j}(x,y)$被称作过滤器（filter）。
 
-From these various points of view, which we will not pursue here in detail, it turns out that it is best to set the pixel value using an expression of the form:
-
-< < I[i][j] ← dx dy I(x, y)F i,j (x, y) (16.1)
-
-Ω
-
-where F i,j (x, y) is some function that tells us how strongly the continuous image value at [x, y] t should inﬂuence the pixel value i,j. In this setting, the function F i,j (x, y) is called a ﬁlter.
 
 In other words, the best pixel value is determined by performing some continuous weighted averaging near the pixel’s location. Effectively, this is like blurring the continuous image before point sampling it to obtain a discrete image. The use of Equation (16.1) to create a discrete image is referred to as anti-aliasing. 
 
