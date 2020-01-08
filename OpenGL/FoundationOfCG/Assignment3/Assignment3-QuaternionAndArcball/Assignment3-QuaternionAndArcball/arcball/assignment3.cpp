@@ -195,12 +195,13 @@ static shared_ptr<Geometry> g_ground, g_cube,g_sphere;
 static const Cvec3 g_light1(2.0, 3.0, 14.0), g_light2(-2, -3.0, -5.0);  // define two lights positions in world space
 static RigTForm g_skyRbt = RigTForm::makeTranslation(0.0, 0.25, 4.0);
 //初始tramsformation，将object frame的原点保持不动，每个cube使用一个object matrix。由于在shader中使用了offset，故此处对象帧的起点都为原点。
-static RigTForm g_objectRbt[3] = {RigTForm(Cvec3(0,0,0)),RigTForm(Cvec3(0,0,0)),RigTForm(Cvec3(0,0,0))};
+static RigTForm g_objectRbt[3] = {RigTForm(Cvec3(-1,0,0)),RigTForm(Cvec3(1,0,0)),RigTForm(Cvec3(0,0,0))};
 static Cvec3f g_objectColors[3] = {Cvec3f(1, 0, 0),Cvec3f(0, 0, 1),Cvec3f(0.5, 0.5, 0)};
 static RigTForm g_auxiliaryRbt;
 
 //defaultly use the skyRbt as the eyeRbt
 static RigTForm g_eyeRbt=g_skyRbt;
+static RigTForm g_arcBallRbt=RigTForm();
 
 static const float g_sphereRaidusScreenRatio = 0.35;
 static float g_arcballScale;
@@ -326,19 +327,25 @@ static void drawStuff() {
     
     // draw cubes
     // ==========
-    safe_glUniform1f(curSS.h_uXCoordOffset, -1.5f);
+    
+    safe_glUniform1f(curSS.h_uXCoordOffset, 0.f);
+    if(g_activeView==1)
+        safe_glUniform1f(curSS.h_uXCoordOffset, -2.f);
     RigTForm mvmRbt = invEyeRbt * g_objectRbt[0];
     MVM = rigTFormToMatrix(mvmRbt);
     NMVM = normalMatrix(MVM);
     sendModelViewNormalMatrix(curSS, MVM, NMVM);
     safe_glUniform3f(curSS.h_uColor, g_objectColors[0][0], g_objectColors[0][1], g_objectColors[0][2]);
+    
     g_cube->draw(curSS);
     if(g_activeObject == 0){
         if(g_arcballUpdateFlag)
             g_arcballScale = computeArcballScale(Cvec4(mvmRbt.getTranslation(),0));
     }
     
-    safe_glUniform1f(curSS.h_uXCoordOffset, 1.5f);
+    safe_glUniform1f(curSS.h_uXCoordOffset, 0.f);
+    if(g_activeView==2)
+        safe_glUniform1f(curSS.h_uXCoordOffset, 2.f);
     mvmRbt = invEyeRbt * g_objectRbt[1];
     MVM = rigTFormToMatrix(mvmRbt);
     NMVM = normalMatrix(MVM);
@@ -350,15 +357,30 @@ static void drawStuff() {
             g_arcballScale = computeArcballScale(Cvec4(mvmRbt.getTranslation(),0));
     }
     
+    
     if(!g_arcballUpdateFlag)
         g_arcballScale = computeArcballScale(Cvec4(invEyeRbt.getTranslation(),0));
+    
+//    if(!g_arcballUpdateFlag){
+//        if(g_activeView==0)
+//            g_arcballScale = computeArcballScale(Cvec4(invEyeRbt.getTranslation(),0));
+//        else{
+//            if(g_activeView==1)
+//                g_arcballScale = computeArcballScale(Cvec4((invEyeRbt * RigTForm::makeZRotation(-2.0f)).getTranslation(),0));
+//            if(g_activeView==2)
+//                g_arcballScale = computeArcballScale(Cvec4((invEyeRbt * RigTForm::makeZRotation(-2.0f)).getTranslation(),0));
+//
+//        }
+//
+//    }
     
     // draw sphere
     //initSphere(); //the raidus of sphere changed constantly,but calling this method frequetly is not effective
     safe_glUniform1f(curSS.h_uXCoordOffset, 0.f);
     float screenRadiusScale = g_arcballScreenRadius*g_arcballScale;
     Matrix4 scaleMatrix = Matrix4::makeScale(Cvec3(screenRadiusScale,screenRadiusScale,screenRadiusScale));
-    mvmRbt = invEyeRbt * g_objectRbt[2];
+    
+    mvmRbt = invEyeRbt * g_arcBallRbt;
     MVM = rigTFormToMatrix(mvmRbt) * scaleMatrix;
     NMVM = normalMatrix(MVM);
     sendModelViewNormalMatrix(curSS, MVM, NMVM);
@@ -403,9 +425,11 @@ static void motion(const float x, const float y) {
     
     g_arcballUpdateFlag = false;
     
-    RigTForm m,t,r;
+    RigTForm m,t,r,r2;
     if (g_mouseLClickButton && !g_mouseRClickButton) { // left button down?
-                                                       //    m = RigTForm::makeXRotation(-dy) * RigTForm::makeYRotation(dx);
+        //non-arcball rotation
+        r2 = RigTForm::makeXRotation(-dy) * RigTForm::makeYRotation(dx);
+        //arcball rotation
         r = RigTForm(arcballQuat);
     }
     else if (g_mouseRClickButton && !g_mouseLClickButton) { // right button down?
@@ -416,33 +440,39 @@ static void motion(const float x, const float y) {
         g_arcballUpdateFlag = true;
     }
     
+    //Arcball Frame defaultly set as world frame
+    g_arcBallRbt = RigTForm();
     
     m=t*r;
     if (g_mouseClickDown) {
         if(g_activeObject == 0){
             if(g_activeView==0){ // sky camera
-                                 //sky-cube frame
+                //sky-cube frame
                 g_auxiliaryRbt = makeMixedFrame(g_objectRbt[0], g_skyRbt);
-            }else{
+            }
+            if(g_activeView==2){
                 //cube-cube frame
                 g_auxiliaryRbt = makeMixedFrame(g_objectRbt[0], g_objectRbt[1]);
+                g_arcBallRbt = RigTForm(g_auxiliaryRbt.getTranslation());
             }
             //g_objectRbt[0] *= m; // Simply right-multiply is WRONG
             g_objectRbt[0] = doQtoOwrtA(m, g_objectRbt[0], g_auxiliaryRbt);
         }else if(g_activeObject == 1){
             if(g_activeView==0){
                 g_auxiliaryRbt = makeMixedFrame(g_objectRbt[1], g_skyRbt);
-            }else{
+            }
+            if(g_activeView==1){
                 g_auxiliaryRbt = makeMixedFrame(g_objectRbt[1], g_objectRbt[0]);
+                g_arcBallRbt = RigTForm(g_auxiliaryRbt.getTranslation());
             }
             g_objectRbt[1] = doQtoOwrtA(m, g_objectRbt[1], g_auxiliaryRbt);
         }else{
             if(g_activeView==0){
                 if(g_activeEgoMotion){  //ego motion
-                    m=t*inv(r);
+                    m=t*inv(r2);
                     g_skyRbt = doQtoOwrtA(m, g_skyRbt, g_skyRbt);
                 }else{  // world-sky as auxilirary frame
-                    m=inv(t)*inv(r);
+                    m=inv(t)*inv(r2);
                     g_auxiliaryRbt = makeMixedFrame(RigTForm(), g_skyRbt);
                     g_skyRbt = doQtoOwrtA(m, g_skyRbt, g_auxiliaryRbt);
                 }
@@ -533,10 +563,10 @@ static void keyboard(GLFWwindow* window, int key, int scancode, int action, int 
                         g_eyeRbt=g_skyRbt;
                         break;
                     case 1:
-                        g_eyeRbt=transFact(g_objectRbt[0])*RigTForm::makeYRotation(-45);
+                        g_eyeRbt=makeMixedFrame(RigTForm::makeTranslation(-1.f, 0.f, 0.f), RigTForm::makeYRotation(-90)); //transFact(g_objectRbt[0])*RigTForm::makeYRotation(-45);
                         break;
                     case 2:
-                        g_eyeRbt=transFact(g_objectRbt[1]);
+                        g_eyeRbt=makeMixedFrame(RigTForm::makeTranslation(1.f, 0.f, 0.f), RigTForm::makeYRotation(90));
                         break;
                     default:
                         break;
@@ -595,7 +625,8 @@ static void initGLState() {
     
     
     //  glCullFace(GL_BACK);
-    //  glEnable(GL_CULL_FACE);
+    //  glDisable(GL_CULL_FACE);
+    
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_GREATER);
     
