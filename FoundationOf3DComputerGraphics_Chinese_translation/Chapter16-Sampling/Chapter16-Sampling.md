@@ -27,34 +27,30 @@ $$\large{ I[i][j] \leftarrow I(i, j)  }$$
 
 从这些多种观点，对这些观点我们这里不追求细节，证实了最好借助下面这种形式的表达来设置像素值：
 $$ \large{
-I[i][j] \leftarrow \iint_\Omega dxdyI(x,y)F_{i,j}(x,y) \tag{16.1}
+I[i][j] \leftarrow \iint_\Omega dx\,dy\,I(x,y)F_{i,j}(x,y) \tag{16.1}
 }$$
 此处$F_{i,j}(x,y)$为某种函数，其告知我们$[x,y]^t$的图像值应该多么强烈影响$i,j$处的像素值。在这种设置中，函数$F_{i,j}(x,y)$被称作过滤器（filter）。
 
+换句话说，最佳像素值通过在临近的像素地址执行某种连续加权平均。实际上，这就像在点采样前模糊连续图像以获得具体图像。使用方程（16.1）生成一个具体图像的方式被称为抗锯齿（anti-aliasing）。
+ 
+$F_{i,j}$的最优选择证实依赖于建模这个问题的实际数学方式。理论上，这种最优$F_{i,j}$可能具备广泛的支持，并且甚至呈现负值。实际上，我们不要求完全的优化，并且我们经常选择过滤器$F_{i,j}(x,y)$为某种容易计算的形式。最简单的这种选择盒式过滤器（box filter），此处$F_{i,j}$除了中心位于$x=i,y=j$的$1\times1$正方形区域外处处为0。把这种正方形称作$\Omega_{i,j}$，我们得到
+$$ \large{
+I[i][j] \leftarrow \iint_\Omega dx\,dy\,I(x,y) \tag{16.2}
+}$$
 
-In other words, the best pixel value is determined by performing some continuous weighted averaging near the pixel’s location. Effectively, this is like blurring the continuous image before point sampling it to obtain a discrete image. The use of Equation (16.1) to create a discrete image is referred to as anti-aliasing. 
+在这种情形中，想要的像素值只是像素正方形区域上的连续图像的平均。（参考图示$\text{Figure 16.2}$。）
 
-The optimal choice for F i,j turns out to depend on the particular mathematical approach used to model the problem. In theory, such an optimal F i,j might have a wide support, and even take on negative values. In practice we do not require complete optimality, and we often choose the ﬁlters F i,j (x, y) to be something that can more easily computed with. The simplest such choice is a box ﬁlter, where F i,j (x, y) is zero everywhere except over the 1-by-1 square centered at x = i, y = j. Calling this square Ω i,j , we arrive at < < I[i][j] ← dx dy I(x, y) (16.2)
-
-Ω
-
-i,j
-
-In this case, the desired pixel value is simply the average of the continuous image over the pixel’s square domain. (See Figure 16.2.)
+在计算机图形中，甚至方程式（16.2）中的积分也难于确切计算。相反，它可以通过下列形式的某种和被近似出来：
 
 In computer graphics, even the integral of Equation (16.2) is too difﬁcult to exactly compute. Instead, it is approximated by some sum of the form:
+$x=i,y=j$的$1\times1$正方形区域外处处为0。把这种正方形称作$\Omega_{i,j}$，我们得到
+$$ \large{
+I[i][j] \leftarrow \sum_{k=1}^nI(x_k,y_k) \tag{16.3}
+}$$
+此处k索引了某种地址集合$(x_k,y_k)$,被称作样本地址。我们称这种为过采样（oversampling）。（参考图示$\text{Figure 16.3}$。）
 
-1 I[i][j] ← n
+要完成过采样，渲染器首先生成一个“高分辨率”色彩和z缓存“图像”，此处我们会使用术语样本表示每个这种高分辨率像素。随后，一旦光栅化完成，这些样本的分组被聚在一起平均，借助方程（16.3），生成最终的，低分辨率图像。
 
-n &
-
-I(x k , y k )
-
-(16.3)
-
-k=1 where k indexes some set of locations (x k , y k ) called the sample locations. We call this oversampling. (See Figure 16.3.)
-
-To do oversampling, the renderer ﬁrst produces a “high resolution” color and zbuffer “image”, where we will use the term sample to refer to each of these high resolution pixels. Then, once rasterization is complete, groups of these samples are averaged together, using Equation (16.3), to create the ﬁnal, lower resolution image.
 
 If the sample locations for the high resolution image form a regular, high resolution grid, then this is called super sampling. See Figure 16.6 (bottom) to see the effect
 
@@ -66,7 +62,7 @@ In OpenGL, we can also choose to do multisampling. In this case, OpenGL draws to
 
 To deal with aliasing that occurs during texture mapping, we have the advantage of possessing the texture image in hand at the outset of the rendering process. This leads to specialized techniques such as mip mapping described in Section 18.3. We defer our discussion of texture anti-aliasing and mip mapping until after we have covered the topic of image reconstruction in Chapter 17.
 
-16.3.1 In the Wild
+### 16.3.1 In the Wild
 
 In digital cameras, antialiasing is accomplished by a combination of the spatial integration that happens over the extent of each pixel sensor, as well as by the optical blurring that happens at due to the lens. Some cameras also include additional optical elements speciﬁcally to blur the continuous image data before it is sampled at the sensors. Aliasing can sometimes be seen in digital images of scenes containing certain regular patterns, such as those in tweed jackets.
 
