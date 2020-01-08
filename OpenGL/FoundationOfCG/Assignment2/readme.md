@@ -11,7 +11,9 @@
 
 ### 3.视点的切换（用“V”键切换）
 ![assignment2-camera-vie](media/assignment2-camera-view.png)
-![assignment2-cube-vie](media/assignment2-cube-view.png)
+
+当切换位立方体视角时，针对每个立方体中心视角，设置眼睛都朝向另一个立方体的中心（也就是说-z轴方向为眼睛所在点指向这个立方体的中心。实际中变换视角时，就是眼睛位置移动到对应立方体中心同时左转右者右转90度）
+![assignment2-cube-view](media/assignment2-cube-view.png)
 
 
 ### 4.立方体和sky-camera相机的操纵（用“O”键切换）
