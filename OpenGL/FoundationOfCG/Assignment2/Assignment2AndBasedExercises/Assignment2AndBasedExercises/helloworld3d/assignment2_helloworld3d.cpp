@@ -58,51 +58,51 @@ static GLFWwindow* window;
 
 
 struct ShaderState {
-  GlProgram program;
-
-  // Handles to uniform variables
-  GLint h_uLight, h_uLight2;
-  GLint h_uProjMatrix;
-  GLint h_uModelViewMatrix;
-  GLint h_uNormalMatrix;
-  GLint h_uColor;
+    GlProgram program;
+    
+    // Handles to uniform variables
+    GLint h_uLight, h_uLight2;
+    GLint h_uProjMatrix;
+    GLint h_uModelViewMatrix;
+    GLint h_uNormalMatrix;
+    GLint h_uColor;
     GLint h_uXCoordOffset;
-
-  // Handles to vertex attributes
-  GLint h_aPosition;
-  GLint h_aNormal;
-
-  ShaderState(const char* vsfn, const char* fsfn,bool sourceFlag) {
-      if(sourceFlag)
-          loadAndCompileShader(program, vsfn, fsfn);
-      else
-          readAndCompileShader(program, vsfn, fsfn);
-
-    const GLuint h = program; // short hand
-
-    // Retrieve handles to uniform variables
-    h_uLight = safe_glGetUniformLocation(h, "uLight");
-    h_uLight2 = safe_glGetUniformLocation(h, "uLight2");
-    h_uProjMatrix = safe_glGetUniformLocation(h, "uProjMatrix");
-    h_uModelViewMatrix = safe_glGetUniformLocation(h, "uModelViewMatrix");
-    h_uNormalMatrix = safe_glGetUniformLocation(h, "uNormalMatrix");
-    h_uColor = safe_glGetUniformLocation(h, "uColor");
-      h_uXCoordOffset = safe_glGetUniformLocation(h, "uXCoordOffset");
-
-    // Retrieve handles to vertex attributes
-    h_aPosition = safe_glGetAttribLocation(h, "aPosition");
-    h_aNormal = safe_glGetAttribLocation(h, "aNormal");
-
-    checkGlError(__FUNCTION__);
-  }
-
+    
+    // Handles to vertex attributes
+    GLint h_aPosition;
+    GLint h_aNormal;
+    
+    ShaderState(const char* vsfn, const char* fsfn,bool sourceFlag) {
+        if(sourceFlag)
+            loadAndCompileShader(program, vsfn, fsfn);
+        else
+            readAndCompileShader(program, vsfn, fsfn);
+        
+        const GLuint h = program; // short hand
+        
+        // Retrieve handles to uniform variables
+        h_uLight = safe_glGetUniformLocation(h, "uLight");
+        h_uLight2 = safe_glGetUniformLocation(h, "uLight2");
+        h_uProjMatrix = safe_glGetUniformLocation(h, "uProjMatrix");
+        h_uModelViewMatrix = safe_glGetUniformLocation(h, "uModelViewMatrix");
+        h_uNormalMatrix = safe_glGetUniformLocation(h, "uNormalMatrix");
+        h_uColor = safe_glGetUniformLocation(h, "uColor");
+        h_uXCoordOffset = safe_glGetUniformLocation(h, "uXCoordOffset");
+        
+        // Retrieve handles to vertex attributes
+        h_aPosition = safe_glGetAttribLocation(h, "aPosition");
+        h_aNormal = safe_glGetAttribLocation(h, "aNormal");
+        
+        checkGlError(__FUNCTION__);
+    }
+    
 };
 
 static const int g_numShaders = 2;
 
 static const char * const g_shaderFiles[g_numShaders][2] = {
-  {"./shaders/basic-gl3.vshader", "./shaders/solid-gl3.fshader"},
-  {"./shaders/basic-gl3.vshader", "./shaders/diffuse-gl3.fshader"}
+    {"./shaders/basic-gl3.vshader", "./shaders/solid-gl3.fshader"},
+    {"./shaders/basic-gl3.vshader", "./shaders/diffuse-gl3.fshader"}
 };
 
 const char* basicVert = GLSL
@@ -126,7 +126,7 @@ const char* basicVert = GLSL
      // send position (eye coordinates) to fragment shader
      vec4 tPosition = uModelViewMatrix * vec4(aPosition, 1.0);
      vPosition = vec3(tPosition);
-     gl_Position = uProjMatrix * tPosition; 
+     gl_Position = uProjMatrix * tPosition;
      gl_Position.x += uXCoordOffset;
  }
  
@@ -172,8 +172,8 @@ const char* diffuseVert = GLSL
  );
 
 static const char * const g_shaderSources[g_numShaders][2] = {
-  {basicVert, diffuseVert},
-  {basicVert, solidVert}
+    {basicVert, diffuseVert},
+    {basicVert, solidVert}
 };
 
 //static const char * const g_shaderFilesGl2[g_numShaders][2] = {
@@ -190,67 +190,67 @@ static vector<shared_ptr<ShaderState> > g_shaderStates; // our global shader sta
 
 // A vertex with floating point position and normal
 struct VertexPN {
-  Cvec3f p, n;
-
-  VertexPN() {}
-  VertexPN(float x, float y, float z,
-           float nx, float ny, float nz)
+    Cvec3f p, n;
+    
+    VertexPN() {}
+    VertexPN(float x, float y, float z,
+             float nx, float ny, float nz)
     : p(x,y,z), n(nx, ny, nz)
-  {}
-
-  // Define copy constructor and assignment operator from GenericVertex so we can
-  // use make* functions from geometrymaker.h
-  VertexPN(const GenericVertex& v) {
-    *this = v;
-  }
-
-  VertexPN& operator = (const GenericVertex& v) {
-    p = v.pos;
-    n = v.normal;
-    return *this;
-  }
+    {}
+    
+    // Define copy constructor and assignment operator from GenericVertex so we can
+    // use make* functions from geometrymaker.h
+    VertexPN(const GenericVertex& v) {
+        *this = v;
+    }
+    
+    VertexPN& operator = (const GenericVertex& v) {
+        p = v.pos;
+        n = v.normal;
+        return *this;
+    }
 };
 
 struct Geometry {
-  GlBufferObject vbo, ibo;
-  int vboLen, iboLen;
-
-  Geometry(VertexPN *vtx, unsigned short *idx, int vboLen, int iboLen) {
-    this->vboLen = vboLen;
-    this->iboLen = iboLen;
-
-    // Now create the VBO and IBO
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(VertexPN) * vboLen, vtx, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * iboLen, idx, GL_STATIC_DRAW);
-  }
-
-  void draw(const ShaderState& curSS) {
-      GLuint vao;
-      glGenVertexArrays( 1, &vao );
-      glBindVertexArray(vao);
-      // Enable the attributes used by our shader
-      safe_glEnableVertexAttribArray(curSS.h_aPosition);
-      safe_glEnableVertexAttribArray(curSS.h_aNormal);
-      
-      // bind vbo
-      glBindBuffer(GL_ARRAY_BUFFER, vbo);
-      safe_glVertexAttribPointer(curSS.h_aPosition, 3, GL_FLOAT, GL_FALSE, sizeof(VertexPN), FIELD_OFFSET(VertexPN, p));
-      safe_glVertexAttribPointer(curSS.h_aNormal, 3, GL_FLOAT, GL_FALSE, sizeof(VertexPN), FIELD_OFFSET(VertexPN, n));
-      
-      // bind ibo
-      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-      
-      // draw!
-      glDrawElements(GL_TRIANGLES, iboLen, GL_UNSIGNED_SHORT, 0);
-      
-      // Disable the attributes used by our shader
-      safe_glDisableVertexAttribArray(curSS.h_aPosition);
-      safe_glDisableVertexAttribArray(curSS.h_aNormal);
-      glBindVertexArray(0);
-  }
+    GlBufferObject vbo, ibo;
+    int vboLen, iboLen;
+    
+    Geometry(VertexPN *vtx, unsigned short *idx, int vboLen, int iboLen) {
+        this->vboLen = vboLen;
+        this->iboLen = iboLen;
+        
+        // Now create the VBO and IBO
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(VertexPN) * vboLen, vtx, GL_STATIC_DRAW);
+        
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * iboLen, idx, GL_STATIC_DRAW);
+    }
+    
+    void draw(const ShaderState& curSS) {
+        GLuint vao;
+        glGenVertexArrays( 1, &vao );
+        glBindVertexArray(vao);
+        // Enable the attributes used by our shader
+        safe_glEnableVertexAttribArray(curSS.h_aPosition);
+        safe_glEnableVertexAttribArray(curSS.h_aNormal);
+        
+        // bind vbo
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        safe_glVertexAttribPointer(curSS.h_aPosition, 3, GL_FLOAT, GL_FALSE, sizeof(VertexPN), FIELD_OFFSET(VertexPN, p));
+        safe_glVertexAttribPointer(curSS.h_aNormal, 3, GL_FLOAT, GL_FALSE, sizeof(VertexPN), FIELD_OFFSET(VertexPN, n));
+        
+        // bind ibo
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+        
+        // draw!
+        glDrawElements(GL_TRIANGLES, iboLen, GL_UNSIGNED_SHORT, 0);
+        
+        // Disable the attributes used by our shader
+        safe_glDisableVertexAttribArray(curSS.h_aPosition);
+        safe_glDisableVertexAttribArray(curSS.h_aNormal);
+        glBindVertexArray(0);
+    }
 };
 
 
@@ -276,15 +276,15 @@ GLfloat cursor_x        = 0.f;
 GLfloat cursor_y        = 0.f;
 
 static void initGround() {
-  // A x-z plane at y = g_groundY of dimension [-g_groundSize, g_groundSize]^2
-  VertexPN vtx[4] = {
-    VertexPN(-g_groundSize, g_groundY, -g_groundSize, 0, 1, 0),
-    VertexPN(-g_groundSize, g_groundY,  g_groundSize, 0, 1, 0),
-    VertexPN( g_groundSize, g_groundY,  g_groundSize, 0, 1, 0),
-    VertexPN( g_groundSize, g_groundY, -g_groundSize, 0, 1, 0),
-  };
-  unsigned short idx[] = {0, 1, 2, 0, 2, 3};
-  g_ground.reset(new Geometry(&vtx[0], &idx[0], 4, 6));
+    // A x-z plane at y = g_groundY of dimension [-g_groundSize, g_groundSize]^2
+    VertexPN vtx[4] = {
+        VertexPN(-g_groundSize, g_groundY, -g_groundSize, 0, 1, 0),
+        VertexPN(-g_groundSize, g_groundY,  g_groundSize, 0, 1, 0),
+        VertexPN( g_groundSize, g_groundY,  g_groundSize, 0, 1, 0),
+        VertexPN( g_groundSize, g_groundY, -g_groundSize, 0, 1, 0),
+    };
+    unsigned short idx[] = {0, 1, 2, 0, 2, 3};
+    g_ground.reset(new Geometry(&vtx[0], &idx[0], 4, 6));
 }
 
 static void initCubes() {
@@ -296,40 +296,40 @@ static void initCubes() {
     vector<unsigned short> idx(ibLen);
     
     makeCube(1, vtx.begin(), idx.begin());
-    g_cube.reset(new Geometry(&vtx[0], &idx[0], vbLen, ibLen));    
+    g_cube.reset(new Geometry(&vtx[0], &idx[0], vbLen, ibLen));
 }
 
 // takes a projection matrix and send to the the shaders
 static void sendProjectionMatrix(const ShaderState& curSS, const Matrix4& projMatrix) {
-  GLfloat glmatrix[16];
-  projMatrix.writeToColumnMajorMatrix(glmatrix); // send projection matrix
-  safe_glUniformMatrix4fv(curSS.h_uProjMatrix, glmatrix);
+    GLfloat glmatrix[16];
+    projMatrix.writeToColumnMajorMatrix(glmatrix); // send projection matrix
+    safe_glUniformMatrix4fv(curSS.h_uProjMatrix, glmatrix);
 }
 
 // takes MVM and its normal matrix to the shaders
 static void sendModelViewNormalMatrix(const ShaderState& curSS, const Matrix4& MVM, const Matrix4& NMVM) {
-  GLfloat glmatrix[16];
-  MVM.writeToColumnMajorMatrix(glmatrix); // send MVM
-  safe_glUniformMatrix4fv(curSS.h_uModelViewMatrix, glmatrix);
-
-  NMVM.writeToColumnMajorMatrix(glmatrix); // send NMVM
-  safe_glUniformMatrix4fv(curSS.h_uNormalMatrix, glmatrix);
+    GLfloat glmatrix[16];
+    MVM.writeToColumnMajorMatrix(glmatrix); // send MVM
+    safe_glUniformMatrix4fv(curSS.h_uModelViewMatrix, glmatrix);
+    
+    NMVM.writeToColumnMajorMatrix(glmatrix); // send NMVM
+    safe_glUniformMatrix4fv(curSS.h_uNormalMatrix, glmatrix);
 }
 
 // update g_frustFovY from g_frustMinFov, g_windowWidth, and g_windowHeight
 static void updateFrustFovY() {
-  if (g_windowWidth >= g_windowHeight)
-    g_frustFovY = g_frustMinFov;
-  else {
-    const double RAD_PER_DEG = 0.5 * CS175_PI/180;
-    g_frustFovY = atan2(sin(g_frustMinFov * RAD_PER_DEG) * g_windowHeight / g_windowWidth, cos(g_frustMinFov * RAD_PER_DEG)) / RAD_PER_DEG;
-  }
+    if (g_windowWidth >= g_windowHeight)
+        g_frustFovY = g_frustMinFov;
+    else {
+        const double RAD_PER_DEG = 0.5 * CS175_PI/180;
+        g_frustFovY = atan2(sin(g_frustMinFov * RAD_PER_DEG) * g_windowHeight / g_windowWidth, cos(g_frustMinFov * RAD_PER_DEG)) / RAD_PER_DEG;
+    }
 }
 
 static Matrix4 makeProjectionMatrix() {
-  return Matrix4::makeProjection(
-           g_frustFovY, g_windowWidth / static_cast <double> (g_windowHeight),
-           g_frustNear, g_frustFar);
+    return Matrix4::makeProjection(
+                                   g_frustFovY, g_windowWidth / static_cast <double> (g_windowHeight),
+                                   g_frustNear, g_frustFar);
 }
 
 static void drawStuff() {
@@ -362,14 +362,15 @@ static void drawStuff() {
     
     // draw cubes
     // ==========
-    safe_glUniform1f(curSS.h_uXCoordOffset, -1.5f);
+    // 通过uniform 变量 h_uXCoordOffset 控制立方体的x轴位置调整
+    safe_glUniform1f(curSS.h_uXCoordOffset, -1.f);
     MVM = invEyeRbt * g_objectRbt[0];
     NMVM = normalMatrix(MVM);
     sendModelViewNormalMatrix(curSS, MVM, NMVM);
     safe_glUniform3f(curSS.h_uColor, g_objectColors[0][0], g_objectColors[0][1], g_objectColors[0][2]);
     g_cube->draw(curSS);
     
-    safe_glUniform1f(curSS.h_uXCoordOffset, 1.5f);
+    safe_glUniform1f(curSS.h_uXCoordOffset, 1.f);
     MVM = invEyeRbt * g_objectRbt[1];
     NMVM = normalMatrix(MVM);
     sendModelViewNormalMatrix(curSS, MVM, NMVM);
@@ -383,21 +384,21 @@ static void display() {
     
     //glClear(GL_DEPTH_BUFFER_BIT);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);    // clear framebuffer color&depth
-
+    
     drawStuff();
-
+    
     //show the back buffer (where we rendered stuff)
     glfwSwapBuffers(window);
-
+    
 }
 
 static void reshape(GLFWwindow* window,const int w, const int h) {
-  g_windowWidth = w;
-  g_windowHeight = h;
-  glViewport(0, 0, w, h);
-  cerr << "Size of window is now " << w << "x" << h << endl;
-  updateFrustFovY();
-  //glutPostRedisplay();
+    g_windowWidth = w;
+    g_windowHeight = h;
+    glViewport(0, 0, w, h);
+    cerr << "Size of window is now " << w << "x" << h << endl;
+    updateFrustFovY();
+    //glutPostRedisplay();
 }
 
 static void displayWindow(GLFWwindow* window){
@@ -405,57 +406,57 @@ static void displayWindow(GLFWwindow* window){
 }
 
 static void motion(const float x, const float y) {
-  const double dx = x - g_mouseClickX;
-  const double dy = g_windowHeight - y - 1 - g_mouseClickY;
-
-  Matrix4 m,r,t;
-  if (g_mouseLClickButton && !g_mouseRClickButton) { // left button down?
-    r = Matrix4::makeXRotation(-dy) * Matrix4::makeYRotation(dx);
-  }
-  else if (g_mouseRClickButton && !g_mouseLClickButton) { // right button down?
-    t = Matrix4::makeTranslation(Cvec3(dx, dy, 0) * 0.01);
-  }
-  else if (g_mouseMClickButton || (g_mouseLClickButton && g_mouseRClickButton)) {  // middle or (left and right) button down?
-    t = Matrix4::makeTranslation(Cvec3(0, 0, -dy) * 0.01);
-  }
-
-  m=t*r;
-  if (g_mouseClickDown) {
-      if(g_activeObject == 0){
-          if(g_activeView==0){ // sky camera
-              //sky-cube frame
-              g_auxiliaryRbt = makeMixedFrame(g_objectRbt[0], g_skyRbt);
-          }else{
-              //cube-cube frame
-              g_auxiliaryRbt = makeMixedFrame(g_objectRbt[0], g_objectRbt[1]);
-          }
-          //g_objectRbt[0] *= m; // Simply right-multiply is WRONG
-          g_objectRbt[0] = doQtoOwrtA(m, g_objectRbt[0], g_auxiliaryRbt);
-      }else if(g_activeObject == 1){
-          if(g_activeView==0){
-              g_auxiliaryRbt = makeMixedFrame(g_objectRbt[1], g_skyRbt);
-          }else{
-              g_auxiliaryRbt = makeMixedFrame(g_objectRbt[1], g_objectRbt[0]);
-          }
-          g_objectRbt[1] = doQtoOwrtA(m, g_objectRbt[1], g_auxiliaryRbt);
-      }else{
-          if(g_activeView==0){
-              if(g_activeEgoMotion){  //ego motion
-                  m=t*inv(r);
-                  g_skyRbt = doQtoOwrtA(m, g_skyRbt, g_skyRbt);
-              }else{  // world-sky as auxilirary frame
-                  m=inv(t)*inv(r);
-                  g_auxiliaryRbt = makeMixedFrame(Matrix4(), g_skyRbt);
-                  g_skyRbt = doQtoOwrtA(m, g_skyRbt, g_auxiliaryRbt);
-              }
-              
-              g_eyeRbt = g_skyRbt;
-          }
-      }
-  }
-
-  g_mouseClickX = x;
-  g_mouseClickY = g_windowHeight - y - 1;
+    const double dx = x - g_mouseClickX;
+    const double dy = g_windowHeight - y - 1 - g_mouseClickY;
+    
+    Matrix4 m,r,t;
+    if (g_mouseLClickButton && !g_mouseRClickButton) { // left button down?
+        r = Matrix4::makeXRotation(-dy) * Matrix4::makeYRotation(dx);
+    }
+    else if (g_mouseRClickButton && !g_mouseLClickButton) { // right button down?
+        t = Matrix4::makeTranslation(Cvec3(dx, dy, 0) * 0.01);
+    }
+    else if (g_mouseMClickButton || (g_mouseLClickButton && g_mouseRClickButton)) {  // middle or (left and right) button down?
+        t = Matrix4::makeTranslation(Cvec3(0, 0, -dy) * 0.01);
+    }
+    
+    m=t*r;
+    if (g_mouseClickDown) {
+        if(g_activeObject == 0){
+            if(g_activeView==0){ // sky camera
+                                 //sky-cube frame
+                g_auxiliaryRbt = makeMixedFrame(g_objectRbt[0]*Matrix4::makeTranslation(Cvec3(-1.f,0.f,0.f)), g_skyRbt);
+            }else{
+                //cube-cube frame
+                g_auxiliaryRbt = makeMixedFrame(g_objectRbt[0]*Matrix4::makeTranslation(Cvec3(-1.f,0.f,0.f)), g_objectRbt[1]);
+            }
+            //g_objectRbt[0] *= m; // Simply right-multiply is WRONG
+            g_objectRbt[0] = doQtoOwrtA(m, g_objectRbt[0], g_auxiliaryRbt);
+        }else if(g_activeObject == 1){
+            if(g_activeView==0){
+                g_auxiliaryRbt = makeMixedFrame(g_objectRbt[1]*Matrix4::makeTranslation(Cvec3(1.f,0.f,0.f)), g_skyRbt);
+            }else{
+                g_auxiliaryRbt = makeMixedFrame(g_objectRbt[1]*Matrix4::makeTranslation(Cvec3(1.f,0.f,0.f)), g_objectRbt[0]);
+            }
+            g_objectRbt[1] = doQtoOwrtA(m, g_objectRbt[1], g_auxiliaryRbt);
+        }else{
+            if(g_activeView==0){
+                if(g_activeEgoMotion){  //ego motion
+                    m=t*inv(r);
+                    g_skyRbt = doQtoOwrtA(m, g_skyRbt, g_skyRbt);
+                }else{  // world-sky as auxilirary frame
+                    m=inv(t)*inv(r);
+                    g_auxiliaryRbt = makeMixedFrame(Matrix4(), g_skyRbt);
+                    g_skyRbt = doQtoOwrtA(m, g_skyRbt, g_auxiliaryRbt);
+                }
+                
+                g_eyeRbt = g_skyRbt;
+            }
+        }
+    }
+    
+    g_mouseClickX = x;
+    g_mouseClickY = g_windowHeight - y - 1;
 }
 
 void cursor_position_callback( GLFWwindow* window, double x, double y )
@@ -533,10 +534,10 @@ static void keyboard(GLFWwindow* window, int key, int scancode, int action, int 
                         g_eyeRbt=g_skyRbt;
                         break;
                     case 1:
-                        g_eyeRbt=transFact(g_objectRbt[0])*Matrix4::makeYRotation(-45);
+                    g_eyeRbt=Matrix4::makeTranslation(Cvec3(-1.f,0.f,0.f))*Matrix4::makeYRotation(-90);
                         break;
                     case 2:
-                        g_eyeRbt=transFact(g_objectRbt[1]);
+                    g_eyeRbt=Matrix4::makeTranslation(Cvec3(1.f,0.f,0.f))*Matrix4::makeYRotation(90);
                         break;
                     default:
                         break;
@@ -563,8 +564,8 @@ static void keyboard(GLFWwindow* window, int key, int scancode, int action, int 
 
 
 static int initGlfwState(){
-   if(!glfwInit())
-       return -1;
+    if(!glfwInit())
+        return -1;
     
     //设置OpenGL core profile
     glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 4 );
@@ -599,7 +600,7 @@ static int initGlfwState(){
     
     //error callback
     glfwSetErrorCallback(error_callback);
-
+    
     return 0;
     
 }
@@ -614,85 +615,85 @@ static void initGLState() {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_GREATER);
     
-//      glReadBuffer(GL_BACK);
-//      glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-//      glPixelStorei(GL_PACK_ALIGNMENT, 1);
+    //      glReadBuffer(GL_BACK);
+    //      glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    //      glPixelStorei(GL_PACK_ALIGNMENT, 1);
     
     glEnable(GL_FRAMEBUFFER_SRGB);
 }
 
 static void initShaders() {
-  g_shaderStates.resize(g_numShaders);
-  for (int i = 0; i < g_numShaders; ++i) {
-    if (g_GlSourceFlag)
-      g_shaderStates[i].reset(new ShaderState(g_shaderSources[i][0], g_shaderSources[i][1],g_GlSourceFlag));
-    else
-      g_shaderStates[i].reset(new ShaderState(g_shaderFiles[i][0], g_shaderFiles[i][1],g_GlSourceFlag));
-  }
+    g_shaderStates.resize(g_numShaders);
+    for (int i = 0; i < g_numShaders; ++i) {
+        if (g_GlSourceFlag)
+            g_shaderStates[i].reset(new ShaderState(g_shaderSources[i][0], g_shaderSources[i][1],g_GlSourceFlag));
+        else
+            g_shaderStates[i].reset(new ShaderState(g_shaderFiles[i][0], g_shaderFiles[i][1],g_GlSourceFlag));
+    }
 }
 
 static void initGeometry() {
-  initGround();
-  initCubes();
+    initGround();
+    initCubes();
 }
 
 int main(int argc, char * argv[]) {
-  try {
-      //initGlutState(argc,argv);
-      
-      //initGLFW
-      initGlfwState();
-
-      GLenum err = glewInit(); // load the OpenGL extensions
-      
-      if (GLEW_OK != err){
-          /* Problem: glewInit failed, something is seriously wrong. */
-          fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
-      }
-      fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
-      
-      if(GLEW_VERSION_4_1)
-          fprintf(stdout, "GLEW VERSION 4.1 Supported \n");
-
-//    cout << (g_Gl2Compatible ? "Will use OpenGL 2.x / GLSL 1.0" : "Will use OpenGL 3.x / GLSL 1.3") << endl;
-//    if ((!g_Gl2Compatible) && !GLEW_VERSION_3_0)
-//      throw runtime_error("Error: card/driver does not support OpenGL Shading Language v1.3");
-//    else if (g_Gl2Compatible && !GLEW_VERSION_2_0)
-//      throw runtime_error("Error: card/driver does not support OpenGL Shading Language v1.0");
-
-
-      initGLState();
-      initGeometry();
-      initShaders();
-      
-      //在Mac环境下窗口的刷新回调并不是绘制窗口的刷新率，而好像只是回调了一次，
-      //所以这种调用不能保证绘制窗口的刷新率，此处调用可以舍弃
-      glfwSetWindowRefreshCallback(window, displayWindow);
-      
-      OpenGL_Helper::PerfMonitor perfMonitor;
-      float fps;
-
-      //mac os x的窗口调用会限制帧数
-      while( !glfwWindowShouldClose(window) ){
-          display();
-          perfMonitor.Update(fps);
-          //cout << "Current FPS at " << glfwGetTime() << " is " << fps << endl;
-          
-          motion(cursor_x, cursor_y);
-          
-          //交换前后缓存，缓存的交换要确保在绘制后交换，若绘制后交换多于一次就会导致窗口闪烁
-          //glfwSwapBuffers( window );
-          //glfwPollEvents();
-          glfwWaitEvents();
-      }
-      
-      
-      glfwTerminate();
-
-    return 0;
-  }
-  catch (const runtime_error& e) {
-    cout << "Exception caught: " << e.what() << endl;
-    return -1;
-  }
+    try {
+        //initGlutState(argc,argv);
+        
+        //initGLFW
+        initGlfwState();
+        
+        GLenum err = glewInit(); // load the OpenGL extensions
+        
+        if (GLEW_OK != err){
+            /* Problem: glewInit failed, something is seriously wrong. */
+            fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+        }
+        fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
+        
+        if(GLEW_VERSION_4_1)
+            fprintf(stdout, "GLEW VERSION 4.1 Supported \n");
+        
+        //    cout << (g_Gl2Compatible ? "Will use OpenGL 2.x / GLSL 1.0" : "Will use OpenGL 3.x / GLSL 1.3") << endl;
+        //    if ((!g_Gl2Compatible) && !GLEW_VERSION_3_0)
+        //      throw runtime_error("Error: card/driver does not support OpenGL Shading Language v1.3");
+        //    else if (g_Gl2Compatible && !GLEW_VERSION_2_0)
+        //      throw runtime_error("Error: card/driver does not support OpenGL Shading Language v1.0");
+        
+        
+        initGLState();
+        initGeometry();
+        initShaders();
+        
+        //在Mac环境下窗口的刷新回调并不是绘制窗口的刷新率，而好像只是回调了一次，
+        //所以这种调用不能保证绘制窗口的刷新率，此处调用可以舍弃
+        glfwSetWindowRefreshCallback(window, displayWindow);
+        
+        OpenGL_Helper::PerfMonitor perfMonitor;
+        float fps;
+        
+        //mac os x的窗口调用会限制帧数
+        while( !glfwWindowShouldClose(window) ){
+            display();
+            perfMonitor.Update(fps);
+            //cout << "Current FPS at " << glfwGetTime() << " is " << fps << endl;
+            
+            motion(cursor_x, cursor_y);
+            
+            //交换前后缓存，缓存的交换要确保在绘制后交换，若绘制后交换多于一次就会导致窗口闪烁
+            //glfwSwapBuffers( window );
+            //glfwPollEvents();
+            glfwWaitEvents();
+        }
+        
+        
+        glfwTerminate();
+        
+        return 0;
+    }
+    catch (const runtime_error& e) {
+        cout << "Exception caught: " << e.what() << endl;
+        return -1;
+    }
 }
