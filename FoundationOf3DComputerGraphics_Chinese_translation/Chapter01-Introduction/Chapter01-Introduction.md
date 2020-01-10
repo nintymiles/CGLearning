@@ -1,5 +1,5 @@
 # Note
-这是对**MIT Foundation of 3D Computer Graphics**第1章的翻译，本章讲解了计算机图形的发展简史，同时简明扼要地介绍了OpenGL图形渲染管线的过程。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教ninetymiles@icloud.com 
+这是对**MIT Foundation of 3D Computer Graphics**第1章的翻译，本章讲解了计算机图形的发展简史，同时简明扼要地介绍了OpenGL图形渲染管线的过程。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教<ninetymiles@icloud.com> 
 
 > 注：文章中相关内容归原作者所有，翻译内容仅供学习参考。
 > 另：Github项目[CGLearning](https://github.com/nintymiles/CGLearning)中拥有相关翻译的完整资料、内容整理、课程项目实现。
