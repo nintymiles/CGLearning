@@ -2,9 +2,7 @@
 现在让我们关注对立问题：假定一个具体图像$I[i][j]$，我们怎样生成一个连续图像$I(x,y)$？正如我们将会看到的，这个问题对于图像尺寸调整以及纹理映射是中心问题。例如，在碎片着色器中，我们可能希望借助落入（两个）纹理像素之间的纹理坐标从纹理中获取色彩。在这种情形中，我们需要决定使用什么纹理色彩。这个处理被称为重建。
 
 ## 17.1 常量重建（Constant）
-
-Let us again assume that our pixels correspond to integer valued (x, y) locations, and we that wish to determine a color at some fractional valued location. Perhaps the easiest image reconstruction approach is the constant reconstruction (or nearest neighbor) method. In this method, a real valued image coordinate is assumed to have the color of the closest discrete pixel. This method can be described by the following pseudo-code
-
+让我们再次假设我们的像素对应整数值化的(x,y)地址，同时我们希望在某种小数值化的地址处决定一个色彩。可能最容易的图形重建方式为常量重建（或称作最近邻居）方法。在这种方法中，一个实数值化的图像坐标被假定拥有最近的具体像素的色彩。这种方法可以借助下面的伪码描述
 
 ```c
 color constantReconstruction(float x, float y, color image[][]){ 
@@ -14,17 +12,15 @@ color constantReconstruction(float x, float y, color image[][]){
 	return image[i][j] 
 }
 ```
+这种“(int)”类型转换近似了一个数字p为不大于p的最近的整数。
 
-The “(int)” typecast rounds a number p to the nearest integer not larger than p.
-
-We can think of this method as deﬁning a continuous image over the continuous (x, y) domain. We call this “constant reconstruction”, since the resulting continuous image is made up of little squares of constant color. For example, the image has the constant value of I[0][0] in the square shaped region: −.5 < x < .5 and −.5 < y < .5. Each pixel has an inﬂuence region of 1 by 1. See Figure 17.1, left.
+我们把这种方法当作是定义了在连续(x,y)域上的连续图像。我们称此为“常量重建（constant reconstruction）”，因为最终的连续图像由常量色彩的小正方形块组成。例如，图像在正方形区域：$−.5 < x < .5$和$−.5 < y < .5$中拥有常量值$I[0][0]$。每个像素拥有$1\times1$的影响范围。参考图示$\text{Figure 17.1}$的左侧。
 
 ![Figure17.1](media/Figure17.1.png)
-Figure 17.1: Top row: a 64-by-64 discrete image. Bottom left: reconstructed using constant reconstruction. Bottom right: reconstructed using bilinear reconstruction.$copyright$Yasuhiro Endo.
+**Figure 17.1:** 顶部行：一个$64\times64$具体图像。底部左侧：使用常量重建方式被重建。底部右侧：借助双线性重建被重建。©️Yasuhiro Endo。
 
 ## 17.2 双线性重建（Bilinear）
-Constant reconstruction produces blocky looking images. We can create a smoother looking reconstruction using bilinear interpolation. Bilinear interpolation is obtained by applying linear interpolation in both the horizontal and vertical directions. It can be described by the following code:
-
+常量重建产生块状外观的图像。我们可以借助双线性插值生成更平滑外观的重建。双线性插值通过在水平和垂直方向都线性插值被获得。它可以通过下面的代码被描述：
 
 ```
 color bilinearReconstruction(float x, float y, color image[][]){
@@ -42,65 +38,59 @@ colorxy = (1-fracy) * colorx1 + (fracy) * colorx2;
 return(colorxy)
 }
 ```
+在这种代码中，我们首先在x坐标上应用线性插值，跟着在y坐标上应用前面结果的线性插值。
 
-In this code, we ﬁrst apply linear interpolation in x followed by linear interpolation of that result in y.
+在整数坐标上，我们有$I(i, j) = I[i][j]$；重建的连续图像$I$认同具体图像$I$。在整数坐标之间，色彩值被连续混合。每个具体图像中的像素以一种可变的程度影响着连续图像中$2\times2$正方形区域中的每个点。图示$\text{Figure 17.1}$比较了常量和双线性重建。
 
-At integer coordinates, we have I(i, j) = I[i][j]; the reconstructed continuous image I agrees with the discrete image I. In between integer coordinates, the color values are blended continuously. Each pixel in the discrete image inﬂuences, to a varying degree, each point within a 2-by-2 square region of the continuous image. Figure 17.1 compares constant and bilinear reconstruction.
-
-Let us look at the a bit more closely at the 1-by-1 square with coordinates i < x < i + 1, j < y < j + 1 for some ﬁxed i and j. Over this square, we can express the reconstruction as
-
+让我们更仔细一点观察坐标$i < x < i + 1, j < y < j + 1$所确定的$1\times1$正方形，其中i和j为某种固定值。在这个正方形上，我们可以表达重建为
 $$\normalsize{ \begin{array}{rl}
 I(i + x_f , j + y_f ) & \leftarrow  & (1 − y_f )((1 − x_f )I[i][j] + (x_f)I[i + 1][j])  \\
  & & +(y_f)((1 − x_f )I[i][j + 1] + (x_f)I[i + 1][j + 1]) 
 \end{array} \qquad\qquad \tag{17.1} }$$
-
-where x f and y f are the fracx and fracy above. Rearranging the terms we get
-
+此处$x_f$和$y_f$为上面的`fracx`和`fracy`。重新排列各项我们得到
 $$\normalsize{ \begin{array}{rrl}
 I(i + x_f , j + y_f) & \leftarrow & I[i][j]\\
 && + (−I[i][j] + I[i + 1][j])x_f \\
 && + (−I[i][j] + I[i][j + 1])y_f \\
 && + (I[i][j] − I[i][j + 1] − I[i + 1][j] + I[i + 1][j + 1])x_fy_f
 \end{array} }$$
-
-Doing this, we see that the reconstructed function has terms that are constant, linear, and bilinear terms in the variables (x f , y f ), and thus also in (x, y). This is where the name bilinear comes from. It is also clear that this reconstruction is symmetric with respect to the horizontal and vertical directions and thus the horizontal-ﬁrst ordering in the pseudo-code is not critical.
-同时这也清晰无误地表明了这种重建对于水平和垂直方向是对成的，因而伪码中水平优先的顺序表达不是影响对错的关键因素。
+完成上面步骤，我们看到重建函数在变量$(x_f,y_f)$上拥有常量项，线性项，和双线性项，因此在$(x,y)$上也是相同的情况。这就是双线性名称的来源。同时这也清晰无误地表明了这种重建对于水平和垂直方向是对称的，因而伪码中水平优先的顺序表达不是影响对错的关键因素。
 
 ## 17.3 基础函数（Basis Functions）
-
-To get some more insight on the general form of our reconstruction methods, we can go back to Equation (17.1) and rearrange it to obtain
-
+要获得重建方法通用形式的更多内审，我们可以返回到方程（17.1）然后重新排列各项获得
 $$\normalsize{ \begin{array}{rrl}
 I(i + x_f , j + y_f) & \leftarrow & (1 − x_f − y_f + x_fy_f)I[i][j] \\
 && +(x_f − x_fy_f)I[i + 1][j] \\
 && +(y_f − x_fy_f)I[i][j + 1] \\
 && +(x_fy_f)I[i + 1][j + 1]
 \end{array} }$$
-
-In this form, we see that for a ﬁxed position (x, y), the color of the continuous reconstruction is linear in the discrete pixel values of I. Since this is true at all (x, y), we see that our reconstruction in fact must be of the form 
+在这种形式中，我们看到对于一个固定位置$(x,y)$，连续重建的色彩位于I的具体像素值中。因为这在所有的$(x,y)$上都是真实的，对于函数$B_{i,j}(x,y)$的某种合适选择，我们看到事实上重建一定是这种形式 
 $$
 I(x, y) \leftarrow \sum_{i,j}B_{i,j}(x, y)I[i][j] \tag{17.2}
 $$
 
-for some appropriate choice of functions B i,j (x, y). These B are called basis functions; they describe how much pixel i,j inﬂuences the continuous image at [x, y] t .
+这些B函数被称作基函数（basis functions）；它们描述了像素$i,j$多大程度上影响$[x,y]^t$处的连续图像。
 
-In the case of bilinear reconstruction, these B functions are called tent functions. They are deﬁned as follows: let H i (x) be a univariate hat function deﬁned as
-
+在这种双线性重建中，这些B函数被称作帐篷函数（tent functions），它们被定义如下：让$H_i(x)$为单变量帽子函数（hat functions）定义为
 $$ \begin{array}{c}
 H_i(x) & =  & x−i+1  & for & i−1<x<i  \\
 				&& −x+i+1 & for & i<x<i+1 \\
 				&& 0  & else &
 \end{array}$$
-
-See Figure 17.2. (In 1D, the hat basis can be used to take a set of values on the integers and linearly interpolate them to obtain a continuous univariate function.) Then, let T i,j (x, y) be the bivariate function
-
+参考图示$\text{Figure 17.2}$。（在1D中，帽子基（hat basis）可以被用于接收在整数值范围上的一个值的集合同时线性插值它们以获得一个连续的单变量函数。）那么，让$T_{i,j}(x,y)$为双变量函数
 $$T_{i,j}(x, y) = H_i(x)H_j(y)$$
 
- This is called a tent function (see Figure 17.3). It can be veriﬁed that plugging these tent functions into Equation (17.2) gives us the result of the bilinear reconstruction algorithm.
+![Figure17.2](media/Figure17.2.png)
+Figure 17.2: A hat basis basis made up of 10 basis functions. When linearly combined, they can create piecewise linear interpolants of discrete values (shown as dots).
 
-Constant reconstruction can be modeled in this form as well, but in this case, the basis function, B i,j (x, y), is a box function that is zero everywhere except for the unit square surrounding the coordinates (i, j), where it has constant value 1.
+这被称作一个帐篷函数（参考图示$\text{Figure17.3}$）。可以验证把这些帐篷函数插入方程（17.2）中会给出我们双线性重建算法的结果。
 
-More generally, we can choose basis functions with all kinds of sizes and shapes. In high quality image editing tools, for example, reconstruction is done using some set of bi-cubic basis functions [50]. In this sense, a pixel is not really a little square. It is simply a discrete value that is used in conjunction with a set of basis functions to obtain a continuous function.
+![Figure17.3](media/Figure17.3.png)
+Figure 17.3: Four views of one quadrant of a single bilinear tent function. It has value 1 at its center, and drops to 0 on the boundary of a 2 pixel by 2 pixel square.
+
+重来重建也可以用这种形式被建模，但是在这种情形中，基函数$B_{i,j}(x,y)$为盒式函数，其除了围绕坐标$(i,j)$的正方形区域中拥有常量值为1之外，其余处处都为0.
+
+更通用地情形中，我们可以选择各种尺寸和形状的基函数。在高质量图像编辑工具中，比如，重建借助参考书目[50]中的某种双-立方基函数（bi-cubic basis functions）被实现。在这种意义上，像素不真正为一个小正方形。它只是一个具体值，其被用于联合基函数集合以获得一个连续函数。
 
 
 ### 17.3.1 边缘保留（Edge Preservation）
