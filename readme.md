@@ -21,7 +21,7 @@
 | Assignment7 Meshes and Subdivision Surfaces| 初步完成，Catmull-clark规则的实现需要改进 |    |
 | Assignment8 Furry Animation| 初步完成，Furry效果需要改进 |   |
 
-## 正在进行的**Foundation of 3D Computer Graphics**的翻译项目
+## 正在进行的3D计算机图形基础（**Foundation of 3D Computer Graphics**）的翻译
 已经完成的章节
 
 - [第一章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter01-Introduction.pdf)
@@ -38,6 +38,7 @@
 - [第十三章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter13-Rational-Linear-Interpolation.pdf)
 - [第十四章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter14-Materials.pdf)
 - [第十五章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter15_texture_mapping.pdf)
+- [第十六章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter16-Sampling.pdf)
 - [第十九章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter19_Color.pdf)
 - [PDF文件目录](FoundationOf3DComputerGraphics_Chinese_translation/PDF/)
 
