@@ -16,4 +16,18 @@ $$\large{ \begin{array}{rcl}
 I(i,j) & \leftarrow & \iint_{\Omega} dx_wdy_w F_{i,j}(x_w,y_w) \sum_{k,l} B_{k,l}(M(x_w,y_w)) T[k][l] \\
 & = &  \sum_{k,l} T[k][l] \iint_{\Omega} dx_wdy_w F_{i,j}(x_w,y_w) B_{k,l}(M(x_w,y_w))
 \end{array} }$$
-
+这个表达式告诉我们每个输出像素如何能够作为输入纹理像素的线性组合方式被获得。有时候更容易在纹理域上可视化这种整合，而不是在窗口域中。借助反转映射$N=M^{-1}$,这可以被表达为
+$$\large{ \begin{array}{rcl}
+I(i,j) & \leftarrow & \iint_{M_{\Omega}} dx_tdy_t |det(D_N)| \, F_{i,j}(N(x_t,y_t)) \sum_{k,l} B_{k,l}(x_t,y_t) T[k][l] \\
+& = &  \iint_{M_{\Omega}} dx_tdy_t |det(D_N)| \, F'_{i,j}(x_t,y_t) \sum_{k,l} B_{k,l}(x_t,y_t) T[k][l]
+\end{array} }$$
+此处$D_N$为N的雅可比行列式（Jacobian）并且$F'=F \dot N$。当F为一个盒式过滤器，这个公式变为
+$$\large{
+I(i,j)  \leftarrow  \iint_{M_{\Omega}} dx_tdy_t |det(D_N)| \, \sum_{k,l} B_{k,l}(x_t,y_t) T[k][l] 
+}$$
+那就是说，我们需要在纹理域中的区域$M$上积分，并且混合那些数据在一起。
+当我们的变换M实际上缩小了纹理，那么M拥有T上的大脚印。(参考图示$\text{Figure 18.1})。如果M正放大纹理，那么M在T上拥有一个非常小的脚印。M也可以实现更有趣的内容，就如仅仅在一个方向缩小。
+When our transformation M effectively shrinks the texture, then M(Ωi,j ) has a
+large footprint over T (xt, yt). (See Figure 18.1). If M is blowing up the texture, then
+M(Ωi,j ) has a very narrow footprint over T (xt, yt). During texture mapping, M can
+also do funnier things, like shrink in one direction only.
