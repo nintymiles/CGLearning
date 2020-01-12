@@ -12,8 +12,8 @@
 
 让几何变换通过一个映射$M(x_w,y_w)$被描述，这个映射从连续窗口到纹理坐标。那么，把这3个步骤放在一起，我们得到
 
-$$
-I(i,j) \leftarrow \iint_{\Omega} dx_wdy_w F_{i,j}(x_w,y_w) \sum_{k,l} B_{k,l}(M(x_w,y_w)) T[k][l] \\
-\sum_{k,l} T[k][l] \iint_{\Omega} dx_wdy_w F_{i,j}(x_w,y_w) B_{k,l}(M(x_w,y_w))
-$$
+$$\large{ \begin{array}{rcl}
+I(i,j) & \leftarrow & \iint_{\Omega} dx_wdy_w F_{i,j}(x_w,y_w) \sum_{k,l} B_{k,l}(M(x_w,y_w)) T[k][l] \\
+& = &  \sum_{k,l} T[k][l] \iint_{\Omega} dx_wdy_w F_{i,j}(x_w,y_w) B_{k,l}(M(x_w,y_w))
+\end{array} }$$
 
