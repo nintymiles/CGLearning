@@ -1,3 +1,9 @@
+# Note
+这是对**MIT Foundation of 3D Computer Graphics**第17章的翻译，本章讲解了常量重建和双线性重建两种重建算法的基础知识。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教ninetymiles@icloud.com 
+
+> 注：文章中相关内容归原作者所有，翻译内容仅供学习参考。
+> 另：Github项目[CGLearning](https://github.com/nintymiles/CGLearning)中拥有相关翻译的完整资料、内容整理、课程项目实现。
+
 # 重建（Reconstruction）
 现在让我们关注对立问题：假定一个具体图像$I[i][j]$，我们怎样生成一个连续图像$I(x,y)$？正如我们将会看到的，这个问题对于图像尺寸调整以及纹理映射是中心问题。例如，在碎片着色器中，我们可能希望借助落入（两个）纹理像素之间的纹理坐标从纹理中获取色彩。在这种情形中，我们需要决定使用什么纹理色彩。这个处理被称为重建。
 
@@ -81,12 +87,12 @@ H_i(x) & =  & x−i+1  & for & i−1<x<i  \\
 $$T_{i,j}(x, y) = H_i(x)H_j(y)$$
 
 ![Figure17.2](media/Figure17.2.png)
-Figure 17.2: A hat basis basis made up of 10 basis functions. When linearly combined, they can create piecewise linear interpolants of discrete values (shown as dots).
+**Figure 17.2:** 一个帽子基（hat basis）由10个基函数组成。当被线性插值，它们可以生成具体值上（显示为圆点）逐段线性插值。
 
 这被称作一个帐篷函数（参考图示$\text{Figure17.3}$）。可以验证把这些帐篷函数插入方程（17.2）中会给出我们双线性重建算法的结果。
 
 ![Figure17.3](media/Figure17.3.png)
-Figure 17.3: Four views of one quadrant of a single bilinear tent function. It has value 1 at its center, and drops to 0 on the boundary of a 2 pixel by 2 pixel square.
+**Figure 17.3:** 一个双线性帐篷函数（tent function）的四个四分之一圆周视图。在其中心值为1，并且在$2\times2$像素正方形边缘其值降为0.
 
 重来重建也可以用这种形式被建模，但是在这种情形中，基函数$B_{i,j}(x,y)$为盒式函数，其除了围绕坐标$(i,j)$的正方形区域中拥有常量值为1之外，其余处处都为0.
 
