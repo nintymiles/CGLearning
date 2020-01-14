@@ -1,9 +1,20 @@
-# 光线追踪是什么（What is Ray Tracing）
+
+
+
+
+
+# Note
+这是对**MIT Foundation of 3D Computer Graphics**第20章的翻译，本章讲解了光线追踪（ray tracing）技术的基础知识。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教<ninetymiles@icloud.com> 
+
+> 注：文章中相关内容归原作者所有，翻译内容仅供学习参考。
+> 另：Github项目[CGLearning](https://github.com/nintymiles/CGLearning)中拥有相关翻译的完整资料、内容整理、课程项目实现。
+ 
+
+# 什么是光线追踪（What is Ray Tracing）
 光线追踪表达了一种不同标准OpenGL管线的渲染方式。这种技术的原理大部分超越了本书的范围，但是我们会给出基础概念的概要。关于这个主题在本书中要参考更多，请查看本书课后练习[23]或[56]。
 
 ## 20.1 Loop Ordering
 从最基本的视角，我们可以将OpenGL基于光栅化的渲染看作下面的算法形式
-
 
 ```psuedo code
 initialize z-buffer  //启动z-buffer
@@ -13,91 +24,77 @@ for all triangles    //遍历所有三角形
 			if z is closer than what is already in the z-buffer  //如果z比z-buffer中所见的更接近
 				update the color and z of the pixel //更新这个像素的色彩和z值
 ```
+这种算法具有场景中每个三角形仅被触碰一次的良好特性，并且以一种可预测的顺序。例如，正是这个原因，甚至离线的皮克斯（Pixar）的RenderMan软件也使用了这种基本算法。另一种好的特性是，在三角形处理期间，设置计算仅被完成一次并且可以在其中所有像素上平摊。正如我们已经看到的，基于光栅化的渲染可以使用迷人的着色计算甚至使用多通道算法来增强。也存在诸如遮挡剔除（参考课后例子[11]）等高级算法，这些算法尝试避免渲染那些在场景中我们知道其会被其它物体所遮挡的三角形。
 
-This algorithm has the nice property that each triangle in the scene is touched only once, and in a predictable order. It is for this reason, for example, that even the ofﬂine Renderman software from Pixar uses this basic algorithm. Another nice property is that, during the processing of a triangle, setup computation is done only once and can be amortized over the all of the pixels in it. As we have already seen, rasterization-based rendering can be enhanced with fancy shading computation and even with multipass algorithms. There are also advanced algorithms such as occlusion culling (see for example [11] and references therein) that attemp to avoid rendering triangles that we know will be occluded by other objects in the scene.
+在基本的光线追踪中，我们反转循环循序以获得如下的算法
 
-In basic ray tracing, we reverse the loop orders to obtain
-
+```psuedo code
 for all pixels on the screen
-for all objects seen in this pixel
+	for all objects seen in this pixel  //对于在这个像素被看到的所有物体
+		if this is the closest object seen at the pixel  //如果其是在像素上被看到的最近的物体
+			compute color and z  //计算色彩和z值
+			set the color of the pixel //设置这个像素的色彩
 
-if this is the closest object seen at the pixel 
-compute color and z set the color of the pixel
+```
+在第二行中，我们需要计算沿着一个像素的视线（参考图示$\text{Figure 20.1}$）哪些物体被看到。这个步骤要求对一条射线和这个场景相交的情形进行计算。这里列出了光线追踪的几个优势。
 
-In the second line, we need to compute which objects are seen along the line of sight of a pixel (see Figure 20.1). This step requires computing the intersection between a ray and the scene. Here are a few advantages of ray tracing.
+- 借助关系追踪，我们绝不会浪费计算被正物体的计算。
+- 因为我们拥有顺着光线的有序列表，（非折射）透明就容易建模。这是因为我们拥有拥有顺着光线的有序列表，这个列表允许我们应用来自方程（16.4）中的over操作符。
+- 借助光线追踪，我们可以直接渲染平滑物体，不是必须首先把它们切成三角形。
+- 易于渲染借助容积集合操作描述的固态物体，就如多个物体的联合或者相交操作。（参考练习54）。
 
-• Using ray tracing, we never waste computation calculating the color of an occluded object.
+更重要的是，一旦光线相交代码就位，我们可以使用这种基础设施进行各种涉及跟踪几何光线通过场景的计算。例如，使用光线追踪，很容易建模完美的镜面反射和计算阴影。
 
-• Since we have an ordered list of intersections along ray, (non refractive) transparency is easy to model. This is because we have an ordered list of intersections along a ray, which allows us to apply the over operator from Equation (16.4).
+![Figure20.1](media/Figure20.1.png)
+**Figure 20.1:** 要为成像面上的一个像素上色，一条射线被发出进入场景。我们确定出被这条射线相交的第一个物体。更进一步，在相交点，我们可以向光源投射出阴影射线以考量是否我们在阴影中。如果物体像镜面一样，我们可以投射出一条反射射线。
 
-• Using ray intersections, we can directly render smooth objects, without having to ﬁrst dice them up into triangles.
+## 20.2 相交（Intersection）
+光线追踪中所需要的主体计算为计算场景中几何射线$(\tilde{p},\vec{d})$和物体的相交（intersection）。这里$\tilde{p}$为射线的起点，其以方向$\vec{d}$行进。
 
-• It is also easy to render solid objects described by volumetric set operations, such as the union or intersection of objects. (See Exercise 54).
+### 20.2.1 平面（Plane）
+假设我们希望计算$(\tilde{p},\vec{d})$的相交，其中平面使用方程式$Ax + By + Cz + D = 0$描述。我们开始于使用一个参数$\lambda$沿着射线表达每个点
+$$ \large{
+\begin{bmatrix} x \\ y \\ z \end{bmatrix} = 
+\begin{bmatrix} p_x \\ p_y \\ p_z \end{bmatrix} +
+\lambda\begin{bmatrix} d_x \\ d_y \\ d_z \end{bmatrix} \tag{20.1}
+}$$
+把这个插入平面方程式，我们得到
+$$ \large{
+\begin{array}{rcl} 
+0 & = & A(p_x + λd_x ) + B(p_y + λd_y ) + C(p_z + λd_z ) + D \\
+  & = & \lambda(Ad_x + Bd_y + Cd_z ) + Ap_x + Bp_y + Cp_z + D \end{array} 
+}$$
+因此我们看到
+$$ \large{
+\lambda = \frac{−Ap_x − Bp_y − Cp_z − D}{Ad_x + Bd_y + Cd_z}
+}$$
+在这种解法中，$\lambda$告知我们沿着射线相交点在哪里（负值化的$\lambda$表示沿着射线后退）。在$\lambda$值之间的比较可以被用于决定在平面集合中沿着射线哪个平面首先被相交。
 
-Most importantly, once ray intersection code is in place, we can use this infrastructure to do all kinds of assorted calculations that involve chasing geometric rays through the scene. For example, it is easy, using ray tracing, to model perfect mirror reﬂection, and to compute shadows.
+### 20.2.2 三角形（Triangle）
+如果我们想要让一条射线相交于一个三角形，我们可以把这个问题分解为两个步骤。在第一步中，我们计算支撑这个三角形的平面的$A,B,C,D$值，并且像上面一样计算射线-平面相交。接下来，我们需要检测来决定相交点是在三角形内还是在三角形外。我们可以借助方程12.4中的“反时针”计算构建这样一种检测如下。假设我们希望检测一个点$\tilde{p}$是位于2D中的三角形$\triangle(\tilde{p}_1\tilde{p}_2\tilde{p}_3)$之内还是在外（参考图示$\text(Figure 20.2)$和$\text(Figure 20.3)$）。考虑三个“子”三角形$\triangle(\tilde{p}_1\tilde{p}_2\tilde{q})$，$\triangle(\tilde{p}_1\tilde{q}\tilde{p}_3)$和$\triangle(\tilde{q}\tilde{p}_2\tilde{p}_3)$。当$\tilde{q}$位于$\triangle(\tilde{p}_1\tilde{p}_2\tilde{p}_3)$，那么所有3个子-三角形将在时针方向上一致。当$\tilde{q}$在外部时，它们将会不一致。
 
-20.2 Intersection
+### 20.2.3 球体（Sphere）
+射线-平面相交的背后思路也可以改造为计算射线-球体相交。在这种情形中，拥有半径$R$和中心$c$的球体被建模为点$[x,y,z]^t$点集合，其满足方程$(x − c_x )^2 + (y − c_y )^2 + (z − c_z )^2 − r^2 = 0$。把这个插入方程（20.1），我们得到
+$$ \large{
+\begin{array}{rcl} 
+0 & = & (p_x+\lambda d_x−c_x)^2+(p_y+\lambda d_y−c_y)^2+(p_z+\lambda d_z−c_z)^2 − r^2 \\
+  & = & (d_x^2+d_y^2+d_z^2)\lambda^2+(2d_x(p_x−c_x)+2d_y(p_y−c_y)+2d_z(p_z−c_z))\lambda  \\
+  & & +(p_x−c_x)^2+(p_y−c_y)^2+(p_z−c_z)^2−r^2 \end{array} 
+}$$
+我们然后使用2次方公式找出这个方程式真正的根$\lambda$。如果存在两个实数根（real roots），这些根表示两次相交，就如射线进入并且从球体离开。如果存在一个（二重）实数根，那么相交是沿着正切线的。如果不存在实数根，那么射线不能击中球体。就如上面所讲过的，任何这种相交可以是沿着射线后退的。
 
-The main computation needed in ray tracing is computing the intersection of a geometric ray (˜p, d) with an object in the scene. Here ˜p is the start of the ray, which goes off in direction d.
+在相交处，$[x,y,z]^t$处球体的法线处于方向$[x-c_x,y−c_y,z−c_z]^t$之上。这实际上对于着色计算是有用的。
 
-20.2.1 Plane
+### 20.2.4 早期剔除（Early Rejection）
+当计算射线和场景之间的相交时，代替验证每个场景物体和射线相交，我们可以使用辅助数据结构快速确定某个物体集合完全不能被射线命中。比如，你能够使用一个简单的形状（比方说一个大球体或盒子）其围住了某个物体集合。给出一个射线，你首先计算是否射线和这个容积相交。如果不相交，那么就很明显这个射线不能命中这个被围住集合中的任何物体。因而射线相交检测不再需要。这种思路可以使用层次体系和空间数据结构被更进一步开发。参考例子[73]及其相关文献。
 
-Suppose we wish to compute the intersection of (˜p, d) with a plane described by the equation Ax + By + Cz + D = 0. We start by representing every point along the ray using a single parameter λ ⎡ ⎤ ⎡ ⎤ ⎡ ⎤ x p x d x ⎣ y ⎦ = ⎣ p y ⎦ + λ ⎣ d y ⎦ (20.1) z p z d z
+## 20.3 次生光线（Secondary Rays）
+一旦我们让射线相交基础设施就位，模拟很多光学现象就变得容易。例如，我们可以计算由点光源产生的阴影。要决定是否一个场景点位于阴影中，你沿着一条“阴影射线（shadow ray）”从被观察点向光源前进，观察是否存在任何在遮挡的几何体。(参考图示$\text{Figure 20.1}$。）
 
-Plugging this into the plane equation, we get
+还有一种可以轻松完成的计算是镜面反射（还有相似的折射）。在这种情形中，你使用方程（14.1）计算反射方向并且在那个方向发出“反射射线（bounce ray）”（参考图示$\text{Figure 20.1}$）。被射线命中的这个点的色彩随后被计算并且被用于决定镜子上最初点的色彩。这个思路可以递归应用多次来模拟多个镜面（或者折射）反射。参考图示$\text{Figure 20.4}$。
 
-0
+### 20.3.1 更多光线（Even More rays）
+就如在后面第21章中以更详细地方式所描述的，更加真实的光学模拟要求积分的计算，并且这些积分可以经常借助沿着样本集合绘制其作用的方式被近似。针对这些样本计算这些值经常涉及跟踪穿过场景的光线。
 
-= =
-
-A(p x + λd x ) + B(p y + λd y ) + C(p z + λd z ) + D
-
-λ(Ad x + Bd y + Cd z ) + Ap x + Bp y + Cp z + D
-
-And we see that
-
-−Ap x − Bp y − Cp z − D λ=
-
-Ad x + Bd y + Cd z
-
-In the solution, λ tells us where along the ray the intersection point is (negative valued λ are backwards along the ray). Comparisons between λ values can be used to determine which, among a set of planes, is the ﬁrst one intersected along a ray.
-
-20.2.2 Triangle
-
-If we want to intersect a ray with a triangle, we can break it up into two steps. In the ﬁrst step, we compute the A, B, C, D of the plane supporting the triangle, and compute the ray-plane intersection as above. Next, we need a test to determine if the intersection point is inside or outside of the triangle. We can build such a test using the “counter clockwise” calculation of Equation 12.4 as follows. Suppose we wish to test if a point ˜q is inside or outside of a triangle ∆(˜p 1 ˜p 2 ˜p 3 ) in 2D (See Figures 20.2 and 20.3).
-Consider the three “sub” triangles ∆(˜p 1 ˜p 2 ˜q), ∆(˜p 1 ˜q˜p 3 ) and ∆(˜q˜p 2 ˜p 3 ) . When ˜q is inside of ∆(˜p 1 ˜p 2 ˜p 3 ), then all three sub-triangles will agree on their clockwisedness. When ˜q is outside, then they will disagree.
-
-20.2.3 Sphere
-
-The ideas behind ray-plane intersection can be adapted to calculate the ray-sphere intersection. In this case, the sphere with radius R and center c is modeled as the set of points [x, y, z] t that satisfy the equation (x − c x ) 2 + (y − c y ) 2 + (z − c z ) 2 − r 2 = 0. Plugging this into Equation (20.1), we get
-
-0
-
-= =
-
-(p x + λd x − c x ) 2 + (p y + λd y − c y ) 2 + (p z + λd z − c z ) 2 − r 2 (d x 2 + d y 2 + d z 2 )λ 2 + (2d x (p x − c x ) + 2d y (p y − c y ) + 2d z (p z − c z ))λ
-
-+(p x − c x ) 2 + (p y − c y ) 2 + (p z − c z ) 2 − r 2
-
-We can then use the quadratic formula to ﬁnd the real roots λ of this equation. If there are two real roots, these represent two intersections, as the ray enters and exits the sphere. If there is one (doubled) real root, then the intersection is tangential. If there are no real roots, then the ray misses the sphere. As above, any of these intersections may be backwards along the ray.
-
-At the intersection, the normal of the sphere at [x, y, z] t is in the direction [x c x y − c y , z − c z ] t . This fact may be useful for shading calculations.
-
-,
-
-20.2.4 Early Rejection
-
-When computing the intersection between a ray and the scene, instead of testing every scene object for intersection with the ray, we may use auxiliary data structures to quickly determine that some set of objects is entirely missed by the ray. For example, one can use a simple shape (say a large sphere or box) that encloses some set of objects. Given a ray, one ﬁrst calculates if the ray intersects this volume. If it does not, then clearly this ray misses all of the objects in the bounded set, and no more ray intersection tests are needed. This idea can be further developed with hierarchies and spatial data structures. See for example [73], and references therein.
-
-20.3 Secondary Rays
-
-Once we have a ray intersection infrastructure in place, it is easy to simulate many optical phenomenon. For example, we can compute shadows due to a point light source. To determine if a scene point is in shadow, one follows a “shadow ray” from the observed point towards the light to see if there is any occluding geometry. (See Figure 20.1.)
-
-Another easy calculation that can be done is mirror reﬂection (and similarly refrac-tion). In this case, one calculates the bounce direction using Equation (14.1) and sends a “bounce ray” off in that direction (see Figure 20.1). The color of the point hit by this ray is then calculated and used to determine the color of the original point on the mirror. This idea can be applied recursively some number of times to simulate multiple mirror (or refractive) bounces. See Figure 20.4.
-
-20.3.1 Even More rays
-
-As described in more detail below in Chapter 21, more realistic optical simulation requires the computation of integrals, and these integrals can often be approximated by summing up contributions along a set of samples. Computing the values for these samples often involves tracing rays through the scene.
-
-For example, we may want to simulate a scene that is illuminated by a large light with ﬁnite area. This, among other things, results in soft shadow boundaries (see Figure 21.8 below). Lighting due to such area light sources can be approximated by sending off a number of shadow rays towards the area light and determining how many of those rays hit the light source. Other similar effects such as focus effects of camera lenses and interreﬂection are discussed in Chapter 21. These too can be calculated by tracing many rays through the scene.
+例如，我们可能想要模拟被有限区域中的大光源照明的场景。除了别的效果之外，这会导致软阴影边界（soft shadow boundaries）（参考后面图示$\text{Figure 21.8}$）。由于这种区域光源，通过向区域光源发出多条阴影射线并且确定出那些射线有多少命中光源，可以近似出这种光。其它相似的效果诸如相机镜头的聚焦效果和互相反射效果在第21章中会被讨论。这些也可以通过追踪很多通过场景的光线被计算。
 
