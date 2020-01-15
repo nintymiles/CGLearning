@@ -39,7 +39,10 @@
 - [第十四章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter14-Materials.pdf)
 - [第十五章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter15_texture_mapping.pdf)
 - [第十六章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter16-Sampling.pdf)
+- [第十七章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter17_Reconstruction.pdf)
+- [第十八章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter18_Resampling.pdf)
 - [第十九章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter19_Color.pdf)
+- [第二十章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter20-WhatIsRayTracing.pdf)
 - [PDF文件目录](FoundationOf3DComputerGraphics_Chinese_translation/PDF/)
 
 ## 总结文字
