@@ -1,153 +1,124 @@
-# 几何建模：基础介绍（Geometric Modeling: Basic Intro）
-在计算机图形中，我们需要具体方式表达形状。几何建模就是关于怎样表达、生成和修改这些形状的主题。几何建模是一个大型主题，其本身值得拥有（并且已经有了）自己相关的书籍（例如参考书目[21,76,7]）。这里我们将简单概括一下这个主题以给你一点相关概念。我们会多花费一点时间在细分表面的表达上，因为这些正在变成流行的表达方式。
+# Note
+这是对**MIT Foundation of 3D Computer Graphics**第22章的翻译，本章讲解了几何建模的基础算法知识。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教<ninetymiles@icloud.com> 
 
-## 22.1 Triangle Soup（三角形乱序组合）
+> 注：文章中相关内容归原作者所有，翻译内容仅供学习参考。
+> 另：Github项目[CGLearning](https://github.com/nintymiles/CGLearning)中拥有相关翻译的完整资料、内容整理、课程项目实现。
+ 
+
+
+# 几何建模：基础介绍（Geometric Modeling: Basic Intro）
+在计算机图形中，我们需要具体方式表达形状。几何建模就是关于怎样表达、生成和修改这些形状的主题。几何建模是一个大型主题，其本身值得拥有（并且已经有了）自己相关的书籍（例如参考书目[21,76,7]）。为了给你一点相关概念，这里我们将简单概括一下这个主题。我们会多花费一点时间在细分表面的表达上，因为这些正在变成流行的表达方式。
+
+## 22.1 Triangle Soup（三角形乱序集合）
 对于在OpenGL中的渲染，最直观的表达是triangle soup；三角形集合，每个通过3个顶点被描述。（参考图示$\text{Figure 22.1}$作为样例。）这种数据经常能够被更好组织以减少冗余。例如，在很多情形中，尤其当它被很多三角形共享时，每个顶点仅存储一次就有意义。另外，连接信息可以借助诸如“三角形扇(triangle fans)”和“三角形带(triangle strips)”被更紧凑地被表达。参考课后书目[79]
+
+![Figure22.1](media/Figure22.1.png)
+**Figure 22.1:** 猫的头部被无序的三角形集合（triangle soup）所描述。 来自于参考书目[64]，©️Eurographics c and Blackwell Publishing Ltd。
 
 相关的表达包含quad soup（使用四条边的多边形）和polygon soup（针对任意数目边的多边形）。针对硬件渲染，这种多边形首先需要切分为三角形，并且随后能够借助通用三角形渲染管线被绘制。
 
-基于三角形的几何体存在很多种能够被生成的方式。实际上，三角形几何体可以借助一个几何建模工具被从头开始生成，可以通过镶嵌平滑表面表达来获得（参考下面），或者通过直接扫描一个实际物体来获得（参考图示$\text{Figure 22.2}$）。
+基于三角形的几何体存在很多种可能被生成的方式。实际上，三角形几何体可以借助一个几何建模工具被从头开始生成，可以通过镶嵌平滑表面表达来获得（参考下面），或者通过直接扫描一个实际物体来获得（参考图示$\text{Figure 22.2}$）。
+
+![Figure22.2](media/Figure22.2.png)
+**Figure 22.2:** 精密扫描仪能够被用于将真实的事物电子化。来自于参考书目[44]，©️ACM。
 
 ## 22.2 网格（Meshes）
+在无序集合的soup表达中，没有方式“遍历”几何体。你不能轻松（以常量时间）指出哪些三角形和一条边缘相遇，或者哪些三角形环绕一个顶点。遍历网格可能有实际用处，例如，如果你尝试平滑化几何体，或者你希望模拟在几何体上的某种物理处理。
 
-In the soup representation, there is no way to “walk along” the geometry. One cannot easily (in constant time) ﬁgure out which triangles meet at an edge, or which triangles surround a vertex. Walking along a mesh can be useful, for example, if one is trying to smooth the geometry, or if one wishes to simulate some physical process over the geometry.
+网格数据结构为组织顶点、边缘、和面数据使得相关查询可以轻松完成的表达。（参考图示$\text{Figure 22.3}$作为例子。）存在很多不同的网格数据结构并且它们可能难于实现。关于网格数据结构的优质参考，请查看课后书目[63]。
 
-A mesh data structure is a representation that organizes the vertex, edge, and face data so that these queries can be done easily. (See for example Figure 22.3.) There are a variety of different mesh data structures and they can be tricky to implement. For a good reference on mesh data structures, see [63].
+![Figure22.3](media/Figure22.3.png)
+**Figure 22.3:** 网格数据结构，在这里被可视化，跟踪多种顶点，边缘，和面如何一起组成几何体。来自于参考书目[8]。
 
-## 22.3 Implicit Surfaces
+## 22.3 隐式表面（Implicit Surfaces）
+一种表达平滑表面的方式是作为在某种给定三变量函数$f(x,y,z)$中评估为0的点集合。这被称作隐式表达。例如，简单形状，就像球体和椭球体，可以被表达为二次方的三变量函数的零值集合。另外，我们可以定义一个隐式函数为更简单的基本隐式函数之和：$f(x,y,z)=\sum_if_i(x,y,z)$。比方说，以球体函数集合使用这种方式，生成一个平滑混合的独立球体的联合（参考图示$\text{Figure 22.4}$）。这种技术被称作斑点形状建模，并且对于建模诸如海狮这种有机体形状是理想的。
 
-One way to represent a smooth surface is as the set of points that evaluate to zero under some given trivariate function f(x, y, z). This is called an implicit representation. For example, simple shapes, like spheres and ellipsoids, can be represented as the zero set of a quadratic trivariate function. Additionally, we can deﬁne an implicit function as % a sum of simpler elemental implicit functions: f(x, y, z) = i f i (x, y, z). Doing so, say, with a set of sphere functions, creates a smoothly blended union of the individual spheres (see Figure 22.4). This technique is known as blobby modeling, and is ideal for modeling organic shapes such as sea mammals.
+![Figure22.4](media/Figure22.4.png)
+**Figure 22.4:** 隐式函数表达非常擅长于表达斑点形状，比如这个电子喷泉。来自于参考书目[34]，©️John c Wiley and Sons。
 
-Implicit surfaces have some nice properties. If we deﬁne a surface as the zero set of f, then we can think of the points where f evaluates to a positive value as the volumetric interior of the surface. As such, it is easy to apply volumetric set operations, such as union, intersection, negation and difference to these interior volumes. For example, the intersection of the volumes deﬁned by functions f 1 and f 2 can be deﬁned using the new function f(x, y, z) = min(f 1 (x, y, z), f 2 (x, y, z)). (See for example Figure 22.5.)
+隐式表面拥有一些好的特性。如果我们定义一个表面为$f$的0值集合，那么我们可以将函数$f$被评估为正值的点当作位于表面的容积之内。如此，应用容积集合操作就变得容易，例如针对这些内部容积的并集（union），交集（intersection），补集（negation）和差集（difference）操作。例如，被函数$f_1$和$f_2$所确定容积的交集可以被定义为新函数$f(x,y,z)=min(f_1(x,y,z),f_2(x,y,z))$。（参考图示$\text{Figure 22.5}$作为实例。）
 
-In order to render an implicit surface in OpenGL, we need to create a set of triangles that approximate the implicit surface. This is a non-trivial task.
+![Figure22.5](media/Figure22.5.png)
+**Figure 22.5:** 这种表面借助双康托(dual-contouring)方法从容积数据表达中提取。容积相交操作被用来扣出被展示的形状。来自于参考书目[32]，©️ACM。
 
-22.4 Volume
+为了在OpenGL中渲染一个隐式表面，我们需要生成一系列近似这种隐式表面的三角形集合。这是一种不繁琐（相对轻松）的任务。
 
-A volume representation is a speciﬁc kind of implicit representation that uses a regular 3D grid of discrete values called voxels. Using trilinear interpolation over each grid cell, these voxels deﬁne a continuous function in 3D. The zero set of this function can then be thought of as an implicit surface.
+## 22.4 容积（Volume）
+容积表达为一种特殊的隐式表达，其借助3D中规则的被称作voxels（容积像素）的具体值的网格。在每个网格元素上使用3线性操作，这些voxels定义了一个3D上的连续函数。从而这个函数的零值集合可以被当作一个隐式表面。
 
-Volume data is often obtained as the output of a volumetric scanning process, such as an MRI. We can also take some general implicit function representation and then sample it along a regular 3D grid to get a voxel-based approximation.
+容积数据经常作为容积扫描处理的输出被获取，就如MRI（核磁共振成像）。我们也能采用一些通用隐式函数表达然后再沿着一个规则3D网格采样以获得一个基于voxel的近似。
 
-To render the zero-set of a volume based representation in OpenGL, one needs to extract a set of triangles that approximate the zero-set. Due to the regular pattern of the data, this can be done a bit more easily than for a general implicit function. The standard technique is called the marching cube method [45], but there are newer methods such as dual contouring [32] (Figure 22.5) that may give better results.
+在OpenGL中要渲染一个基于容积表达的零值集合，你需要提取出近似这个零值集合的三角形集合。由于数据的规则图样，这能够相比通用隐式函数以更轻松一点的方式被完成。标准技术被称为行进立方体方法（marching cube method）[45]，但是存在可以给出更好结果的诸如双等高线（dual contouring）[32](图示$\text{Figure 22.5}$）等更新式的方法。
 
-22.5 Parametric Patches
+## 22.5 参数补丁（Parametric Patches）
+参数补丁使用3个坐标函数$x(s,t),y(s,t),z(s,t)$表达了被称作补丁（patch）的一部分表面。这些函数在$(s,t)$平面的某个正方形或者三角形部分上被定义。在大多数情形中，补丁上的每个坐标函数被表达为一个逐段的双变量多项式函数。（参考图示$\text{Figure 22.6}$作为例子。）
 
-Parametric patches represent a section of surface called a patch using 3 coordinate functions x(s, t), y(s, t) and z(s, t). These functions are deﬁned over some square or triangular portion of the (s, t) plane. In most cases, each coordinate function over the patch is represented as a piecewise polynomial bivariate function. (See for example Figure 22.6.)
+![Figure22.6](media/Figure22.6.png)
+**Figure 22.6:** 这里我们展示了一个样条补丁，其由一个$m\times n$的直线状控制网格所控制。来自于参考书目[61]，©️IEEE。
 
-The most common parametric representation is the tensor-product spline surface. Recall (Section 9.5) that a spline curve can be used to represent a curve in space. Such a spline curve is deﬁned by an input control polygon that connects a sequence of discrete points in space. This spline curve is made up of a set of smaller pieces, each having coordinate functions that are, say, cubic polynomials
+最常见的参数表达是张量积（tensor-product）样条表面。回忆一下（小节9.5）一个样条曲线可以被用来表达在空间中的曲线。这样一个样条曲线在空间中通过一个连接一系列具体点的输入控制多边形来定义。这种样条曲线由一系列更小的块函数（piece）集合组成，比方说，每个都具有立方多项式样式的坐标函数。
 
-For a tensor product spline, this construction is “upgraded “ from curves to surfaces. In this case, the control polygon is replaced by an m-by-n rectilinear control mesh, with vertices in 3D. By appropriately applying the spline deﬁnitions in both the s and t variables, we end up with a parametric patch. Such a patch is made up of small pieces deﬁned over small squares in the (s, t) domain. The coordinates of each such piece are polynomials in s and t. In the case where we upgrade from a cubic spline curve construction, each square piece is deﬁned by a bi-cubic polynomial in (s, t) (i.e., have terms up to the highest power: s 3 t 3 ).
+对于一个张量积样条，这种构造从曲线被“升级”到表面。在这种情形中，控制多边形被$m \times n$直线状控制网格所替换，其使用3D中的顶点。通过恰当地在s和t变量上都应用样条定义，我们最终得到一个参数补丁。这样一个补丁由小的定义在$(s,t)$域上的小正方形区域上的块函数构成。每个这样块函数的坐标在s和t上是多项式。在我们从一个立方样条曲线构造升级的情形中，每个正方形块函数被$(s,t)$域上的双-立方多项式所定义（也就是说，拥有最高幂为$s^3t^3$的项）。
 
-For rendering, splines can easily be approximated by a quad mesh in a number of ways. For example, we can just place a ﬁne grid of sample points over the (s, t) domain and evaluate the spline functions to obtain [x, y, z] t coordinates for each sample. These samples can be used as the vertices of a regular quad mesh. Another approach is to apply a recursive reﬁnement process that takes in a control mesh and outputs a denser control mesh that represents the same surface. After a few steps of subdivision, the quads themselves form a dense control mesh that form a good approximation to the underlying spline surface.
+对于渲染，样条可以轻松通过四边形网格以多种方式被近似。例如，我们可以只是在$(s,t)$域上放置一个规整的样本点的网格并且评估样条函数以获得每个样本的$[x,y,z]^t$坐标。这些样本可以被用作一个规则四边形网格的顶点。另一个方法是应用一个递归的提炼处理(refinement process)，其接受一个控制网格并且输出一个表达相同表面的更密集的控制网格。经历几个步骤的细分之后，四边形本身组成了一个密集控制网格，其构成了对底层样条表面的良好近似。
 
-One can typically design surfaces using splines in a geometric modeling package. Spline surfaces are very popular in the computer aided design community. In particular, due to their explicit parametric polynomial representation, it is easy to apply various calculations to such shapes.
+你通常能够在集合建模包中借助样条设计表面。样条表面在计算机辅助设计社区中非常流行。实际上，由于它们的显式参数化多项式表达，很容易对这些形状应用多种计算。
 
-Modeling with splines is not without a number of difﬁculties. To model a closed (say ball-like) surface, we have to stitch together some number of patches. Doing the stitching in a smooth manner is tricky. Additionally, if we want patches to meet up along speciﬁc creased curves, we need to explicitly do something called “trimming” to each of the patches. One interesting book about the spline representation is [59].
+用样条建模也会有不少难题。要建模一个闭合的（比如说球状的）表面，我们必须缝合一些补丁。这种情形下以平滑方式进行缝合是有点困难的。另外，如果我们想要沿着特定的褶皱表面打补丁以满足平滑性，我们需要显式地对每个补丁执行一些“整修剪切”的工作。关于样条表达的一本有趣的书籍是[59]。
 
-22.6 Subdivision Surfaces
+## 22.6 细分表面（Subdivision Surfaces）
+细分表面可以解决和参数补丁相关的诸多难题的一种简单表达。基本思路开始于一个简单控制网格。这个网格不需要是成直线状的；它可以表达闭合表面并且可以拥有任意价(valence)的顶点。我们随后使用一个规则集合去提炼网格，形成一个更高分辨率的控制网格。通过递归地应用这种处理一些次数，我们获得一个非常高的分辨率网格，其可以直接被渲染为一个平滑表面的近似表达。（参考例子图示$\text{Figure 22.7}$和$\text{Figure 22.8}$。）细分表面不要求任何打补丁的步骤。另外，特定的规则可以沿着控制网格的某些部分被应用以获得在所需要处表面的褶皱。
 
-The subdivision surface is a simple representation that solves many of the difﬁculties associated with parametric patches. The basic idea is to start with a single control mesh. This mesh need not be rectilinear; it can represent a closed surface and can have vertices of any valence. We then use a set of rules to reﬁne the mesh, resulting in a higher resolution control mesh. By applying this process recursively some number of times, we obtain a very high resolution mesh that can be directly rendered as an approximation to a smooth surface. (See for example Figures 22.7 and 22.8.) Subdivision surfaces do not require any patching steps. Additionally, special rules can be applied along certain portions of the control mesh to achieve creases in the surface where desired.
+![Figure22.7](media/Figure22.7.png)
+**Figure 22.7:** 左侧，我们展示了一个低分辨率网格。右侧，我们展示了一级的细分。左侧的顶点$v$导致了右侧顶点$v_v$的产生。左侧的边缘$e$导致了右侧的顶点$v_e$的产生。左侧的面$f$引起了右侧顶点$v_f$的产生。异常顶点以红色展示。这些异常顶点数目在细分过程中保持不变。
 
-The subdivision rules are deﬁned such that the meshes arising after more and more levels of subdivision converge to a smooth limit-surface (a C 1 immersed submanifold in R 3 ). In many cases, such as in regions where the mesh is rectilinear, the subdivision steps match those used to reﬁne a tensor-product spline surface.
+![Figure22.8](media/Figure22.8.png)
+**Figure 22.8:** 左侧，我们展示了多级的细分级别。右侧，相同的网格被平滑着色。
 
-One drawback of a subdivision surface is that the surface representation is deﬁned by a procedure, and not by a formula. Thus, such surfaces are more difﬁcult to mathematically analyze. Additionally, away from the rectilinear regions (at so-called extraordinary points) the limit surface can be somewhat poorly behaved [55] and harder to control. But, for casual use (movies and games), these are not big issues, and subdivision surfaces have proven to be simple, useful, and general.
+细分规则被定义以便在越来越多级别的细分汇聚到一个平滑的有限表面（$\mathbb{R}^3$空间中的一个$C^1$沉浸的次要部分）后会形成一些网格。在很多情形中，比如在网格成直线状的区域中，细分步骤匹配那些被用于提炼出一个张量积样条表面。
 
-22.6.1 Catmull-Clark
+曲面细分表面的一个不足之处为表面表达通过程序定义，而不是通过公式。因而，这样的表面更难于以数学方式进行分析。另外，远离直线特征区域（在所谓的异常点）有限表面（limit surface）可能某种程度上表现糟糕（参考书目[55]）且难于控制。但是，出于临时使用的目的（电影和游戏），这些不是大问题，并且细分表面已经证明了其简单性，有效性和通用性。
 
-Here we describe in more detail a speciﬁc subdivision representation due to Catmull and Clark. One starts with some input mesh M 0 (which we will assume is a watertight “manifold with no boundary”). This mesh has connectivity information describing its vertex, edge and face structure. The mesh also has geometric information, mapping each abstract vertex to a point in 3D. 
-Now we apply a set of connectivity updates to get a new reﬁned mesh M 1 , with its own connectivity and geometry. The connectivity of M 1 is deﬁned as follows (and shown in Figure 22.7). For each vertex v in M 0 , we associate a new “vertex-vertex” v v in M 1 . For each edge e in M 0 we associate a new “edge-vertex” v e in M 1 . For each face f in M 0 we associate a new “face-vertex” v f in M 1 . These new vertices are connected up with new edges and faces as shown in Figure 22.7. We can easily verify that in M 1 , all faces are quads. In M 1 we call any vertex of valence four “ordinary” and any vertex of valence different from four “extraordinary”.
+### 22.6.1 Catmull-Clark
+这里我们更详细地描述一种由Catmull和Clark所发现的特殊的细分表达方式。你开始于某种输入网格$M^0$（我们假设它是一种严丝合缝的“没有边缘的manifold”）。这种网格具有描述其顶点、边缘和面结构的连接信息，映射每个抽象顶点到3D中的一个点上。
 
-We apply this subdivision process recursively. Given M 1 , or more generally, M i , for any i ≥ 1, we apply the same subdivision rules to obtain a ﬁner mesh M i+1 . In the new mesh, we have roughly 4 times the number of vertices. But importantly, we can verify that the number of extraordinary vertices stays ﬁxed (see Figure 22.7)! Thus, during subdivision, more and more of the mesh looks locally rectilinear, with a ﬁxed number of isolated extraordinary points in between.
+现在我们应用连接更新的集合获得一个新的改进的网格$M^1$，拥有其自身的连接和几何体。$M^1$的连接被定义如下（并且被展示在图示$\text{Figure 22.7}$）。对于$M^0$中的每个顶点，我们在$M^1$中关联一个新的“vertex-vertex（顶点-顶点）” vv。针对$M^0$中的每条边缘（edge），我们在$M^1$中关联一个新的“edge-vertex（边缘-顶点）” ve。针对$M^0$中的每个面，我们在$M^1$中关联一个新的“face-vertex（面-顶点）” vf。这些新顶点被使用在图示$\text{Figure 22.7}$的新边缘和面连接在一起。我们可以轻松验证在$M^1$中，所有的面是四边形。在$M^1$中我们称任何价（valence）为4的顶点“正常的”，同时称任何价不为4的顶点为“异常的”。
 
-Now all we need are rules to determine the geometry for the new vertices as they are created during each subdivision step. First, let f be a face in M i surrounded by the vertices v j (and let m f be the number of such vertices). We set the geometry of each new face-vertex v f in M i+1 to be
+我们递归应用这种细分处理。给出$M^1$，或者更通用地，针对任何$i \geq 1$，给出$M^i$，我们应用相同的细分规则获得一个更优的网格$M^{i+1}$。在新网格中，我们大约拥有4倍的顶点数目。但是重要地是，我们可以验证异常顶点的数目保持固定不变（参考图示$\text{Figure 22.7}$）！因此，在细分过程中，网格越来越多的部分本地看起来是沿直线分布的，让固定数量的异常点位于其间。
 
-1
+现在，所有我们需要的是确定针对在每次细分步骤中生成的新顶点的几何规则。首先，让$f$为$M^i$中被顶点$v_j$所围住的一个面（同时让$m_f$作为这些顶点的数量）。我们设置$M^{i+1}$中每个新face-vertex $v_f$的几何特征为
+$$ \large{
+v_f = \frac{1}{m_f}\sum_jv_j \tag{22.1}
+}$$
+(也就是说，$M^i$中顶点的质心明确了那个面）。（再次，针对任何细分级别$i \geq 1$，我们有$m_f=4$。）参考图示$\text{Figure 22.9}$。
 
-v f
+接着，让$e$为$M^i$中的一条连接顶点$v_1$和$v_2$的边缘，并且分割面$f_1$和$f_2$。我们设置$M^{i+1}$新edge-vertex的几何特征为
+$$ \large{
+v_e = \frac{1}{4}(v_1+v_2+v_{f_1}+v_{f_2}) \tag{22.2}
+}$$
+参考图示$\text{Figure 22.10}$。
 
-=
+最后让$v$为$M^i$中被连接到$n_v$个$v_j$顶点的顶点，同时被$n_v$个面$f_j$所围绕。那么，我们设置在$M^{i+1}$中的新vertex-vertex的几何特征为
+$$ \large{
+v_v = \frac{n_v-2}{n_v}v + \frac{1}{n_v^2}\sum_jv_j + \frac{1}{n_v^2}\sum_jv_{f_j}  \tag{22.3}
+}$$
+对于正常顶点，其价$n_v=4$，这个公式变形为
+$$ \large{
+v_v = \frac{1}{2}v + \frac{1}{16}\sum_jv_j + \frac{1}{16}\sum_jv_{f_j}  \tag{22.4}
+}$$
+参考图示$\text{Figure 22.11}$。
 
-m f
+在这种细分规则的发展中有很多研究已经在进行，并且正在理解它们的聚合特征。异常点的第一等级行为的首个完成分析可以在Reif的书[60]中找到。
 
-&
+实际上，你不需要知道任何这些内容；要使用细分表面，所有你需要做的是实现方程式(22.1)、(22.2)和(22.3)。最难的部分只是你要设置好一个网格数据结构以便可以实现这种计算。
 
-j
 
-v
+![Figure22.9](media/Figure22.9.png)
+**Figure 22.9:** 左侧的面$f$导致了右侧顶点$v_f$的形成，$v_f$的几何特征通过左侧的$v_j$所决定。
 
-j
+![Figure22.10](media/Figure22.10.png)
+**Figure 22.10:** 左侧的边缘e导致了右侧产生了$v_e$。$v_e$的几何体通过左侧的$v_j$和右侧的$v_{f_j}$来确定。
 
-(22.1)
-
-(i.e., the centroid of the vertices in M i deﬁning that face). (Again, for any subdivision level i ≥ 1, we have m f = 4.) See Figure 22.9.
-
-Next, let e be an edge in M i connecting the vertices v 1 and v 2 , and separating the faces f 1 and f 2 . We set the geometry of the new edge-vertex in M i+1 to be
-
-v e =
-
-1 4
-
-(v 1 + v 2 + v f 1 + v f 2 )
-
-(22.2)
-
-See Figure 22.10.
-
-Finally let v be a vertex in M i connected to the n v vertices v j and surrounded by the n v faces f j . Then, we set the geometry of the new vertex-vertex in M i+1 to be
-
-& 1 n v 2 j For an ordinary vertex, with valence n v = 4, this becomes
-
-n v − 2
-
-n v
-
-v v =
-
-1 v+
-
-n 2 v
-
-&
-
-j
-
-v j +
-
-v
-
-f j
-
-(22.3)
-
-v v =
-
-1 2
-
-v+
-
-1 16
-
-&
-
-j
-
-v j +
-
-1 16
-
-&
-
-j
-
-v
-
-f j
-
-(22.4)
-
-See Figure 22.11.
-
-There has been much study into the development of these subdivision rules, and understanding their convergence properties. The ﬁrst complete analysis of the ﬁrst order behavior at extraordinary points is found in Reif [60].
-
-In practice, you don’t need to know any of this; all you need to do to use subdivision surfaces is to implement Equations (22.1), (22.2) and (22.3). The hardest part is simply getting a mesh data structure set up so that you can implement this computation.
+![Figure22.11](media/Figure22.11.png)
+**Figure 22.11:** 左侧的顶点$v$在右侧导致了$v_v$的产生。$v_v$的几何形状被左侧的顶点$v_j$和右侧的顶点$v_{f_j}$所决定。
 
