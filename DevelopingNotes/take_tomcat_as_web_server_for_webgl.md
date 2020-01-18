@@ -18,10 +18,24 @@
 ```web.xml
 ...
 
-<Context path="" docBase="/Users/xxx/Documents/MyWeb/TWGL" debug="0" reloadable="true" />
+<Context path="" docBase="/Users/xxx/Documents/MyWeb/TWGL" debug="true" reloadable="true" />
 
 ...
 ```
 这配置了web站点的根目录。使用 http://localhost:8080/ 访问即可。
+
+## 配置的简单错误
+有时候在配置xml文件时，由于网络copy或者书写问题，会导致属性无法生效，从而使得tomcat无法启动。比如，有中文字符，`<Context path="" docBase="/Users/xxx/Documents/MyWeb/TWGL" debug=“true” reloadable=“true" />`。
+此时tomcat会如果出现下列信息，则预示着xml的书写错误。
+
+
+```log
+org.xml.sax.SAXParseException; systemId: file:/Users/xxx/Documents/TomcatServer/tomcat-7.0.99/conf/server.xml; lineNumber: 140; columnNumber: 79; 
+Open quote is expected for attribute "debug" associated with an  element type  "Context".
+	at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.createSAXParseException(ErrorHandlerWrapper.java:203)
+	at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.fatalError(ErrorHandlerWrapper.java:177)
+...
+```
+
 
 
