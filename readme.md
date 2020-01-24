@@ -43,7 +43,8 @@
 - [第十八章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter18_Resampling.pdf)
 - [第十九章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter19_Color.pdf)
 - [第二十章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter20-WhatIsRayTracing.pdf)
-- [第二十二章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/ Chapter22-GeometricModelingBasicIntrodcution.pdf)
+- [第二十一章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter21-Light.pdf)
+- [第二十二章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter22-GeometricModelingBasicIntrodcution.pdf)
 - [PDF文件目录](FoundationOf3DComputerGraphics_Chinese_translation/PDF/)
 
 ## 总结文字
