@@ -1,8 +1,0 @@
-# Light (technical)
-
-In this chapter we will describe in more detail how light and reﬂections are properly measured and represented. These concepts may not be necessary for doing casual computer graphics, but they can become important in order to do high quality rendering. Such high quality rendering is often done using stand alone software and does not use the same rendering pipeline as OpenGL. We will cover some of this material, as it is perhaps the most developed part of advanced computer graphics. This chapter will be covering material at a more advanced level than the rest of this book. For an even more detailed treatment of this material, see Jim Arvo’s PhD thesis [3] and Eric Veach’s PhD thesis [71].
-
-There are two steps needed to understand high quality light simulation. First of all, one needs to understand the proper units needed to measure light and reﬂection. This understanding directly leads to equations which model how light behaves in a scene. Secondly, one needs algorithms that compute approximate solutions to these equations. These algorithms make heavy use of the ray tracing infrastructure described in Chapter 20. In this chapter we will focus on the more fundamental aspect of deriving the appropriate equations, and only touch on the subsequent algorithmic issues. For more on such issues, the interested reader should see [71, 30].
-
-Our basic mental model of light is that of “geometric optics”. We think of light as a ﬁeld of photons ﬂying through space. In free space, each photon ﬂies unmolested in a straight line, and each moves at the same speed. When photons hit a surface, they scatter in various directions from that point. We also assume that the ﬁeld is in equilibrium.
-
