@@ -29,6 +29,7 @@
 - [第三章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter03-Affine.pdf)
 - [第四章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter04-Respect.pdf)
 - [第五章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter05-Frames-In-Graphics.pdf)
+- [第六章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter06-HelloWorld3D.pdf)
 - [第七章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter07-Quaternions.pdf)
 - [第八章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter08-BallsTrackAndArc.pdf)
 - [第九章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter09-Smooth-Interpolation.pdf)
@@ -45,6 +46,7 @@
 - [第二十章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter20-WhatIsRayTracing.pdf)
 - [第二十一章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter21-Light.pdf)
 - [第二十二章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter22-GeometricModelingBasicIntrodcution.pdf)
+- [第二十三章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter23-Animation.pdf)
 - [PDF文件目录](FoundationOf3DComputerGraphics_Chinese_translation/PDF/)
 
 ## 总结文字
