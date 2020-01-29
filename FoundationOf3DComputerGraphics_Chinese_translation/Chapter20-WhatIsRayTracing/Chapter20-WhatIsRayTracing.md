@@ -1,8 +1,5 @@
 
 
-
-
-
 # Note
 这是对**MIT Foundation of 3D Computer Graphics**第20章的翻译，本章讲解了光线追踪（ray tracing）技术的基础知识。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教<ninetymiles@icloud.com> 
 
