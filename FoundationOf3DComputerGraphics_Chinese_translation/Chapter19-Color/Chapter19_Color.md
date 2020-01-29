@@ -1,9 +1,8 @@
-
-这是对**Foundation of 3D Computer Graphics**第19章的翻译，本章讲解了CG中很关键的色彩概念。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教<ninetymiles@icloud.com>  
+# Note
+这是对**MIT Foundation of 3D Computer Graphics**第18章的翻译，本章讲解了重采样和以其为基础的渐进式纹理映射（mip mapping）的基础知识。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教<ninetymiles@icloud.com> 
 
 > 注：文章中相关内容归原作者所有，翻译内容仅供学习参考。
-
----
+> 另：Github项目[CGLearning](https://github.com/nintymiles/CGLearning)中拥有相关翻译的完整资料、内容整理、课程项目实现。
 
 # Color
 本节，我们将探索色彩的基本概念。同时还将讨论色彩是什么，以及多种表达色彩的方式。色彩在研究领域有着丰富的主题，并且在人类色彩感知领域尚有很多未解之谜。我们会在这个主题上专门投入时间，因为我们发现这个主题非常有趣，同时还因为其重要性不仅涉及到计算机成像方面同时还关联到电子（数码）设备成像领域。
