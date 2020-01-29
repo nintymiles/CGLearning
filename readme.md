@@ -47,6 +47,7 @@
 - [第二十一章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter21-Light.pdf)
 - [第二十二章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter22-GeometricModelingBasicIntrodcution.pdf)
 - [第二十三章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter23-Animation.pdf)
+- [附录B](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter23-Animation.pdf)
 - [PDF文件目录](FoundationOf3DComputerGraphics_Chinese_translation/PDF/)
 
 ## 总结文字
