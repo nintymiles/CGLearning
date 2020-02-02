@@ -1,5 +1,5 @@
 # Note
-这是对**MIT Foundation of 3D Computer Graphics**第6章的翻译，本章讲解了如何使用现代OpenGL渲染管线方式利用矢量、线性变换等知识实现简单的3D绘制。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教<ninetymiles@icloud.com> 
+这是对**MIT Foundation of 3D Computer Graphics**第6章的翻译，本章讲解了如何使用现代OpenGL渲染管线方式利用矢量、线性变换等知识实现简单的3D绘制。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教<ninetymiles@icloud.com>。 
 
 > 注：文章中相关内容归原作者所有，翻译内容仅供学习参考。
 > 另：Github项目[CGLearning](https://github.com/nintymiles/CGLearning)中拥有相关翻译的完整资料、内容整理、课程项目实现。
@@ -44,7 +44,7 @@ static void InitGLState(){
 }
 
 ```
-这些调用的详细含义在这本书中随后被讲述。在`glClearColor`调用中，我们不仅设置默认的清理后的图像色彩，而且也设置默认的清理后的“z-缓存”值。我们还需要启用深度，或者称为z-缓存并且告知OpenGL“更大的z值”意味着"离眼睛更近"。z-缓存在第11章中被详细讨论。为了效率起见，我们还要告知OpenGL剔除任何背向眼睛的面（也就是说不绘制）。当图像中的顶点看起来以顺时针方向排列时，这个面就是背向面。背向面剔除在小节12.2中背详细讨论。
+这些调用的详细含义在这本书中随后被讲述。在`glClearColor`调用中，我们不仅设置默认的清理后的图像色彩，而且也设置默认的清理后的“z-缓存”值。我们还需要启用深度，或者称为z-缓存并且告知OpenGL“更大的z值”意味着"离眼睛更近"。z-缓存在第11章中被详细讨论。为了效率起见，我们还要告知OpenGL剔除任何背向眼睛的面（也就是说不绘制）。当图像中的顶点看起来以顺时针方向排列时，这个面就是背向面。背向面剔除在小节12.2中被详细讨论。
 
 现在返回主题。我们使用全局变量`Matrix4 objRbt`表达刚体矩阵，其将物体的正交标准帧关联到世界帧，就如在表达式$\vec{\mathbf{o}}^t=\vec{\mathbf{w}}^tO$中一样。我们使用全局变量`Matrix4 eyeRbt`表达刚体矩阵$E$，其关联物体的正交标准帧到世界帧，就如在表达式$\vec{\mathbf{e}}^t = \vec{\mathbf{w}}^tE$中一样。
 
@@ -87,14 +87,19 @@ static GLuint floorVertBO, floorNormBO, cubeVertBO, cubeNormBO;
 
 static void initVBOs(void){
 
-glGenBuffers(1,&floorVertBO); glBindBuffer(GL_ARRAY_BUFFER,floorVertBO);
+glGenBuffers(1,&floorVertBO); 
+glBindBuffer(GL_ARRAY_BUFFER,floorVertBO);
 glBufferData( GL_ARRAY_BUFFER, 18 * sizeof(GLfloat), floorVerts, GL_STATIC_DRAW);
 
-glGenBuffers(1,&floorNormBO); glBindBuffer(GL_ARRAY_BUFFER,floorNormBO); glBufferData( GL_ARRAY_BUFFER, 18 * sizeof(GLfloat), floorNorms, GL_STATIC_DRAW);
+glGenBuffers(1,&floorNormBO); glBindBuffer(GL_ARRAY_BUFFER,floorNormBO); 
+glBufferData( GL_ARRAY_BUFFER, 18 * sizeof(GLfloat), floorNorms, GL_STATIC_DRAW);
 
-glGenBuffers(1,&cubeVertBO); glBindBuffer(GL_ARRAY_BUFFER,cubeVertBO); glBufferData( GL_ARRAY_BUFFER, 36 * 3 * sizeof(GLfloat), cubeVerts, GL_STATIC_DRAW);
+glGenBuffers(1,&cubeVertBO); 
+glBindBuffer(GL_ARRAY_BUFFER,cubeVertBO); 
+glBufferData( GL_ARRAY_BUFFER, 36 * 3 * sizeof(GLfloat), cubeVerts, GL_STATIC_DRAW);
 
-glGenBuffers(1,&cubeNormBO); glBindBuffer(GL_ARRAY_BUFFER,cubeNormBO); glBufferData( GL_ARRAY_BUFFER, 36 * 3 * sizeof(GLfloat), cubeNorms, GL_STATIC_DRAW);
+glGenBuffers(1,&cubeNormBO); glBindBuffer(GL_ARRAY_BUFFER,cubeNormBO); 
+glBufferData( GL_ARRAY_BUFFER, 36 * 3 * sizeof(GLfloat), cubeNorms, GL_STATIC_DRAW);
 
 }
 ```
@@ -104,9 +109,11 @@ glGenBuffers(1,&cubeNormBO); glBindBuffer(GL_ARRAY_BUFFER,cubeNormBO); glBufferD
 ```cpp
 void drawObj(GLuint vertbo, GLuint normbo, int numverts){
 
-glBindBuffer(GL_ARRAY_BUFFER,vertbo); safe_glVertexAttribPointer(h_aVertex); safe_glEnableVertexAttribArray(h_aVertex);
+glBindBuffer(GL_ARRAY_BUFFER,vertbo); 
+safe_glVertexAttribPointer(h_aVertex); safe_glEnableVertexAttribArray(h_aVertex);
 
-glBindBuffer(GL_ARRAY_BUFFER,normbo); safe_glVertexAttribPointer(h_aNormal); safe_glEnableVertexAttribArray(h_aNormal);
+glBindBuffer(GL_ARRAY_BUFFER,normbo); 
+safe_glVertexAttribPointer(h_aNormal); safe_glEnableVertexAttribArray(h_aNormal);
 glDrawArrays(GL_TRIANGLES,0,numverts);
 
 safe_glDisableVertexAttribArray(h_aVertex); safe_glDisableVertexAttribArray(h_aNormal);
@@ -114,30 +121,37 @@ safe_glDisableVertexAttribArray(h_aVertex); safe_glDisableVertexAttribArray(h_aN
 }
 ```
 
-我们现在可以观察我们的显示函数。
+我们现在可以观察我们的显示函数**display**。
 
 ```cpp
 static void display(){
 
-safe_glUseProgram(h_program_); glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+safe_glUseProgram(h_program_);
+glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-Matrix4 projmat = makeProjection(frust_fovy, frust_ar, frust_near, frust_far); sendProjectionMatrix(projmat);
+Matrix4 projmat = makeProjection(frust_fovy, frust_ar, frust_near,frust_far); 
+sendProjectionMatrix(projmat);
 
-Matrix4 MVM = inv(eyeRbt); Matrix4 NMVM = normalMatrix(MVM); sendModelViewNormalMatrix(MVM,NMVM);
+Matrix4 MVM = inv(eyeRbt); 
+Matrix4 NMVM = normalMatrix(MVM); 
+sendModelViewNormalMatrix(MVM,NMVM);
 
 safe_glVertexAttrib3f(h_aColor, 0.6, 0.8, 0.6); drawObj(floorVertBO,floorNormBO,6);
 
-MVM = inv(eyeRbt) * objRbt; NMVM = normalMatrix(MVM); sendModelViewNormalMatrix(MVM,NMVM);
+MVM = inv(eyeRbt) * objRbt; 
+NMVM = normalMatrix(MVM); 
+sendModelViewNormalMatrix(MVM,NMVM);
 
 safe_glVertexAttrib3f(h_aColor, 0.0, 0.0, 1.0); drawObj(cubeVertBO,cubeNormBO,36);
 
-glutSwapBuffers(); if (glGetError() != GL_NO_ERROR){
+glutSwapBuffers(); 
 
-const GLubyte * errString;
+if (glGetError() != GL_NO_ERROR){
+	const GLubyte * errString;
+	errString=gluErrorString(errCode);
 
-errString=gluErrorString(errCode);
-
-printf("error: %s\n", errString); }
+	printf("error: %s\n", errString); 
+}
 
 }
 ```
