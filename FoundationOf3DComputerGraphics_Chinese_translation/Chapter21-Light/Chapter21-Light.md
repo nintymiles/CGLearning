@@ -35,7 +35,7 @@ $$
 ![Figure21.2](media/Figure21.2.png)
 **Figure 21.2:** 我们可以把辐射通量除以$|X|$。在极限情形中，这就变为逐点的入射辐射率测量$E_{\vec{n}}(W,\tilde{x})$。
 
-经常，在文学中，针对$E$的第一个参数会从标记方式中去除，并且从公式和上下文中以某种方式被推断。例如，在某些上下文中，可能$W$为点上整个上半球体是明确的。相似地，法线参数经常从标记中去除而且从上下文推断出来。
+经常，在文献中，针对$E$的第一个参数会从标记方式中去除，并且从公式和上下文中以某种方式被推断。例如，在某些上下文中，可能$W$为点上整个上半球体是明确的。相似地，法线参数经常从标记中去除而且从上下文推断出来。
 
 假设有限大小的传感器表面$X$被分成许多更小的表面，$X_i$。那么我们可以在整个传感器之上计算辐射通量为下面的求和公式
 $$\large{
@@ -53,21 +53,21 @@ $$\large{
 
 现在我们通过将辐射照度除以球面度来定义一种新的辐射测量
 $$\large{
-L_{\vec{n}}(W,\tilde{x}) = E_{\vec{n}}(W,\tilde{x})
+L_{\vec{n}}(W,\tilde{x}) = \frac{E_{\vec{n}}(W,\tilde{x})}{|W|}
 }$$
 
-我们可以围绕一个指向点$\tilde{x}$的矢量$\vec{w}$借助越来越小的楔形来测量这种数据。再次，根据围绕$\Phi$合理连续性假设,这会汇聚到一种我们称为$L_{\vec{n}}(W,\tilde{x})$的测量，此处$\vec{w}$现在为单一方向矢量，并且不是楔形。参考图示$\text{Figure 21.3}$。
+我们可以围绕一个指向点$\tilde{x}$的矢量$\vec{w}$借助越来越小的楔形来测量这种数据。再次，根据围绕$\Phi$合理连续性假设,这会汇聚到一种我们称为$L_{\vec{n}}(\vec{w},\tilde{x})$的测量，此处$\vec{w}$现在为单一方向矢量，并且不是楔形。参考图示$\text{Figure 21.3}$。
 
 ![Figure21.3](media/Figure21.3.png)
 **Figure 21.3:** 我们可以通过$|W|$除以一个被测量的辐射照度来获得测量$L_{\vec{n}}(W,\tilde{x})=\frac{E_{\vec{n}}(W,\tilde{x})}{|W|}$。这会聚合于$L_{\vec{n}}(W,\tilde{x})$，去掉上标，给出我们用于光线的辐射率测量$L(\vec{w},\tilde{x})$。
 
-我们现在通过转化对L_{\vec{n}}(W,\tilde{x})的测量为$L_{-\vec{w}}(\vec{w},\tilde{x})$，从而去掉对$\vec{n}$的依赖。换句话说，测量会有的情形是让$X$平面正交于入射光束。要实现这种测量，我们必须考虑到它们被平铺于上的传感器表面面积之间的比率。这可以被计算为
+我们现在通过转化对$L_{\vec{n}}(\vec{w},\tilde{x})$的测量为$L_{-\vec{w}}(\vec{w},\tilde{x})$，从而去掉对$\vec{n}$的依赖。换句话说，测量会有的情形是让$X$平面正交于入射光束。要实现这种测量，我们必须考虑到它们被平铺于上的传感器表面面积之间的比率。这可以被计算为
 $$\large{
-L(W,\tilde{x}) := L_{-\vec{w}}(\vec{w},\tilde{x}) = \frac{L_{\vec{n}}(W,\tilde{x})}{\cos(\theta)}
+L(\vec{w},\tilde{x}) := L_{-\vec{w}}(\vec{w},\tilde{x}) = \frac{L_{\vec{n}}(\vec{w},\tilde{x})}{\cos(\theta)}
 }$$
 此处$\theta$为$\vec{n}$和$-\vec{w}$之间的角度。我们现在去掉法线参数，将这个简单地记作$L(W,\tilde{x})$而不是$L_{-\vec{w}}(W,\tilde{x})$。我们把这个称作入射辐射率（incoming radiance）测量。参考图示$\text{Figure 21.3}$。汇总为
 $$\large{
-L(W,\tilde{x}) := \frac{1}{\cos(\theta)}\lim_{W\rightarrow\vec{w}}\frac{1}{|W|} \left(\lim_{X\rightarrow\vec{x}}\frac{\Phi(W,X)}{|X|} \right) \tag{21.1}
+L(\vec{w},\tilde{x}) := \frac{1}{\cos(\theta)} \lim_{W\rightarrow\vec{w}}\frac{1}{|W|} \left(\lim_{X\rightarrow\vec{x}}\frac{\Phi(W,X)}{|X|} \right) \tag{21.1}
 }$$
 
 还有一种方式（going the other way)，给出一个空间的和角度的变化$L(\vec{w},\tilde{x})$，我们可以计算大传感器$(W,X)$之上的辐射通量为
