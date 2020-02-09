@@ -7,6 +7,15 @@
 
 ### ObitControl类应该是控制3D对象运动的？这个类比较复杂，需要深入理解。
 
+### EllipseCurve类的实现
+
+1. EllipseCurve类的继承结构设计
+    基类为Curve，这个基类设计了直线、曲线相关的通用接口。包括获取相应粒度的点集合，计算法线、曲线距离等。
+    EllipseCurve类中主要实现了单个椭圆点的生成逻辑
+2. CurvePath类的作用
+    CurvePath类为curve对象的集合，用于产生复杂曲线。其中包括生成对应曲线几何数据的功能。
+
+
 
 
 ## 关于ThreeJS源码的理解
