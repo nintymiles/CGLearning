@@ -144,3 +144,23 @@ static void animateVerticesOfSubdivision(){
 
 第二种，首先遍历mesh的顶点，将法线置0。然后遍历mesh的面，再遍历每个面的关联顶点，将这个面的法线累加到当前顶点法线的法线之上。当mesh的面遍历完成后，自然就完成了顶点的法线累加。
 
+
+## WebGL样例学习
+WebGL确实为OpenGL ES的对应版本，体现在
+
+1. 使用的shader完全相同。
+2. web种的api都有对应的OpenGLES版本，几乎可以确定为1vs1。
+
+Threejs相对于webgl来说就如同OpenGL中的一个封装了material（当然材料封装了常用的shader和shading计算）和几何体生成的程序。
+也即是说，可以将threejs看成是一个webgl引擎，也可以看成是常见例子的合集。从threejs中可以学得常见的3D变成方法，以及工业级别应用的代码水准。
+
+## 一些常见的头文件澄清
+
+1. <stdexcept>为cpp中的头文件，其中包含一些异常类的定义。这些异常类可以为库和程序所用，用以报告一些常见的错误。
+2. dirent.h通常为Linux（*nix）系统中的一个头文件，用于访问文件目录结构信息。
+
+## ThreeJS源码阅读
+
+### 关于Materials
+Materials目录中封装了各种material的参数，目前看来不涉及各类shader以及shading算法的封装。
+
