@@ -7,6 +7,16 @@
 
 ### ObitControl类应该是控制3D对象运动的？这个类比较复杂，需要深入理解。
 
+#### 1. OrbitControl的初步理解
+OrbitControl其实是camera对象的操作集合，故而需要在构造器中接收一个camera object作为被操作的对象，还有webgl的dom元素用以设置相关事件（鼠标或手势动作）。
+
+#### 2. OrbitControl事件的注册
+在OrbitControl构造函数初始化时，就会注册相关的3D对象运动控制事件。并且会初始化camera的当前状态（this.update）。
+
+#### 3. OrbitControl类定义的实现方式
+通过匿名函数一次性执行，在函数中定义了Constraint对象（这意味着Constraint函数的访问范围，只能被OrbitControl对象所使用）和THREE.ObjectControls对象（注意是以THREE的子对象方式定义的）。匿名函数执行后，THREE.OrbitControl对象就位且被初始化。
+
+
 ### EllipseCurve类的实现
 
 1. EllipseCurve类的继承结构设计
@@ -16,10 +26,8 @@
     CurvePath类为curve对象的集合，用于产生复杂曲线。其中包括生成对应曲线几何数据的功能。
 
 
-
-
 ## 关于ThreeJS源码的理解
-ThreeJS及其实例简直是OpenGL ES的实例宝库，包含了各种例子。
+ThreeJS及其实例简直是OpenGL ES的实例宝库。包含了图像渲染各方面的算法实例，且以生动的方式呈现了OpenGL体系的方方面面。实在是学习的不二之选。
 
 目前的想法是对关键的例子进行剖析理解，然后再移植回到OpenGL中一些
 
@@ -38,3 +46,11 @@ ThreeJS中将material和geometry匹配组合在一个mesh对象中。
 
 ### 关于ThreeJS的ellipsecurve功能
 此功能用于绘制特定形状（椭圆形）的曲线，包含xRadians和yRadians两个参数（若xRadians==yRadians，则为圆形）。此处这个类根据这些参数生成了对应的几何形状(线条)，并且可以生成几何对象集合。
+
+### PerspectiveCamera类
+PerspectiveCamera类确定了透视相机的参数以及相关投射属性（相机属性）的计算，最主要的目标是确定出投射矩阵以及投射矩阵的反转矩阵。
+
+### ThreeJS的渲染引擎
+WebGLRender类实现了渲染引擎的主要逻辑，实现了camera，material，geometry子系统的整合逻辑。
+ThreeJS的封装层次比较复杂，WebGLRender的个体封装不易于被理解。
+WebGLProgram封装了各种shader的组合逻辑。
