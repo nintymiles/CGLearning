@@ -26,6 +26,11 @@ OrbitControl其实是camera对象的操作集合，故而需要在构造器中�
     CurvePath类为curve对象的集合，用于产生复杂曲线。其中包括生成对应曲线几何数据的功能。
 
 
+## Javascript的面向对象机制
+Javascript通过prototype机制实现面向对象编程，与通常的Cpp/Java方式有明显不同。
+每个函数都是对象，我们可以首先定义一个函数，然后将其作为一个对象的构造函数。随后再基于这个构造函数生成对象。
+
+
 ## 关于ThreeJS源码的理解
 ThreeJS及其实例简直是OpenGL ES的实例宝库。包含了图像渲染各方面的算法实例，且以生动的方式呈现了OpenGL体系的方方面面。实在是学习的不二之选。
 
@@ -54,3 +59,4 @@ PerspectiveCamera类确定了透视相机的参数以及相关投射属性（相
 WebGLRender类实现了渲染引擎的主要逻辑，实现了camera，material，geometry子系统的整合逻辑。
 ThreeJS的封装层次比较复杂，WebGLRender的个体封装不易于被理解。
 WebGLProgram封装了各种shader的组合逻辑。
+
