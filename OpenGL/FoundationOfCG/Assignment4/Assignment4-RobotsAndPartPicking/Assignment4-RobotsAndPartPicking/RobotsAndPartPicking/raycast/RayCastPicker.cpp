@@ -1,24 +1,30 @@
 #include <GL/glew.h>
 
-#include "picker.h"
+#include "RayCastPicker.h"
+#include "Geometry.h"
+
 
 using namespace std;
 
-Picker::Picker(const RigTForm& initialRbt, const ShaderState& curSS)
+RaycastPicker::RaycastPicker(const RigTForm& initialRbt, const ShaderState& curSS)
   : drawer_(initialRbt, curSS)
   , idCounter_(0)
   , srgbFrameBuffer_(true) {}
 
-Picker::Picker(const RigTForm& initialRbt, const ShaderState& curSS,shared_ptr<SgRbtNode> selectedNode,shared_ptr<SgRootNode> worldNode,RigTForm eyeRbt,RigTForm motionRbt):drawer_(initialRbt, curSS)
+RaycastPicker::RaycastPicker(const RigTForm& initialRbt, const ShaderState& curSS,shared_ptr<SgRbtNode> selectedNode,shared_ptr<SgRootNode> worldNode,RigTForm eyeRbt,RigTForm motionRbt):drawer_(initialRbt, curSS)
 , idCounter_(0)
 , srgbFrameBuffer_(true)
 , selectedRbtNode_(selectedNode)
 , worldNode_(worldNode)
 , eyeRbt_(eyeRbt)
-, motionRbt_(motionRbt) {}
+, motionRbt_(motionRbt)
+, rayCaster_(new RayCaster()){}
 
+void RaycastPicker::setRayCaster(Cvec3 screenPos,float width,float height,Matrix4 eyeMat,Matrix4 projMat,bool isPerspective){
+    rayCaster_->setFromCamera(screenPos, width, height, eyeMat, projMat, isPerspective);
+}
 
-bool Picker::visit(SgTransformNode& node) {
+bool RaycastPicker::visit(SgTransformNode& node) {
   shared_ptr<SgNode> baseNode = node.shared_from_this();
   nodeStack_.push_back(baseNode);
     if(selectedRbtNode_ == baseNode){
@@ -36,36 +42,80 @@ bool Picker::visit(SgTransformNode& node) {
   return drawer_.visit(node);
 }
 
-bool Picker::postVisit(SgTransformNode& node) {
+
+
+bool RaycastPicker::postVisit(SgTransformNode& node) {
   nodeStack_.pop_back();
   return drawer_.postVisit(node);
 }
 
-bool Picker::visit(SgShapeNode& node) {
+bool RaycastPicker::visit(SgShapeNode& node) {
   // We will increment idcounter every time visit a shape node
     ++idCounter_;
     Cvec3 idColor = idToColor(idCounter_);
+    vector<IntersectionData> intersects = raycast(rayCaster_, node);
+    if(intersects.size()>0){
+        safe_glUniform3f(drawer_.getCurSS().h_uIdColor, 0.3, 0.9, 0.5);
+    }else{
+        safe_glUniform3f(drawer_.getCurSS().h_uIdColor, idColor[0], idColor[1], idColor[2]);
+    }
 
     shared_ptr<SgNode> baseNode = nodeStack_.back();
     shared_ptr<SgRbtNode> rbtNode = dynamic_pointer_cast<SgRbtNode>(baseNode);
     addToMap(idCounter_, rbtNode);
-    //为选中的节点指定颜色
-    if(selectedRbtNode_ == baseNode){
-        safe_glUniform3f(drawer_.getCurSS().h_uIdColor, 0.3, 0.9, 0.5);
-    }else{
-    safe_glUniform3f(drawer_.getCurSS().h_uIdColor, idColor[0], idColor[1], idColor[2]);
-    }
+//    //为选中的节点指定颜色
+//    if(selectedRbtNode_ == baseNode){
+//        safe_glUniform3f(drawer_.getCurSS().h_uIdColor, 0.3, 0.9, 0.5);
+//    }else{
+//    safe_glUniform3f(drawer_.getCurSS().h_uIdColor, idColor[0], idColor[1], idColor[2]);
+//    }
     
   return drawer_.visit(node);
 }
 
-bool Picker::postVisit(SgShapeNode& node) {
+bool RaycastPicker::postVisit(SgShapeNode& node) {
   // TODO
   return drawer_.postVisit(node);
 }
 
+vector<IntersectionData> RaycastPicker::raycast(RayCaster* rayCaster,SgShapeNode& node){
+    
+    shared_ptr<SgNode> baseNode = nodeStack_.back();
+    shared_ptr<SgRbtNode> currentNode = dynamic_pointer_cast<SgRbtNode>(baseNode);
+    RigTForm nodeWorldRbt = getPathAccumRbt(worldNode_, currentNode,0,1);
+    
+    SgGeometryShapeNode<Geometry>& geometryNode = dynamic_cast<SgGeometryShapeNode<Geometry>&>(node);
+    
+    Matrix4 matrixWorld = rigTFormToMatrix(nodeWorldRbt) * geometryNode.getAffineMatrix();
+    
+    
+    //将BV副本转换为world coordinate
+    shared_ptr<Geometry> geomP = geometryNode.getGeometry();
+    Sphere sphere = geomP->bSphere;
+    Box box = geomP->bBox;
+    
+    sphere.applyMatrix4(matrixWorld);
+    
+    // 先进行了ray-sphere相交检测
+    Ray *ray = rayCaster->ray;
+    
+    vector<IntersectionData> intersectPoints = ray->intersectSphere(&sphere);
+    //if (intersectPoints.size()==0) return {};
+    if(intersectPoints.size()>0){
+        return intersectPoints;
+    }
+    
+//    box.applyMatrix4(matrixWorld);
+//    intersectPoints = ray->intersectBox(&box);
+//    if(intersectPoints.size()>0){
+//        return intersectPoints;
+//    }
+    
+    return {};
+}
+
 //此处初始化raycaster，然后对几何体执行raycast动作
-shared_ptr<SgRbtNode> Picker::getRbtNodeAtXY(int x, int y) {
+shared_ptr<SgRbtNode> RaycastPicker::getRbtNodeAtXY(int x, int y) {
     vector<char> image(3);
     PackedPixel pixel;
 //    glReadBuffer(GL_BACK);
@@ -79,11 +129,11 @@ shared_ptr<SgRbtNode> Picker::getRbtNodeAtXY(int x, int y) {
 // Helper functions
 //------------------
 //
-void Picker::addToMap(int id, shared_ptr<SgRbtNode> node) {
+void RaycastPicker::addToMap(int id, shared_ptr<SgRbtNode> node) {
   idToRbtNode_[id] = node;
 }
 
-shared_ptr<SgRbtNode> Picker::find(int id) {
+shared_ptr<SgRbtNode> RaycastPicker::find(int id) {
   IdToRbtNodeMap::iterator it = idToRbtNode_.find(id);
   if (it != idToRbtNode_.end())
     return it->second;
@@ -94,7 +144,7 @@ shared_ptr<SgRbtNode> Picker::find(int id) {
 // encode 2^4 = 16 IDs in each of R, G, B channel, for a total of 16^3 number of objects
 static const int NBITS = 4, N = 1 << NBITS, MASK = N-1;
 
-Cvec3 Picker::idToColor(int id) {
+Cvec3 RaycastPicker::idToColor(int id) {
   assert(id > 0 && id < N * N * N);
   Cvec3 framebufferColor = Cvec3(id & MASK, (id >> NBITS) & MASK, (id >> (NBITS+NBITS)) & MASK);
   framebufferColor = framebufferColor / N + Cvec3(0.5/N);
@@ -111,7 +161,7 @@ Cvec3 Picker::idToColor(int id) {
   }
 }
 
-int Picker::colorToId(const PackedPixel& p) {
+int RaycastPicker::colorToId(const PackedPixel& p) {
   const int UNUSED_BITS = 8 - NBITS;
   int id = p.r >> UNUSED_BITS;
   id |= ((p.g >> UNUSED_BITS) << NBITS);

@@ -5,12 +5,14 @@
 #include <memory>
 #include <stdexcept>
 
-
 #include "cvec.h"
 #include "matrix4.h"
 #include "rigtform.h"
 #include "glsupport.h" // for Noncopyable
 #include "asstcommon.h"
+#include "Ray.h"
+#include "RayCaster.h"
+
 
 using namespace std;
 
@@ -64,12 +66,15 @@ private:
 // A shape node has no decendents, but can perform drawing. It can also
 // provide an affine matrix to be used to modify its geometry.
 //
+class RayCaster;
+class IntersectionData;
 class SgShapeNode : public SgNode {
 public:
   virtual bool accept(SgNodeVisitor& visitor);
 
   virtual Matrix4 getAffineMatrix() = 0;
   virtual void draw(const ShaderState& curSS) = 0;
+
 };
 
 
@@ -89,7 +94,7 @@ public:
 RigTForm getPathAccumRbt(
   shared_ptr<SgTransformNode> source,
   shared_ptr<SgTransformNode> destination,
-  int offsetFromDestination = 0);
+  int offsetFromDestination = 0,int offsetFromStackBottom=0);
 
 
 //----------------------------------------------------
@@ -144,6 +149,10 @@ public:
                     Matrix4::makeZRotation(eulerAngles[2]) *
                     Matrix4::makeScale(scales)) {}
 
+  virtual shared_ptr<Geometry> getGeometry() {
+    return geometry_;
+  }
+    
   virtual Matrix4 getAffineMatrix() {
     return affineMatrix_;
   }
@@ -152,6 +161,7 @@ public:
     safe_glUniform3f(curSS.h_uColor, color_[0], color_[1], color_[2]);
     geometry_->draw(curSS);
   }
+    
 };
 
 #endif

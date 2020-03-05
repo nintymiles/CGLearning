@@ -242,32 +242,74 @@ inline double norm2(const Matrix4& m) {
 
 // computes inverse of affine matrix. assumes last row is [0,0,0,1]
 inline Matrix4 inv(const Matrix4& m) {
-    Matrix4 r;                                              // default constructor initializes it to identity
-    assert(isAffine(m));
-    double det = m(0,0)*(m(1,1)*m(2,2) - m(1,2)*m(2,1)) +
-    m(0,1)*(m(1,2)*m(2,0) - m(1,0)*m(2,2)) +
-    m(0,2)*(m(1,0)*m(2,1) - m(1,1)*m(2,0));
+    Matrix4 r;
     
-    // check non-singular matrix
-    assert(std::abs(det) > CS175_EPS3);
+    float s[6];
+    float c[6];
+    s[0] = m(0,0)*m(1,1) - m(1,0)*m(0,1);
+    s[1] = m(0,0)*m(1,2) - m(1,0)*m(0,2);
+    s[2] = m(0,0)*m(1,3) - m(1,0)*m(0,3);
+    s[3] = m(0,1)*m(1,2) - m(1,1)*m(0,2);
+    s[4] = m(0,1)*m(1,3) - m(1,1)*m(0,3);
+    s[5] = m(0,2)*m(1,3) - m(1,2)*m(0,3);
     
-    // "rotation part"
-    r(0,0) =  (m(1,1) * m(2,2) - m(1,2) * m(2,1)) / det;
-    r(1,0) = -(m(1,0) * m(2,2) - m(1,2) * m(2,0)) / det;
-    r(2,0) =  (m(1,0) * m(2,1) - m(1,1) * m(2,0)) / det;
-    r(0,1) = -(m(0,1) * m(2,2) - m(0,2) * m(2,1)) / det;
-    r(1,1) =  (m(0,0) * m(2,2) - m(0,2) * m(2,0)) / det;
-    r(2,1) = -(m(0,0) * m(2,1) - m(0,1) * m(2,0)) / det;
-    r(0,2) =  (m(0,1) * m(1,2) - m(0,2) * m(1,1)) / det;
-    r(1,2) = -(m(0,0) * m(1,2) - m(0,2) * m(1,0)) / det;
-    r(2,2) =  (m(0,0) * m(1,1) - m(0,1) * m(1,0)) / det;
+    c[0] = m(2,0)*m(3,1) - m(3,0)*m(2,1);
+    c[1] = m(2,0)*m(3,2) - m(3,0)*m(2,2);
+    c[2] = m(2,0)*m(3,3) - m(3,0)*m(2,3);
+    c[3] = m(2,1)*m(3,2) - m(3,1)*m(2,2);
+    c[4] = m(2,1)*m(3,3) - m(3,1)*m(2,3);
+    c[5] = m(2,2)*m(3,3) - m(3,2)*m(2,3);
     
-    // "translation part" - multiply the translation (on the left) by the inverse linear part
-    r(0,3) = -(m(0,3) * r(0,0) + m(1,3) * r(0,1) + m(2,3) * r(0,2));
-    r(1,3) = -(m(0,3) * r(1,0) + m(1,3) * r(1,1) + m(2,3) * r(1,2));
-    r(2,3) = -(m(0,3) * r(2,0) + m(1,3) * r(2,1) + m(2,3) * r(2,2));
-    assert(isAffine(r) && norm2(Matrix4() - m*r) < CS175_EPS2);
+    /* Assumes it is invertible */
+    float idet = 1.0f/( s[0]*c[5]-s[1]*c[4]+s[2]*c[3]+s[3]*c[2]-s[4]*c[1]+s[5]*c[0] );
+    
+    r(0,0) = ( m(1,1) * c[5] - m(1,2) * c[4] + m(1,3) * c[3]) * idet;
+    r(0,1) = (-m(0,1) * c[5] + m(0,2) * c[4] - m(0,3) * c[3]) * idet;
+    r(0,2) = ( m(3,1) * s[5] - m(3,2) * s[4] + m(3,3) * s[3]) * idet;
+    r(0,3) = (-m(2,1) * s[5] + m(2,2) * s[4] - m(2,3) * s[3]) * idet;
+    
+    r(1,0) = (-m(1,0) * c[5] + m(1,2) * c[2] - m(1,3) * c[1]) * idet;
+    r(1,1) = ( m(0,0) * c[5] - m(0,2) * c[2] + m(0,3) * c[1]) * idet;
+    r(1,2) = (-m(3,0) * s[5] + m(3,2) * s[2] - m(3,3) * s[1]) * idet;
+    r(1,3) = ( m(2,0) * s[5] - m(2,2) * s[2] + m(2,3) * s[1]) * idet;
+    
+    r(2,0) = ( m(1,0) * c[4] - m(1,1) * c[2] + m(1,3) * c[0]) * idet;
+    r(2,1) = (-m(0,0) * c[4] + m(0,1) * c[2] - m(0,3) * c[0]) * idet;
+    r(2,2) = ( m(3,0) * s[4] - m(3,1) * s[2] + m(3,3) * s[0]) * idet;
+    r(2,3) = (-m(2,0) * s[4] + m(2,1) * s[2] - m(2,3) * s[0]) * idet;
+    
+    r(3,0) = (-m(1,0) * c[3] + m(1,1) * c[1] - m(1,2) * c[0]) * idet;
+    r(3,1) = ( m(0,0) * c[3] - m(0,1) * c[1] + m(0,2) * c[0]) * idet;
+    r(3,2) = (-m(3,0) * s[3] + m(3,1) * s[1] - m(3,2) * s[0]) * idet;
+    r(3,3) = ( m(2,0) * s[3] - m(2,1) * s[1] + m(2,2) * s[0]) * idet;
+    
     return r;
+//    Matrix4 r;                                              // default constructor initializes it to identity
+//    //assert(isAffine(m));
+//    double det = m(0,0)*(m(1,1)*m(2,2) - m(1,2)*m(2,1)) +
+//    m(0,1)*(m(1,2)*m(2,0) - m(1,0)*m(2,2)) +
+//    m(0,2)*(m(1,0)*m(2,1) - m(1,1)*m(2,0));
+//
+//    // check non-singular matrix
+//    //assert(std::abs(det) > CS175_EPS3);
+//
+//    // "rotation part"
+//    r(0,0) =  (m(1,1) * m(2,2) - m(1,2) * m(2,1)) / det;
+//    r(1,0) = -(m(1,0) * m(2,2) - m(1,2) * m(2,0)) / det;
+//    r(2,0) =  (m(1,0) * m(2,1) - m(1,1) * m(2,0)) / det;
+//    r(0,1) = -(m(0,1) * m(2,2) - m(0,2) * m(2,1)) / det;
+//    r(1,1) =  (m(0,0) * m(2,2) - m(0,2) * m(2,0)) / det;
+//    r(2,1) = -(m(0,0) * m(2,1) - m(0,1) * m(2,0)) / det;
+//    r(0,2) =  (m(0,1) * m(1,2) - m(0,2) * m(1,1)) / det;
+//    r(1,2) = -(m(0,0) * m(1,2) - m(0,2) * m(1,0)) / det;
+//    r(2,2) =  (m(0,0) * m(1,1) - m(0,1) * m(1,0)) / det;
+//
+//    // "translation part" - multiply the translation (on the left) by the inverse linear part
+//    r(0,3) = -(m(0,3) * r(0,0) + m(1,3) * r(0,1) + m(2,3) * r(0,2));
+//    r(1,3) = -(m(0,3) * r(1,0) + m(1,3) * r(1,1) + m(2,3) * r(1,2));
+//    r(2,3) = -(m(0,3) * r(2,0) + m(1,3) * r(2,1) + m(2,3) * r(2,2));
+//    //assert(isAffine(r) && norm2(Matrix4() - m*r) < CS175_EPS2);
+//    return r;
 }
 
 //transpose的含义就是将矩阵行列的顺序调转过来

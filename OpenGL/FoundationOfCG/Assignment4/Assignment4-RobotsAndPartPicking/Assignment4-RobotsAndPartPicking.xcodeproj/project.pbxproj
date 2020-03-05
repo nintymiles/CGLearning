@@ -20,6 +20,11 @@
 		5C800CD721FA921900DB8452 /* basic-gl3.vshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C800CC121FA81C200DB8452 /* basic-gl3.vshader */; };
 		5C800CD821FA923B00DB8452 /* pick-gl3.fshader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C800CBF21FA81C200DB8452 /* pick-gl3.fshader */; };
 		5C800CDB21FB12E600DB8452 /* picker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C800CD921FB12E600DB8452 /* picker.cpp */; };
+		5C9DB480240FA9A900EDF81C /* Ray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C9DB478240FA9A900EDF81C /* Ray.cpp */; };
+		5C9DB481240FA9A900EDF81C /* Sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C9DB479240FA9A900EDF81C /* Sphere.cpp */; };
+		5C9DB482240FA9A900EDF81C /* RayCaster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C9DB47B240FA9A900EDF81C /* RayCaster.cpp */; };
+		5C9DB483240FA9A900EDF81C /* Box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C9DB47C240FA9A900EDF81C /* Box.cpp */; };
+		5C9DB486240FB2E600EDF81C /* RayCastPicker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C9DB484240FB2E500EDF81C /* RayCastPicker.cpp */; };
 		5CA6586921F0CA790087B7F8 /* scenegraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CA6586121F0CA790087B7F8 /* scenegraph.cpp */; };
 		5CDA259421EF72CB00F2A6D1 /* assignment4-main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CDA259321EF72CB00F2A6D1 /* assignment4-main.cpp */; };
 		5CF9491821FEA0F1004D711B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CF9491721FEA0F1004D711B /* Cocoa.framework */; };
@@ -42,6 +47,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5C234B602410F23300B3F073 /* linmath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = linmath.h; path = ../../../../../../BaseFramework/linmath.h; sourceTree = "<group>"; };
 		5C54F28821FDA1F000657C36 /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = readme.md; path = ../../../readme.md; sourceTree = "<group>"; };
 		5C800CAA21FA810A00DB8452 /* perfMonitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = perfMonitor.cpp; path = ../../../../../../BaseFramework/perfMonitor/perfMonitor.cpp; sourceTree = "<group>"; };
 		5C800CAB21FA810A00DB8452 /* perfMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = perfMonitor.h; path = ../../../../../../BaseFramework/perfMonitor/perfMonitor.h; sourceTree = "<group>"; };
@@ -66,6 +72,17 @@
 		5C800CD221FA874C00DB8452 /* ppm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ppm.h; path = "../../../../Assignment3/Assignment3-QuaternionAndArcball/Assignment3-QuaternionAndArcball/mit-example/ppm.h"; sourceTree = "<group>"; };
 		5C800CD921FB12E600DB8452 /* picker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = picker.cpp; path = "Assignment4-RobotsAndPartPicking/RobotsAndPartPicking/picker.cpp"; sourceTree = SOURCE_ROOT; };
 		5C800CDA21FB12E600DB8452 /* picker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = picker.h; path = "Assignment4-RobotsAndPartPicking/RobotsAndPartPicking/picker.h"; sourceTree = SOURCE_ROOT; };
+		5C9DB478240FA9A900EDF81C /* Ray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Ray.cpp; path = "Assignment4-RobotsAndPartPicking/RobotsAndPartPicking/Ray.cpp"; sourceTree = SOURCE_ROOT; };
+		5C9DB479240FA9A900EDF81C /* Sphere.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sphere.cpp; path = "Assignment4-RobotsAndPartPicking/RobotsAndPartPicking/Sphere.cpp"; sourceTree = SOURCE_ROOT; };
+		5C9DB47A240FA9A900EDF81C /* Sphere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sphere.h; path = "Assignment4-RobotsAndPartPicking/RobotsAndPartPicking/Sphere.h"; sourceTree = SOURCE_ROOT; };
+		5C9DB47B240FA9A900EDF81C /* RayCaster.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RayCaster.cpp; path = "Assignment4-RobotsAndPartPicking/RobotsAndPartPicking/RayCaster.cpp"; sourceTree = SOURCE_ROOT; };
+		5C9DB47C240FA9A900EDF81C /* Box.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Box.cpp; path = "Assignment4-RobotsAndPartPicking/RobotsAndPartPicking/Box.cpp"; sourceTree = SOURCE_ROOT; };
+		5C9DB47D240FA9A900EDF81C /* RayCaster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RayCaster.h; path = "Assignment4-RobotsAndPartPicking/RobotsAndPartPicking/RayCaster.h"; sourceTree = SOURCE_ROOT; };
+		5C9DB47E240FA9A900EDF81C /* Box.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Box.h; path = "Assignment4-RobotsAndPartPicking/RobotsAndPartPicking/Box.h"; sourceTree = SOURCE_ROOT; };
+		5C9DB47F240FA9A900EDF81C /* Ray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ray.h; path = "Assignment4-RobotsAndPartPicking/RobotsAndPartPicking/Ray.h"; sourceTree = SOURCE_ROOT; };
+		5C9DB484240FB2E500EDF81C /* RayCastPicker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RayCastPicker.cpp; sourceTree = "<group>"; };
+		5C9DB485240FB2E500EDF81C /* RayCastPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RayCastPicker.h; sourceTree = "<group>"; };
+		5C9DB48724108DA500EDF81C /* Geometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Geometry.h; path = "Assignment4-RobotsAndPartPicking/RobotsAndPartPicking/Geometry.h"; sourceTree = SOURCE_ROOT; };
 		5CA6586121F0CA790087B7F8 /* scenegraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scenegraph.cpp; sourceTree = "<group>"; };
 		5CA6586221F0CA790087B7F8 /* drawer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = drawer.h; sourceTree = "<group>"; };
 		5CA6586521F0CA790087B7F8 /* asstcommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asstcommon.h; sourceTree = "<group>"; };
@@ -116,6 +133,24 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		5C9DB477240FA99600EDF81C /* raycast */ = {
+			isa = PBXGroup;
+			children = (
+				5C9DB48724108DA500EDF81C /* Geometry.h */,
+				5C9DB484240FB2E500EDF81C /* RayCastPicker.cpp */,
+				5C9DB485240FB2E500EDF81C /* RayCastPicker.h */,
+				5C9DB47C240FA9A900EDF81C /* Box.cpp */,
+				5C9DB47E240FA9A900EDF81C /* Box.h */,
+				5C9DB478240FA9A900EDF81C /* Ray.cpp */,
+				5C9DB47F240FA9A900EDF81C /* Ray.h */,
+				5C9DB47B240FA9A900EDF81C /* RayCaster.cpp */,
+				5C9DB47D240FA9A900EDF81C /* RayCaster.h */,
+				5C9DB479240FA9A900EDF81C /* Sphere.cpp */,
+				5C9DB47A240FA9A900EDF81C /* Sphere.h */,
+			);
+			path = raycast;
+			sourceTree = "<group>";
+		};
 		5CA6586021F0CA610087B7F8 /* RobotsAndPartPicking */ = {
 			isa = PBXGroup;
 			children = (
@@ -124,6 +159,7 @@
 				5C800CAE21FA812600DB8452 /* arcball.h */,
 				5C800CAD21FA812600DB8452 /* quat.h */,
 				5C800CAF21FA812600DB8452 /* rigtform.h */,
+				5C234B602410F23300B3F073 /* linmath.h */,
 				5C800CB121FA813300DB8452 /* cvec.h */,
 				5C800CB021FA813300DB8452 /* geometrymaker.h */,
 				5C800CB221FA813300DB8452 /* matrix4.h */,
@@ -136,6 +172,7 @@
 				5CA6586221F0CA790087B7F8 /* drawer.h */,
 				5C800CD921FB12E600DB8452 /* picker.cpp */,
 				5C800CDA21FB12E600DB8452 /* picker.h */,
+				5C9DB477240FA99600EDF81C /* raycast */,
 				5CA6586121F0CA790087B7F8 /* scenegraph.cpp */,
 				5CA6586821F0CA790087B7F8 /* scenegraph.h */,
 				5CDA259321EF72CB00F2A6D1 /* assignment4-main.cpp */,
@@ -226,11 +263,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				5C800CAC21FA810A00DB8452 /* perfMonitor.cpp in Sources */,
+				5C9DB482240FA9A900EDF81C /* RayCaster.cpp in Sources */,
 				5CDA259421EF72CB00F2A6D1 /* assignment4-main.cpp in Sources */,
+				5C9DB481240FA9A900EDF81C /* Sphere.cpp in Sources */,
 				5C800CB521FA815100DB8452 /* glsupport.cpp in Sources */,
+				5C9DB486240FB2E600EDF81C /* RayCastPicker.cpp in Sources */,
 				5C800CDB21FB12E600DB8452 /* picker.cpp in Sources */,
+				5C9DB480240FA9A900EDF81C /* Ray.cpp in Sources */,
 				5C800CD321FA874C00DB8452 /* ppm.cpp in Sources */,
 				5CA6586921F0CA790087B7F8 /* scenegraph.cpp in Sources */,
+				5C9DB483240FA9A900EDF81C /* Box.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

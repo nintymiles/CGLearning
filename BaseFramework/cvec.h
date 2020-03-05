@@ -214,6 +214,26 @@ inline Cvec<T, n> normalize(const Cvec<T,n>& v) {
     return v / norm(v);
 }
 
+template<typename T, int n>
+inline Cvec<T, n> maxVec(const Cvec<T,n>& v1,const Cvec<T,n>& v2) {
+    Cvec<T,n> v;
+    for(int i=0;i<n;i++){
+        v[i] = fmax(v1[i],v2[i]);
+    }
+    
+    return v;
+}
+
+template<typename T, int n>
+inline Cvec<T, n> minVec(const Cvec<T,n>& v1,const Cvec<T,n>& v2) {
+    Cvec<T,n> v;
+    for(int i=0;i<n;i++){
+        v[i] = fmin(v1[i],v2[i]);
+    }
+    
+    return v;
+}
+
 //设置常用子类型的alias，以方便使用
 // element of type double precision float
 typedef Cvec <double, 2> Cvec2;

@@ -4,6 +4,7 @@
 
 using namespace std;
 
+//accept的实现逻辑，只要有visit权限，就可以一直向深层授权
 bool SgTransformNode::accept(SgNodeVisitor& visitor) {
   if (!visitor.visit(*this))
     return false;
@@ -38,12 +39,12 @@ public:
     : target_(target)
     , found_(false) {}
 
-  const RigTForm getAccumulatedRbt(int offsetFromStackTop = 0) {
+  const RigTForm getAccumulatedRbt(int offsetFromStackTop = 0,int offsetFromStackBottom = 0) {
       RigTForm accumulatedRbt;
       long stackSize = rbtStack_.size();
       //g_world is just a root node and it is not a rbtnode,so we dont need to explicitly exclude g_world(source) node
-      if((stackSize - offsetFromStackTop)>=1 ){
-          for(auto start=begin(rbtStack_) , last = end(rbtStack_) - offsetFromStackTop ; start!=last; ++start ){
+      if((stackSize - offsetFromStackBottom - offsetFromStackTop)>=1 ){
+          for(auto start=begin(rbtStack_) + offsetFromStackBottom , last = end(rbtStack_) - offsetFromStackTop ; start!=last; ++start ){
               accumulatedRbt = accumulatedRbt * (*start) ;
           }
       }
@@ -77,9 +78,9 @@ public:
 RigTForm getPathAccumRbt(
   shared_ptr<SgTransformNode> source,
   shared_ptr<SgTransformNode> destination,
-  int offsetFromDestination) {
+  int offsetFromDestination,int offsetFromStackBottom) {
 
   RbtAccumVisitor accum(*destination);
   source->accept(accum);
-  return accum.getAccumulatedRbt(offsetFromDestination);
+  return accum.getAccumulatedRbt(offsetFromDestination,offsetFromStackBottom);
 }
