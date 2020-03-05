@@ -1,5 +1,5 @@
 # Note
-这是对**MIT Foundation of 3D Computer Graphics**第3章的翻译，本章讲解了仿射变换的基本概念，变换矩阵的由来以及分解、通用法线变换的推导等内容。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教<ninetymiles@icloud.com>。 
+这是对**MIT Foundation of 3D Computer Graphics**第3章的翻译，本章讲解了仿射变换的基本概念，变换矩阵的由来以及分解、通用法线变换的推导等内容。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教<ninetymiles@icloud.com> 
 
 > 注：文章中相关内容归原作者所有，翻译内容仅供学习参考。
 > 另：Github项目[CGLearning](https://github.com/nintymiles/CGLearning)中拥有相关翻译的完整资料、内容整理、课程项目实现。
@@ -65,7 +65,7 @@ $$ \vec{\mathbf{f}}^t\mathbf{c} \Rightarrow \vec{\mathbf{f}}^tA\mathbf{c}$$
 我们可以验证上面表达的第二行描述了一个有效的点，因为乘法
 $$
 \begin{bmatrix} x' \\ y' \\ z' \\ 1 \end{bmatrix} =
-\begin{bmatrix} a & b & c & d \\ e & f & g & h \\ i & j & k & l \\ 0 & 0 & 0 & 1 \end{bmatrix} 
+\begin{bmatrix} a & b & c & d \\ e & f & g & h \\ i & j & k & l \\ 0 & 0 & 0 & 1\end{bmatrix} 
 \begin{bmatrix} c_1 \\ c_2 \\ c_3 \\ 1 \end{bmatrix}
 $$
 给出了我们一个带有1作为第4条目的4部件坐标矢量。另一方面，我们也能够看到乘法
@@ -74,15 +74,15 @@ $$
 \begin{bmatrix} \vec{b}_1 & \vec{b}_2 & \vec{b}_3 & \tilde{o} \end{bmatrix}
 \begin{bmatrix} a & b & c & d \\ e & f & g & h \\ i & j & k & l \\ 0 & 0 & 0 & 1 \end{bmatrix}
 $$
-此处$0\tilde{o}$被定义为$\tilde{o}$，给出了一个由3个矢量和一个原点组成的有效帧。
+此处$0\tilde{o}$被定义为$\vec{0}$，给出了一个由3个矢量和一个原点组成的有效帧。
 
 同时也要注意到，如果矩阵的最后一行不是$[0,0,0,1]$这种形式，变换就通常给出一个无效的结果。
 
 类似于线性变换的情形，我们可以针对一个帧应用仿射变换（affine transformation）为
 $$ 
-\begin{bmatrix} \vec{b}_1 & \vec{b}_2 & \vec{b}_3 & \tilde{o} \end{bmatrix} \Rightarrow
 \begin{bmatrix} \vec{b}_1 & \vec{b}_2 & \vec{b}_3 & \tilde{o} \end{bmatrix}
-\begin{bmatrix} a & b & c & d \\ e & f & g & h \\ i & j & k & l \\ 0 & 0 & 0 & 1 \end{bmatrix}
+\Rightarrow 
+\begin{bmatrix} \vec{b}_1 & \vec{b}_2 & \vec{b}_3 & \tilde{o} \end{bmatrix}\begin{bmatrix} a & b & c & d \\ e & f & g & h \\ i & j & k & l \\ 0 & 0 & 0 & 1 \end{bmatrix}
 $$
 
 或者简写为
@@ -102,9 +102,9 @@ $$ \begin{array}{rl}
 
 我们借助下列缩写用于描述一个$4\times4$矩阵，其只是应用了一个线性变换。
 $$
-L= \begin{bmatrix} l & 0 \\ 0 & 1 \end{bmatrix}
+L= \begin{bmatrix}l & 0 \\ 0 & 1\end{bmatrix}
 $$
-此处$L$是一个$4\times4$矩阵，$l$是一个$3\times3$矩阵，右上角的0代表$3\times1$由0组成的矩阵，右下角的1是一个变量。
+此处$L$是一个$4\times4$矩阵，$l$是一个$3\times3$矩阵，右上角的0代表$3\times1$由0组成的矩阵，右下角的1是一个标量(scalar)。
 
 ![Figure3.1](media/Figure3.1.png)
 **Figure 3.1:** 对一个点应用线性变换。可以通过应用线性变换到始于原点的偏移矢量上来完成。
@@ -120,12 +120,13 @@ $$ \begin{array}{rl}
 \end{array}$$
 
 我们看到变换在坐标上的效果为
-$$ \begin{array}{l}
-c_1 \Rightarrow c_1 + t_x \\
-c_2 \Rightarrow c_2 + t_x \\
-c_3 \Rightarrow c_3 + t_x 
-\end{array} $$
-
+$$
+\begin{array}{rcl}
+c_1 & \Rightarrow & c_1 + t_x \\
+c_2 & \Rightarrow  & c_2 + t_y \\
+c_3 & \Rightarrow & c_3 + t_z 
+\end{array}
+$$
 针对平移，我们使用简写
 $$
 T= \begin{bmatrix} i & t \\ 0 & 1 \end{bmatrix}
@@ -192,7 +193,7 @@ $$
 
 如果我们定义$[x',y',z',1]^t=A[x,y,z,1]^t$为被变换点的坐标，同时让$[nx',ny',nz',*]=[nx,ny,nz,*]A^{-1}$，那么我们就得到如下表达
 $$
-（\begin{bmatrix} nx' & ny' & nz' & * \end{bmatrix}A^{-1})(A
+（\begin{bmatrix} nx' & ny' & nz' & * \end{bmatrix})(
 \left( 
 \begin{bmatrix} x1' \\ y1' \\ z1' \\ 1 \end{bmatrix} - 
 \begin{bmatrix} x0' \\ y0' \\ z0' \\ 1 \end{bmatrix}
