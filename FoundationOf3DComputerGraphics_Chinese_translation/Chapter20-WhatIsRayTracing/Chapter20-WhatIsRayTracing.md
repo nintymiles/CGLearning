@@ -79,7 +79,7 @@ $$ \large{
 ### 20.2.3 球体（Sphere）
 射线-平面相交的背后思路也可以改造为计算射线-球体相交。在这种情形中，拥有半径$R$和中心$c$的球体被建模为点$[x,y,z]^t$点集合，其满足方程$(x − c_x )^2 + (y − c_y )^2 + (z − c_z )^2 − r^2 = 0$。把这个插入方程（20.1），我们得到
 $$ \large{
-\begin{array}{rcl} 
+\begin{array}{rl} 
 0 & = & (p_x+\lambda d_x−c_x)^2+(p_y+\lambda d_y−c_y)^2+(p_z+\lambda d_z−c_z)^2 − r^2 \\
   & = & (d_x^2+d_y^2+d_z^2)\lambda^2+(2d_x(p_x−c_x)+2d_y(p_y−c_y)+2d_z(p_z−c_z))\lambda  \\
   & & +(p_x−c_x)^2+(p_y−c_y)^2+(p_z−c_z)^2−r^2 \end{array} 
