@@ -76,7 +76,7 @@ struct ShaderState {
   GLint h_uModelViewMatrix;
   GLint h_uNormalMatrix;
   GLint h_uColor;
-    GLint h_uXCoordOffset;
+  GLint h_uXCoordOffset;
 
   // Handles to vertex attributes
   GLint h_aPosition;
