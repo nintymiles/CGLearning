@@ -116,9 +116,7 @@ static shared_ptr<SgRbtNode> g_currentPickedRbtNode; // used later when you do p
 static shared_ptr<Geometry> g_ground, g_cube,g_sphere;
 
 static const Cvec3 g_light1(2.0, 3.0, 14.0), g_light2(-2, -3.0, -5.0);  // define two lights positions in world space
-static RigTForm g_skyRbt = RigTForm::makeTranslation(0.0, 0.25, 4.0);
-//初始tramsformation，将object frame的原点保持不动，每个cube使用一个object matrix。由于在shader中使用了offset，故此处对象帧的起点都为原点。
-static RigTForm g_objectRbt[3] = {RigTForm(Cvec3(0,0,0)),RigTForm(Cvec3(0,0,0)),RigTForm(Cvec3(0,0,0))};
+
 static Cvec3f g_objectColors[3] = {Cvec3f(1, 0, 0),Cvec3f(0, 0, 1),Cvec3f(0.5, 0.5, 0)};
 static RigTForm g_auxiliaryRbt;
 
@@ -253,7 +251,7 @@ static void drawStuff(const ShaderState& curSS, bool picking){
         // draw sphere
         //initSphere(); //the raidus of sphere changed constantly,but calling this method frequetly is not effective
         
-        RigTForm mvmRbt = invEyeRbt * g_objectRbt[2];
+        RigTForm mvmRbt = invEyeRbt * RigTForm(); //arcball frame same as world frame
         //update g_arcballScale
         g_arcballScale = computeArcballScale(Cvec4(mvmRbt.getTranslation(),0));
         float screenRadiusScale = g_arcballScreenRadius*g_arcballScale;
@@ -320,7 +318,7 @@ static void motion(const float x, const float y) {
     
     Cvec2 startScreenPos = Cvec2(g_mouseClickX,g_mouseClickY);
     Cvec2 endScreenPos = Cvec2(x,g_windowHeight - y - 1); //convert from window coordnate to OpenGL window coordinate.
-    Cvec2 centerScreenPos = getScreenSpaceCoord(g_objectRbt[0].getTranslation(),makeProjectionMatrix(), 0.0, 0.0, g_windowWidth, g_windowHeight);
+    Cvec2 centerScreenPos = getScreenSpaceCoord(RigTForm().getTranslation(),makeProjectionMatrix(), 0.0, 0.0, g_windowWidth, g_windowHeight);
     Quat arcballQuat = arcball(Cvec3(centerScreenPos,0), g_arcballScreenRadius, startScreenPos, endScreenPos);
     
     const double dx = x - g_mouseClickX;
