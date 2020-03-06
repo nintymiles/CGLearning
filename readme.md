@@ -28,7 +28,7 @@
 | --- | --- | --- | 
 | Assignment2 Hello World 3D| 已完成 | [详情](OpenGL/FoundationOfCG/Assignment2/readme.md)  |
 | Assignment3 Quaternion and Arcball| 已完成 |  [详情](OpenGL/FoundationOfCG/Assignment3/readme.md)   |
-| Assignment4 Hierarchical Transformations and Pickin| 初步完成，Picking部分未完成，需要新方法 |  |
+| Assignment4 Hierarchical Transformations and Pickin| 已完成，Picking部分采用raycast方式 |  |
 | Assignment5 Keyframe Animation| 初步完成，不少地方需要改进 |   |
 | Assignment6 Materials and Bump Mapping| 初步完成，Picking部分未完成 |    |
 | Assignment7 Meshes and Subdivision Surfaces| 初步完成，Catmull-clark规则的实现需要改进 |    |
