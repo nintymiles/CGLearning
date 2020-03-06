@@ -215,17 +215,18 @@ static float computeArcballScale(const Cvec4 objectRbtOrigin){
 
 static RigTForm getEyeRbt(){
     RigTForm eyeRbt;
+    eyeRbt = getPathAccumRbt(g_world, g_skyNode);
     if(g_activeEyeFrame == 1){
-        g_currentPickedRbtNode = g_skyNode;
-        eyeRbt = getPathAccumRbt(g_world, g_skyNode);
+//        g_currentPickedRbtNode = g_skyNode;
+        //eyeRbt = getPathAccumRbt(g_world, g_skyNode);
     }else if(g_activeEyeFrame == 2){
         //when you get a path from g_world to g_robot1Node,the path is a direct path and just includes g_world,g_robot1Node.
         // make g_skyCamera RBT left multiply the path to get an appropriate view angle.
-        g_currentPickedRbtNode = g_robot1Node;
-        eyeRbt = getPathAccumRbt(g_world, g_skyNode) * getPathAccumRbt(g_world, g_robot1Node);
+//        g_currentPickedRbtNode = g_robot1Node;
+        //eyeRbt = getPathAccumRbt(g_world, g_skyNode) * getPathAccumRbt(g_world, g_robot1Node);
     }else{
-        g_currentPickedRbtNode=g_robot2Node;
-        eyeRbt = getPathAccumRbt(g_world, g_skyNode) * getPathAccumRbt(g_world, g_robot2Node);
+//        g_currentPickedRbtNode=g_robot2Node;
+        //eyeRbt = getPathAccumRbt(g_world, g_skyNode) * getPathAccumRbt(g_world, g_robot2Node);
     }
     return eyeRbt;
 }
@@ -267,14 +268,14 @@ static void drawStuff(const ShaderState& curSS, bool picking){
         g_sphere->draw(curSS);
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // draw filled again
     }else {
-        RaycastPicker picker(invEyeRbt, curSS,g_currentPickedRbtNode,g_world,getEyeRbt(),RigTForm());
+        RaycastPicker picker(invEyeRbt, curSS,g_currentPickedRbtNode,g_world,getEyeRbt(),g_motionRbt);
         Cvec3 screenPos = Cvec3(g_pickingMouseX, g_pickingMouseY,0);
         picker.setRayCaster(screenPos, g_windowWidth, g_windowHeight, rigTFormToMatrix(eyeRbt), projmat, true);
         g_world->accept(picker);
         //glFlush();
-        //g_currentPickedRbtNode = picker.getRbtNodeAtXY(g_pickingMouseX, g_pickingMouseY);
-        //if (g_currentPickedRbtNode == g_groundNode)
-        g_currentPickedRbtNode = shared_ptr<SgRbtNode>();   // set to NULL
+        g_currentPickedRbtNode = picker.getSelectedRbtNode();
+        if (g_currentPickedRbtNode == g_groundNode)
+            g_currentPickedRbtNode = NULL;   // set to NULL
     }
 }
 
@@ -329,8 +330,8 @@ static void motion(const float x, const float y) {
     
     RigTForm m;
     if (g_mouseLClickButton && !g_mouseRClickButton) { // left button down?
-  //    m = RigTForm::makeXRotation(-dy) * RigTForm::makeYRotation(dx);
-        m = RigTForm(arcballQuat);
+      m = RigTForm::makeXRotation(-dy) * RigTForm::makeYRotation(dx);
+//        m = RigTForm(arcballQuat);
     }
     else if (g_mouseRClickButton && !g_mouseLClickButton) { // right button down?
         m = RigTForm(Cvec3(dx, dy, 0) * g_arcballScale/**0.01*/);
@@ -342,18 +343,18 @@ static void motion(const float x, const float y) {
     
     
     if (g_mouseClickDown) {
-        if(g_activeCube == 0){
-            //g_objectRbt[0] *= m; // Simply right-multiply is WRONG
-            g_auxiliaryRbt = makeMixedFrame(g_objectRbt[0], g_skyRbt);
-            g_objectRbt[0] = doQtoOwrtA(m, g_objectRbt[0], g_auxiliaryRbt);
-            
-        }else if(g_activeCube == 1){
-            g_auxiliaryRbt = makeMixedFrame(g_objectRbt[1], g_skyRbt);
-            g_objectRbt[1] = doQtoOwrtA(m, g_objectRbt[1], g_auxiliaryRbt);
-        }else{
-            RigTForm invMouseMotionMatrix = inv(m);
-            g_skyRbt = doQtoOwrtA(m, g_skyRbt, g_skyRbt);
-        }
+//        if(g_activeCube == 0){
+//            //g_objectRbt[0] *= m; // Simply right-multiply is WRONG
+//            g_auxiliaryRbt = makeMixedFrame(g_objectRbt[0], g_skyRbt);
+//            g_objectRbt[0] = doQtoOwrtA(m, g_objectRbt[0], g_auxiliaryRbt);
+//
+//        }else if(g_activeCube == 1){
+//            g_auxiliaryRbt = makeMixedFrame(g_objectRbt[1], g_skyRbt);
+//            g_objectRbt[1] = doQtoOwrtA(m, g_objectRbt[1], g_auxiliaryRbt);
+//        }else{
+//            //RigTForm invMouseMotionMatrix = inv(m);
+//            //g_skyRbt = doQtoOwrtA(m, g_skyRbt, g_skyRbt);
+//        }
         g_motionRbt = m;
         
     }

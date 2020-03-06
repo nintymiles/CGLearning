@@ -81,8 +81,8 @@ bool RaycastPicker::postVisit(SgShapeNode& node) {
 vector<IntersectionData> RaycastPicker::raycast(RayCaster* rayCaster,SgShapeNode& node){
     
     shared_ptr<SgNode> baseNode = nodeStack_.back();
-    shared_ptr<SgRbtNode> currentNode = dynamic_pointer_cast<SgRbtNode>(baseNode);
-    RigTForm nodeWorldRbt = getPathAccumRbt(worldNode_, currentNode,0,1);
+    shared_ptr<SgRbtNode> currentRbtNode = dynamic_pointer_cast<SgRbtNode>(baseNode);
+    RigTForm nodeWorldRbt = getPathAccumRbt(worldNode_, currentRbtNode,0,1);
     
     SgGeometryShapeNode<Geometry>& geometryNode = dynamic_cast<SgGeometryShapeNode<Geometry>&>(node);
     
@@ -99,30 +99,25 @@ vector<IntersectionData> RaycastPicker::raycast(RayCaster* rayCaster,SgShapeNode
     // 先进行了ray-sphere相交检测
     Ray *ray = rayCaster->ray;
     
-    vector<IntersectionData> intersectPoints = ray->intersectSphere(&sphere);
-    //if (intersectPoints.size()==0) return {};
-    if(intersectPoints.size()>0){
-        return intersectPoints;
-    }
-    
-//    box.applyMatrix4(matrixWorld);
-//    intersectPoints = ray->intersectBox(&box);
+//    vector<IntersectionData> intersectPoints = ray->intersectSphere(&sphere);
+//    //if (intersectPoints.size()==0) return {};
 //    if(intersectPoints.size()>0){
 //        return intersectPoints;
 //    }
+   
+    //here ray-box test is a bit more accurate
+    box.applyMatrix4(matrixWorld);
+    vector<IntersectionData> intersectPoints = ray->intersectBox(&box);
+    if(intersectPoints.size()>0){
+        selectedRbtNode_ = currentRbtNode;
+        return intersectPoints;
+    }
     
     return {};
 }
 
-//此处初始化raycaster，然后对几何体执行raycast动作
-shared_ptr<SgRbtNode> RaycastPicker::getRbtNodeAtXY(int x, int y) {
-    vector<char> image(3);
-    PackedPixel pixel;
-//    glReadBuffer(GL_BACK);
-    glReadPixels(x,y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, &pixel);
-    int colorId = colorToId(pixel);
-    shared_ptr<SgRbtNode> jointNode = find(colorId);
-  return jointNode;
+shared_ptr<SgRbtNode> RaycastPicker::getSelectedRbtNode(){
+    return selectedRbtNode_;
 }
 
 //------------------

@@ -48,8 +48,8 @@ public:
   virtual bool visit(SgShapeNode& node);
   virtual bool postVisit(SgShapeNode& node);
     virtual void setRayCaster(Cvec3 screenPos,float width,float height,Matrix4 eyeMat,Matrix4 projMat,bool isPerspective);
-
-  shared_ptr<SgRbtNode> getRbtNodeAtXY(int x, int y);
+    
+    shared_ptr<SgRbtNode> getSelectedRbtNode();
     
     vector<IntersectionData> raycast(RayCaster* raycater,SgShapeNode& node);
 };

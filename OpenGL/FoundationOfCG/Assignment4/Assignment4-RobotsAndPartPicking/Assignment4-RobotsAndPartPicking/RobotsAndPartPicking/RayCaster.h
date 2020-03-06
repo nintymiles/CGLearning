@@ -33,8 +33,8 @@ public:
     //设置screen-ray
     //On MacOS, mouse coordinate range is actually one quarter of real screen resolution
     void setFromCamera(Cvec3 screenPos,float width,float height,Matrix4 eyeMat,Matrix4 projMat,bool isPerspective){
-        float rayOriginX = (screenPos[0]/width) * 2 - 1;
-        float rayOriginY = (screenPos[1]/height) * 2 - 1;
+        float rayOriginX = (screenPos[0]/width) * 2 - 1 + 1/width;
+        float rayOriginY = (screenPos[1]/height) * 2 - 1 + 1/height;
         
         if(isPerspective){
             //Matrix4 viewMat= inv(eyeMat);
