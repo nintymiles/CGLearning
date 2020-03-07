@@ -51,14 +51,15 @@ public:
     }
     
     //构造函数，从vector类型和基础类型共同构造，基础类型默认初始值为0
-    //参数vector类型的数目可以大于也可以小于当前构造的部件，总之，根据两者的最小部件数目进行两个vector之间的对应部件复制，若赋值部件数目小于当前vector的数目，则用扩展值单一填充，扩展值默认为0
+    //参数vector类型的数目可以大于也可以小于当前构造的部件，总之，根据两者的最小部件数目进行
+    //两个vector之间的对应部件复制，若赋值部件数目小于当前vector的数目，则用扩展值单一填充，扩展值默认为0
     // either truncate if m < n, or extend with extendValue
     template<int m>
     explicit Cvec(const Cvec<T, m>& v, const T& extendValue = T(0)) {
-        for (int i = 0; i < std::min(m, n); ++i) {
+        for (int i = 0; i < fmin(m, n); ++i) {
             d_[i] = v[i];
         }
-        for (int i = std::min(m, n); i < n; ++i) {
+        for (int i = fmin(m, n); i < n; ++i) {
             d_[i] = extendValue;
         }
     }
