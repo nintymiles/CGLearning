@@ -77,8 +77,6 @@
 		5C9E4BF52418E39100BB9AE4 /* Cubemap.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C9E4BF22418E34000BB9AE4 /* Cubemap.vsh */; };
 		5CA558A42419C06400ABA6E5 /* TexturedTeapotObjModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CA558A32419C06400ABA6E5 /* TexturedTeapotObjModel.cpp */; };
 		5CA558A6241A0F7E00ABA6E5 /* greenleaves.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5CA558A5241A0F1700ABA6E5 /* greenleaves.png */; };
-		5CA558AB241A1ED200ABA6E5 /* EyeFrameCubemap.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5CA558AA241A1C6C00ABA6E5 /* EyeFrameCubemap.fsh */; };
-		5CA558AC241A1ED200ABA6E5 /* EyeFrameCubemap.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5CA558A9241A1C6C00ABA6E5 /* EyeFrameCubemap.vsh */; };
 		5CA6586921F0CA790087B7F8 /* scenegraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CA6586121F0CA790087B7F8 /* scenegraph.cpp */; };
 		5CDA259421EF72CB00F2A6D1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CDA259321EF72CB00F2A6D1 /* main.cpp */; };
 		5CF9491821FEA0F1004D711B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CF9491721FEA0F1004D711B /* Cocoa.framework */; };
@@ -104,8 +102,6 @@
 			dstPath = ./shaders;
 			dstSubfolderSpec = 16;
 			files = (
-				5CA558AB241A1ED200ABA6E5 /* EyeFrameCubemap.fsh in CopyFiles */,
-				5CA558AC241A1ED200ABA6E5 /* EyeFrameCubemap.vsh in CopyFiles */,
 				5C09326924192FC900892BF0 /* teapot.obj in CopyFiles */,
 				5C9E4BF42418E39100BB9AE4 /* Cubemap.fsh in CopyFiles */,
 				5C9E4BF52418E39100BB9AE4 /* Cubemap.vsh in CopyFiles */,
@@ -209,8 +205,6 @@
 		5CA558A22419C06400ABA6E5 /* TexturedTeapotObjModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexturedTeapotObjModel.h; sourceTree = "<group>"; };
 		5CA558A32419C06400ABA6E5 /* TexturedTeapotObjModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TexturedTeapotObjModel.cpp; sourceTree = "<group>"; };
 		5CA558A5241A0F1700ABA6E5 /* greenleaves.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = greenleaves.png; sourceTree = "<group>"; };
-		5CA558A9241A1C6C00ABA6E5 /* EyeFrameCubemap.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EyeFrameCubemap.vsh; sourceTree = "<group>"; };
-		5CA558AA241A1C6C00ABA6E5 /* EyeFrameCubemap.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EyeFrameCubemap.fsh; sourceTree = "<group>"; };
 		5CA6586121F0CA790087B7F8 /* scenegraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scenegraph.cpp; sourceTree = "<group>"; };
 		5CA6586221F0CA790087B7F8 /* drawer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = drawer.h; sourceTree = "<group>"; };
 		5CA6586521F0CA790087B7F8 /* shadersasst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = shadersasst.h; sourceTree = "<group>"; };
@@ -276,13 +270,11 @@
 		5C800CBC21FA81C200DB8452 /* shaders */ = {
 			isa = PBXGroup;
 			children = (
-				5CA558AA241A1C6C00ABA6E5 /* EyeFrameCubemap.fsh */,
-				5CA558A9241A1C6C00ABA6E5 /* EyeFrameCubemap.vsh */,
-				5C9E4BF32418E34000BB9AE4 /* Cubemap.fsh */,
-				5C9E4BF22418E34000BB9AE4 /* Cubemap.vsh */,
 				5C09326824191C4A00892BF0 /* teapot.obj */,
 				5C1C7717241718D80047B11B /* InstancedPhongShader.fsh */,
 				5C1C7718241718D90047B11B /* InstancedPhongShader.vsh */,
+				5C9E4BF32418E34000BB9AE4 /* Cubemap.fsh */,
+				5C9E4BF22418E34000BB9AE4 /* Cubemap.vsh */,
 				5C278EC62415CA7300D53A67 /* ShaderPlain.fsh */,
 				5C278EC42415CA7300D53A67 /* ShaderPlain.vsh */,
 				5C278EC52415CA7300D53A67 /* ShaderPlainV2.fsh */,

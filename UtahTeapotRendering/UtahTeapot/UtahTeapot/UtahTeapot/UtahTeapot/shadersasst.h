@@ -140,10 +140,8 @@ struct TexturedTeapotShaderState{
     TexturedTeapotShaderState() {
 //        static std::string vsfn = "./shaders/Cubemap.vsh";
 //        static std::string fsfn = "./shaders/Cubemap.fsh";
-        static std::string vsfn = "./shaders/EyeFrameCubemap.vsh";
-        static std::string fsfn = "./shaders/EyeFrameCubemap.fsh";
-//        static std::string vsfn = "./shaders/ShaderPlain.vsh";
-//        static std::string fsfn = "./shaders/ShaderPlain.fsh";
+        static std::string vsfn = "./shaders/ShaderPlain.vsh";
+        static std::string fsfn = "./shaders/ShaderPlain.fsh";
         
         readAndCompileShader(program, vsfn.c_str(), fsfn.c_str());
         
