@@ -319,7 +319,7 @@ static void motion(const float x, const float y) {
     Cvec2 startScreenPos = Cvec2(g_mouseClickX,g_mouseClickY);
     Cvec2 endScreenPos = Cvec2(x,g_windowHeight - y - 1); //convert from window coordnate to OpenGL window coordinate.
     Cvec2 centerScreenPos = getScreenSpaceCoord(RigTForm().getTranslation(),makeProjectionMatrix(), 0.0, 0.0, g_windowWidth, g_windowHeight);
-    Quat arcballQuat = arcball(Cvec3(centerScreenPos,0), g_arcballScreenRadius, startScreenPos, endScreenPos);
+    Quat arcballQuat = trackball(Cvec3(centerScreenPos,0), g_arcballScreenRadius, startScreenPos, endScreenPos);
     
     const double dx = x - g_mouseClickX;
     const double dy = g_windowHeight - y - 1 - g_mouseClickY;
@@ -328,8 +328,8 @@ static void motion(const float x, const float y) {
     
     RigTForm m;
     if (g_mouseLClickButton && !g_mouseRClickButton) { // left button down?
-      m = RigTForm::makeXRotation(-dy) * RigTForm::makeYRotation(dx);
-//        m = RigTForm(arcballQuat);
+      //m = RigTForm::makeXRotation(-dy) * RigTForm::makeYRotation(dx);
+        m = RigTForm(arcballQuat);
     }
     else if (g_mouseRClickButton && !g_mouseLClickButton) { // right button down?
         m = RigTForm(Cvec3(dx, dy, 0) * g_arcballScale/**0.01*/);

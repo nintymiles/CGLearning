@@ -57,6 +57,7 @@
 		5C234B672413E8AD00B3F073 /* RayCaster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RayCaster.h; sourceTree = "<group>"; };
 		5C234B682413E8AD00B3F073 /* Box.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Box.cpp; sourceTree = "<group>"; };
 		5C54F28821FDA1F000657C36 /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = readme.md; path = ../../../readme.md; sourceTree = "<group>"; };
+		5C7B78982414D8A30027CBB4 /* Geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Geometry.h; sourceTree = "<group>"; };
 		5C800CAA21FA810A00DB8452 /* perfMonitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = perfMonitor.cpp; path = ../../../../../../BaseFramework/perfMonitor/perfMonitor.cpp; sourceTree = "<group>"; };
 		5C800CAB21FA810A00DB8452 /* perfMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = perfMonitor.h; path = ../../../../../../BaseFramework/perfMonitor/perfMonitor.h; sourceTree = "<group>"; };
 		5C800CAD21FA812600DB8452 /* quat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = quat.h; path = ../../../../../../BaseFramework/quat/quat.h; sourceTree = "<group>"; };
@@ -82,7 +83,6 @@
 		5C800CDA21FB12E600DB8452 /* picker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = picker.h; path = "Assignment4-RobotsAndPartPicking/RobotsAndPartPicking/picker.h"; sourceTree = SOURCE_ROOT; };
 		5C9DB484240FB2E500EDF81C /* RayCastPicker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RayCastPicker.cpp; sourceTree = "<group>"; };
 		5C9DB485240FB2E500EDF81C /* RayCastPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RayCastPicker.h; sourceTree = "<group>"; };
-		5C9DB48724108DA500EDF81C /* Geometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Geometry.h; path = "Assignment4-RobotsAndPartPicking/RobotsAndPartPicking/Geometry.h"; sourceTree = SOURCE_ROOT; };
 		5CA6586121F0CA790087B7F8 /* scenegraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scenegraph.cpp; sourceTree = "<group>"; };
 		5CA6586221F0CA790087B7F8 /* drawer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = drawer.h; sourceTree = "<group>"; };
 		5CA6586521F0CA790087B7F8 /* asstcommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asstcommon.h; sourceTree = "<group>"; };
@@ -174,7 +174,7 @@
 				5C9DB477240FA99600EDF81C /* raycast */,
 				5CA6586121F0CA790087B7F8 /* scenegraph.cpp */,
 				5CA6586821F0CA790087B7F8 /* scenegraph.h */,
-				5C9DB48724108DA500EDF81C /* Geometry.h */,
+				5C7B78982414D8A30027CBB4 /* Geometry.h */,
 				5CDA259321EF72CB00F2A6D1 /* assignment4-main.cpp */,
 			);
 			path = RobotsAndPartPicking;
