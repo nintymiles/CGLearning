@@ -1,0 +1,761 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5C1C771D2417452C0047B11B /* ppm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CAF3E902415ED1B00D4D4D9 /* ppm.cpp */; };
+		5C1C771E2417452C0047B11B /* Box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CAF3E9C2415EE4500D4D4D9 /* Box.cpp */; };
+		5C1C771F2417452C0047B11B /* FileWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC4A21E83842003B5B50 /* FileWrapper.mm */; };
+		5C1C77212417452C0047B11B /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC2F21E836AB003B5B50 /* ViewController.mm */; };
+		5C1C77222417452C0047B11B /* glsupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CAF3E8C2415EC7000D4D4D9 /* glsupport.cpp */; };
+		5C1C77232417452C0047B11B /* perfMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CAF3E852415EC1500D4D4D9 /* perfMonitor.cpp */; };
+		5C1C77242417452C0047B11B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC3A21E836AC003B5B50 /* main.m */; };
+		5C1C77252417452C0047B11B /* NativeTemplate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC4921E83842003B5B50 /* NativeTemplate.cpp */; };
+		5C1C77262417452C0047B11B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC2C21E836AB003B5B50 /* AppDelegate.m */; };
+		5C1C77272417452C0047B11B /* Sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CAF3E9E2415EE4500D4D4D9 /* Sphere.cpp */; };
+		5C1C772B2417452C0047B11B /* PhongShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 5CAF3EA32415F0E200D4D4D9 /* PhongShader.vsh */; };
+		5C1C772C2417452C0047B11B /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5CE2BC6521E83DD9003B5B50 /* ViewController.xib */; };
+		5C1C772D2417452C0047B11B /* PhongShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 5CAF3EA22415F0E200D4D4D9 /* PhongShader.fsh */; };
+		5C1C77302417452C0047B11B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5CE2BC7121E84197003B5B50 /* LaunchScreen.storyboard */; };
+		5C1C77322417452C0047B11B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CE2BC3421E836AC003B5B50 /* Assets.xcassets */; };
+		5C1C77332417452C0047B11B /* teapot.inl in Resources */ = {isa = PBXBuildFile; fileRef = 5CAF3E962415EDA500D4D4D9 /* teapot.inl */; };
+		5C1C773E241745AB0047B11B /* moreteapots.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5C1C773A241745AB0047B11B /* moreteapots.mm */; };
+		5C1C773F241745AB0047B11B /* MoreTeapotsModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C1C773C241745AB0047B11B /* MoreTeapotsModel.cpp */; };
+		5C1C7743241747C70047B11B /* InstancedPhongShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 5C1C7741241747C70047B11B /* InstancedPhongShader.vsh */; };
+		5C1C7744241747C70047B11B /* InstancedPhongShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 5C1C7742241747C70047B11B /* InstancedPhongShader.fsh */; };
+		5C9E4B772418A75B00BB9AE4 /* ppm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CAF3E902415ED1B00D4D4D9 /* ppm.cpp */; };
+		5C9E4B792418A75B00BB9AE4 /* Box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CAF3E9C2415EE4500D4D4D9 /* Box.cpp */; };
+		5C9E4B7A2418A75B00BB9AE4 /* FileWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC4A21E83842003B5B50 /* FileWrapper.mm */; };
+		5C9E4B7B2418A75B00BB9AE4 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC2F21E836AB003B5B50 /* ViewController.mm */; };
+		5C9E4B7C2418A75B00BB9AE4 /* glsupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CAF3E8C2415EC7000D4D4D9 /* glsupport.cpp */; };
+		5C9E4B7D2418A75B00BB9AE4 /* perfMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CAF3E852415EC1500D4D4D9 /* perfMonitor.cpp */; };
+		5C9E4B7E2418A75B00BB9AE4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC3A21E836AC003B5B50 /* main.m */; };
+		5C9E4B802418A75B00BB9AE4 /* NativeTemplate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC4921E83842003B5B50 /* NativeTemplate.cpp */; };
+		5C9E4B812418A75B00BB9AE4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC2C21E836AB003B5B50 /* AppDelegate.m */; };
+		5C9E4B822418A75B00BB9AE4 /* Sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CAF3E9E2415EE4500D4D4D9 /* Sphere.cpp */; };
+		5C9E4B852418A75B00BB9AE4 /* PhongShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 5CAF3EA32415F0E200D4D4D9 /* PhongShader.vsh */; };
+		5C9E4B862418A75B00BB9AE4 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5CE2BC6521E83DD9003B5B50 /* ViewController.xib */; };
+		5C9E4B872418A75B00BB9AE4 /* PhongShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 5CAF3EA22415F0E200D4D4D9 /* PhongShader.fsh */; };
+		5C9E4B882418A75B00BB9AE4 /* InstancedPhongShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 5C1C7742241747C70047B11B /* InstancedPhongShader.fsh */; };
+		5C9E4B892418A75B00BB9AE4 /* InstancedPhongShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 5C1C7741241747C70047B11B /* InstancedPhongShader.vsh */; };
+		5C9E4B8A2418A75B00BB9AE4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5CE2BC7121E84197003B5B50 /* LaunchScreen.storyboard */; };
+		5C9E4B8B2418A75B00BB9AE4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CE2BC3421E836AC003B5B50 /* Assets.xcassets */; };
+		5C9E4B8C2418A75B00BB9AE4 /* teapot.inl in Resources */ = {isa = PBXBuildFile; fileRef = 5CAF3E962415EDA500D4D4D9 /* teapot.inl */; };
+		5C9E4B962418A7ED00BB9AE4 /* TexturedTeapotModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C9E4B942418A7ED00BB9AE4 /* TexturedTeapotModel.cpp */; };
+		5C9E4B972418A7ED00BB9AE4 /* TeaturedTeapot.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5C9E4B952418A7ED00BB9AE4 /* TeaturedTeapot.mm */; };
+		5C9E4B9A2418B84100BB9AE4 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C9E4B982418B84100BB9AE4 /* Texture.cpp */; };
+		5C9E4BA22418BF6800BB9AE4 /* Cubemap.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 5C9E4B9E2418BF6800BB9AE4 /* Cubemap.vsh */; };
+		5C9E4BA32418BF6800BB9AE4 /* Cubemap.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 5C9E4B9F2418BF6800BB9AE4 /* Cubemap.fsh */; };
+		5C9E4BAC2418C1CA00BB9AE4 /* bottom.tga in Resources */ = {isa = PBXBuildFile; fileRef = 5C9E4BA52418C1CA00BB9AE4 /* bottom.tga */; };
+		5C9E4BAD2418C1CA00BB9AE4 /* top.tga in Resources */ = {isa = PBXBuildFile; fileRef = 5C9E4BA62418C1CA00BB9AE4 /* top.tga */; };
+		5C9E4BAE2418C1CA00BB9AE4 /* left.tga in Resources */ = {isa = PBXBuildFile; fileRef = 5C9E4BA72418C1CA00BB9AE4 /* left.tga */; };
+		5C9E4BAF2418C1CA00BB9AE4 /* android_pie.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5C9E4BA82418C1CA00BB9AE4 /* android_pie.bmp */; };
+		5C9E4BB02418C1CA00BB9AE4 /* front.tga in Resources */ = {isa = PBXBuildFile; fileRef = 5C9E4BA92418C1CA00BB9AE4 /* front.tga */; };
+		5C9E4BB12418C1CA00BB9AE4 /* right.tga in Resources */ = {isa = PBXBuildFile; fileRef = 5C9E4BAA2418C1CA00BB9AE4 /* right.tga */; };
+		5C9E4BB22418C1CA00BB9AE4 /* back.tga in Resources */ = {isa = PBXBuildFile; fileRef = 5C9E4BAB2418C1CA00BB9AE4 /* back.tga */; };
+		5C9E4BB82418DA1F00BB9AE4 /* portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C9E4BB72418DA1F00BB9AE4 /* portrait.png */; };
+		5CA558A8241A156500ABA6E5 /* renderwrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5CA558A7241A156400ABA6E5 /* renderwrapper.mm */; };
+		5CAF3E872415EC1500D4D4D9 /* perfMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CAF3E852415EC1500D4D4D9 /* perfMonitor.cpp */; };
+		5CAF3E8E2415EC7000D4D4D9 /* glsupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CAF3E8C2415EC7000D4D4D9 /* glsupport.cpp */; };
+		5CAF3E922415ED1B00D4D4D9 /* ppm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CAF3E902415ED1B00D4D4D9 /* ppm.cpp */; };
+		5CAF3E992415EDA500D4D4D9 /* TeapotModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CAF3E952415EDA500D4D4D9 /* TeapotModel.cpp */; };
+		5CAF3E9A2415EDA500D4D4D9 /* teapot.inl in Resources */ = {isa = PBXBuildFile; fileRef = 5CAF3E962415EDA500D4D4D9 /* teapot.inl */; };
+		5CAF3EA02415EE4600D4D4D9 /* Box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CAF3E9C2415EE4500D4D4D9 /* Box.cpp */; };
+		5CAF3EA12415EE4600D4D4D9 /* Sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CAF3E9E2415EE4500D4D4D9 /* Sphere.cpp */; };
+		5CAF3EA42415F0E200D4D4D9 /* PhongShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 5CAF3EA22415F0E200D4D4D9 /* PhongShader.fsh */; };
+		5CAF3EA52415F0E200D4D4D9 /* PhongShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 5CAF3EA32415F0E200D4D4D9 /* PhongShader.vsh */; };
+		5CE2BC2D21E836AB003B5B50 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC2C21E836AB003B5B50 /* AppDelegate.m */; };
+		5CE2BC3021E836AB003B5B50 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC2F21E836AB003B5B50 /* ViewController.mm */; };
+		5CE2BC3521E836AC003B5B50 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CE2BC3421E836AC003B5B50 /* Assets.xcassets */; };
+		5CE2BC3B21E836AC003B5B50 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC3A21E836AC003B5B50 /* main.m */; };
+		5CE2BC4D21E83842003B5B50 /* NativeTemplate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC4921E83842003B5B50 /* NativeTemplate.cpp */; };
+		5CE2BC4E21E83842003B5B50 /* FileWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC4A21E83842003B5B50 /* FileWrapper.mm */; };
+		5CE2BC6721E83DD9003B5B50 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5CE2BC6521E83DD9003B5B50 /* ViewController.xib */; };
+		5CE2BC7321E84197003B5B50 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5CE2BC7121E84197003B5B50 /* LaunchScreen.storyboard */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		5C1C77372417452C0047B11B /* MoreUtahTeapotsIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoreUtahTeapotsIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5C1C77382417452C0047B11B /* UtahTeapotIOS copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "UtahTeapotIOS copy-Info.plist"; path = "/Users/afighter/Desktop/UteaTeapotIOS-Proj/UtahTeapotIOS/UtahTeapotIOS copy-Info.plist"; sourceTree = "<absolute>"; };
+		5C1C773A241745AB0047B11B /* moreteapots.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = moreteapots.mm; sourceTree = "<group>"; };
+		5C1C773B241745AB0047B11B /* MoreTeapotsModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoreTeapotsModel.h; sourceTree = "<group>"; };
+		5C1C773C241745AB0047B11B /* MoreTeapotsModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MoreTeapotsModel.cpp; sourceTree = "<group>"; };
+		5C1C7741241747C70047B11B /* InstancedPhongShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = InstancedPhongShader.vsh; sourceTree = "<group>"; };
+		5C1C7742241747C70047B11B /* InstancedPhongShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = InstancedPhongShader.fsh; sourceTree = "<group>"; };
+		5C9E4B902418A75B00BB9AE4 /* TexturedUtahTeapotIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TexturedUtahTeapotIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5C9E4B912418A75B00BB9AE4 /* MoreUtahTeapotsIOS copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "MoreUtahTeapotsIOS copy-Info.plist"; path = "/Users/afighter/Desktop/UteaTeapotIOS-Proj/UtahTeapotIOS/MoreUtahTeapotsIOS copy-Info.plist"; sourceTree = "<absolute>"; };
+		5C9E4B932418A7ED00BB9AE4 /* TexturedTeapotModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexturedTeapotModel.h; sourceTree = "<group>"; };
+		5C9E4B942418A7ED00BB9AE4 /* TexturedTeapotModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TexturedTeapotModel.cpp; sourceTree = "<group>"; };
+		5C9E4B952418A7ED00BB9AE4 /* TeaturedTeapot.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TeaturedTeapot.mm; sourceTree = "<group>"; };
+		5C9E4B982418B84100BB9AE4 /* Texture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Texture.cpp; path = UtahTeapot/base/Texture.cpp; sourceTree = "<group>"; };
+		5C9E4B992418B84100BB9AE4 /* Texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Texture.h; path = UtahTeapot/base/Texture.h; sourceTree = "<group>"; };
+		5C9E4B9B2418BAFF00BB9AE4 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stb_image.h; path = UtahTeapot/base/stb_image.h; sourceTree = "<group>"; };
+		5C9E4B9E2418BF6800BB9AE4 /* Cubemap.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Cubemap.vsh; sourceTree = "<group>"; };
+		5C9E4B9F2418BF6800BB9AE4 /* Cubemap.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Cubemap.fsh; sourceTree = "<group>"; };
+		5C9E4BA52418C1CA00BB9AE4 /* bottom.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = bottom.tga; sourceTree = "<group>"; };
+		5C9E4BA62418C1CA00BB9AE4 /* top.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = top.tga; sourceTree = "<group>"; };
+		5C9E4BA72418C1CA00BB9AE4 /* left.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = left.tga; sourceTree = "<group>"; };
+		5C9E4BA82418C1CA00BB9AE4 /* android_pie.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = android_pie.bmp; sourceTree = "<group>"; };
+		5C9E4BA92418C1CA00BB9AE4 /* front.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = front.tga; sourceTree = "<group>"; };
+		5C9E4BAA2418C1CA00BB9AE4 /* right.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = right.tga; sourceTree = "<group>"; };
+		5C9E4BAB2418C1CA00BB9AE4 /* back.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = back.tga; sourceTree = "<group>"; };
+		5C9E4BB72418DA1F00BB9AE4 /* portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = portrait.png; sourceTree = "<group>"; };
+		5CA558A7241A156400ABA6E5 /* renderwrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = renderwrapper.mm; sourceTree = "<group>"; };
+		5CAF3E852415EC1500D4D4D9 /* perfMonitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = perfMonitor.cpp; path = UtahTeapot/base/perfMonitor/perfMonitor.cpp; sourceTree = "<group>"; };
+		5CAF3E862415EC1500D4D4D9 /* perfMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = perfMonitor.h; path = UtahTeapot/base/perfMonitor/perfMonitor.h; sourceTree = "<group>"; };
+		5CAF3E882415EC2700D4D4D9 /* quat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = quat.h; path = UtahTeapot/base/quat/quat.h; sourceTree = "<group>"; };
+		5CAF3E892415EC2700D4D4D9 /* arcball.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = arcball.h; path = UtahTeapot/base/quat/arcball.h; sourceTree = "<group>"; };
+		5CAF3E8A2415EC2700D4D4D9 /* rigtform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rigtform.h; path = UtahTeapot/base/quat/rigtform.h; sourceTree = "<group>"; };
+		5CAF3E8B2415EC4E00D4D4D9 /* cvec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cvec.h; path = UtahTeapot/base/cvec.h; sourceTree = "<group>"; };
+		5CAF3E8C2415EC7000D4D4D9 /* glsupport.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glsupport.cpp; path = UtahTeapot/base/glsupport.cpp; sourceTree = "<group>"; };
+		5CAF3E8D2415EC7000D4D4D9 /* glsupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glsupport.h; path = UtahTeapot/base/glsupport.h; sourceTree = "<group>"; };
+		5CAF3E8F2415EC7F00D4D4D9 /* linmath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = linmath.h; path = UtahTeapot/base/linmath.h; sourceTree = "<group>"; };
+		5CAF3E902415ED1B00D4D4D9 /* ppm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ppm.cpp; path = UtahTeapot/base/ppm.cpp; sourceTree = "<group>"; };
+		5CAF3E912415ED1B00D4D4D9 /* ppm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ppm.h; path = UtahTeapot/base/ppm.h; sourceTree = "<group>"; };
+		5CAF3E932415ED4800D4D4D9 /* matrix4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = matrix4.h; path = UtahTeapot/base/matrix4.h; sourceTree = "<group>"; };
+		5CAF3E942415ED6700D4D4D9 /* geometrymaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = geometrymaker.h; path = UtahTeapot/geometrymaker.h; sourceTree = "<group>"; };
+		5CAF3E952415EDA500D4D4D9 /* TeapotModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TeapotModel.cpp; path = UtahTeapot/TeapotModel.cpp; sourceTree = "<group>"; };
+		5CAF3E962415EDA500D4D4D9 /* teapot.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = teapot.inl; path = UtahTeapot/teapot.inl; sourceTree = "<group>"; };
+		5CAF3E972415EDA500D4D4D9 /* shadersasst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = shadersasst.h; path = UtahTeapot/shadersasst.h; sourceTree = "<group>"; };
+		5CAF3E982415EDA500D4D4D9 /* TeapotModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TeapotModel.h; path = UtahTeapot/TeapotModel.h; sourceTree = "<group>"; };
+		5CAF3E9B2415EE1400D4D4D9 /* Geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Geometry.h; path = UtahTeapot/Geometry.h; sourceTree = "<group>"; };
+		5CAF3E9C2415EE4500D4D4D9 /* Box.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Box.cpp; path = UtahTeapot/raycast/Box.cpp; sourceTree = "<group>"; };
+		5CAF3E9D2415EE4500D4D4D9 /* Box.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Box.h; path = UtahTeapot/raycast/Box.h; sourceTree = "<group>"; };
+		5CAF3E9E2415EE4500D4D4D9 /* Sphere.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sphere.cpp; path = UtahTeapot/raycast/Sphere.cpp; sourceTree = "<group>"; };
+		5CAF3E9F2415EE4500D4D4D9 /* Sphere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sphere.h; path = UtahTeapot/raycast/Sphere.h; sourceTree = "<group>"; };
+		5CAF3EA22415F0E200D4D4D9 /* PhongShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PhongShader.fsh; sourceTree = "<group>"; };
+		5CAF3EA32415F0E200D4D4D9 /* PhongShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PhongShader.vsh; sourceTree = "<group>"; };
+		5CE2BC2821E836AB003B5B50 /* UtahTeapotIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UtahTeapotIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5CE2BC2B21E836AB003B5B50 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		5CE2BC2C21E836AB003B5B50 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		5CE2BC2E21E836AB003B5B50 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		5CE2BC2F21E836AB003B5B50 /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
+		5CE2BC3421E836AC003B5B50 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5CE2BC3921E836AC003B5B50 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5CE2BC3A21E836AC003B5B50 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		5CE2BC4721E83842003B5B50 /* FileWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileWrapper.h; sourceTree = "<group>"; };
+		5CE2BC4821E83842003B5B50 /* NativeTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NativeTemplate.h; sourceTree = "<group>"; };
+		5CE2BC4921E83842003B5B50 /* NativeTemplate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NativeTemplate.cpp; sourceTree = "<group>"; };
+		5CE2BC4A21E83842003B5B50 /* FileWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FileWrapper.mm; sourceTree = "<group>"; };
+		5CE2BC6521E83DD9003B5B50 /* ViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ViewController.xib; sourceTree = "<group>"; };
+		5CE2BC7221E84197003B5B50 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5C1C77292417452C0047B11B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5C9E4B832418A75B00BB9AE4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5CE2BC2521E836AB003B5B50 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5C1C7739241745AB0047B11B /* MoreTeapots */ = {
+			isa = PBXGroup;
+			children = (
+				5C1C773A241745AB0047B11B /* moreteapots.mm */,
+				5C1C773B241745AB0047B11B /* MoreTeapotsModel.h */,
+				5C1C773C241745AB0047B11B /* MoreTeapotsModel.cpp */,
+			);
+			name = MoreTeapots;
+			path = UtahTeapot/MoreTeapots;
+			sourceTree = "<group>";
+		};
+		5C9E4B922418A7ED00BB9AE4 /* TexturedTeapot */ = {
+			isa = PBXGroup;
+			children = (
+				5C9E4BA42418C1CA00BB9AE4 /* Textures */,
+				5C9E4B932418A7ED00BB9AE4 /* TexturedTeapotModel.h */,
+				5C9E4B942418A7ED00BB9AE4 /* TexturedTeapotModel.cpp */,
+				5C9E4B952418A7ED00BB9AE4 /* TeaturedTeapot.mm */,
+			);
+			name = TexturedTeapot;
+			path = UtahTeapot/TexturedTeapot;
+			sourceTree = "<group>";
+		};
+		5C9E4BA42418C1CA00BB9AE4 /* Textures */ = {
+			isa = PBXGroup;
+			children = (
+				5C9E4BB72418DA1F00BB9AE4 /* portrait.png */,
+				5C9E4BA52418C1CA00BB9AE4 /* bottom.tga */,
+				5C9E4BA62418C1CA00BB9AE4 /* top.tga */,
+				5C9E4BA72418C1CA00BB9AE4 /* left.tga */,
+				5C9E4BA82418C1CA00BB9AE4 /* android_pie.bmp */,
+				5C9E4BA92418C1CA00BB9AE4 /* front.tga */,
+				5C9E4BAA2418C1CA00BB9AE4 /* right.tga */,
+				5C9E4BAB2418C1CA00BB9AE4 /* back.tga */,
+			);
+			path = Textures;
+			sourceTree = "<group>";
+		};
+		5CE2BC1F21E836AB003B5B50 = {
+			isa = PBXGroup;
+			children = (
+				5CE2BC2A21E836AB003B5B50 /* UtahTeapotIOS */,
+				5CE2BC2921E836AB003B5B50 /* Products */,
+				5C1C77382417452C0047B11B /* UtahTeapotIOS copy-Info.plist */,
+				5C9E4B912418A75B00BB9AE4 /* MoreUtahTeapotsIOS copy-Info.plist */,
+			);
+			sourceTree = "<group>";
+		};
+		5CE2BC2921E836AB003B5B50 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5CE2BC2821E836AB003B5B50 /* UtahTeapotIOS.app */,
+				5C1C77372417452C0047B11B /* MoreUtahTeapotsIOS.app */,
+				5C9E4B902418A75B00BB9AE4 /* TexturedUtahTeapotIOS.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5CE2BC2A21E836AB003B5B50 /* UtahTeapotIOS */ = {
+			isa = PBXGroup;
+			children = (
+				5CAF3E852415EC1500D4D4D9 /* perfMonitor.cpp */,
+				5CAF3E862415EC1500D4D4D9 /* perfMonitor.h */,
+				5CAF3E892415EC2700D4D4D9 /* arcball.h */,
+				5CAF3E882415EC2700D4D4D9 /* quat.h */,
+				5CAF3E8A2415EC2700D4D4D9 /* rigtform.h */,
+				5CAF3E8F2415EC7F00D4D4D9 /* linmath.h */,
+				5CAF3E932415ED4800D4D4D9 /* matrix4.h */,
+				5CAF3E8C2415EC7000D4D4D9 /* glsupport.cpp */,
+				5CAF3E8D2415EC7000D4D4D9 /* glsupport.h */,
+				5C9E4B9B2418BAFF00BB9AE4 /* stb_image.h */,
+				5C9E4B982418B84100BB9AE4 /* Texture.cpp */,
+				5C9E4B992418B84100BB9AE4 /* Texture.h */,
+				5CAF3E8B2415EC4E00D4D4D9 /* cvec.h */,
+				5CAF3E902415ED1B00D4D4D9 /* ppm.cpp */,
+				5CAF3E912415ED1B00D4D4D9 /* ppm.h */,
+				5CAF3E942415ED6700D4D4D9 /* geometrymaker.h */,
+				5CAF3E9B2415EE1400D4D4D9 /* Geometry.h */,
+				5CAF3E9C2415EE4500D4D4D9 /* Box.cpp */,
+				5CAF3E9D2415EE4500D4D4D9 /* Box.h */,
+				5CAF3E9E2415EE4500D4D4D9 /* Sphere.cpp */,
+				5CAF3E9F2415EE4500D4D4D9 /* Sphere.h */,
+				5CA558A7241A156400ABA6E5 /* renderwrapper.mm */,
+				5CAF3E972415EDA500D4D4D9 /* shadersasst.h */,
+				5CAF3E962415EDA500D4D4D9 /* teapot.inl */,
+				5CAF3E952415EDA500D4D4D9 /* TeapotModel.cpp */,
+				5CAF3E982415EDA500D4D4D9 /* TeapotModel.h */,
+				5C9E4B922418A7ED00BB9AE4 /* TexturedTeapot */,
+				5C1C7739241745AB0047B11B /* MoreTeapots */,
+				5CE2BC6A21E83FDE003B5B50 /* shaders */,
+				5CE2BC2B21E836AB003B5B50 /* AppDelegate.h */,
+				5CE2BC2C21E836AB003B5B50 /* AppDelegate.m */,
+				5CE2BC2E21E836AB003B5B50 /* ViewController.h */,
+				5CE2BC2F21E836AB003B5B50 /* ViewController.mm */,
+				5CE2BC6521E83DD9003B5B50 /* ViewController.xib */,
+				5CE2BC4721E83842003B5B50 /* FileWrapper.h */,
+				5CE2BC4A21E83842003B5B50 /* FileWrapper.mm */,
+				5CE2BC4921E83842003B5B50 /* NativeTemplate.cpp */,
+				5CE2BC4821E83842003B5B50 /* NativeTemplate.h */,
+				5CE2BC3421E836AC003B5B50 /* Assets.xcassets */,
+				5CE2BC3921E836AC003B5B50 /* Info.plist */,
+				5CE2BC3A21E836AC003B5B50 /* main.m */,
+				5CE2BC7121E84197003B5B50 /* LaunchScreen.storyboard */,
+			);
+			path = UtahTeapotIOS;
+			sourceTree = "<group>";
+		};
+		5CE2BC6A21E83FDE003B5B50 /* shaders */ = {
+			isa = PBXGroup;
+			children = (
+				5C9E4B9F2418BF6800BB9AE4 /* Cubemap.fsh */,
+				5C9E4B9E2418BF6800BB9AE4 /* Cubemap.vsh */,
+				5C1C7742241747C70047B11B /* InstancedPhongShader.fsh */,
+				5C1C7741241747C70047B11B /* InstancedPhongShader.vsh */,
+				5CAF3EA22415F0E200D4D4D9 /* PhongShader.fsh */,
+				5CAF3EA32415F0E200D4D4D9 /* PhongShader.vsh */,
+			);
+			path = shaders;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5C1C771B2417452C0047B11B /* MoreUtahTeapotsIOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5C1C77342417452C0047B11B /* Build configuration list for PBXNativeTarget "MoreUtahTeapotsIOS" */;
+			buildPhases = (
+				5C1C771C2417452C0047B11B /* Sources */,
+				5C1C77292417452C0047B11B /* Frameworks */,
+				5C1C772A2417452C0047B11B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MoreUtahTeapotsIOS;
+			productName = ArcballProj;
+			productReference = 5C1C77372417452C0047B11B /* MoreUtahTeapotsIOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		5C9E4B752418A75B00BB9AE4 /* TexturedUtahTeapotIOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5C9E4B8D2418A75B00BB9AE4 /* Build configuration list for PBXNativeTarget "TexturedUtahTeapotIOS" */;
+			buildPhases = (
+				5C9E4B762418A75B00BB9AE4 /* Sources */,
+				5C9E4B832418A75B00BB9AE4 /* Frameworks */,
+				5C9E4B842418A75B00BB9AE4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TexturedUtahTeapotIOS;
+			productName = ArcballProj;
+			productReference = 5C9E4B902418A75B00BB9AE4 /* TexturedUtahTeapotIOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		5CE2BC2721E836AB003B5B50 /* UtahTeapotIOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5CE2BC3E21E836AC003B5B50 /* Build configuration list for PBXNativeTarget "UtahTeapotIOS" */;
+			buildPhases = (
+				5CE2BC2421E836AB003B5B50 /* Sources */,
+				5CE2BC2521E836AB003B5B50 /* Frameworks */,
+				5CE2BC2621E836AB003B5B50 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = UtahTeapotIOS;
+			productName = ArcballProj;
+			productReference = 5CE2BC2821E836AB003B5B50 /* UtahTeapotIOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5CE2BC2021E836AB003B5B50 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1000;
+				ORGANIZATIONNAME = SeanRen;
+				TargetAttributes = {
+					5C1C771B2417452C0047B11B = {
+						ProvisioningStyle = Automatic;
+					};
+					5C9E4B752418A75B00BB9AE4 = {
+						ProvisioningStyle = Automatic;
+					};
+					5CE2BC2721E836AB003B5B50 = {
+						CreatedOnToolsVersion = 10.0;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 5CE2BC2321E836AB003B5B50 /* Build configuration list for PBXProject "UtahTeapotIOS" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 5CE2BC1F21E836AB003B5B50;
+			productRefGroup = 5CE2BC2921E836AB003B5B50 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5CE2BC2721E836AB003B5B50 /* UtahTeapotIOS */,
+				5C1C771B2417452C0047B11B /* MoreUtahTeapotsIOS */,
+				5C9E4B752418A75B00BB9AE4 /* TexturedUtahTeapotIOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5C1C772A2417452C0047B11B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5C1C772B2417452C0047B11B /* PhongShader.vsh in Resources */,
+				5C1C772C2417452C0047B11B /* ViewController.xib in Resources */,
+				5C1C772D2417452C0047B11B /* PhongShader.fsh in Resources */,
+				5C1C7744241747C70047B11B /* InstancedPhongShader.fsh in Resources */,
+				5C1C7743241747C70047B11B /* InstancedPhongShader.vsh in Resources */,
+				5C1C77302417452C0047B11B /* LaunchScreen.storyboard in Resources */,
+				5C1C77322417452C0047B11B /* Assets.xcassets in Resources */,
+				5C1C77332417452C0047B11B /* teapot.inl in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5C9E4B842418A75B00BB9AE4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5C9E4B852418A75B00BB9AE4 /* PhongShader.vsh in Resources */,
+				5C9E4B862418A75B00BB9AE4 /* ViewController.xib in Resources */,
+				5C9E4B872418A75B00BB9AE4 /* PhongShader.fsh in Resources */,
+				5C9E4BB22418C1CA00BB9AE4 /* back.tga in Resources */,
+				5C9E4BB12418C1CA00BB9AE4 /* right.tga in Resources */,
+				5C9E4BAE2418C1CA00BB9AE4 /* left.tga in Resources */,
+				5C9E4B882418A75B00BB9AE4 /* InstancedPhongShader.fsh in Resources */,
+				5C9E4B892418A75B00BB9AE4 /* InstancedPhongShader.vsh in Resources */,
+				5C9E4BA22418BF6800BB9AE4 /* Cubemap.vsh in Resources */,
+				5C9E4BAD2418C1CA00BB9AE4 /* top.tga in Resources */,
+				5C9E4BAC2418C1CA00BB9AE4 /* bottom.tga in Resources */,
+				5C9E4BB82418DA1F00BB9AE4 /* portrait.png in Resources */,
+				5C9E4BAF2418C1CA00BB9AE4 /* android_pie.bmp in Resources */,
+				5C9E4BA32418BF6800BB9AE4 /* Cubemap.fsh in Resources */,
+				5C9E4BB02418C1CA00BB9AE4 /* front.tga in Resources */,
+				5C9E4B8A2418A75B00BB9AE4 /* LaunchScreen.storyboard in Resources */,
+				5C9E4B8B2418A75B00BB9AE4 /* Assets.xcassets in Resources */,
+				5C9E4B8C2418A75B00BB9AE4 /* teapot.inl in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5CE2BC2621E836AB003B5B50 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5CAF3EA52415F0E200D4D4D9 /* PhongShader.vsh in Resources */,
+				5CE2BC6721E83DD9003B5B50 /* ViewController.xib in Resources */,
+				5CAF3EA42415F0E200D4D4D9 /* PhongShader.fsh in Resources */,
+				5CE2BC7321E84197003B5B50 /* LaunchScreen.storyboard in Resources */,
+				5CE2BC3521E836AC003B5B50 /* Assets.xcassets in Resources */,
+				5CAF3E9A2415EDA500D4D4D9 /* teapot.inl in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5C1C771C2417452C0047B11B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5C1C771D2417452C0047B11B /* ppm.cpp in Sources */,
+				5C1C773E241745AB0047B11B /* moreteapots.mm in Sources */,
+				5C1C771E2417452C0047B11B /* Box.cpp in Sources */,
+				5C1C771F2417452C0047B11B /* FileWrapper.mm in Sources */,
+				5C1C77212417452C0047B11B /* ViewController.mm in Sources */,
+				5C1C77222417452C0047B11B /* glsupport.cpp in Sources */,
+				5C1C77232417452C0047B11B /* perfMonitor.cpp in Sources */,
+				5C1C77242417452C0047B11B /* main.m in Sources */,
+				5C1C773F241745AB0047B11B /* MoreTeapotsModel.cpp in Sources */,
+				5C1C77252417452C0047B11B /* NativeTemplate.cpp in Sources */,
+				5C1C77262417452C0047B11B /* AppDelegate.m in Sources */,
+				5C1C77272417452C0047B11B /* Sphere.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5C9E4B762418A75B00BB9AE4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5C9E4B772418A75B00BB9AE4 /* ppm.cpp in Sources */,
+				5C9E4B792418A75B00BB9AE4 /* Box.cpp in Sources */,
+				5C9E4B7A2418A75B00BB9AE4 /* FileWrapper.mm in Sources */,
+				5C9E4B7B2418A75B00BB9AE4 /* ViewController.mm in Sources */,
+				5C9E4B962418A7ED00BB9AE4 /* TexturedTeapotModel.cpp in Sources */,
+				5C9E4B9A2418B84100BB9AE4 /* Texture.cpp in Sources */,
+				5C9E4B7C2418A75B00BB9AE4 /* glsupport.cpp in Sources */,
+				5C9E4B7D2418A75B00BB9AE4 /* perfMonitor.cpp in Sources */,
+				5C9E4B7E2418A75B00BB9AE4 /* main.m in Sources */,
+				5C9E4B802418A75B00BB9AE4 /* NativeTemplate.cpp in Sources */,
+				5C9E4B812418A75B00BB9AE4 /* AppDelegate.m in Sources */,
+				5C9E4B972418A7ED00BB9AE4 /* TeaturedTeapot.mm in Sources */,
+				5C9E4B822418A75B00BB9AE4 /* Sphere.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5CE2BC2421E836AB003B5B50 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5CAF3E922415ED1B00D4D4D9 /* ppm.cpp in Sources */,
+				5CAF3EA02415EE4600D4D4D9 /* Box.cpp in Sources */,
+				5CE2BC4E21E83842003B5B50 /* FileWrapper.mm in Sources */,
+				5CAF3E992415EDA500D4D4D9 /* TeapotModel.cpp in Sources */,
+				5CE2BC3021E836AB003B5B50 /* ViewController.mm in Sources */,
+				5CAF3E8E2415EC7000D4D4D9 /* glsupport.cpp in Sources */,
+				5CAF3E872415EC1500D4D4D9 /* perfMonitor.cpp in Sources */,
+				5CE2BC3B21E836AC003B5B50 /* main.m in Sources */,
+				5CA558A8241A156500ABA6E5 /* renderwrapper.mm in Sources */,
+				5CE2BC4D21E83842003B5B50 /* NativeTemplate.cpp in Sources */,
+				5CE2BC2D21E836AB003B5B50 /* AppDelegate.m in Sources */,
+				5CAF3EA12415EE4600D4D4D9 /* Sphere.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		5CE2BC7121E84197003B5B50 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5CE2BC7221E84197003B5B50 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		5C1C77352417452C0047B11B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9KVM264T66;
+				INFOPLIST_FILE = "UtahTeapotIOS copy-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zxtech.UtahTeapotIOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		5C1C77362417452C0047B11B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9KVM264T66;
+				INFOPLIST_FILE = "UtahTeapotIOS copy-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zxtech.UtahTeapotIOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		5C9E4B8E2418A75B00BB9AE4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9KVM264T66;
+				INFOPLIST_FILE = "MoreUtahTeapotsIOS copy-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zxtech.UtahTeapotIOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		5C9E4B8F2418A75B00BB9AE4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9KVM264T66;
+				INFOPLIST_FILE = "MoreUtahTeapotsIOS copy-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zxtech.UtahTeapotIOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		5CE2BC3C21E836AC003B5B50 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		5CE2BC3D21E836AC003B5B50 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		5CE2BC3F21E836AC003B5B50 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9KVM264T66;
+				INFOPLIST_FILE = UtahTeapotIOS/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zxtech.UtahTeapotIOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		5CE2BC4021E836AC003B5B50 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9KVM264T66;
+				INFOPLIST_FILE = UtahTeapotIOS/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zxtech.UtahTeapotIOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5C1C77342417452C0047B11B /* Build configuration list for PBXNativeTarget "MoreUtahTeapotsIOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5C1C77352417452C0047B11B /* Debug */,
+				5C1C77362417452C0047B11B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5C9E4B8D2418A75B00BB9AE4 /* Build configuration list for PBXNativeTarget "TexturedUtahTeapotIOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5C9E4B8E2418A75B00BB9AE4 /* Debug */,
+				5C9E4B8F2418A75B00BB9AE4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5CE2BC2321E836AB003B5B50 /* Build configuration list for PBXProject "UtahTeapotIOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5CE2BC3C21E836AC003B5B50 /* Debug */,
+				5CE2BC3D21E836AC003B5B50 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5CE2BC3E21E836AC003B5B50 /* Build configuration list for PBXNativeTarget "UtahTeapotIOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5CE2BC3F21E836AC003B5B50 /* Debug */,
+				5CE2BC4021E836AC003B5B50 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5CE2BC2021E836AB003B5B50 /* Project object */;
+}
