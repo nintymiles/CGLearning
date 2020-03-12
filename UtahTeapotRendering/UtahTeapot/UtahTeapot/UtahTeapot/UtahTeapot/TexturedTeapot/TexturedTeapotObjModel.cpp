@@ -196,8 +196,11 @@ void TexturedTeapotObjModel::Render(float r, float g, float b) {
     glBindVertexArray(vao);
     
     mat_model_ = mat_model_ * Matrix4::makeYRotation(0.5);
+    
+    Matrix4 mat_mv = mat_view_ * mat_model_;
     // Feed Projection and Model View matrices to the shaders
-    Matrix4 mat_vp = mat_projection_ * mat_view_ * mat_model_;
+    Matrix4 mat_vp = mat_projection_ * mat_mv;
+    
     
     // Bind the VBO
     glBindBuffer(GL_ARRAY_BUFFER, geometry_->vbo);
@@ -243,7 +246,7 @@ void TexturedTeapotObjModel::Render(float r, float g, float b) {
                        glmatrix);
     
     GLfloat glmatrix2[16];
-    mat_view_.writeToColumnMajorMatrix(glmatrix2);
+    mat_mv.writeToColumnMajorMatrix(glmatrix2);
     glUniformMatrix4fv(teapotShaderState_->matrix_view_, 1, GL_FALSE, glmatrix2);
     
     GLfloat glmatrix3[16];
