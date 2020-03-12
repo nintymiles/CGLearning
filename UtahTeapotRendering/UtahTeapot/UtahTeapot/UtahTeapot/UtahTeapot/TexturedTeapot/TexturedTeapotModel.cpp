@@ -43,8 +43,8 @@ TexturedTeapotModel::~TexturedTeapotModel(){
  */
 GLint TexturedTeapotModel::GetTextureType(void) {
     return
-//        GL_TEXTURE_CUBE_MAP;
-    GL_TEXTURE_2D;
+        GL_TEXTURE_CUBE_MAP;
+//    GL_TEXTURE_2D;
     //            GL_INVALID_VALUE;
 }
 
@@ -142,7 +142,7 @@ void TexturedTeapotModel::Init() {
     //  UpdateViewport();
     mat_model_ = Matrix4::makeTranslation(Cvec3(0, 0, -80.f));
     
-    mat_model_ =  mat_model_ * Matrix4::makeXRotation(-60);
+    mat_model_ =  mat_model_ * Matrix4::makeXRotation(-30);
     
     mat_view_ = Matrix4::makeTranslation(Cvec3(0,10.0f,4.0f));
     mat_view_ = inv(mat_view_);
@@ -179,8 +179,10 @@ void TexturedTeapotModel::Render(float r, float g, float b) {
     glBindVertexArray(vao);
     
     mat_model_ = mat_model_ * Matrix4::makeZRotation(0.5);
+    
+    Matrix4 mat_mv = mat_view_ * mat_model_;
     // Feed Projection and Model View matrices to the shaders
-    Matrix4 mat_vp = mat_projection_ * mat_view_ * mat_model_;
+    Matrix4 mat_vp = mat_projection_ * mat_mv;
     
     // Bind the VBO
     glBindBuffer(GL_ARRAY_BUFFER, geometry_->vbo);
@@ -226,7 +228,7 @@ void TexturedTeapotModel::Render(float r, float g, float b) {
                        glmatrix);
     
     GLfloat glmatrix2[16];
-    mat_view_.writeToColumnMajorMatrix(glmatrix2);
+    mat_mv.writeToColumnMajorMatrix(glmatrix2);
     glUniformMatrix4fv(teapotShaderState_->matrix_view_, 1, GL_FALSE, glmatrix2);
     
     GLfloat glmatrix3[16];
