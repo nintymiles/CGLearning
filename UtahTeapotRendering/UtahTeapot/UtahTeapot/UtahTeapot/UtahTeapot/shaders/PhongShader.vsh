@@ -61,7 +61,7 @@ void main(void)
     //取出顶点坐标为3-coordinate vector方式,ecPosition为眼睛坐标
     vec3 ecPosition = gl_Position.xyz;
     
-    //colorDiffuse的计算有问题，不能向紫铜色靠拢，颜色的调试可以直接依靠fragment的输出
+    //Diffuse factor的计算
     colorDiffuse = max(0.0,dot(normalize(eyeNormal), normalize(vLight0 - ecPosition))) * vMaterialDiffuse ;
     
     normal = eyeNormal;
