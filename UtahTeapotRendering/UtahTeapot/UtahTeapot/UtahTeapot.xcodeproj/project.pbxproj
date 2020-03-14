@@ -26,7 +26,6 @@
 		5C1C77052416888F0047B11B /* ShaderPlain.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C278EC62415CA7300D53A67 /* ShaderPlain.fsh */; };
 		5C1C77062416888F0047B11B /* ShaderPlain.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C278EC42415CA7300D53A67 /* ShaderPlain.vsh */; };
 		5C1C7714241689460047B11B /* moreteapots_main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C1C7712241689460047B11B /* moreteapots_main.cpp */; };
-		5C1C77152416970A0047B11B /* MoreTeapotsModel.h in Sources */ = {isa = PBXBuildFile; fileRef = 5C1C7710241689460047B11B /* MoreTeapotsModel.h */; };
 		5C1C77162416970A0047B11B /* MoreTeapotsModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C1C7711241689460047B11B /* MoreTeapotsModel.cpp */; };
 		5C1C771924173B0D0047B11B /* InstancedPhongShader.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C1C7717241718D80047B11B /* InstancedPhongShader.fsh */; };
 		5C1C771A24173B0D0047B11B /* InstancedPhongShader.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C1C7718241718D90047B11B /* InstancedPhongShader.vsh */; };
@@ -81,6 +80,7 @@
 		5CA558BB241B68A400ABA6E5 /* MotionControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CA558B9241B68A400ABA6E5 /* MotionControl.cpp */; };
 		5CA558BC241B68A400ABA6E5 /* MotionControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CA558B9241B68A400ABA6E5 /* MotionControl.cpp */; };
 		5CA558BD241B68A400ABA6E5 /* MotionControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CA558B9241B68A400ABA6E5 /* MotionControl.cpp */; };
+		5CA558BE241CFACC00ABA6E5 /* MoreTeapotsModel.h in Sources */ = {isa = PBXBuildFile; fileRef = 5C1C7710241689460047B11B /* MoreTeapotsModel.h */; };
 		5CA6586921F0CA790087B7F8 /* scenegraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CA6586121F0CA790087B7F8 /* scenegraph.cpp */; };
 		5CDA259421EF72CB00F2A6D1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CDA259321EF72CB00F2A6D1 /* main.cpp */; };
 		5CF9491821FEA0F1004D711B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CF9491721FEA0F1004D711B /* Cocoa.framework */; };
@@ -510,8 +510,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5CA558BE241CFACC00ABA6E5 /* MoreTeapotsModel.h in Sources */,
 				5CA558BC241B68A400ABA6E5 /* MotionControl.cpp in Sources */,
-				5C1C77152416970A0047B11B /* MoreTeapotsModel.h in Sources */,
 				5C1C77162416970A0047B11B /* MoreTeapotsModel.cpp in Sources */,
 				5C1C76F22416888F0047B11B /* Ray.cpp in Sources */,
 				5C1C76F32416888F0047B11B /* Box.cpp in Sources */,
