@@ -148,6 +148,30 @@ void TexturedTeapotModel::Init() {
     
     texObj_->Activate();
     
+    if(!vao_)
+    glGenVertexArrays( 1, &vao_ );
+    
+    glBindVertexArray(vao_);
+    
+    // Bind the VBO
+    glBindBuffer(GL_ARRAY_BUFFER, geometry_->vbo);
+    
+    int32_t iStride = sizeof(VertexPNX);
+    // Pass the vertex data
+    glVertexAttribPointer(ATTRIB_VERTEX, 3, GL_FLOAT, GL_FALSE, iStride,
+                          BUFFER_OFFSET(0));
+    glEnableVertexAttribArray(ATTRIB_VERTEX);
+    
+    glVertexAttribPointer(ATTRIB_NORMAL, 3, GL_FLOAT, GL_FALSE, iStride,
+                          BUFFER_OFFSET(3 * sizeof(GLfloat)));
+    glEnableVertexAttribArray(ATTRIB_NORMAL);
+    
+    glVertexAttribPointer(ATTRIB_UV, 2, GL_FLOAT, GL_FALSE, iStride,
+                          BUFFER_OFFSET(3 * sizeof(GLfloat)+ 3 * sizeof(GLfloat)));
+    glEnableVertexAttribArray(ATTRIB_UV);
+    
+    glBindVertexArray(0);
+    
     //  UpdateViewport();
     mat_local_model_ = Matrix4::makeTranslation(Cvec3(0, 0, -80.f));
     
@@ -193,9 +217,6 @@ void TexturedTeapotModel::SetMotionControl(std::shared_ptr<MotionControl> mContr
 }
 
 void TexturedTeapotModel::Render(float r, float g, float b) {
-    GLuint vao;
-    glGenVertexArrays( 1, &vao );
-    glBindVertexArray(vao);
     
     //mat_model_ = mat_model_ * Matrix4::makeZRotation(0.5);
     mat_model_ = mat_local_model_ * mat_motion_matrix_;
@@ -204,25 +225,6 @@ void TexturedTeapotModel::Render(float r, float g, float b) {
     // Feed Projection and Model View matrices to the shaders
     Matrix4 mat_vp = mat_projection_ * mat_mv;
     
-    // Bind the VBO
-    glBindBuffer(GL_ARRAY_BUFFER, geometry_->vbo);
-    
-    int32_t iStride = sizeof(VertexPNX);
-    // Pass the vertex data
-    glVertexAttribPointer(ATTRIB_VERTEX, 3, GL_FLOAT, GL_FALSE, iStride,
-                          BUFFER_OFFSET(0));
-    glEnableVertexAttribArray(ATTRIB_VERTEX);
-    
-    glVertexAttribPointer(ATTRIB_NORMAL, 3, GL_FLOAT, GL_FALSE, iStride,
-                          BUFFER_OFFSET(3 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(ATTRIB_NORMAL);
-    
-    glVertexAttribPointer(ATTRIB_UV, 2, GL_FLOAT, GL_FALSE, iStride,
-                          BUFFER_OFFSET(3 * sizeof(GLfloat)+ 3 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(ATTRIB_UV);
-    
-    // Bind the IB
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry_->ibo);
     
     glUseProgram(teapotShaderState_->program);
     
@@ -257,12 +259,9 @@ void TexturedTeapotModel::Render(float r, float g, float b) {
     
     glUniform3f(teapotShaderState_->light0_, 100.f, 0.f, -300.f);
     
+    glBindVertexArray(vao_);
     glDrawElements(GL_TRIANGLES, num_indices_, GL_UNSIGNED_SHORT,
                    BUFFER_OFFSET(0));
-    //glDrawArrays(GL_TRIANGLES, 0, num_vertices_);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    
+
     glBindVertexArray(0);
 }
