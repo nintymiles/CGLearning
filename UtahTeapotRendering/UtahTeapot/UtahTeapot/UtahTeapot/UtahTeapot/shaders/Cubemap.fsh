@@ -46,7 +46,7 @@ void main()
     lowp vec4 colorSpecular = vec4( vMaterialSpecular.xyz * specular, 1 );
     vec3 texCoord = reflected;
     //why flipped texCoord.y
-    texCoord.y = -texCoord.y;
+    //texCoord.y = -texCoord.y;
     //fragColor = texture(samplerObj, normalize(texCoord));
     fragColor = colorDiffuse * texture(samplerObj, texCoord);// + colorSpecular* vMaterialSpecular + vec4(vMaterialAmbient.xyz, 1.0);
 }

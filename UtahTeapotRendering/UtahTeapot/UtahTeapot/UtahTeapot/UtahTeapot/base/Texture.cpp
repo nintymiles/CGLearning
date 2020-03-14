@@ -142,11 +142,8 @@ TextureCubemap::TextureCubemap(std::vector<std::string> &files) {
     for(GLuint i = 0; i < 6; i++) {
         
         // tga/bmp files are saved as vertical mirror images ( at least more than half ).
-        stbi_set_flip_vertically_on_load(1);
-        
-//        uint8_t* imageBits = stbi_load_from_memory(
-//                                                   fileBits.data(), fileBits.size(),
-//                                                   &imgWidth, &imgHeight, &channelCount, 4);
+        // It's not right for tga to set flip vertically here
+        //stbi_set_flip_vertically_on_load(1);
         
         
         uint8_t* imageBits = stbi_load(files[i].c_str(), &imgWidth, &imgHeight, &channelCount,3);

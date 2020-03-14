@@ -66,13 +66,6 @@
 		5C9E4BD72418DE1600BB9AE4 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C9E4BD52418DE1600BB9AE4 /* Texture.cpp */; };
 		5C9E4BDC2418DE2600BB9AE4 /* TexturedTeapotModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C9E4BDA2418DE2500BB9AE4 /* TexturedTeapotModel.cpp */; };
 		5C9E4BDF2418DE5600BB9AE4 /* texturedteapot_main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C9E4BDE2418DE5600BB9AE4 /* texturedteapot_main.cpp */; };
-		5C9E4BEB2418E00500BB9AE4 /* bottom.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C9E4BE32418DFFC00BB9AE4 /* bottom.tga */; };
-		5C9E4BEC2418E00500BB9AE4 /* top.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C9E4BE42418DFFC00BB9AE4 /* top.tga */; };
-		5C9E4BED2418E00500BB9AE4 /* left.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C9E4BE52418DFFC00BB9AE4 /* left.tga */; };
-		5C9E4BEE2418E00500BB9AE4 /* android_pie.bmp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C9E4BE62418DFFC00BB9AE4 /* android_pie.bmp */; };
-		5C9E4BEF2418E00500BB9AE4 /* front.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C9E4BE72418DFFC00BB9AE4 /* front.tga */; };
-		5C9E4BF02418E00500BB9AE4 /* right.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C9E4BE82418DFFC00BB9AE4 /* right.tga */; };
-		5C9E4BF12418E00500BB9AE4 /* back.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C9E4BE92418DFFC00BB9AE4 /* back.tga */; };
 		5C9E4BF42418E39100BB9AE4 /* Cubemap.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C9E4BF32418E34000BB9AE4 /* Cubemap.fsh */; };
 		5C9E4BF52418E39100BB9AE4 /* Cubemap.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C9E4BF22418E34000BB9AE4 /* Cubemap.vsh */; };
 		5CA558A42419C06400ABA6E5 /* TexturedTeapotObjModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CA558A32419C06400ABA6E5 /* TexturedTeapotObjModel.cpp */; };
@@ -136,13 +129,6 @@
 				5CA558B7241A3CB900ABA6E5 /* posy.jpg in CopyFiles */,
 				5CA558B8241A3CB900ABA6E5 /* posz.jpg in CopyFiles */,
 				5CA558A6241A0F7E00ABA6E5 /* greenleaves.png in CopyFiles */,
-				5C9E4BEB2418E00500BB9AE4 /* bottom.tga in CopyFiles */,
-				5C9E4BEC2418E00500BB9AE4 /* top.tga in CopyFiles */,
-				5C9E4BED2418E00500BB9AE4 /* left.tga in CopyFiles */,
-				5C9E4BEE2418E00500BB9AE4 /* android_pie.bmp in CopyFiles */,
-				5C9E4BEF2418E00500BB9AE4 /* front.tga in CopyFiles */,
-				5C9E4BF02418E00500BB9AE4 /* right.tga in CopyFiles */,
-				5C9E4BF12418E00500BB9AE4 /* back.tga in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -212,13 +198,6 @@
 		5C9E4BD92418DE2500BB9AE4 /* TexturedTeapotModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexturedTeapotModel.h; sourceTree = "<group>"; };
 		5C9E4BDA2418DE2500BB9AE4 /* TexturedTeapotModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TexturedTeapotModel.cpp; sourceTree = "<group>"; };
 		5C9E4BDE2418DE5600BB9AE4 /* texturedteapot_main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = texturedteapot_main.cpp; sourceTree = "<group>"; };
-		5C9E4BE32418DFFC00BB9AE4 /* bottom.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = bottom.tga; sourceTree = "<group>"; };
-		5C9E4BE42418DFFC00BB9AE4 /* top.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = top.tga; sourceTree = "<group>"; };
-		5C9E4BE52418DFFC00BB9AE4 /* left.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = left.tga; sourceTree = "<group>"; };
-		5C9E4BE62418DFFC00BB9AE4 /* android_pie.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = android_pie.bmp; sourceTree = "<group>"; };
-		5C9E4BE72418DFFC00BB9AE4 /* front.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = front.tga; sourceTree = "<group>"; };
-		5C9E4BE82418DFFC00BB9AE4 /* right.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = right.tga; sourceTree = "<group>"; };
-		5C9E4BE92418DFFC00BB9AE4 /* back.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = back.tga; sourceTree = "<group>"; };
 		5C9E4BF22418E34000BB9AE4 /* Cubemap.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Cubemap.vsh; sourceTree = "<group>"; };
 		5C9E4BF32418E34000BB9AE4 /* Cubemap.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Cubemap.fsh; sourceTree = "<group>"; };
 		5CA558A22419C06400ABA6E5 /* TexturedTeapotObjModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexturedTeapotObjModel.h; sourceTree = "<group>"; };
@@ -366,13 +345,6 @@
 				5CA558AF241A3C4900ABA6E5 /* posy.jpg */,
 				5CA558B2241A3C4A00ABA6E5 /* posz.jpg */,
 				5CA558A5241A0F1700ABA6E5 /* greenleaves.png */,
-				5C9E4BE32418DFFC00BB9AE4 /* bottom.tga */,
-				5C9E4BE42418DFFC00BB9AE4 /* top.tga */,
-				5C9E4BE52418DFFC00BB9AE4 /* left.tga */,
-				5C9E4BE62418DFFC00BB9AE4 /* android_pie.bmp */,
-				5C9E4BE72418DFFC00BB9AE4 /* front.tga */,
-				5C9E4BE82418DFFC00BB9AE4 /* right.tga */,
-				5C9E4BE92418DFFC00BB9AE4 /* back.tga */,
 			);
 			path = Textures;
 			sourceTree = "<group>";

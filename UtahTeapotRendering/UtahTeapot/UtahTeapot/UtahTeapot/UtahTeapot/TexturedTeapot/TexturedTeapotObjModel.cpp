@@ -128,21 +128,12 @@ void TexturedTeapotObjModel::Init() {
     
     
     GLint type = GetTextureType();
-    // Need flip Y, so as top/bottom image
-    //    std::vector<std::string> textures {
-    //        std::string("./textures/left.tga"),   // GL_TEXTURE_CUBE_MAP_NEGATIVE_X
-    //        std::string("./textures/right.tga"),  // GL_TEXTURE_CUBE_MAP_POSITIVE_X
-    //        std::string("./textures/bottom.tga"), // GL_TEXTURE_CUBE_MAP_NEGATIVE_Y
-    //        std::string("./textures/top.tga"),    // GL_TEXTURE_CUBE_MAP_POSITIVE_Y
-    //        std::string("./textures/front.tga"),  // GL_TEXTURE_CUBE_MAP_POSITIVE_Z
-    //        std::string("./textures/back.tga")    // GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
-    //    };
     
     std::vector<std::string> textures {
-        std::string("./textures/negx.jpg"),   // GL_TEXTURE_CUBE_MAP_NEGATIVE_X
         std::string("./textures/posx.jpg"),  // GL_TEXTURE_CUBE_MAP_POSITIVE_X
-        std::string("./textures/negy.jpg"), // GL_TEXTURE_CUBE_MAP_NEGATIVE_Y
+        std::string("./textures/negx.jpg"),   // GL_TEXTURE_CUBE_MAP_NEGATIVE_X
         std::string("./textures/posy.jpg"),    // GL_TEXTURE_CUBE_MAP_POSITIVE_Y
+        std::string("./textures/negy.jpg"), // GL_TEXTURE_CUBE_MAP_NEGATIVE_Y
         std::string("./textures/posz.jpg"),  // GL_TEXTURE_CUBE_MAP_POSITIVE_Z
         std::string("./textures/negz.jpg")    // GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
     };
