@@ -149,12 +149,12 @@ TextureCubemap::TextureCubemap(std::vector<std::string> &files) {
 //                                                   &imgWidth, &imgHeight, &channelCount, 4);
         
         
-        uint8_t* imageBits = stbi_load(files[i].c_str(), &imgWidth, &imgHeight, &channelCount,0);
+        uint8_t* imageBits = stbi_load(files[i].c_str(), &imgWidth, &imgHeight, &channelCount,3);
         
         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-                     0, GL_RGBA,
+                     0, GL_RGB,
                      imgWidth, imgHeight,
-                     0, GL_RGBA,
+                     0, GL_RGB,
                      GL_UNSIGNED_BYTE, imageBits);
         stbi_image_free(imageBits);
     }

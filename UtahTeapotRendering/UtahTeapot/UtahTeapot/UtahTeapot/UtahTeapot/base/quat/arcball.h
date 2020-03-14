@@ -106,20 +106,23 @@ inline Quat arcball(const Cvec3& centerScreenPos,const double onScreenRadius,con
     //    if(angle == NAN)
     //        return Quat::identity();
    
-    //如果startVector和endVector不为0矢量，且startVector和endVector不相同，然后才计算arcball接口旋转
-    if(startVector != Cvec3(0) && endVector!=Cvec3(0) && startVector != endVector){
-        //Phi angle between startVector and endVector,using arc cosine function thorough dot production value of start/end vector;
-        double angle = acos(dot(startVector,endVector));
-        
-        
-         //rotation axis, first compute cross product of start/end vectors(not necessarily normalized vector),then normalization
-        Cvec3 axisVector = normalize(cross(startVector,endVector));
-        //construct arcball quat by definition
-        Quat arcball = Quat(cos(angle), axisVector * sin(angle));
-        return arcball;
-    }else{
-        return Quat::identity();
-    }
+//    //如果startVector和endVector不为0矢量，且startVector和endVector不相同，然后才计算arcball接口旋转
+//    if(startVector != Cvec3(0) && endVector!=Cvec3(0) && startVector != endVector){
+//        //Phi angle between startVector and endVector,using arc cosine function thorough dot production value of start/end vector;
+//        double angle = acos(dot(startVector,endVector));
+//
+//
+//         //rotation axis, first compute cross product of start/end vectors(not necessarily normalized vector),then normalization
+//        Cvec3 axisVector = normalize(cross(startVector,endVector));
+//        //construct arcball quat by definition
+//        Quat arcball = Quat(cos(angle), axisVector * sin(angle));
+//        return arcball;
+//    }else{
+//        return Quat::identity();
+//    }
+    
+    Quat arcball = Quat(dot(startVector,endVector), cross(startVector,endVector));
+    return arcball;
     
 }
 

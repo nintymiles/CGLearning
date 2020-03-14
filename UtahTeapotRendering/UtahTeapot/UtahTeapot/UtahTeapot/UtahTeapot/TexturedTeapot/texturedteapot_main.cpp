@@ -38,8 +38,10 @@
 #include "RayCastPicker.h"
 #include "Sphere.h"
 
-//#include "TexturedTeapotObjModel.h"
-#include "TexturedTeapotModel.h"
+#include "MotionControl.h"
+
+#include "TexturedTeapotObjModel.h"
+//#include "TexturedTeapotModel.h"
 
 #include "perfMonitor.h"
 
@@ -75,8 +77,10 @@ static RigTForm g_motionRbt;
 
 ///////////////// END OF G L O B A L S //////////////////////////////////////////////////
 
-//shared_ptr<TexturedTeapotObjModel> teapotModel;
-shared_ptr<TexturedTeapotModel> teapotModel;
+shared_ptr<TexturedTeapotObjModel> teapotModel;
+//shared_ptr<TexturedTeapotModel> teapotModel;
+
+shared_ptr<MotionControl> motionControl;
 
 //--------------------------------------------------------------------------------
 //  GLFW global variables
@@ -138,6 +142,7 @@ static RigTForm getEyeRbt(){
 }
 
 static void drawStuff(){
+    teapotModel->Update(0);
     teapotModel->UpdateViewport();
     teapotModel->Render(1.0, 0.0, 0.0);
     
@@ -172,6 +177,12 @@ static void scaleCallback(GLFWwindow* window,const float wScale, const float hSc
 
 static void displayWindow(GLFWwindow* window){
     display();
+}
+
+static Cvec2 screenToNDC(const float mouse_x, const float mouse_y){
+    float ndc_x= 2*(mouse_x/g_windowWidth) - 1;
+    float ndc_y= 2*(mouse_y/g_windowWidth) - 1;
+    return Cvec2(ndc_x,ndc_y);
 }
 
 
@@ -220,10 +231,10 @@ static void motion(const float x, const float y) {
         
     }
     
-    
-    
     g_mouseClickX = x;
     g_mouseClickY = g_windowHeight - y - 1;
+    
+    motionControl->Drag(screenToNDC(g_mouseClickX, g_mouseClickY));
 }
 
 void cursor_position_callback( GLFWwindow* window, double x, double y )
@@ -250,7 +261,17 @@ static void mouse(GLFWwindow* window, const int button, const int action, int mo
     if(g_mouseClickDown){
         g_pickingMouseX = g_mouseClickX;
         g_pickingMouseY = g_mouseClickY;
+    
     }
+    
+    if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS){
+        motionControl->BeginDrag(screenToNDC(g_pickingMouseX, g_pickingMouseY));
+    }
+    
+    if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE){
+        motionControl->EndDrag();
+    }
+    
     
     
 }
@@ -360,9 +381,15 @@ static void initGLState() {
 }
 
 static void initGeometry() {
-//    teapotModel.reset(new TexturedTeapotObjModel());
-    teapotModel.reset(new TexturedTeapotModel());
+    teapotModel.reset(new TexturedTeapotObjModel());
+//    teapotModel.reset(new TexturedTeapotModel());
     teapotModel->Init();
+    
+    motionControl.reset(new MotionControl());
+    motionControl->SetFlip(1.f, 1.f, 1.f);
+    motionControl->SetPinchTransformFactor(2.f, 2.f, 8.f);
+    //appCamera->InitParameters();
+    teapotModel->SetMotionControl(motionControl);
 }
 
 int main(int argc, char * argv[]) {

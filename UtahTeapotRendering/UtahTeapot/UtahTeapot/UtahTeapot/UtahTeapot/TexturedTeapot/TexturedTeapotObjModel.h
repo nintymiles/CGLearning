@@ -10,6 +10,7 @@
 #include "Geometry.h"
 
 #include "Texture.h"
+#include "MotionControl.h"
 
 
 #define BUFFER_OFFSET(i) ((char*)NULL + (i))
@@ -51,6 +52,10 @@ class TexturedTeapotObjModel{
     Matrix4 mat_view_;
     Matrix4 mat_model_;
     
+    Matrix4 mat_local_model_;
+    Matrix4 mat_motion_matrix_;
+    std::shared_ptr<MotionControl> motionControl_;
+    
 public:
     TexturedTeapotObjModel();
     virtual ~TexturedTeapotObjModel();
@@ -59,7 +64,7 @@ public:
     void Update(double time);
     void Unload();
     void UpdateViewport();
-    
+    void SetMotionControl(std::shared_ptr<MotionControl> mControl);
 };
 
 #endif

@@ -129,13 +129,22 @@ void TexturedTeapotObjModel::Init() {
     
     GLint type = GetTextureType();
     // Need flip Y, so as top/bottom image
+    //    std::vector<std::string> textures {
+    //        std::string("./textures/left.tga"),   // GL_TEXTURE_CUBE_MAP_NEGATIVE_X
+    //        std::string("./textures/right.tga"),  // GL_TEXTURE_CUBE_MAP_POSITIVE_X
+    //        std::string("./textures/bottom.tga"), // GL_TEXTURE_CUBE_MAP_NEGATIVE_Y
+    //        std::string("./textures/top.tga"),    // GL_TEXTURE_CUBE_MAP_POSITIVE_Y
+    //        std::string("./textures/front.tga"),  // GL_TEXTURE_CUBE_MAP_POSITIVE_Z
+    //        std::string("./textures/back.tga")    // GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
+    //    };
+    
     std::vector<std::string> textures {
-        std::string("./textures/right.tga"),  // GL_TEXTURE_CUBE_MAP_POSITIVE_X
-        std::string("./textures/left.tga"),   // GL_TEXTURE_CUBE_MAP_NEGATIVE_X
-        std::string("./textures/top.tga"),    // GL_TEXTURE_CUBE_MAP_POSITIVE_Y
-        std::string("./textures/bottom.tga"), // GL_TEXTURE_CUBE_MAP_NEGATIVE_Y
-        std::string("./textures/front.tga"),  // GL_TEXTURE_CUBE_MAP_POSITIVE_Z
-        std::string("./textures/back.tga")    // GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
+        std::string("./textures/negx.jpg"),   // GL_TEXTURE_CUBE_MAP_NEGATIVE_X
+        std::string("./textures/posx.jpg"),  // GL_TEXTURE_CUBE_MAP_POSITIVE_X
+        std::string("./textures/negy.jpg"), // GL_TEXTURE_CUBE_MAP_NEGATIVE_Y
+        std::string("./textures/posy.jpg"),    // GL_TEXTURE_CUBE_MAP_POSITIVE_Y
+        std::string("./textures/posz.jpg"),  // GL_TEXTURE_CUBE_MAP_POSITIVE_Z
+        std::string("./textures/negz.jpg")    // GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
     };
     
     if(type == GL_TEXTURE_2D) {
@@ -156,11 +165,10 @@ void TexturedTeapotObjModel::Init() {
     
     texObj_->Activate();
     
-    //  UpdateViewport();
-    mat_model_ = Matrix4::makeTranslation(Cvec3(0, 0, -30.f));
-    
-    //mat_model_ =  mat_model_ * Matrix4::makeXRotation(-60);
-    
+
+    mat_local_model_ = Matrix4::makeTranslation(Cvec3(0, 0, -30.f));
+    //mat_local_model_ =  mat_local_model_ * Matrix4::makeXRotation(-70);
+        
     mat_view_ = Matrix4::makeTranslation(Cvec3(0,0.0f,4.0f));
     mat_view_ = inv(mat_view_);
     
@@ -186,8 +194,19 @@ void TexturedTeapotObjModel::Unload() {
 }
 
 void TexturedTeapotObjModel::Update(double time) {
-    
-    
+    if (motionControl_) {
+        motionControl_->Update();
+        //mat_view_ = appCamera_->GetTransformMatrix() * mat_view_ *
+        //appCamera_->GetRotationMatrix();
+        //mat_view_ =  mat_view_ * appCamera_->GetRotationMatrix();
+        
+        mat_motion_matrix_ =  motionControl_->GetRotationMatrix();
+    }
+}
+
+
+void TexturedTeapotObjModel::SetMotionControl(std::shared_ptr<MotionControl> mControl){
+    motionControl_ = mControl;
 }
 
 void TexturedTeapotObjModel::Render(float r, float g, float b) {
@@ -195,7 +214,8 @@ void TexturedTeapotObjModel::Render(float r, float g, float b) {
     glGenVertexArrays( 1, &vao );
     glBindVertexArray(vao);
     
-    mat_model_ = mat_model_ * Matrix4::makeYRotation(0.5);
+    //mat_model_ = mat_model_ * Matrix4::makeYRotation(0.5);
+    mat_model_ = mat_local_model_ * mat_motion_matrix_;
     
     Matrix4 mat_mv = mat_view_ * mat_model_;
     // Feed Projection and Model View matrices to the shaders

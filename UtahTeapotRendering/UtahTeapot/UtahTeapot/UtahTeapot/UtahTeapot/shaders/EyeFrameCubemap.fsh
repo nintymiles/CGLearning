@@ -30,5 +30,5 @@ void main()
     //why flipped texCoord.y
     texCoord.y = -texCoord.y;
     //fragColor = texture(samplerObj, normalize(texCoord));
-    fragColor = colorDiffuse * texture(samplerObj, texCoord) ;//+ colorSpecular* vMaterialSpecular + vec4(vMaterialAmbient.xyz, 1.0);
+    fragColor =  texture(samplerObj, texCoord) ;//+ colorSpecular* vMaterialSpecular + vec4(vMaterialAmbient.xyz, 1.0);
 }
