@@ -107,7 +107,7 @@ y = normalize(z \times x)
 
 $$\large{ normalize(c) = \frac{c}{\sqrt{c_1^2+c_2^2+c_3^2}} }$$
 
-然后矩阵E可以被定义为：
+然后矩阵$E$可以被定义为：
 $$\large{ \begin{bmatrix}
 x_1 & y_1 & z_1 & p_1 \\
 x_2 & y_2 & z_2 & p_2 \\
