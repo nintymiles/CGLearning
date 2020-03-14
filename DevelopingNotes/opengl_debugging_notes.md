@@ -1,4 +1,6 @@
 # OpenGL/OpenGLES中的调试问题
+> 注：虽然iOS将OpenGL ES标记为depreated，但是最近版本的xcode对于OpenGL ES真机程序，仍然支持图形帧的数据抓取。这真是一个巨大的福利， OpenGL ES程序的调试可以豁然开朗。
+
 在OpenGL/OpenGLES的大部分版本中调试错误是比较痛苦的，直到最近的版本，OpenGL才具备了较高效的错误处理机制。下面对这两种方式简要说明
 
 ## `glGetError()`的执行机制
