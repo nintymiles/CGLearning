@@ -5,7 +5,7 @@
 > 另：Github项目[CGLearning](https://github.com/nintymiles/CGLearning)中拥有相关翻译的完整资料、内容整理、课程项目实现。
 
 # 图形中帧（坐标系）的应用（Frames in Graphics）
-目前为止，已经讲解了点和矩阵变换的基础，我们将能够在计算机图形中描述它们通常如何被使用。随后我们会讨论多种建模运用（modeling manipulation）和成像操作（imaging operation）。
+目前为止，已经讲解了点和矩阵变换的基础，我们将详解它们在计算机图形中通常如何被使用。随后我们会讨论多种建模运用（modeling manipulation）和成像操作（imaging operation）。
 
 ## 5.1 世界、物体和眼睛帧（World, Object and Eye Frames）
 当描述一个场景的几何形状时，我们会开始于一个被称为世界帧（world frame）的右手性的正交标准帧（right handed orthonormal frame), $\vec{w}^t$。世界帧（world frame）绝对不会被我们改动。然后其它帧能被关联于这个世界帧（world frame）所描述。如果我们借助关联于世界帧（world frame）的坐标表达某个点的地址，那么这些坐标将被称作世界坐标（world coordinates）。
@@ -20,11 +20,11 @@ $$\Large{ \vec{o}^t = \vec{w}^tO }$$
 
 在我们的计算机程序中，我们会存储矩阵O，借助上面的公式，这个矩阵可被理解为将世界帧（world frame）关联到object‘s coordinate system（物体坐标系）。要移动$\vec{o}^t$帧，我们改变矩阵O。
 
-在真实世界中，当我们想要生成一张3D环境的2D图像，我们会在场景中某处放置一台相机。图片中每个对象的位置基于到相机的3D关系被确定，也就是说，其坐标关联于一个恰当的坐标系（basis）。在计算机图形中我们借助一个右手性的正交标准帧(right handed orthonormal frame）$\vec{e}^t$，被称为眼睛帧（eye frame）。我们将眼睛解读为正看向这个帧的负z轴同时拍摄相片（参考图示$\text{Figure 5.1}$）。眼睛帧（eye frame）通过某种（坚固形体-rigid body）$4 \times 4$矩阵E和世界帧（world frame）关联：
+在真实世界中，当我们想要生成一张3D环境的2D图像，我们会在场景中某处放置一台相机。图片中每个对象的位置基于到相机的3D关系被确定，也就是说，其坐标关联于一个恰当的坐标系（basis）。在计算机图形中我们借助一个右手性的正交标准帧(right handed orthonormal frame）$\vec{e}^t$，被称为眼睛帧（eye frame）。我们将眼睛解读为正看向这个帧的负z轴同时拍摄相片（参考图示$\text{Figure 5.1}$）。眼睛帧（eye frame）通过某种（刚体-rigid body）$4 \times 4$矩阵$E$和世界帧（world frame）关联：
 
 $$\Large{ \vec{\mathbf{e}}^t = \vec{\mathbf{w}}^tE }$$
 
-在计算机程序中，我们会明确地存储矩阵E。
+在计算机程序中，我们会明确地存储矩阵$E$。
 
 给定一个点
 
@@ -36,16 +36,16 @@ $$ \Large{ \begin{bmatrix} x_e \\ y_e \\ z_e \\ 1 \end{bmatrix}
 = E^{-1}O
 \begin{bmatrix} x_o \\ y_o \\ z_o \\ 1 \end{bmatrix} } $$
 
-最终，就是这些眼睛坐标（eye coordinates）指定了其中每个顶点（vertex）在被渲染图像中所出现的位置。因此，正如在第6章中所描述的，我们的渲染处理将需要计算每个顶点的眼睛坐标（eye coordinates）。
+最终，正是这些眼睛坐标（eye coordinates）指定了每个顶点（vertex）在被渲染图像中所出现的位置。因此，就如在第6章中所描述的，我们的渲染处理将需要计算每个顶点的眼睛坐标（eye coordinates）。
 
 ![Figure5.1](media/Figure5.1.png)
-**Figure 5.1:** 世界帧（world frame）用红色表示，物体帧（objects frame）用绿色表示，而眼睛帧（eye frame）用蓝色表示。眼睛正看向眼睛帧的朝向物体方向的负z轴。
+**Figure 5.1:** 世界帧（world frame）用红色表示，物体帧（objects frame）用绿色表示，而眼睛帧（eye frame）用蓝色表示。眼睛正看向眼睛帧中朝向物体方向的负z轴。
 
-## 5.2 任意移动相关事物（Moving Things Around）
-在一个交互式的3D程序中，我们经常想要借助某种坚固形体变换（rigid body transformation）在空中来回移动物体和眼睛（视野方位）。现在我们讨论这种方式如何被实现。
+## 5.2 任意移动物体（Moving Things Around）
+在一个交互式的3D程序中，我们经常想要借助某种刚体变换（rigid body transformation）在空中来回移动物体和眼睛（视野方位）。现在我们讨论这种行为如何被实现。
 
 ### 5.2.1 移动一个物体（Moving an Object）
-我们通过恰当更新其帧（frame）的方式移动一个物体，这可以通过更新其矩阵O的方式被表示。
+我们通过恰当地更新物体所对应的帧（frame）的方式移动一个物体，这可以通过更新其矩阵O的方式被表示。
 
 让我们讲，我们希望关联于某种帧（frame）$\vec{\mathbf{a}}^t = \vec{\mathbf{w}}^tA$对一个物体帧（object frame）$\vec{\mathbf{o}}^t$应用变换M，就如在方程（4.1）中所示，我们有如下推导
 
@@ -72,7 +72,7 @@ $$\Large{
  \vec{\mathbf{a}}^t = \vec{\mathbf{w}}^t(O)_T(E)_R   \qquad (5.6)
 }$$
 
-这个帧（frame）通过始于世界坐标系（world coordinate system），然后平移其到物体帧（object‘s frame）的原点（从左到右读，也就是说，依次经历局部变换的解读），再然后围绕这个点旋转从而达到与眼睛帧（eye）的轴方向对齐。（参考图示$\text{Figure 5.3}$）。
+这个帧（frame）通过始于世界坐标系（world coordinate system），然后平移其到物体帧（object‘s frame）的原点（从左到右读，也就是说，依次经历关联于局部的变换解读），再然后围绕这个点旋转从而达到与眼睛帧（eye）的轴方向对齐。（参考图示$\text{Figure 5.3}$）。
 
 因此，对于这种物体运动（object motion），方程式（5.1）中矩阵A应该为$A=(O)_T(E)_R$。
 
@@ -82,13 +82,13 @@ $$\Large{
 
 
 ![Figure5.2](media/Figure5.2.png)
-**Figure 5.2:** 当我们移动鼠标到右侧，我们想让物体围绕其中心和沿着眼睛的y-轴方向旋转。
+**Figure 5.2:** 当我们移动鼠标到右侧，我们想让物体围绕其中心和沿着眼睛的$y$轴方向旋转。
 
 ![Figure5.3](media/Figure5.3.png)
-**Figure 5.3:** 辅助帧（auxiliary frame）$\vec{\mathbf{a}}^t$ 拥有$\vec{\mathbf{o}}^t$的原点（origin）和$\vec{\mathbf{e}}^t$的轴方向（axes）。 x轴指向页面中，已经被抑制（没有绘制）。
+**Figure 5.3:** 辅助帧（auxiliary frame）$\vec{\mathbf{a}}^t$ 拥有$\vec{\mathbf{o}}^t$的原点（origin）和$\vec{\mathbf{e}}^t$的轴方向（axes）。 $x$轴指向页面中，已经被抑制（没有绘制）。
 
 ### 5.2.2 移动眼睛（视角）（Moving the Eye）
-另一种我们希望进行的操作是移动眼睛到不同的视角。这会涉及改动$\vec{\mathbf{e}}^t$,在程序中具体通过更新矩阵E来达到目的。再一次，我们可以挑选一个合适的坐标系，关联于这个坐标系我们执行$\vec{\mathbf{e}}^t$的更新，就如之前我们在物体上所做的操作。
+另一种我们希望进行的操作是移动眼睛到不同的视角。这会涉及改动$\vec{\mathbf{e}}^t$,在程序中具体通过更新矩阵$E$来达到目的。再一次，我们可以挑选一个合适的坐标系，关联于这个坐标系我们执行$\vec{\mathbf{e}}^t$的更新，就如之前我们在物体上所做的操作。
 
 一种选择是使用和上面相同的辅助坐标系。在这种情形中，眼睛会围着物体的中心环绕运动。
 
@@ -97,7 +97,7 @@ $$\Large{
 ### 5.2.3 Lookat（盯着看）
 > 本节有一些错误，已经根据本书的errata改正。
 
-有时，特别是针对静态图像(static images)时，直接描绘出眼睛帧$\vec{\mathbf{e}}^t = \vec{\mathbf{w}}^tE$会很便利，通过指定眼睛的位置$\tilde{p}$,和一个眼睛正死盯着的点$\tilde{q}$，还有一个“上方矢量(up vector)"$\vec{u}$用于描述眼睛上方的方向。这些点和矢量通过变量p,q和u被给出，它们的坐标关联于$\vec{\mathbf{w}}^t$。假定这种输入，进行下面的计算
+有时，特别是针对静态图像(static images)时，直接描绘出眼睛帧$\vec{\mathbf{e}}^t = \vec{\mathbf{w}}^tE$会很便利，通过指定眼睛的位置$\tilde{p}$,和一个眼睛正死盯着的点$\tilde{q}$，还有一个“上方矢量(up vector)"$\vec{u}$用于描述眼睛上方的方向。这些点和矢量通过变量$p$,$q$和$u$被给出，它们的坐标关联于$\vec{\mathbf{w}}^t$。假定这种输入，进行下面的计算
 
 $$\large{
 z = normalize(p-q) \\
@@ -115,35 +115,35 @@ x_3 & y_3 & z_3 & p_3 \\
 0 & 0 & 0 & 1
 \end{bmatrix} }$$
 
-> 注：此处的眼睛矩阵E并不是通常在CG中的View矩阵，View矩阵一般为$E^{-1}$。
+> 注：此处的眼睛矩阵$E$并不是通常在CG中的View矩阵，View矩阵一般为$E^{-1}$。
 
 ## 5.3 伸缩变换（Scales）
-目前为止，我们已经将我们的世界认为是由运动的物体组成，每个物体都有一个由其自身的坚固形体矩阵所表达的正交标准帧（orthonormal frame） $\vec{\mathbf{o}}^t = \vec{\mathbf{w}}^tO$。我们限制关注点到正交标准帧以便平移和旋转矩阵可以像我们预期它们的行为那样工作。
+目前为止，我们已经将我们的世界认为是由运动的物体组成，每个物体都有一个由其自身的刚体矩阵所表达的正交标准帧（orthonormal frame） $\vec{\mathbf{o}}^t = \vec{\mathbf{w}}^tO$。我们将关注点限制到正交标准帧以便平移和旋转矩阵可以像我们预期它们的行为那样工作。
 
-当然，要建模物体，我们当然想同时应用伸缩。例如，我们想要建模一个椭球体为一个被挤压的球体。一种处理方式是让这个物体同时拥有一个伸缩矩阵（scaled matrix）$O'$。然后被伸缩的物体帧（非正交标准化的）被确定为$\vec{\mathbf{o}}'^t = \vec{\mathbf{o}}^tO'$。这种方式中我们仍然像上面一样通过更新矩阵O移动物体。要绘制这个物体，我们使用矩阵$E^{-1}OO'$将“伸缩的物体坐标”变换为眼睛坐标。
+当然，要建模物体，我们当然想同时应用伸缩。例如，我们想要将一个椭球体建模为一个被挤压的球体。一种处理方式是让这个物体同时拥有一个伸缩矩阵（scaled matrix）$O'$。然后被伸缩的物体帧（非正交标准化的）被确定为$\vec{\mathbf{o}}'^t = \vec{\mathbf{o}}^tO'$。这种方式中我们仍然像上面一样通过更新矩阵$O$移动物体。要绘制这个物体，我们使用矩阵$E^{-1}OO'$将“伸缩的物体坐标”变换为眼睛坐标。
 
 ## 5.4 层级体系（Hierarchy）
-经常将一个物体（object）当作由某些固定的或者可活动的多个子-物体（sub-objects）组装而成，这种观点其实很有用。每个子-物体可以拥有自己的正交标准帧（orthonormal frame），比如说$\vec{\mathbf{a}}^t$。（同时还有伸缩帧-scaled frame）。然后我们可以用其自己的坐标系存储这个子-物体的顶点（vertex）。给定这个层次体系，我们想拥有这种能力，即可以轻松以整体建模物体的运动，同时也可以独立建模子-物体的运动。
+经常将一个物体（object）当作由一些固定的或可活动的多个子-物体（sub-objects）组装而成，这种观点其实很有用。每个子-物体可以拥有自己的正交标准帧（orthonormal frame），比如说$\vec{\mathbf{a}}^t$。（同时还有伸缩帧-scaled frame）。然后我们可以用其自己的坐标系存储这个子-物体的顶点（vertex）。给定这个层次体系，我们想拥有这种能力-即可以轻松以整体建模物体的运动，同时也可以独立建模子-物体的运动。
 
 例如，当建模带有移动肢体的机器人时，我们可以借助一个物体帧（object）和伸缩物体帧（scaled object frame）表达躯干，一个子-物体帧（sub-object frame）表达一个可以转动的肩膀，还有一个子-子-物体帧（sub-sub-object frame）表达上臂（其和肩膀一起运动）。（参考图示$\text{Figure 5.4}$）。
 
 ![Figure5.4](media/Figure5.4.png)
-**Figure 5.4:** 在本例中，绿色的帧（frame）为物体帧（object frame） $\vec{\mathbf{o}}^t = \vec{\mathbf{w}}^tO$，灰色的帧$t'$为伸缩物体帧（scaled object frame）$\vec{\mathbf{o}}'^t = \vec{\mathbf{o}}^tO'$。一个单位立方体（unit cube）的坐标在$\vec{\mathbf{o}}'^t$中被绘制从而形成一个矩型（长方形）的躯干。矩阵O可以被改变用于移动整个机器人。青色的帧$\vec{\mathbf{a}}^t = \vec{\mathbf{o}}^tA$为右肩帧（right shoulder frame）。矩阵A中的旋转因子可以被改变用于旋转整个右臂。浅蓝色帧$\vec{\mathbf{b}}^t = \vec{\mathbf{a}}^tB$为右上臂帧（right upper arm frame）。红色帧$\vec{\mathbf{b}}'^t = \vec{\mathbf{b}}^tB'$为伸缩（scaled）右上臂帧。一个单位球体的坐标在$\vec{\mathbf{b}}'^t$中绘制形成了椭球体形状的右上臂。$\vec{\mathbf{c}}^t = \vec{\mathbf{b}}^tC$为右肘帧（right elbow frame）。矩阵C中的旋转因子可以被改变用于旋转右下臂（right lower-arm）。$\vec{\mathbf{d}}^t = \vec{\mathbf{c}}^tD$和$\vec{\mathbf{d}}'^t = \vec{\mathbf{d}}^tD'$分别为正交标准和伸缩的右下臂帧用于绘制下臂。帧$\vec{\mathbf{f}}^t = \vec{\mathbf{o}}^tF$为左肩帧（left shoulder frame）。
+**Figure 5.4:** 在本例中，绿色的帧（frame）为物体帧（object frame） $\vec{\mathbf{o}}^t = \vec{\mathbf{w}}^tO$，灰色的帧$t'$为伸缩物体帧（scaled object frame）$\vec{\mathbf{o}}'^t = \vec{\mathbf{o}}^tO'$。一个单位立方体（unit cube）的坐标在$\vec{\mathbf{o}}'^t$中被绘制从而形成一个矩型（长方形）的躯干。矩阵$O$可以被改变用于移动整个机器人。青色的帧$\vec{\mathbf{a}}^t = \vec{\mathbf{o}}^tA$为右肩帧（right shoulder frame）。矩阵A中的旋转因子可以被改变用于旋转整个右臂。浅蓝色帧$\vec{\mathbf{b}}^t = \vec{\mathbf{a}}^tB$为右上臂帧（right upper arm frame）。红色帧$\vec{\mathbf{b}}'^t = \vec{\mathbf{b}}^tB'$为伸缩（scaled）右上臂帧。一个单位球体的坐标在$\vec{\mathbf{b}}'^t$中绘制形成了椭球体形状的右上臂。$\vec{\mathbf{c}}^t = \vec{\mathbf{b}}^tC$为右肘帧（right elbow frame）。矩阵C中的旋转因子可以被改变用于旋转右下臂（right lower-arm）。$\vec{\mathbf{d}}^t = \vec{\mathbf{c}}^tD$和$\vec{\mathbf{d}}'^t = \vec{\mathbf{d}}^tD'$分别为正交标准和伸缩的右下臂帧用于绘制下臂。帧$\vec{\mathbf{f}}^t = \vec{\mathbf{o}}^tF$为左肩帧（left shoulder frame）。臂。帧$\vec{\mathbf{f}}^t = \vec{\mathbf{o}}^tF$为左肩帧（left shoulder frame）。
 
-当我们通过更新矩阵O移动整个物体，我们想让所有的物体（组件）更加一致（参考图示$\text{Figure 5.5}$）。要获得这种行为，我们借助一个将其和物体帧（object’s frame）联系在一起的坚固形体矩阵表达了子物体帧（sub-object‘s frame）。因此，我们存储了一个坚固形体矩阵（rigid body matrix）A，我们将其解读为定义了这种关系：$\vec{\mathbf{a}}^t = \vec{\mathbf{o}}^tA$，同时还有一个伸缩矩阵$A'$，其定义了伸缩的子物体帧（sub-object frame）为$\vec{\mathbf{a}}’^t = \vec{\mathbf{a}}^tA'$。要重新定位在这个物体内的子-物体（sub-object），所有我们需要做的就是更新矩阵A。要绘制子-物体（sub-object），我们使用矩阵$E^{-1}OAA'$，其变换“伸缩的子-物体坐标”为眼睛坐标（eye coordinates）。很清晰地，这种思路可以被递归嵌套，同时我们可以表达一个子-子-物体（sub-sub-object）为$\vec{\mathbf{b}}^t = \vec{\mathbf{a}}^tB$，以及一个伸缩的子-子-物体为$\vec{\mathbf{b}}'^t = \vec{\mathbf{b}}^tB'$。
+当我们通过更新矩阵$O$移动整个物体，我们想让所有的物体（组件）更加协调一致（参考图示$\text{Figure 5.5}$）。要获得这种行为，我们借助一个将其和物体帧（object’s frame）联系在一起的刚体矩阵表达了子物体帧（sub-object‘s frame）。因此，我们存储了一个刚体矩阵（rigid body matrix）$A$，我们将其解读为定义了这种关系：$\vec{\mathbf{a}}^t = \vec{\mathbf{o}}^tA$，同时还有一个伸缩矩阵$A'$，其定义了伸缩的子物体帧（sub-object frame）为$\vec{\mathbf{a}}’^t = \vec{\mathbf{a}}^tA'$。要重新定位在这个物体内的子-物体（sub-object），所有我们需要做的就是更新矩阵$A$。要绘制子-物体（sub-object），我们使用矩阵$E^{-1}OAA'$，其变换“伸缩的子-物体坐标”为眼睛坐标（eye coordinates）。很清晰地，这种思路可以被递归嵌套，同时我们可以表达一个子-子-物体（sub-sub-object）为$\vec{\mathbf{b}}^t = \vec{\mathbf{a}}^tB$，以及一个伸缩的子-子-物体为$\vec{\mathbf{b}}'^t = \vec{\mathbf{b}}^tB'$。
 
 在我们的机器人例子中，我们使用了$\vec{\mathbf{a}}^t$为右肩的帧（frame），$\vec{\mathbf{b}}^t$为右上臂的帧，还有$\vec{\mathbf{c}}^t=\vec{\mathbf{b}}^t\mathbf{c}$为右肘帧。$\vec{\mathbf{d}}^t=\vec{\mathbf{c}}^tD$和$\vec{\mathbf{d}}^t=\vec{\mathbf{d}}^tD'$分别是右下臂的正交标准帧和伸缩帧。
 
-要移动整个机器人，我们更新其O矩阵（参考图示$\text{Figure 5.5}$）。要在肩膀处弯曲右臂，我们更新其A矩阵（参考图示$\text{Figure 5.6}$）。要在肘部弯曲右臂，我们更新其C矩阵（参考图示$\text{Fiugre 5.7}$）。
+要移动整个机器人，我们更新其$O$矩阵（参考图示$\text{Figure 5.5}$）。要在肩膀处弯曲右臂，我们更新其$A$矩阵（参考图示$\text{Figure 5.6}$）。要在肘部弯曲右臂，我们更新其$C$矩阵（参考图示$\text{Fiugre 5.7}$）。
 
 ![Figure5.5](media/Figure5.5.png)
-**Figure 5.5:** 要移动整个机器人，我们更新O矩阵。
+**Figure 5.5:** 要移动整个机器人，我们更新$O$矩阵。
 
 ![Figure5.6](media/Figure5.6.png)
-**Figure 5.6:** 要在肩部弯曲胳膊，我们更新A矩阵。
+**Figure 5.6:** 要在肩部弯曲胳膊，我们更新$A$矩阵。
 
 ![Figure5.7](media/Figure5.7.png)
-**Figure 5.7:** 要弯曲肘部，我们更新C矩阵。
+**Figure 5.7:** 要弯曲肘部，我们更新$C$矩阵。
 
 
 

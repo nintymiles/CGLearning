@@ -1,7 +1,11 @@
-# 使用Tomcat作为web服务器
+# 简单web服务器搭建（tomcat，python http server）
+
+有时候，当要验证一些网络相关的内容时（比如webgl），需要使用web服务器。这时候就需要简单快捷的搭建web服务器。
+
+## 1. 使用tomcat作为临时的web服务器
 有时候使用Tomcat作为临时的web服务器十分便利。跨平台而且配置安装简单。
 
-## 关键配置
+### 关键配置
 首先，在conf/server.xml中配置Host标签，将appBase设置为你的web根目录
 
 ```web.xml
@@ -18,24 +22,22 @@
 ```web.xml
 ...
 
-<Context path="" docBase="/Users/xxx/Documents/MyWeb/TWGL" debug="true" reloadable="true" />
+<Context path="" docBase="/Users/xxx/Documents/MyWeb/TWGL" debug="0" reloadable="true" />
 
 ...
 ```
 这配置了web站点的根目录。使用 http://localhost:8080/ 访问即可。
 
-## 配置的简单错误
-有时候在配置xml文件时，由于网络copy或者书写问题，会导致属性无法生效，从而使得tomcat无法启动。比如，有中文字符，`<Context path="" docBase="/Users/xxx/Documents/MyWeb/TWGL" debug=“true” reloadable=“true" />`。
-此时tomcat会如果出现下列信息，则预示着xml的书写错误。
+## 2. 使用python实现随意简单的web服务器
+使用python自带的http server实现其实是最简单和方便的。只要拥有python环境即可，在windows上需要安装python。由于mac/Linux系统默认自带python环境，实际上这个步骤也不需要。
 
+### python web服务器的使用方法
 
-```log
-org.xml.sax.SAXParseException; systemId: file:/Users/xxx/Documents/TomcatServer/tomcat-7.0.99/conf/server.xml; lineNumber: 140; columnNumber: 79; 
-Open quote is expected for attribute "debug" associated with an  element type  "Context".
-	at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.createSAXParseException(ErrorHandlerWrapper.java:203)
-	at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.fatalError(ErrorHandlerWrapper.java:177)
-...
-```
+#### 1. web根目录的设置
+python自带的web服务器以当前目录为web的根目录，不需要设置任何复杂的配置文件，只要在命令行中cd到当前目录，然后启动python http server服务器即可。
 
+#### 2. 启动命令
+这里需要稍微注意，针对不同的python版本，启动命令稍微有些差异。在python2中，执行`python -m SimpleHTTPServer`命令，python3中，执行`python3 -m http.server`命令。
 
+当命令执行完成后，你就可以使用http://localhost:8000进行访问了。
 
