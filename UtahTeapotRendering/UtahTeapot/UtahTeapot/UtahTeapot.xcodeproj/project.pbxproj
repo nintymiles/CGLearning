@@ -81,6 +81,8 @@
 		5CA558BC241B68A400ABA6E5 /* MotionControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CA558B9241B68A400ABA6E5 /* MotionControl.cpp */; };
 		5CA558BD241B68A400ABA6E5 /* MotionControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CA558B9241B68A400ABA6E5 /* MotionControl.cpp */; };
 		5CA558BE241CFACC00ABA6E5 /* MoreTeapotsModel.h in Sources */ = {isa = PBXBuildFile; fileRef = 5C1C7710241689460047B11B /* MoreTeapotsModel.h */; };
+		5CA558BF241CFDFA00ABA6E5 /* PhongShader.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C278EC52415CA7300D53A67 /* PhongShader.fsh */; };
+		5CA558C0241CFDFA00ABA6E5 /* PhongShader.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C278EC32415CA7300D53A67 /* PhongShader.vsh */; };
 		5CA6586921F0CA790087B7F8 /* scenegraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CA6586121F0CA790087B7F8 /* scenegraph.cpp */; };
 		5CDA259421EF72CB00F2A6D1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CDA259321EF72CB00F2A6D1 /* main.cpp */; };
 		5CF9491821FEA0F1004D711B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CF9491721FEA0F1004D711B /* Cocoa.framework */; };
@@ -138,6 +140,8 @@
 			dstPath = ./shaders;
 			dstSubfolderSpec = 16;
 			files = (
+				5CA558BF241CFDFA00ABA6E5 /* PhongShader.fsh in CopyFiles */,
+				5CA558C0241CFDFA00ABA6E5 /* PhongShader.vsh in CopyFiles */,
 				5C278EC72415CAC500D53A67 /* ShaderPlain.fsh in CopyFiles */,
 				5C278EC82415CAC500D53A67 /* ShaderPlain.vsh in CopyFiles */,
 			);
@@ -162,9 +166,9 @@
 		5C234B662413E8AD00B3F073 /* Box.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Box.h; sourceTree = "<group>"; };
 		5C234B672413E8AD00B3F073 /* RayCaster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RayCaster.h; sourceTree = "<group>"; };
 		5C234B682413E8AD00B3F073 /* Box.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Box.cpp; sourceTree = "<group>"; };
-		5C278EC32415CA7300D53A67 /* ShaderPlainV2.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ShaderPlainV2.vsh; sourceTree = "<group>"; };
+		5C278EC32415CA7300D53A67 /* PhongShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PhongShader.vsh; sourceTree = "<group>"; };
 		5C278EC42415CA7300D53A67 /* ShaderPlain.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ShaderPlain.vsh; sourceTree = "<group>"; };
-		5C278EC52415CA7300D53A67 /* ShaderPlainV2.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ShaderPlainV2.fsh; sourceTree = "<group>"; };
+		5C278EC52415CA7300D53A67 /* PhongShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PhongShader.fsh; sourceTree = "<group>"; };
 		5C278EC62415CA7300D53A67 /* ShaderPlain.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ShaderPlain.fsh; sourceTree = "<group>"; };
 		5C54F28821FDA1F000657C36 /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = readme.md; path = ../../../readme.md; sourceTree = "<group>"; };
 		5C7B78882414D79E0027CBB4 /* perfMonitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = perfMonitor.cpp; path = base/perfMonitor/perfMonitor.cpp; sourceTree = "<group>"; };
@@ -287,8 +291,8 @@
 				5C1C7718241718D90047B11B /* InstancedPhongShader.vsh */,
 				5C278EC62415CA7300D53A67 /* ShaderPlain.fsh */,
 				5C278EC42415CA7300D53A67 /* ShaderPlain.vsh */,
-				5C278EC52415CA7300D53A67 /* ShaderPlainV2.fsh */,
-				5C278EC32415CA7300D53A67 /* ShaderPlainV2.vsh */,
+				5C278EC52415CA7300D53A67 /* PhongShader.fsh */,
+				5C278EC32415CA7300D53A67 /* PhongShader.vsh */,
 			);
 			path = shaders;
 			sourceTree = "<group>";

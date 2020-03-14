@@ -71,8 +71,8 @@ struct TeapotShaderState{
     GLuint matrix_view_;
     
     TeapotShaderState() {
-        static std::string vsfn = "./shaders/ShaderPlain.vsh";
-        static std::string fsfn = "./shaders/ShaderPlain.fsh";
+        static std::string vsfn = "./shaders/PhongShader.vsh";
+        static std::string fsfn = "./shaders/PhongShader.fsh";
         
         readAndCompileShader(program, vsfn.c_str(), fsfn.c_str());
         

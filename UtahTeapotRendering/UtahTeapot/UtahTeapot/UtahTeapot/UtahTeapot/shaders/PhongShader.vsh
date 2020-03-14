@@ -1,4 +1,4 @@
-//OpenGL ES version specification
+//OpenGL version specification
 #version 410 core
 
 //layout(packed, row_major) uniform;
@@ -58,14 +58,13 @@ void main(void)
     
     //将对象空间的normal vector变为eye frame空间的normal vector
     vec3 eyeNormal = vec3(mat3(uMVMatrix[0].xyz, uMVMatrix[1].xyz, uMVMatrix[2].xyz) * myNormal);
-    //在取出顶点坐标为3-coordinate vector方式,ecPosition为眼睛坐标
+    //取出顶点坐标为3-coordinate vector方式,ecPosition为眼睛坐标
     vec3 ecPosition = gl_Position.xyz;
     
     //colorDiffuse的计算有问题，不能向紫铜色靠拢，颜色的调试可以直接依靠fragment的输出
     colorDiffuse = max(0.0,dot(normalize(eyeNormal), normalize(vLight0 - ecPosition))) * vMaterialDiffuse ;
     
-    
     normal = eyeNormal;
     position = ecPosition;
-
+    
 }

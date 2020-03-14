@@ -15,8 +15,6 @@ uniform lowp vec3       vMaterialAmbient;
 // uniform variable -- light position
 uniform mediump vec3  vLight0;
 
-uniform sampler2D samplerObj;
-
 //--------------------------------------------------------------------------------
 //  fragment input variables -- varying varialbles
 //--------------------------------------------------------------------------------
@@ -37,7 +35,7 @@ out vec4 fragColor;
 
 void main()
 {
-
+    
     vec3 halfVector = normalize(vLight0 - position);
     float NdotH = max(dot(normalize(normal), halfVector), 0.0);
     float fPower = vMaterialSpecular.w;
@@ -47,8 +45,8 @@ void main()
     fragColor = colorDiffuse + colorSpecular + vec4(vMaterialAmbient,1);
     //fragColor = vMaterialDiffuse * NdotH + colorSpecular;
     
-    fragColor =  texture(samplerObj, texCoord) +  vec4(vMaterialAmbient.xyz, 1.0f) + colorSpecular;
+    fragColor =  colorDiffuse +  vec4(vMaterialAmbient.xyz, 1.0f) + colorSpecular;
     
     //fragColor = vec4(1.0,0.0,0.0,1.0);
-
+    
 }

@@ -160,7 +160,7 @@ static RigTForm getEyeRbt(){
 
 static void drawStuff(){
     teapotModel->UpdateViewport();
-    teapotModel->Render(1.0, 0.0, 0.0);
+    teapotModel->Render(1.0, 0.055, 0.027);
     
 }
 
