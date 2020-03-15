@@ -34,7 +34,7 @@ MoreTeapotsModel::~MoreTeapotsModel(){
 void MoreTeapotsModel::Init(const int32_t numX, const int32_t numY,
                             const int32_t numZ) {
     // Settings
-    glFrontFace(GL_CCW);
+    //glFrontFace(GL_CCW);
     
     // Create Index buffer
     num_indices_ = sizeof(teapotIndices) / sizeof(teapotIndices[0]);
@@ -191,9 +191,8 @@ void MoreTeapotsModel::UpdateViewport() {
     const float CAM_NEAR = -0.1f;
     const float CAM_FAR = -10000.f;
     
-    //        float aspect =
-    //            static_cast<float>(viewport[2]) / static_cast<float>(viewport[3]);
-    float aspect = 1024/1024.0;
+    float aspect =
+                static_cast<float>(viewport[2]) / static_cast<float>(viewport[3]);
     mat_projection_ = Matrix4::makeProjection(60, aspect, CAM_NEAR, CAM_FAR);
 
 }
@@ -211,7 +210,6 @@ void MoreTeapotsModel::Render(float r, float g, float b) {
     anglecounter++;
     if(anglecounter>360)
         anglecounter=0;
-    
     
     
     glUseProgram(moreTeapotsShaderState_->program);
@@ -272,11 +270,6 @@ void MoreTeapotsModel::Render(float r, float g, float b) {
     glDrawElementsInstanced(GL_TRIANGLES, num_indices_, GL_UNSIGNED_SHORT,
                             BUFFER_OFFSET(0),
                             teapot_x_ * teapot_y_ * teapot_z_);
-    
-    
-    //glBindBuffer(GL_UNIFORM_BUFFER, 0);
-//    glBindBuffer(GL_ARRAY_BUFFER, 0);
-//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     
     glBindVertexArray(0);
 }

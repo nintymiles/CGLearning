@@ -229,7 +229,7 @@ void TexturedTeapotModel::Render(float r, float g, float b) {
     glUseProgram(teapotShaderState_->program);
     
     TEAPOT_MATERIALS material = {
-        {1.0, 0.5, 0.5}, {1.0f, 1.0f, 1.0f, 40.f}, {0.1f, 0.1f, 0.1f}, };
+        {1.0, 0.105, 0.095}, {1.0f, 1.0f, 1.0f, 40.f}, {0.1f, 0.1f, 0.1f}, };
     
     // Update uniforms
     glUniform4f(teapotShaderState_->material_diffuse_, material.diffuse_color[0],
