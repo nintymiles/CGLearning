@@ -149,8 +149,28 @@ void MoreTeapotsModel::Init(const int32_t numX, const int32_t numY,
                  GL_DYNAMIC_DRAW);
     delete[] pBuffer;
     
+    if(vao_==0)
+    glGenVertexArrays( 1, &vao_ );
     
+    glBindVertexArray(vao_);
     
+    // Bind the VBO
+    glBindBuffer(GL_ARRAY_BUFFER, geometry_->vbo);
+    
+    int32_t iStride = sizeof(VertexPNX);
+    // Pass the vertex data
+    glVertexAttribPointer(ATTRIB_VERTEX, 3, GL_FLOAT, GL_FALSE, iStride,
+                          BUFFER_OFFSET(0));
+    glEnableVertexAttribArray(ATTRIB_VERTEX);
+    
+    glVertexAttribPointer(ATTRIB_NORMAL, 3, GL_FLOAT, GL_FALSE, iStride,
+                          BUFFER_OFFSET(3 * sizeof(GLfloat)));
+    glEnableVertexAttribArray(ATTRIB_NORMAL);
+    
+    // Bind the IB
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry_->ibo);
+    
+    glBindVertexArray(0);
     
     //  UpdateViewport();
     //    mat_model_ = Matrix4::makeTranslation(Cvec3(0, 0, -80.f));
@@ -175,35 +195,11 @@ void MoreTeapotsModel::UpdateViewport() {
     //            static_cast<float>(viewport[2]) / static_cast<float>(viewport[3]);
     float aspect = 1024/1024.0;
     mat_projection_ = Matrix4::makeProjection(60, aspect, CAM_NEAR, CAM_FAR);
-    
-    //  if (viewport[2] < viewport[3]) {
-    //    float aspect =
-    //        static_cast<float>(viewport[2]) / static_cast<float>(viewport[3]);
-    //    mat_projection_ =
-    //        ndk_helper::Mat4::Perspective(aspect, 1.0f, CAM_NEAR, CAM_FAR);
-    //  } else {
-    //    float aspect =
-    //        static_cast<float>(viewport[3]) / static_cast<float>(viewport[2]);
-    //    mat_projection_ =
-    //        ndk_helper::Mat4::Perspective(1.0f, aspect, CAM_NEAR, CAM_FAR);
-    //  }
+
 }
 
 void MoreTeapotsModel::Unload() {
-    //  if (vbo_) {
-    //    glDeleteBuffers(1, &vbo_);
-    //    vbo_ = 0;
-    //  }
-    //
-    //  if (ibo_) {
-    //    glDeleteBuffers(1, &ibo_);
-    //    ibo_ = 0;
-    //  }
-    
-    //  if (shader_param_.program_) {
-    //    glDeleteProgram(shader_param_.program_);
-    //    shader_param_.program_ = 0;
-    //  }
+
 }
 
 void MoreTeapotsModel::Update(double time) {
@@ -216,26 +212,7 @@ void MoreTeapotsModel::Render(float r, float g, float b) {
     if(anglecounter>360)
         anglecounter=0;
     
-    if(vao_==0)
-        glGenVertexArrays( 1, &vao_ );
     
-    glBindVertexArray(vao_);
-    
-    // Bind the VBO
-    glBindBuffer(GL_ARRAY_BUFFER, geometry_->vbo);
-    
-    int32_t iStride = sizeof(VertexPNX);
-    // Pass the vertex data
-    glVertexAttribPointer(ATTRIB_VERTEX, 3, GL_FLOAT, GL_FALSE, iStride,
-                          BUFFER_OFFSET(0));
-    glEnableVertexAttribArray(ATTRIB_VERTEX);
-    
-    glVertexAttribPointer(ATTRIB_NORMAL, 3, GL_FLOAT, GL_FALSE, iStride,
-                          BUFFER_OFFSET(3 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(ATTRIB_NORMAL);
-    
-    // Bind the IB
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry_->ibo);
     
     glUseProgram(moreTeapotsShaderState_->program);
     
@@ -290,6 +267,7 @@ void MoreTeapotsModel::Render(float r, float g, float b) {
     }
     glUnmapBuffer(GL_UNIFORM_BUFFER);
     
+    glBindVertexArray(vao_);
     // Instanced rendering
     glDrawElementsInstanced(GL_TRIANGLES, num_indices_, GL_UNSIGNED_SHORT,
                             BUFFER_OFFSET(0),
@@ -297,8 +275,8 @@ void MoreTeapotsModel::Render(float r, float g, float b) {
     
     
     //glBindBuffer(GL_UNIFORM_BUFFER, 0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+//    glBindBuffer(GL_ARRAY_BUFFER, 0);
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     
     glBindVertexArray(0);
 }

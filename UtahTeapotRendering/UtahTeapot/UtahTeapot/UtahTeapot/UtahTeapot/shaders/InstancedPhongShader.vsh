@@ -45,13 +45,13 @@ void main(void)
     highp vec4 p = vec4(myVertex,1);
     gl_Position = uPMatrix[gl_InstanceID] * p;
 
-    highp vec3 worldNormal = vec3(mat3(uMVMatrix[gl_InstanceID][0].xyz,
+    highp vec3 ecNormal = vec3(mat3(uMVMatrix[gl_InstanceID][0].xyz,
             uMVMatrix[gl_InstanceID][1].xyz,
             uMVMatrix[gl_InstanceID][2].xyz) * myNormal);
-    highp vec3 ecPosition = p.xyz;
+    highp vec3 ecPosition = gl_Position.xyz;
 
-    colorDiffuse = max(0,dot( normalize(worldNormal), normalize(-vLight0+ecPosition))) * vec4(vMaterialDiffuse[gl_InstanceID], 1.f)  + vec4( vMaterialAmbient, 1 );
+    colorDiffuse = max(0,dot( normalize(ecNormal), normalize(vLight0-ecPosition))) * vec4(vMaterialDiffuse[gl_InstanceID], 1.f)  + vec4( vMaterialAmbient, 1 );
 
-    normal = worldNormal;
+    normal = ecNormal;
     position = ecPosition;
 }
