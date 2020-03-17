@@ -1,11 +1,11 @@
 # Note
-这是对**Foundation of 3D Computer Graphics**第9章的翻译，本章讲解了平滑插值的基本概念以及贝塞尔函数和样条函数的使用。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教<ninetymiles@icloud.com>。 
+这是对**Foundation of 3D Computer Graphics**第9章的翻译，本章讲解了平滑插值的基本概念以及贝塞尔函数和样条函数的使用。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教<ninetymiles@icloud.com>。r 
 
 > 注：文章中相关内容归原作者所有，翻译内容仅供学习参考。
 > 另：Github项目[CGLearning](https://github.com/nintymiles/CGLearning)中拥有相关翻译的完整资料、内容整理、课程项目实现。
 
 # 平滑插值（Smooth Interpolation）
-让我们考虑一种被称为关键帧动画（keyframe animation）的技术。在这种环境中，一个动画绘制器（animator）会描述位于一系列具体时刻之上的3D计算机图形动画的快照（snapshot）。每个快照（snapshot）根据某种集合的建模参数被定义。这些参数可能包含很多对象的位置（locations）和方位（orientations）信息，当然也包含相机的位置和方位信息。除此还包含模型活动部件的关节角度等信息。要从这些关键帧生成平滑动画，计算机的工作就是在连续的时间范围上平滑地“填入”参数值。如果一个这种动画参数被称为c，那么我们的每个具体快照（snapshot）可被称为$c_i$,此处i为某种范围的整数，那么我们的工作就是将这个参数的快照（snapshots）转变为一个关于时间的联系函数，$c(t)$。我们通常想让函数$c(t)$足够平滑，以便生成的动画不会显得太断断续续。
+让我们考虑一种被称为关键帧动画（keyframe animation）的技术。在这种环境中，一个动画绘制器（animator）会描述位于一系列具体时刻之上的3D计算机图形动画的快照（snapshot）。每个快照（snapshot）根据某种集合的建模参数被定义。这些参数可能包含很多对象的位置（locations）和方位（orientations）信息，当然也包含相机的位置和方位信息。除此还包含模型活动部件的关节角度等信息。要从这些关键帧生成平滑动画，计算机的工作就是在连续的时间范围上平滑地“填入”参数值。如果一个这种动画参数被称为$c$，那么我们的每个具体快照（snapshot）可被称为$c_i$,此处$i$为某种范围的整数，那么我们的工作就是将这个参数的快照（snapshots）转变为一个关于时间的连续函数(continuous function)，$c(t)$。我们通常想让函数$c(t)$足够平滑，以便生成的动画不会显得太断断续续。
 
 在本章中，我们会讨论在位于局部实数范围上的这样一套具体值上平滑插值的简单方式，这些方式一般借助样条（splines）函数。举个例子，在图示$\text{Figure 9.1}$中我们展示了一个函数$c(t)，t \in [0..8] $,这个函数在关联于整数值$c_i,i \in -1..9 $的具体值上插值，它们被展示为蓝色点（具体对额外的不参与插值的在-1和9处的具体值的需求随后澄清）。我们的样条（splines）函数将由独立的块函数（piece functions）组成，这里每个块函数是某种低等多项式函数。这些多项式块函数会被专门挑选以便它们可以平滑地”缝合在一起“。样条（splines）函数经常被用于计算机图形中，因为它们易于表达，评估和控制。实际上，它们的行为相比单一的高等多项式函数要容易预测得多。
 
@@ -24,14 +24,14 @@
 
 要评估在任何t值上的函数c(t)，我们执行下面的线性插值序列：
 
-$$
-   f = (1 − t)c_0 + td_0 \qquad\qquad\qquad\qquad (9.1)\ \\
-	g = (1 − t)d_0 + te_0 \qquad\qquad\qquad\qquad (9.2) \\
-	h = (1 − t)e_0 + tc_1 \qquad\qquad\qquad\qquad (9.3) \\
-   m = (1 − t)f + tg  \qquad\qquad\qquad\qquad\; (9.4) \\
-   n = (1 − t)g + th  \qquad\qquad\qquad\qquad\; (9.5) \\
-   c(t) = (1 − t)m + tn \qquad\qquad\qquad\qquad (9.6) \\
-$$
+$$\begin{array}{rclr}
+  f &=& (1 − t)c_0 + td_0 & (9.1) \\
+	g &=& (1 − t)d_0 + te_0 & (9.2) \\
+	h &=& (1 − t)e_0 + tc_1 & (9.3) \\
+   m &=& (1 − t)f + tg  & (9.4) \\
+   n &=& (1 − t)g + th  & (9.5) \\
+c(t) &=& (1 − t)m + tn & (9.6) \\
+\end{array}$$
 
 在图示$\text{Figure 9.3}$中，当t=0.3时，我们可视化这种计算步骤为2D空间中的线性插值。
 
@@ -50,24 +50,24 @@ $$c(t)= c_0(1 − t)^3 + 3d_0t(1 − t)^2 + 3e_0t^2(1 − t) + c_1t^3$$
 ### 9.1.2 平移（Translation）
 如果我们想获得一个立方函数，这个函数分别在t = i和t = i+1上的具体值$c_i$和$c_{i+1}$上插值，同时调用另外两个控制点$d_i$和$e_i$，我们仅需“平移”方程（9.1）的评估算法以获得下面的评估步骤：
 
-$$
-   f = (1 − t + i)c_i + (t-i)d_i \qquad\qquad\qquad\qquad (9.7)\ \\
-	g = (1 − t + i)d_i + (t-i)e_i \qquad\qquad\qquad\qquad (9.8) \\
-	h = (1 − t + i)e_i + (t-i)c_{i+1} \qquad\qquad\qquad\quad (9.9) \\
-   m = (1 − t + i)f + (t-i)g  \qquad\qquad\qquad\qquad\; (9.10) \\
-   n = (1 − t + i)g + (t-i)h  \qquad\qquad\qquad\qquad\; (9.11) \\
-   c(t) = (1 − t +i)m + (t-i)n \qquad\qquad\qquad\quad (9.12) \\
-$$
+$$\begin{array}{rclr}
+f &=& (1 − t + i)c_i + (t-i)d_i & (9.7) \\
+g &=& (1 − t + i)d_i + (t-i)e_i & (9.8) \\
+h &=& (1 − t + i)e_i + (t-i)c_{i+1} & (9.9) \\
+m &=& (1 − t + i)f + (t-i)g & (9.10) \\
+n &=& (1 − t + i)g + (t-i)h  & (9.11) \\
+c(t) &=& (1 − t +i)m + (t-i)n & (9.12) \\
+\end{array}$$
 
 ## 9.2 Catmull-Rom样条函数（Catmull-Rom Splines）
-让我们返回在一系列具体值$c_i,i \in -1..n+1$上插值的最初问题。做这个事情的简单方式是借助Catmull-Rom样条函数（Catmull-Rom Splines）。这个方法定义了一个针对变量$t \in [0..n]$的函数c(t)。这个函数被n个立方函数定义，每个在$t \in [i..i+1]$的单位区间上被支持。块函数（piece）被选定在$c_i$值上插值，同时满足它们的第一推导。
+让我们返回在一系列具体值$c_i,i \in -1..n+1$上插值的最初问题。做这个事情的简单方式是借助Catmull-Rom样条函数（Catmull-Rom Splines）。这个方法定义了一个针对变量$t \in [0..n]$的函数$c(t)$。这个函数被$n$个立方函数定义，每个在$t \in [i..i+1]$的单位区间上被支持。块函数（piece）被选定在$c_i$值上插值，同时满足它们的第一推导。
 
 每个块函数在其贝塞尔表达（Bezier represesntation）方式中，借助4个控制值：$c_i,d_i,e_i和c_{i+1}$被确定。根据我们的输入值。要设置$d_i$和$e_i$的值，我们施加约束$c′(t)|_i = \frac{1}{2} (c_{i+1} − c_{i−1} )$。换句话说，我们向前和向后各寻找一个样例以决定t=i处的斜率；这是为什么我们需要额外的边缘值（extreme values）$c_{-1}$和$c_{n+1}$的原因。因为在贝塞尔表达（Bezier representation）中$c'(i) = 3(d_i-c_i) = 3(c_i-e_{i-1}) $，这其实告诉我们需要做如下设置：
 
-$$ 
-	d_i = \frac{1}{6}(c_{i+1}-c_{i-1}) + c_i  \qquad\qquad(9.13)\\
-	e_i = -\frac{1}{6}(c_{i+2}-c_{i}) + c_{i+1} \qquad\quad(9.14)
-$$
+$$\begin{array}{rcl}
+d_i &=& ((c_{i+1}c_{i−1}^{−1} )^\frac{1}{6})c_i  & (9.13)\\
+e_i &=& ((c_{i+2}c_{i}^{−1} )^\frac{-1}{6})c_{i+1} & (9.14)\\
+\end{array}$$
 
 这个处理在图示$\text{Figure 9.4}$中被可视化表达。在这里我们展示了一个立方函数线段所需的控制值c，d和e（其中d和e以红色表示）。我们以浅蓝色展示了一个立方块函数（cubic piece）的控制多边形。控制值d和e借助深蓝色展示的弦（chords）被确定。
 
