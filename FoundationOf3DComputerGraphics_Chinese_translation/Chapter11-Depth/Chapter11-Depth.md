@@ -26,7 +26,7 @@
 ## 11.2 基础数学模型（Basic Mathematical Model）
 在OpenGL中，我们借助z-缓存计算可视性。要使用z-缓存，除了一个点的$[x_n,y_n]^t$外，我们还需要一个深度值。要完成这个任务，针对每个用眼睛坐标描述的点，我们借助下列矩阵表达定义其$[x_n,y_n,z_n]^t$坐标。
 $$ \begin{array}{c}
-\begin{bmatrix} x_nw_n \\ y_nw_n \\ z_nw_n \\ w_n \end{bmatrix}  = \begin{bmatrix} x_c \\ y_c \\ z_c \\ w_c \end{bmatrix}  =  \begin{bmatrix} s_x & 0 & -c_x & 0 \\ 0 & s_y & -c_y & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & -1 & 0 \end{bmatrix}\begin{bmatrix} x_e \\ y_e \\ z_e \\ 1 \end{bmatrix}  \tag{11.1}
+\begin{bmatrix} x_nw_n \\ y_nw_n \\ z_nw_n \\ w_n \end{bmatrix}  = \begin{bmatrix} x_c \\ y_c \\ z_c \\ w_c \end{bmatrix}  =  \begin{bmatrix} s_x & 0 & -c_x & 0 \\ 0 & s_y & -c_y & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & -1 & 0 \end{bmatrix} \begin{bmatrix} x_e \\ y_e \\ z_e \\ 1 \end{bmatrix}  \tag{11.1}
 \end{array} $$
 再次，原始的输出被称作裁切坐标，并且和以前一样，要获得$x_n$和$y_n$的值，我们需要除以$w_n$值。但是现在我们还得到了$z_n=\frac{-1}{z_e}$值。我们计划使用这个$z_n$在z-缓存中进行深度比较。
 
@@ -55,9 +55,9 @@ $$ \begin{array}{c}
 ### 线性被投射变换保留（Lines are preserved by projective transforms (optional)）
 这里我们只是勾勒出线性被投射变换保留所需要证明的步骤。
 
-首先，让我们定义一个施加在3D仿射空间（3D affine space）的投射变换。固定我们的帧，每个点被$\mathbf{c}$所表达，其代表一个由1作为最后条目的4部件坐标矢量。我们随后通过一个被选定的$4\times4$矩阵P乘以这个矢量，以获得$\mathbf{b}=P\mathbf{c}$。在P的第四行上没有限制，但是我们会假设这个矩阵是可反转的（invertible）。最终，我们对于$\mathbf{d}$中的4个条目的每个除以其第四条目。这样就会给出我们结果$\mathbf{e}$，我们将其解读为我们的仿射空间（affine space）中的另一个点的坐标。（让我们忽略$\mathbf{d}$的第4条目碰巧为0的情况。）这样一种变换$\mathbf{c}\Rightarrow \mathbf{e}$。被称作一个投射变换。
+首先，让我们定义一个施加在3D仿射空间（3D affine space）的投射变换。固定我们的帧，每个点被$\mathbf{c}$所表达，其代表一个由1作为最后条目的4部件坐标矢量。我们随后通过一个被选定的$4\times4$矩阵$P$乘以这个矢量，以获得$\mathbf{b}=P\mathbf{c}$。在$P$的第四行上没有限制，但是我们会假设这个矩阵是可反转的（invertible）。最终，我们对于$\mathbf{d}$中的4个条目的每个除以其第四条目。这样就会给出我们结果$\mathbf{e}$，我们将其解读为我们的仿射空间（affine space）中的另一个点的坐标。（让我们忽略$\mathbf{d}$的第4条目碰巧为0的情况。）这样一种变换$\mathbf{c}\Rightarrow \mathbf{e}$。被称作一个投射变换。
 
-要明白这种变换保留了同线性，让我们将$\mathbf{c}$当作4D线性空间$R^4$中的一个坐标矢量。如果我们开始于在我们的3D仿射空间中全部位于一条线上的点，那么所有关联的$\mathbf{c}$坐标一定也表达了在$R^4$中位于某个相应的2D子空间中的矢量。让我们将被P相乘仅当作施加在$R^4$中的线性变换。作为任意线性变换，这一定会映射2D子空间到2D子空间。因而所有最终的$\mathbf{d}$坐标一定位于$R^4$中某个固定的2D子空间。最后，当我们除以第4坐标，我们只是缩放每个最终的矢量让它们的最后坐标为1，以便它们也位于$R^4$中的3D超平面（hyperplane）上。任何这种$\mathbf{e}$坐标一定位于3D超平面中的1D线上。这个超平面是我们的3D仿射空间的同型体（isomorphic），因而投射变换的最终点一定是同线性的。
+要明白这种变换保留了同线性，让我们将$\mathbf{c}$当作4D线性空间$R^4$中的一个坐标矢量。如果我们开始于在我们的3D仿射空间中全部位于一条线上的点，那么所有关联的$\mathbf{c}$坐标一定也表达了在$R^4$中位于某个相应的2D子空间中的矢量。让我们将被$P$相乘仅当作施加在$R^4$中的线性变换。作为任意线性变换，这一定会映射2D子空间到2D子空间。因而所有最终的$\mathbf{d}$坐标一定位于$R^4$中某个固定的2D子空间。最后，当我们除以第4坐标，我们只是缩放每个最终的矢量让它们的最后坐标为1，以便它们也位于$R^4$中的3D超平面（hyperplane）上。任何这种$\mathbf{e}$坐标一定位于3D超平面中的1D线上。这个超平面是我们的3D仿射空间的同型体（isomorphic），因而投射变换的最终点一定是同线性的。
 
 
 ## 11.3 近值和远值（Near And Far）
@@ -96,6 +96,6 @@ $$ \begin{bmatrix}
 ## 11.4 编码（Code）
 在OpenGL中，z-缓存的使用通过调用`glEnable(GL_DEPTH_TEST)`来开启。我们也需要调用`glDepthFunc(GL_GREATER)`，因为我们在使用右手性的坐标系，其中“越负的数”表示“越远离眼睛”。
 
-把所有的汇总在一起，所以我们真正需要做的是写出程序`Matrix4 makeProjection(double minfov, double aspectratio, double zNear, double zFar)`和`Matrix4 makeProjection(double top, double bottom, double left, double right, double zNear, double ZFar)`，它们会返回合适的矩阵。我们也需要程序`sendProjectionMatrix(projmat)`将投射矩阵发送到顶点着色器中恰当命名的变量之上。这些程序代码可以在我们的网站找到。实际使用投射矩阵的乘法是在顶点着色器中完成的，就如我们在小节6.3中所做的一样。
+把所有的内容汇总在一起，所以我们真正需要做的是写出程序`Matrix4 makeProjection(double minfov, double aspectratio, double zNear, double zFar)`和`Matrix4 makeProjection(double top, double bottom, double left, double right, double zNear, double ZFar)`，它们会返回合适的矩阵。我们也需要程序`sendProjectionMatrix(projmat)`将投射矩阵发送到顶点着色器中恰当命名的变量之上。这些程序代码可以在我们的网站找到。实际使用投射矩阵的乘法是在顶点着色器中完成的，就如我们在小节6.3中所做的一样。
 
 
