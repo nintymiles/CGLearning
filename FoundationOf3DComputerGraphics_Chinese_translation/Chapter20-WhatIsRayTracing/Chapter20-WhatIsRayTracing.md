@@ -49,23 +49,24 @@ for all pixels on the screen
 光线追踪中所需要的主体计算为计算场景中几何射线$(\tilde{p},\vec{d})$和物体的相交（intersection）。这里$\tilde{p}$为射线的起点，其以方向$\vec{d}$行进。
 
 ### 20.2.1 平面（Plane）
-假设我们希望计算$(\tilde{p},\vec{d})$的相交，其中平面使用方程式$Ax + By + Cz + D = 0$描述。我们开始于使用参数$\lambda$沿着射线表达每个点
+假设我们希望计算$(\tilde{p},\vec{d})$的相交，其中平面使用方程式$Ax + By + Cz + D = 0$描述。我们开始于，使用参数$\lambda$沿着射线表达每个点
 $$ \large{
-\begin{bmatrix} x \\ y \\ z \end{bmatrix} = 
-\begin{bmatrix} p_x \\ p_y \\ p_z \end{bmatrix} +
-\lambda\begin{bmatrix} d_x \\ d_y \\ d_z \end{bmatrix} \tag{20.1}
+\begin{bmatrix} x \\ y \\ z\end{bmatrix}  = 
+\begin{bmatrix} p_x \\ p_y \\ p_z\end{bmatrix}  +
+\lambda \begin{bmatrix} d_x \\ d_y \\ d_z\end{bmatrix}  \tag{20.1}
 }$$
 把这个插入平面方程式，我们得到
 $$ \large{
 \begin{array}{rcl} 
 0 & = & A(p_x + λd_x ) + B(p_y + λd_y ) + C(p_z + λd_z ) + D \\
-  & = & \lambda(Ad_x + Bd_y + Cd_z ) + Ap_x + Bp_y + Cp_z + D \end{array} 
+  & = & \lambda(Ad_x + Bd_y + Cd_z ) + Ap_x + Bp_y + Cp_z + D\end{array} 
 }$$
 因此我们看到
 $$ \large{
 \lambda = \frac{−Ap_x − Bp_y − Cp_z − D}{Ad_x + Bd_y + Cd_z}
 }$$
-在这种解法中，$\lambda$告知我们沿着射线相交点在哪里（负值化的$\lambda$表示沿着射线后退）。在$\lambda$值之间的比较可以被用于决定在平面集合中沿着射线哪个平面首先被相交。
+
+在这种解法中，$\lambda$告知我们沿着射线相交点在哪里（负值化的$\lambda$表示沿着射线后退）。在$\lambda$值之间的比较，可以被用于决定，在平面集合中沿着射线哪个平面首先被相交。
 
 ### 20.2.2 三角形（Triangle）
 如果我们想要让一条射线相交于一个三角形，我们可以把这个问题分解为两个步骤。在第一步中，我们计算支撑这个三角形的平面的$A,B,C,D$值，并且像上面一样计算射线-平面相交。接下来，我们需要检测来决定相交点是在三角形内还是在三角形外。我们可以借助方程12.4中的“反时针”计算构建这样一种检测如下。假设我们希望检测一个点$\tilde{p}$是位于2D中的三角形$\triangle(\tilde{p}_1\tilde{p}_2\tilde{p}_3)$之内还是在外（参考图示$\text(Figure 20.2)$和$\text(Figure 20.3)$）。考虑三个“子”三角形$\triangle(\tilde{p}_1\tilde{p}_2\tilde{q})$，$\triangle(\tilde{p}_1\tilde{q}\tilde{p}_3)$和$\triangle(\tilde{q}\tilde{p}_2\tilde{p}_3)$。当$\tilde{q}$位于$\triangle(\tilde{p}_1\tilde{p}_2\tilde{p}_3)$之内，那么所有3个子-三角形将在时针方向上一致。当$\tilde{q}$在外部时，它们将会不一致。
@@ -77,7 +78,7 @@ $$ \large{
 **Figure 20.3:** 点$\tilde{q}$位于三角形外部。子-三角形$\triangle(\tilde{p}_1\tilde{p}_2\tilde{q})$在旋转时针方向上与其它两个子-三角形不一致。
 
 ### 20.2.3 球体（Sphere）
-射线-平面相交的背后思路也可以改造为计算射线-球体相交。在这种情形中，拥有半径$R$和中心$c$的球体被建模为点$[x,y,z]^t$点集合，其满足方程$(x − c_x )^2 + (y − c_y )^2 + (z − c_z )^2 − r^2 = 0$。把这个插入方程（20.1），我们得到
+射线-平面相交的背后思路也可以改造为计算射线-球体相交。在这种情形中，拥有半径$R$和中心$c$的球体被建模为点$[x,y,z]^t$的坐标集合，其满足方程$(x − c_x )^2 + (y − c_y )^2 + (z − c_z )^2 − r^2 = 0$。把这个插入方程
 $$ \large{
 \begin{array}{rl} 
 0 & = & (p_x+\lambda d_x−c_x)^2+(p_y+\lambda d_y−c_y)^2+(p_z+\lambda d_z−c_z)^2 − r^2 \\
@@ -100,7 +101,7 @@ $$ \large{
 **Figure 20.4:** 一张最早发布的使用递归光学追踪方式渲染的图像。来自于参考书吗[77]，©️ACM。
 
 ### 20.3.1 更多光线（Even More rays）
-就如在后面第21章中以更详细地方式所描述的，更加真实的光学模拟要求积分的计算，并且这些积分可以经常借助沿着样本集合汇总其作用的方式被近似。针对这些样本计算对应值经常涉及跟踪穿过场景的光线。
+就如在后面第21章中以更详细地方式所描述的，更加真实的光学模拟要求积分的计算，并且这些积分可以经常借助沿着样本集合汇总其作用的方式被近似。针对这些样本计算对应值，经常涉及跟踪穿过场景的光线。
 
-例如，我们可能想要模拟被有限区域中的大光源照明的场景。除了别的效果之外，这会导致软阴影边界（soft shadow boundaries）（参考后面图示$\text{Figure 21.8}$）。由于这种区域光源，通过向区域光源发出多条阴影射线并且确定出那些射线有多少命中光源，可以近似出这种光。其它相似的效果诸如相机镜头的聚焦效果和互相反射效果在第21章中会被讨论。这些也可以通过追踪很多通过场景的光线被计算。
+例如，我们可能想要模拟，被有限区域中的大光源所照明的场景。除了其它的效果之外，这会导致软阴影边界（soft shadow boundaries）（参考后面图示$\text{Figure 21.8}$）。由于这种区域光源，通过向区域光源发出多条阴影射线并且确定出那些射线有多少命中了光源，可以近似出这种光。其它相似的效果诸如相机镜头的聚焦效果和互相反射效果在第21章中会被讨论。这些也可以通过追踪很多通过场景的光线被计算。
 
