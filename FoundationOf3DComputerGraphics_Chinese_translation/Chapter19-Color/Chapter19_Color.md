@@ -29,7 +29,11 @@
 
 在某种强度范围内，（相关对应的）锥体（细胞）线性地响应照摄在它们之上的光。如此，对于混合光束$l(\lambda)$，3个响应坐标值$[S,M,L]^t$可用如下公式计算：
 
-$ \begin{matrix} S \quad = \quad \int_\Omega d\lambda \ l(\lambda) \ k_s(\lambda)  \qquad \text{(19.1)} \\ M \quad = \quad \int_\Omega d\lambda \ l(\lambda) \  k_m(\lambda) \qquad \text{(19.2)}  \\ L \quad =  \quad \int_\Omega d\lambda \ l(\lambda) \  k_l(\lambda) \qquad \text{(19.3)}  \end{matrix} $ 
+$$ \begin{array}{lcll} 
+S & = & \int_\Omega d\lambda \ l(\lambda) \ k_s(\lambda)  & \qquad \text{(19.1)} \\
+M & = & \int_\Omega d\lambda \ l(\lambda) \  k_m(\lambda) & \qquad \text{(19.2)}  \\ 
+L & =  & \int_\Omega d\lambda \ l(\lambda) \  k_l(\lambda) & \qquad \text{(19.3)}  
+\end{array}$$ 
 
 此处$\Omega = [380..770]$。
 
@@ -80,15 +84,19 @@ Figure 19.3: 基本色彩匹配实验装置。光投影仪使用多种可变光�
 
 然后，我们的下一步是指出怎样将两种色彩加在一起。我们从物理学中得知当两个光束，$𝑙_1(\lambda)$和$𝑙_2(\lambda)$被加在一起，它们只是以光分布$𝑙_1(\lambda)+𝑙_2(\lambda)$的特征组成了一个合并光束。如此，我们尝试定义两个色彩的加法，其结果为两个光束的加法（和）所对应的色彩。
 
-$\vec{c}(𝑙_1(\lambda))+\vec{c}(𝑙_2(\lambda) := \vec{c}(𝑙_1(\lambda)+𝑙_2(\lambda))$
+$$
+\vec{c}(𝑙_1(\lambda))+\vec{c}(𝑙_2(\lambda) := \vec{c}(𝑙_1(\lambda)+𝑙_2(\lambda))
+$$
 
 要让这个公式被正确定义，必须以实验方式验证不论我们选择哪个光束作为这种色彩的表达都没有什么不同。实际上，如果$\vec{c}(𝑙_1(\lambda)) = \vec{c}(𝑙_1'(\lambda))$，那么我们必须验证（再次借助图示$\text{Figure19.3}$的装置）：对于所有的$𝑙_2(\lambda)$，我们具有如下关系$\vec{c}(𝑙_1(\lambda)) + \vec{c}(𝑙_2(\lambda)) := \vec{c}(𝑙_1'(\lambda)) + \vec{c}(𝑙_2(\lambda)$)，也即，我们必须验证光束$𝑙_1(\lambda) + 𝑙_2(\lambda)$对于$𝑙_1'(\lambda) + 𝑙_2(\lambda)$不可区分。这个属性确实可被实验证实。
 
 我们的下一步是尝试定义用非负实数$\alpha$乘以一个色彩坐标意味着什么。再次，因为我们可以用一个正数（scalar）乘以一个光束，尝试如下定义：
 
-$\alpha \vec{c} (𝑙_1(\lambda)) := \vec{c}(\alpha𝑙_1(\lambda)) \qquad\text{(19.4)}$  
+$$
+\alpha \vec{c} (𝑙_1(\lambda)) := \vec{c}(\alpha𝑙_1(\lambda)) \tag{19.4}
+$$
 
-再一次，我们需要验证这个操作的行为不依赖我们对光束的选择。因此当$\vec{c}(𝑙_1(\lambda)) = \vec{c}(𝑙_1'(\lambda))$，我们必须验证对于所有的$\alpha$值我们也具有$\vec{c}(\alpha𝑙_1(\lambda)) = \vec{c}(\alpha 𝑙_1'(\lambda))$，也即是说，我们必须验证光束$\alpha 𝑙_1(\lambda)$对于$\alpha 𝑙_1'(\lambda)$是无法区分的。这个属性也可以通过实验证实。
+再一次，我们需要验证这个操作的行为不依赖我们对光束的选择。因此当$\vec{c}(𝑙_1(\lambda)) = \vec{c}(𝑙_1'(\lambda))$，我们必须验证对于所有的$\alpha$值都具有$\vec{c}(\alpha𝑙_1(\lambda)) = \vec{c}(\alpha 𝑙_1'(\lambda))$，也即是说，我们必须验证光束$\alpha 𝑙_1(\lambda)$对于$\alpha 𝑙_1'(\lambda)$是无法区分的。这个属性也可以通过实验证实。
 
 ### 19.2.1 一个技术细节（One Technical Detail）
 在实数矢量空间，我们可以用一个负实数乘以一个矢量。如果我们在色彩表达中尝试这种计算，当我们得到$-\vec{c}(l_1):=\vec{c}(-l_1)$这样的结果时，那么这种结果是未定义的(undefined)，因为不存在负光(negative light)。
@@ -112,7 +120,7 @@ $$
 我们仍然不知道色彩空间的维度，（但是很快会证实它是3维的）。我们现在返回图示$\text{Figure 19.7}$并且把其当作扩展色彩空间的图示。在色彩锥体内的矢量是实际色彩，而锥体外的色彩是想象色彩。矢量，例如，使用坐标$[0,1,0]^t$所表达的是想象色彩。
 
 ## 19.3 色彩匹配（Color Matching）
-色彩匹配实验的目标是要证实色彩空间的维度是3维。另外，它会给出我们一种计算方式（类似于方程式（19.1）），这种方式专门用于映射光束到其关于一个特定基(basis)的色彩坐标。
+色彩匹配实验的目标是要证实色彩空间的维度是3维。另外，它会给出我们一种计算方式（类似于方程式（19.1）），这种方式专门用于映射光束到关于一个特定基(basis)的色彩坐标。
 
 使用图示$\text{Figure 19.3}$的装置，观察者看到两个屏幕。在屏幕的左侧会给他们展示一个纯的测试光束$𝑙_\lambda$，拥有某种固定波长。在屏幕的右侧，他们会观察到一束光，由3个纯匹配光束的正值线性组合构成，波长分别为435，545和625纳米。观察者的目标是调整右侧的3个旋钮，控制匹配光束的强度，以便加权过的3种匹配光束对于测试光束是不可区分的。针对固定的波长λ，同时将旋钮设置值看可作$k_{435}(\lambda)$,$k_{545}(\lambda)$和$k_{625}(\lambda)$,目标便是设置这些旋钮以便光束$k_{435}(\lambda)𝑙_{435} + k_{545}(\lambda)𝑙_{545} + k_{625}(\lambda)𝑙_{625}$为$𝑙_\lambda$的条件等色。如果用户不能成功，那么他们被允许从右侧移动一个或者多个匹配光束到左侧，同时将他们合并到测试光束并代替测试光束。在扩展色彩空间的数学里，这等同于允许某个数量值$k(\lambda)$变动为负值。
 
