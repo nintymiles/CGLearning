@@ -272,3 +272,4 @@ void TexturedTeapotObjModel::Render(float r, float g, float b) {
     glBindVertexArray(0);
 
 }
+
