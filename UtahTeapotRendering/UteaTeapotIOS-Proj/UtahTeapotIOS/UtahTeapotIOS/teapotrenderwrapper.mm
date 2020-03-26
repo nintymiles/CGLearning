@@ -29,32 +29,13 @@
 #include "Geometry.h"
 #include "TeapotModel.h"
 
+#include "FrustumModel.h"
+
 
 
 using namespace std;      // for string, vector, iostream, and other standard C++ stuff
 
 // G L O B A L S ///////////////////////////////////////////////////
-
-// --------- IMPORTANT --------------------------------------------------------
-// Before you start working on this assignment, set the following variable
-// properly to indicate whether you want to use OpenGL 2.x with GLSL 1.0 or
-// OpenGL 3.x+ with GLSL 1.3.
-//
-// Set g_Gl2Compatible = true to use GLSL 1.0 and g_Gl2Compatible = false to
-// use GLSL 1.3. Make sure that your machine supports the version of GLSL you
-// are using. In particular, on Mac OS X currently there is no way of using
-// OpenGL 3.x with GLSL 1.3 when GLUT is used.
-//
-// If g_Gl2Compatible=true, shaders with -gl2 suffix will be loaded.
-// If g_Gl2Compatible=false, shaders with -gl3 suffix will be loaded.
-// To complete the assignment you only need to edit the shader files that get
-// loaded
-//
-// Original assignment source designed for early OpenGL versions 1.0/1.3. Because
-// We need to work on OpenGL ES enviroment,so remove g_GL2Compatible flag and related
-// shader resources.
-// ----------------------------------------------------------------------------
-//static const bool g_Gl2Compatible = false;
 
 
 static const float g_frustMinFov = 60.0;  // A minimal of 60 degree field of view
@@ -62,8 +43,6 @@ static float g_frustFovY = g_frustMinFov; // FOV in y direction (updated by upda
 
 static const float g_frustNear = -0.1;    // near plane
 static const float g_frustFar = -50.0;    // far plane
-static const float g_groundY = -2.0;      // y coordinate of the ground
-static const float g_groundSize = 10.0;   // half the ground length
 
 static int g_windowWidth = 512;
 static int g_windowHeight = 512;
@@ -75,20 +54,6 @@ static int g_mouseClickX, g_mouseClickY; // coordinates for mouse click event
 static int g_activeShader = 0;
 
 
-static const int g_numShaders = 2;
-static const char * const g_shaderFiles[g_numShaders][2] = {
-  {"basic-gles3.vshader", "diffuse-gles3.fshader"},
-  {"basic-gles3.vshader", "solid-gles3.fshader"}
-};
-
-static vector<shared_ptr<ShaderState> > g_shaderStates; // our global shader states
-
-// --------- Geometry
-
-
-// Vertex buffer and index buffer associated with the ground and cube geometry
-static shared_ptr<Geometry> g_ground, g_cube,g_sphere;
-
 // --------- Scene
 
 static const Cvec3 g_light1(2.0, 3.0, 14.0), g_light2(-2, -3.0, -5.0);  // define two lights positions in world space
@@ -97,12 +62,12 @@ static RigTForm g_skyRbt = RigTForm(Cvec3(0.0, 0.25, 4.0));
 //static Matrix4 g_objectRbt[2] = {Matrix4::makeTranslation(Cvec3(0,0,0)),Matrix4::makeTranslation(Cvec3(0,0,-2))};
 static RigTForm g_objectRbt[2] = {RigTForm(Cvec3(0.5,0.5,0.5)),RigTForm(Cvec3(0,0,0))};
 
-static Cvec4f g_objectColors[2] = {Cvec4f(1, 0, 0, 1),Cvec4f(0.5, 0, 0.5, 0.3)};
 static const Cvec3 g_objectFrameOrigin = Cvec3(0,-0.25,-4.0);
 
 
 ///////////////// END OF G L O B A L S //////////////////////////////////////////////////
 shared_ptr<TeapotModel> teapotModel;
+shared_ptr<FrustumModel> frustumModel;
 
 //--------------------------------------------------------------------------------
 //  touch event variables
@@ -116,15 +81,6 @@ GLfloat rotation_angle_alpha;
 GLfloat rotation_angle_slerp_start=75.f;
 GLfloat rotation_angle_slerp_end=255.f;
 RigTForm g_slerpBaseRbt = RigTForm(Cvec3(0,0,-2));
-
-
-// takes a projection matrix and send to the the shaders
-static void sendProjectionMatrix(const ShaderState& curSS, const Matrix4& projMatrix) {
-  GLfloat glmatrix[16];
-  projMatrix.writeToColumnMajorMatrix(glmatrix); // send projection matrix
-  safe_glUniformMatrix4fv(curSS.h_uProjMatrix, glmatrix);
-}
-
 
 
 // update g_frustFovY from g_frustMinFov, g_windowWidth, and g_windowHeight
@@ -145,7 +101,10 @@ static Matrix4 makeProjectionMatrix() {
 
 static void drawStuff() {
     teapotModel->UpdateViewport();
-    teapotModel->Render(1.0, 0.0, 0.0);
+    teapotModel->Render(1.0, 0.055, 0.027);
+    
+    frustumModel->UpdateViewport();
+    frustumModel->Render();
 }
 
 static void display() {
@@ -313,19 +272,12 @@ static void initGLState() {
     
 }
 
-static void initShaders() {
-  g_shaderStates.resize(g_numShaders);
-  for (int i = 0; i < g_numShaders; ++i) {
-//    if (g_Gl2Compatible)
-//      g_shaderStates[i].reset(new ShaderState(GetBundleFileName(g_shaderFilesGl2[i][0]), GetBundleFileName(g_shaderFilesGl2[i][1])));
-//    else
-      g_shaderStates[i].reset(new ShaderState(GetBundleFileName(g_shaderFiles[i][0]), GetBundleFileName(g_shaderFiles[i][1])));
-  }
-}
-
 static void initGeometry() {
     teapotModel.reset(new TeapotModel());
     teapotModel->Init();
+    
+    frustumModel.reset(new FrustumModel());
+    frustumModel->Init();
 }
 
 bool GraphicsInit()
