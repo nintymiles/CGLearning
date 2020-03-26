@@ -21,8 +21,8 @@
 struct VertexPN {
     Cvec3f p, n;
     
-//    //常量FORMAT为本struct对象定义范围内的存在
-//    static const VertexFormat FORMAT;
+    //    //常量FORMAT为本struct对象定义范围内的存在
+    //    static const VertexFormat FORMAT;
     
     VertexPN() {}
     
@@ -57,8 +57,8 @@ struct VertexPN {
 struct VertexPNX : public VertexPN {
     Cvec2f x; // texture coordinates
     
-//    //VertexPNX所属的常量FORMAT
-//    static const VertexFormat FORMAT;
+    //    //VertexPNX所属的常量FORMAT
+    //    static const VertexFormat FORMAT;
     
     VertexPNX() {}
     
@@ -93,8 +93,8 @@ struct VertexPNX : public VertexPN {
 struct VertexPNTBX : public VertexPNX {
     Cvec3f t, b; // tangent, binormal
     
-//    //隶属于VertexPNTBX所配备的常量
-//    static const VertexFormat FORMAT;
+    //    //隶属于VertexPNTBX所配备的常量
+    //    static const VertexFormat FORMAT;
     
     VertexPNTBX() {}
     
@@ -149,8 +149,19 @@ struct Geometry {
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glBufferData(GL_ARRAY_BUFFER, sizeof(VertexPNX) * vboLen, vtx, GL_STATIC_DRAW);
         
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * iboLen, idx, GL_STATIC_DRAW);
+        if(iboLen>0){
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * iboLen, idx, GL_STATIC_DRAW);
+        }
+        
+    }
+    
+    Geometry(VertexPN *vtx, int vboLen) {
+        this->vboLen = vboLen;
+        
+        // Now create the VBO and IBO
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(VertexPN) * vboLen, vtx, GL_STATIC_DRAW);
         
     }
     
@@ -177,28 +188,28 @@ struct Geometry {
     }
     
     void draw(const ShaderState& curSS) {
-//        GLuint vao;
-//        glGenVertexArrays( 1, &vao );
-//        glBindVertexArray(vao);
-//        // Enable the attributes used by our shader
-//        safe_glEnableVertexAttribArray(curSS.h_aPosition);
-//        safe_glEnableVertexAttribArray(curSS.h_aNormal);
-//        
-//        // bind vbo
-//        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-//        safe_glVertexAttribPointer(curSS.h_aPosition, 3, GL_FLOAT, GL_FALSE, sizeof(VertexPNX), FIELD_OFFSET(VertexPNX, p));
-//        safe_glVertexAttribPointer(curSS.h_aNormal, 3, GL_FLOAT, GL_FALSE, sizeof(VertexPNX), FIELD_OFFSET(VertexPN, n));
-//        
-//        // bind ibo
-//        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-//        
-//        // draw!
-//        glDrawElements(GL_TRIANGLES, iboLen, GL_UNSIGNED_SHORT, 0);
-//        
-//        // Disable the attributes used by our shader
-//        safe_glDisableVertexAttribArray(curSS.h_aPosition);
-//        safe_glDisableVertexAttribArray(curSS.h_aNormal);
-//        glBindVertexArray(0);
+        GLuint vao;
+        glGenVertexArrays( 1, &vao );
+        glBindVertexArray(vao);
+        // Enable the attributes used by our shader
+        safe_glEnableVertexAttribArray(curSS.h_aPosition);
+        safe_glEnableVertexAttribArray(curSS.h_aNormal);
+        
+        // bind vbo
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        safe_glVertexAttribPointer(curSS.h_aPosition, 3, GL_FLOAT, GL_FALSE, sizeof(VertexPN), FIELD_OFFSET(VertexPN, p));
+        safe_glVertexAttribPointer(curSS.h_aNormal, 3, GL_FLOAT, GL_FALSE, sizeof(VertexPN), FIELD_OFFSET(VertexPN, n));
+        
+        // bind ibo
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+        
+        // draw!
+        glDrawElements(GL_TRIANGLES, iboLen, GL_UNSIGNED_SHORT, 0);
+        
+        // Disable the attributes used by our shader
+        safe_glDisableVertexAttribArray(curSS.h_aPosition);
+        safe_glDisableVertexAttribArray(curSS.h_aNormal);
+        glBindVertexArray(0);
     }
 };
 

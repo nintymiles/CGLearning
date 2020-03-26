@@ -115,6 +115,15 @@ public:
         return *this;
     }
     
+    //标量“*=”操作符实现
+    Cvec& operator *= (const Cvec& v) {
+        for (int i = 0; i < n; ++i) {
+            //此处的“*=”是本意
+            d_[i] *= v[i];
+        }
+        return *this;
+    }
+    
     //标量“/=”操作符实现
     Cvec& operator /= (const T a) {
         //此处inva是变量，括号中内容是list initialzation，等同于T inva = 1/a
@@ -153,6 +162,10 @@ public:
     //标量“*”操作符实现
     Cvec operator * (const T a) const {
         return Cvec(*this) *= a;
+    }
+    
+    Cvec operator * (const Cvec& v) const {
+        return Cvec(*this) *= v;
     }
     
     //标量“/”操作符实现

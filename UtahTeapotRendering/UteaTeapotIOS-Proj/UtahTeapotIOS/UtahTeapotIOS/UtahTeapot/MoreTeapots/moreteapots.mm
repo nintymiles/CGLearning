@@ -88,14 +88,6 @@ GLfloat rotation_angle_slerp_end=255.f;
 RigTForm g_slerpBaseRbt = RigTForm(Cvec3(0,0,-2));
 
 
-// takes a projection matrix and send to the the shaders
-static void sendProjectionMatrix(const ShaderState& curSS, const Matrix4& projMatrix) {
-  GLfloat glmatrix[16];
-  projMatrix.writeToColumnMajorMatrix(glmatrix); // send projection matrix
-  safe_glUniformMatrix4fv(curSS.h_uProjMatrix, glmatrix);
-}
-
-
 // update g_frustFovY from g_frustMinFov, g_windowWidth, and g_windowHeight
 static void updateFrustFovY() {
   if (g_windowWidth >= g_windowHeight)

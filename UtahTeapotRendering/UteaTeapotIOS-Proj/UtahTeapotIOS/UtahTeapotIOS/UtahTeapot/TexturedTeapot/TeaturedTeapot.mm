@@ -27,7 +27,10 @@
 
 #include "shadersasst.h"
 #include "Geometry.h"
-#include "TexturedTeapotModel.h"
+#include "MotionControl.h"
+#include "TexturedTeapotObjModel.h"
+//#include "TexturedTeapotModel.h"
+
 
 
 
@@ -72,7 +75,8 @@ static const Cvec3 g_objectFrameOrigin = Cvec3(0,-0.25,-4.0);
 
 
 ///////////////// END OF G L O B A L S //////////////////////////////////////////////////
-shared_ptr<TexturedTeapotModel> texturedTeapotModel;
+shared_ptr<TexturedTeapotObjModel> texturedTeapotModel;
+shared_ptr<MotionControl> motionControl;
 
 //--------------------------------------------------------------------------------
 //  touch event variables
@@ -86,14 +90,6 @@ GLfloat rotation_angle_alpha;
 GLfloat rotation_angle_slerp_start=75.f;
 GLfloat rotation_angle_slerp_end=255.f;
 RigTForm g_slerpBaseRbt = RigTForm(Cvec3(0,0,-2));
-
-
-// takes a projection matrix and send to the the shaders
-static void sendProjectionMatrix(const ShaderState& curSS, const Matrix4& projMatrix) {
-  GLfloat glmatrix[16];
-  projMatrix.writeToColumnMajorMatrix(glmatrix); // send projection matrix
-  safe_glUniformMatrix4fv(curSS.h_uProjMatrix, glmatrix);
-}
 
 
 // update g_frustFovY from g_frustMinFov, g_windowWidth, and g_windowHeight
@@ -113,6 +109,7 @@ static Matrix4 makeProjectionMatrix() {
 }
 
 static void drawStuff() {
+    texturedTeapotModel->Update(0);
     texturedTeapotModel->UpdateViewport();
     texturedTeapotModel->Render(1.0, 0.0, 0.0);
 }
@@ -284,8 +281,15 @@ static void initGLState() {
 
 
 static void initGeometry() {
-    texturedTeapotModel.reset(new TexturedTeapotModel());
+    texturedTeapotModel.reset(new TexturedTeapotObjModel());
+//    texturedTeapotModel.reset(new TexturedTeapotModel());
     texturedTeapotModel->Init();
+    
+    motionControl.reset(new MotionControl());
+    motionControl->SetFlip(1.f, 1.f, 1.f);
+    motionControl->SetPinchTransformFactor(2.f, 2.f, 8.f);
+    //appCamera->InitParameters();
+    texturedTeapotModel->SetMotionControl(motionControl);
 }
 
 bool GraphicsInit()
@@ -323,12 +327,21 @@ bool GraphicsRender() {
     }
 }
 
+static Cvec2 screenToNDC(const float mouse_x, const float mouse_y){
+    float ndc_x= 2*(mouse_x/g_windowWidth) - 1;
+    float ndc_y= 2*(mouse_y/g_windowWidth) - 1;
+    return Cvec2(ndc_x,ndc_y);
+}
+
 void TouchEventDown( float x, float y,unsigned long tapCount,bool pressStatus )
 {
     touch_location_x = x;
     touch_location_y = y;
     
     mouse(x,y,tapCount,pressStatus);
+    
+    motionControl->EndDrag();
+    motionControl->BeginDrag(screenToNDC(x, g_windowHeight - y - 1));
 }
 
 void TouchEventMove( float x, float y,unsigned long touchCount )
@@ -351,6 +364,8 @@ void TouchEventMove( float x, float y,unsigned long touchCount )
         g_skyRbt = doQtoOwrtA(RigTForm(arcballQuat), g_skyRbt, g_objectRbt[1]);
 
     }
+    
+    motionControl->Drag(screenToNDC(x, g_windowHeight - y - 1));
 }
 
 void TouchEventRelease( float x, float y,unsigned long tapCount,bool pressStatus )
@@ -368,4 +383,6 @@ void TouchEventRelease( float x, float y,unsigned long tapCount,bool pressStatus
     }
     
     mouse(x,y,tapCount,pressStatus);
+    
+    motionControl->EndDrag();
 }

@@ -66,8 +66,30 @@ void TeapotModel::Init() {
     
     delete[] p;
     
+    
+    if(!vao_)
+        glGenVertexArrays(1, &vao_);
+    
+    glBindVertexArray(vao_);
+    // Bind the VBO
+    glBindBuffer(GL_ARRAY_BUFFER, geometry_->vbo);
+    
+    int32_t iStride = sizeof(VertexPNX);
+    // Pass the vertex data
+    glVertexAttribPointer(ATTRIB_VERTEX, 3, GL_FLOAT, GL_FALSE, iStride,
+                          BUFFER_OFFSET(0));
+    glEnableVertexAttribArray(ATTRIB_VERTEX);
+    
+    glVertexAttribPointer(ATTRIB_NORMAL, 3, GL_FLOAT, GL_FALSE, iStride,
+                          BUFFER_OFFSET(3 * sizeof(GLfloat)));
+    glEnableVertexAttribArray(ATTRIB_NORMAL);
+    
+    // Bind the IB
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry_->ibo);
+    glBindVertexArray(0);
+    
     //  UpdateViewport();
-    mat_model_ = Matrix4::makeTranslation(Cvec3(0, 0, -80.f));
+    mat_model_ = Matrix4::makeTranslation(Cvec3(0, -10.f, -80.f));
     
     mat_model_ =  mat_model_ * Matrix4::makeXRotation(-60);
     
@@ -78,29 +100,16 @@ void TeapotModel::Init() {
 }
 
 void TeapotModel::UpdateViewport() {
-    // Init Projection matrices
     int32_t viewport[4];
     glGetIntegerv(GL_VIEWPORT, viewport);
     
     const float CAM_NEAR = -0.1f;
     const float CAM_FAR = -10000.f;
     
-    //        float aspect =
-    //            static_cast<float>(viewport[2]) / static_cast<float>(viewport[3]);
-    float aspect = 325/667.0;
-    mat_projection_ = Matrix4::makeProjection(90, aspect, CAM_NEAR, CAM_FAR);
     
-    //  if (viewport[2] < viewport[3]) {
-    //    float aspect =
-    //        static_cast<float>(viewport[2]) / static_cast<float>(viewport[3]);
-    //    mat_projection_ =
-    //        ndk_helper::Mat4::Perspective(aspect, 1.0f, CAM_NEAR, CAM_FAR);
-    //  } else {
-    //    float aspect =
-    //        static_cast<float>(viewport[3]) / static_cast<float>(viewport[2]);
-    //    mat_projection_ =
-    //        ndk_helper::Mat4::Perspective(1.0f, aspect, CAM_NEAR, CAM_FAR);
-    //  }
+    float fov = 60;
+    float aspect = static_cast<float>(viewport[2]) / static_cast<float>(viewport[3]);
+    mat_projection_ =Matrix4::makeProjection(fov, aspect, CAM_NEAR, CAM_FAR);
 }
 
 void TeapotModel::Unload() {
@@ -126,34 +135,17 @@ void TeapotModel::Update(double time) {
 }
 
 void TeapotModel::Render(float r, float g, float b) {
-    GLuint vao;
-    glGenVertexArrays( 1, &vao );
-    glBindVertexArray(vao);
     
     mat_model_ = mat_model_ * Matrix4::makeZRotation(1);
     // Feed Projection and Model View matrices to the shaders
     Matrix4 mat_vp = mat_projection_ * mat_view_ * mat_model_;
     
-    // Bind the VBO
-    glBindBuffer(GL_ARRAY_BUFFER, geometry_->vbo);
     
-    int32_t iStride = sizeof(VertexPNX);
-    // Pass the vertex data
-    glVertexAttribPointer(ATTRIB_VERTEX, 3, GL_FLOAT, GL_FALSE, iStride,
-                          BUFFER_OFFSET(0));
-    glEnableVertexAttribArray(ATTRIB_VERTEX);
-    
-    glVertexAttribPointer(ATTRIB_NORMAL, 3, GL_FLOAT, GL_FALSE, iStride,
-                          BUFFER_OFFSET(3 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(ATTRIB_NORMAL);
-    
-    // Bind the IB
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry_->ibo);
     
     glUseProgram(teapotShaderState_->program);
     
     TEAPOT_MATERIALS material = {
-        {r, g, b}, {1.0f, 1.0f, 1.0f, 10.f}, {0.1f, 0.1f, 0.1f}, };
+        {r, g, b}, {1.0f, 1.0f, 1.0f, 90.f}, {0.1f, 0.1f, 0.1f}, };
     
     // Update uniforms
     glUniform4f(teapotShaderState_->material_diffuse_, material.diffuse_color[0],
@@ -177,13 +169,11 @@ void TeapotModel::Render(float r, float g, float b) {
     mat_view_.writeToColumnMajorMatrix(glmatrix2);
     glUniformMatrix4fv(teapotShaderState_->matrix_view_, 1, GL_FALSE, glmatrix2);
     
-    glUniform3f(teapotShaderState_->light0_, 0.f, 100.f, 10.f);
+    glUniform3f(teapotShaderState_->light0_, -100.f, -200.f, 100.f);
     
+    glBindVertexArray(vao_);
     glDrawElements(GL_TRIANGLES, num_indices_, GL_UNSIGNED_SHORT,
                    BUFFER_OFFSET(0));
-    
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     
     glBindVertexArray(0);
 }

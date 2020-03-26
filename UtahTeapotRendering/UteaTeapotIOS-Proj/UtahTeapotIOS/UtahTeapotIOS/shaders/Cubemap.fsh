@@ -18,7 +18,7 @@
 
 #version 300 es
 
-precision mediump float;
+precision highp float;
 
 uniform lowp vec3       vMaterialAmbient;
 uniform lowp vec4       vMaterialSpecular;
@@ -36,15 +36,17 @@ out mediump vec4 fragColor;
 
 void main()
 {
-    mediump vec3 halfVector = normalize(-vLight0 + position);
+    mediump vec3 halfVector = normalize(vLight0 - position);
     mediump float NdotH = max(dot(normalize(normal), halfVector), 0.0);
     mediump float fPower = vMaterialSpecular.w;
     mediump float specular = pow(NdotH, fPower);
     
-    vec3 reflector = reflect(position,normalize(normal));
+    vec3 reflected = reflect(normalize(position),normalize(normal));
 
     lowp vec4 colorSpecular = vec4( vMaterialSpecular.xyz * specular, 1 );
-    vec3 texCoord = reflector;
-    //texCoord.y = -normal.y;
-    fragColor = texture(samplerObj, normalize(texCoord));
+    vec3 texCoord = reflected;
+    //why flipped texCoord.y
+    //texCoord.y = -texCoord.y;
+    //fragColor = texture(samplerObj, normalize(texCoord));
+    fragColor = colorDiffuse * texture(samplerObj, texCoord);// + colorSpecular* vMaterialSpecular + vec4(vMaterialAmbient.xyz, 1.0);
 }

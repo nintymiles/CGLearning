@@ -1,27 +1,6 @@
-//
-// Copyright (C) 2015 The Android Open Source Project
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
-//  ShaderPlain.fsh
-//
-
-//--------------------------------------------------------------------------------
-//  fragment shader 代码
-//--------------------------------------------------------------------------------
 #version 300 es
 //为float类型指定默认精度，这个精度必需指定，因为fragment shader中没有float类型系统默认精度
-precision mediump float;
+precision highp float;
 
 //--------------------------------------------------------------------------------
 //  uniform variables
@@ -32,8 +11,6 @@ uniform vec4      vMaterialSpecular;
 uniform lowp vec3       vMaterialAmbient;
 // uniform variable -- light position
 uniform mediump vec3  vLight0;
-
-uniform sampler2D samplerObj;
 
 //--------------------------------------------------------------------------------
 //  fragment input variables -- varying varialbles
@@ -55,17 +32,18 @@ out vec4 fragColor;
 
 void main()
 {
-
-    vec3 halfVector = normalize(-vLight0 + position);
+    
+    vec3 halfVector = normalize(vLight0 - position);
     float NdotH = max(dot(normalize(normal), halfVector), 0.0);
     float fPower = vMaterialSpecular.w;
     float specular = pow(NdotH, fPower);
-
+    
     vec4 colorSpecular = vec4( vMaterialSpecular.xyz * specular, 1 );
-    //fragColor = colorDiffuse + colorSpecular + vec4(vMaterialAmbient,1);
+    fragColor = colorDiffuse + colorSpecular + vec4(vMaterialAmbient,1);
     //fragColor = vMaterialDiffuse * NdotH + colorSpecular;
-    fragColor =  texture(samplerObj, texCoord) +  vec4(vMaterialAmbient.xyz, 1.0f) + colorSpecular;
+    
+    fragColor =  colorDiffuse +  vec4(vMaterialAmbient.xyz, 1.0f) + colorSpecular;
     
     //fragColor = vec4(1.0,0.0,0.0,1.0);
-
+    
 }

@@ -58,6 +58,35 @@ inline void sendModelViewNormalMatrix(const ShaderState& curSS, const Matrix4& M
   safe_glUniformMatrix4fv(curSS.h_uNormalMatrix, glmatrix);
 }
 
+// takes a projection matrix and send to the the shaders
+static void sendProjectionMatrix(const ShaderState& curSS, const Matrix4& projMatrix) {
+    GLfloat glmatrix[16];
+    projMatrix.writeToColumnMajorMatrix(glmatrix); // send projection matrix
+    safe_glUniformMatrix4fv(curSS.h_uProjMatrix, glmatrix);
+}
+
+
+struct FrustumShaderState{
+    
+    GlProgram program;
+    
+    GLuint matrix_mvp_;
+    
+    FrustumShaderState() {
+        static std::string vsfn = "SimpleVertex.glsl";
+        static std::string fsfn = "SimpleFragment.glsl";
+        
+        
+        readAndCompileShader(program, GetBundleFileName(vsfn.c_str()), GetBundleFileName(fsfn.c_str()));
+        
+        // Retrieve handles to uniform variables
+        matrix_mvp_ = safe_glGetUniformLocation(program, "uMVPMatrix");
+        
+        checkGlError(__FUNCTION__);
+    }
+    
+};
+
 struct TeapotShaderState{
     
     GlProgram program;
@@ -77,7 +106,7 @@ struct TeapotShaderState{
         readAndCompileShader(program, GetBundleFileName(vsfn.c_str()), GetBundleFileName(fsfn.c_str()));
         
         // Retrieve handles to uniform variables
-        matrix_projection_ = safe_glGetUniformLocation(program, "uPMatrix");
+        matrix_projection_ = safe_glGetUniformLocation(program, "uMVPMatrix");
         matrix_view_ = safe_glGetUniformLocation(program, "uMVMatrix");
         
         light0_ = safe_glGetUniformLocation(program, "vLight0");
@@ -110,7 +139,7 @@ struct MoreTeapotsShaderState{
         readAndCompileShader(program, GetBundleFileName(vsfn.c_str()), GetBundleFileName(fsfn.c_str()), map_parameters);
         
         // Retrieve handles to uniform variables
-        matrix_projection_ = safe_glGetUniformLocation(program, "uMVPMatrix");
+        matrix_projection_ = safe_glGetUniformLocation(program, "uPMatrix");
         matrix_view_ = safe_glGetUniformLocation(program, "uMVMatrix");
         
         light0_ = safe_glGetUniformLocation(program, "vLight0");
@@ -124,6 +153,41 @@ struct MoreTeapotsShaderState{
     
 };
 
+//struct TexturedTeapotShaderState{
+//
+//    GlProgram program;
+//
+//    GLuint light0_;
+//    GLuint material_diffuse_;
+//    GLuint material_ambient_;
+//    GLuint material_specular_;
+//
+//    GLuint matrix_projection_;
+//    GLuint matrix_view_;
+//
+//    TexturedTeapotShaderState() {
+////        static std::string vsfn = "Cubemap.vsh";
+////        static std::string fsfn = "Cubemap.fsh";
+//        static std::string vsfn = "PhongShader.vsh";
+//        static std::string fsfn = "PhongShader.fsh";
+//
+//        readAndCompileShader(program, GetBundleFileName(vsfn.c_str()), GetBundleFileName(fsfn.c_str()));
+//
+//        // Retrieve handles to uniform variables
+//        matrix_projection_ = safe_glGetUniformLocation(program, "uMVPMatrix");
+//        matrix_view_ = safe_glGetUniformLocation(program, "uMVMatrix");
+//
+//        light0_ = safe_glGetUniformLocation(program, "vLight0");
+//        material_diffuse_ = safe_glGetUniformLocation(program, "vMaterialDiffuse");
+//        material_ambient_ = safe_glGetUniformLocation(program, "vMaterialAmbient");
+//        material_specular_ =
+//        safe_glGetUniformLocation(program, "vMaterialSpecular");
+//
+//        checkGlError(__FUNCTION__);
+//    }
+//
+//};
+
 struct TexturedTeapotShaderState{
     
     GlProgram program;
@@ -135,18 +199,22 @@ struct TexturedTeapotShaderState{
     
     GLuint matrix_projection_;
     GLuint matrix_view_;
+    GLuint matrix_model_;
     
     TexturedTeapotShaderState() {
-//        static std::string vsfn = "Cubemap.vsh";
-//        static std::string fsfn = "Cubemap.fsh";
-        static std::string vsfn = "PhongShader.vsh";
-        static std::string fsfn = "PhongShader.fsh";
+        //        static std::string vsfn = "./shaders/Cubemap.vsh";
+        //        static std::string fsfn = "./shaders/Cubemap.fsh";
+        static std::string vsfn = "EyeFrameCubemap.vsh";
+        static std::string fsfn = "EyeFrameCubemap.fsh";
+//        static std::string vsfn = "ShaderPlain.vsh";
+//        static std::string fsfn = "ShaderPlain.fsh";
         
         readAndCompileShader(program, GetBundleFileName(vsfn.c_str()), GetBundleFileName(fsfn.c_str()));
         
         // Retrieve handles to uniform variables
-        matrix_projection_ = safe_glGetUniformLocation(program, "uPMatrix");
+        matrix_projection_ = safe_glGetUniformLocation(program, "uMVPMatrix");
         matrix_view_ = safe_glGetUniformLocation(program, "uMVMatrix");
+        matrix_model_ = safe_glGetUniformLocation(program, "uMMatrix");
         
         light0_ = safe_glGetUniformLocation(program, "vLight0");
         material_diffuse_ = safe_glGetUniformLocation(program, "vMaterialDiffuse");

@@ -14,9 +14,20 @@
 #include "matrix4.h"
 #include "Geometry.h"
 #include "Texture.h"
+#include "geometrymaker.h"
 
+//Note TARGET_OS_MAC includes any apple OS,TARGET_OS_IPHONE includes any device/simulator run on iOS
+#if defined(__APPLE__) && defined(__MACH__)
+#include <TargetConditionals.h>
+#if TARGET_OS_OSX   //定位OSX系统的macro
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#elif TARGET_OS_IPHONE //用于定位IPHONE系统的macro
 #include <OpenGLES/ES3/gl.h>
 #include <OpenGLES/ES3/glext.h>
+#endif
+#endif
+
 
 
 //--------------------------------------------------------------------------------
@@ -42,14 +53,18 @@ TexturedTeapotModel::~TexturedTeapotModel(){
  */
 GLint TexturedTeapotModel::GetTextureType(void) {
     return
-    //    GL_TEXTURE_CUBE_MAP;
-    GL_TEXTURE_2D;
+    GL_TEXTURE_CUBE_MAP;
+    //    GL_TEXTURE_2D;
     //            GL_INVALID_VALUE;
 }
+
+
 
 void TexturedTeapotModel::Init() {
     // Settings
     glFrontFace(GL_CCW);
+    
+    
     
     // Load shader
     teapotShaderState_.reset(new TexturedTeapotShaderState());
@@ -59,8 +74,22 @@ void TexturedTeapotModel::Init() {
     // Create VBO
     num_vertices_ = sizeof(teapotPositions) / sizeof(teapotPositions[0]) / 3;
     
+    //    int ibLen, vbLen;
+    //    getCubeVbIbLen(vbLen, ibLen);
+    //
+    //    // Temporary storage for cube Geometry
+    //    vector<VertexPNX> vtx(vbLen);
+    //    vector<unsigned short> idx(ibLen);
+    //
+    //    makeCube(1, vtx.begin(), idx.begin());
+    //
+    //    num_indices_ = ibLen;
+    //    // Create VBO
+    //    num_vertices_ = vbLen;
+    //    geometry_.reset(new Geometry(&vtx[0], &idx[0], num_vertices_, num_indices_));
+    
     int32_t index = 0;
-    int32_t tIndex = 0;
+    //int32_t tIndex = 0;
     VertexPNX* p = new VertexPNX[num_vertices_];
     for (int32_t i = 0; i < num_vertices_; ++i) {
         p[i].p[0] = teapotPositions[index];
@@ -93,17 +122,26 @@ void TexturedTeapotModel::Init() {
     
     GLint type = GetTextureType();
     // Need flip Y, so as top/bottom image
+    //    std::vector<std::string> textures {
+    //        std::string("./textures/left.tga"),   // GL_TEXTURE_CUBE_MAP_NEGATIVE_X
+    //        std::string("./textures/right.tga"),  // GL_TEXTURE_CUBE_MAP_POSITIVE_X
+    //        std::string("./textures/bottom.tga"), // GL_TEXTURE_CUBE_MAP_NEGATIVE_Y
+    //        std::string("./textures/top.tga"),    // GL_TEXTURE_CUBE_MAP_POSITIVE_Y
+    //        std::string("./textures/front.tga"),  // GL_TEXTURE_CUBE_MAP_POSITIVE_Z
+    //        std::string("./textures/back.tga")    // GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
+    //    };
+    
     std::vector<std::string> textures {
-        std::string(GetBundleFileName("right.tga")),  // GL_TEXTURE_CUBE_MAP_POSITIVE_X
-        std::string(GetBundleFileName("left.tga")),   // GL_TEXTURE_CUBE_MAP_NEGATIVE_X
-        std::string(GetBundleFileName("top.tga")),    // GL_TEXTURE_CUBE_MAP_POSITIVE_Y
-        std::string(GetBundleFileName("bottom.tga")), // GL_TEXTURE_CUBE_MAP_NEGATIVE_Y
-        std::string(GetBundleFileName("front.tga")),  // GL_TEXTURE_CUBE_MAP_POSITIVE_Z
-        std::string(GetBundleFileName("back.tga"))    // GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
+        std::string(GetBundleFileName("posx.jpg")),  // GL_TEXTURE_CUBE_MAP_POSITIVE_X
+        std::string(GetBundleFileName("negx.jpg")),   // GL_TEXTURE_CUBE_MAP_NEGATIVE_X
+        std::string(GetBundleFileName("posy.jpg")),    // GL_TEXTURE_CUBE_MAP_POSITIVE_Y
+        std::string(GetBundleFileName("negy.jpg")), // GL_TEXTURE_CUBE_MAP_NEGATIVE_Y
+        std::string(GetBundleFileName("posz.jpg")),  // GL_TEXTURE_CUBE_MAP_POSITIVE_Z
+        std::string(GetBundleFileName("negz.jpg"))    // GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
     };
     
     if(type == GL_TEXTURE_2D) {
-        textures[0] = std::string(GetBundleFileName("portrait.png"));
+        textures[0] = std::string(GetBundleFileName("greenleaves.png"));
     }
     
     texObj_ = Texture::Create(type, textures);
@@ -120,12 +158,36 @@ void TexturedTeapotModel::Init() {
     
     texObj_->Activate();
     
+    if(!vao_)
+        glGenVertexArrays( 1, &vao_ );
+    
+    glBindVertexArray(vao_);
+    
+    // Bind the VBO
+    glBindBuffer(GL_ARRAY_BUFFER, geometry_->vbo);
+    
+    int32_t iStride = sizeof(VertexPNX);
+    // Pass the vertex data
+    glVertexAttribPointer(ATTRIB_VERTEX, 3, GL_FLOAT, GL_FALSE, iStride,
+                          BUFFER_OFFSET(0));
+    glEnableVertexAttribArray(ATTRIB_VERTEX);
+    
+    glVertexAttribPointer(ATTRIB_NORMAL, 3, GL_FLOAT, GL_FALSE, iStride,
+                          BUFFER_OFFSET(3 * sizeof(GLfloat)));
+    glEnableVertexAttribArray(ATTRIB_NORMAL);
+    
+    glVertexAttribPointer(ATTRIB_UV, 2, GL_FLOAT, GL_FALSE, iStride,
+                          BUFFER_OFFSET(3 * sizeof(GLfloat)+ 3 * sizeof(GLfloat)));
+    glEnableVertexAttribArray(ATTRIB_UV);
+    
+    glBindVertexArray(0);
+    
     //  UpdateViewport();
-    mat_model_ = Matrix4::makeTranslation(Cvec3(0, 0, -80.f));
+    mat_local_model_ = Matrix4::makeTranslation(Cvec3(0, 0, -80.f));
     
-    mat_model_ =  mat_model_ * Matrix4::makeXRotation(-60);
+    mat_local_model_ =  mat_local_model_ * Matrix4::makeXRotation(-70);
     
-    mat_view_ = Matrix4::makeTranslation(Cvec3(0,0,4.0f));
+    mat_view_ = Matrix4::makeTranslation(Cvec3(0,0.0f,4.0f));
     mat_view_ = inv(mat_view_);
     
     UpdateViewport();
@@ -150,43 +212,34 @@ void TexturedTeapotModel::Unload() {
 }
 
 void TexturedTeapotModel::Update(double time) {
-    
-    
+    if (motionControl_) {
+        motionControl_->Update();
+        //mat_view_ = appCamera_->GetTransformMatrix() * mat_view_ *
+        //appCamera_->GetRotationMatrix();
+        //mat_view_ =  mat_view_ * appCamera_->GetRotationMatrix();
+        
+        mat_motion_matrix_ =  motionControl_->GetRotationMatrix();
+    }
+}
+
+void TexturedTeapotModel::SetMotionControl(std::shared_ptr<MotionControl> mControl){
+    motionControl_ = mControl;
 }
 
 void TexturedTeapotModel::Render(float r, float g, float b) {
-    GLuint vao;
-    glGenVertexArrays( 1, &vao );
-    glBindVertexArray(vao);
     
-    mat_model_ = mat_model_ * Matrix4::makeZRotation(1);
+    //mat_model_ = mat_model_ * Matrix4::makeZRotation(0.5);
+    mat_model_ = mat_local_model_ * mat_motion_matrix_;
+    
+    Matrix4 mat_mv = mat_view_ * mat_model_;
     // Feed Projection and Model View matrices to the shaders
-    Matrix4 mat_vp = mat_projection_ * mat_view_ * mat_model_;
+    Matrix4 mat_vp = mat_projection_ * mat_mv;
     
-    // Bind the VBO
-    glBindBuffer(GL_ARRAY_BUFFER, geometry_->vbo);
-    
-    int32_t iStride = sizeof(VertexPNX);
-    // Pass the vertex data
-    glVertexAttribPointer(ATTRIB_VERTEX, 3, GL_FLOAT, GL_FALSE, iStride,
-                          BUFFER_OFFSET(0));
-    glEnableVertexAttribArray(ATTRIB_VERTEX);
-    
-    glVertexAttribPointer(ATTRIB_NORMAL, 3, GL_FLOAT, GL_FALSE, iStride,
-                          BUFFER_OFFSET(3 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(ATTRIB_NORMAL);
-    
-    glVertexAttribPointer(ATTRIB_UV, 2, GL_FLOAT, GL_FALSE, iStride,
-                          BUFFER_OFFSET(3 * sizeof(GLfloat)+ 3 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(ATTRIB_UV);
-    
-    // Bind the IB
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry_->ibo);
     
     glUseProgram(teapotShaderState_->program);
     
     TEAPOT_MATERIALS material = {
-        {0.0, 0.3, 0.6}, {1.0f, 1.0f, 1.0f, 10.f}, {0.2f, 0.2f, 0.2f}, };
+        {1.0, 0.105, 0.095}, {1.0f, 1.0f, 1.0f, 40.f}, {0.1f, 0.1f, 0.1f}, };
     
     // Update uniforms
     glUniform4f(teapotShaderState_->material_diffuse_, material.diffuse_color[0],
@@ -207,16 +260,18 @@ void TexturedTeapotModel::Render(float r, float g, float b) {
                        glmatrix);
     
     GLfloat glmatrix2[16];
-    mat_view_.writeToColumnMajorMatrix(glmatrix2);
+    mat_mv.writeToColumnMajorMatrix(glmatrix2);
     glUniformMatrix4fv(teapotShaderState_->matrix_view_, 1, GL_FALSE, glmatrix2);
     
-    glUniform3f(teapotShaderState_->light0_, 0.f, 100.f, 10.f);
+    GLfloat glmatrix3[16];
+    mat_model_.writeToColumnMajorMatrix(glmatrix3);
+    glUniformMatrix4fv(teapotShaderState_->matrix_model_, 1, GL_FALSE, glmatrix3);
     
+    glUniform3f(teapotShaderState_->light0_, 100.f, 0.f, -300.f);
+    
+    glBindVertexArray(vao_);
     glDrawElements(GL_TRIANGLES, num_indices_, GL_UNSIGNED_SHORT,
                    BUFFER_OFFSET(0));
-    
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     
     glBindVertexArray(0);
 }

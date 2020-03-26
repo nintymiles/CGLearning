@@ -10,6 +10,8 @@
 #include <map>
 #include <string>
 
+#include "cvec.h"
+
 //Note TARGET_OS_MAC includes any apple OS,TARGET_OS_IPHONE includes any device/simulator run on iOS
 #if defined(__APPLE__) && defined(__MACH__)
 #include <TargetConditionals.h>
@@ -23,6 +25,8 @@
 #endif
 
 #define GLSL(version, shader) "#version " #version "\n" #shader
+
+Cvec3 hexStringToRGB(std::string hexString);
 
 // Check if there has been an error inside OpenGL and if yes, print the error and
 // through a runtime_error exception.

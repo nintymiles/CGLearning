@@ -28,7 +28,8 @@ out mediump vec3 position;
 out mediump vec3 normal;
 
 uniform highp mat4      uMVMatrix;
-uniform highp mat4      uPMatrix;
+uniform highp mat4      uMVPMatrix;
+uniform highp mat4      uMMatrix;
 
 uniform highp vec3      vLight0;
 
@@ -39,10 +40,10 @@ uniform lowp vec4       vMaterialSpecular;
 void main(void)
 {
     highp vec4 p = vec4(myVertex,1);
-    gl_Position = uPMatrix * p;
+    gl_Position = uMVPMatrix * p;
 
-    highp vec3 worldNormal = vec3(inverse(transpose(mat3(uMVMatrix[0].xyz, uMVMatrix[1].xyz, uMVMatrix[2].xyz))) * myNormal);
-    highp vec3 ecPosition = vec3(uMVMatrix * p);
+    highp vec3 worldNormal = vec3(mat3(uMMatrix[0].xyz, uMMatrix[1].xyz, uMMatrix[2].xyz) * myNormal);
+    highp vec3 ecPosition = vec3(uMMatrix * p);
 
     // brighten the teapot color by 50%
     colorDiffuse = clamp(vMaterialDiffuse * 1.5,
