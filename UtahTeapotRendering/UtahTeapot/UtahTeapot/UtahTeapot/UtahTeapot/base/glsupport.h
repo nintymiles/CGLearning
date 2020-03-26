@@ -22,7 +22,11 @@
 #endif
 #endif
 
+#include "cvec.h"
+
 #define GLSL(version, shader) "#version " #version "\n" #shader
+
+Cvec3 hexStringToRGB(std::string hexString);
 
 // Check if there has been an error inside OpenGL and if yes, print the error and
 // through a runtime_error exception.

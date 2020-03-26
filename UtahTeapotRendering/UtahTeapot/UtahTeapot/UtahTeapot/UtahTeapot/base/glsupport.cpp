@@ -9,6 +9,14 @@
 
 using namespace std;
 
+Cvec3 hexStringToRGB(string hexString){
+    int num = stoi(hexString,NULL,16);
+    int red = num>>16&0xFF;
+    int green = num>>8&0xFF;
+    int blue = num&0xFF;
+    return Cvec3(red/255.0,green/255.0,blue/255.0);
+}
+
 //此函数原来借助glu对GLError的封装，但是在GLES环境中，目前不借助第三方utility library。
 //void checkGlErrors() {
 //  const GLenum errCode = glGetError();

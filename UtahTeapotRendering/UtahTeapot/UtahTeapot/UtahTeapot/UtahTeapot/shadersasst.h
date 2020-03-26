@@ -58,6 +58,27 @@ inline void sendModelViewNormalMatrix(const ShaderState& curSS, const Matrix4& M
     safe_glUniformMatrix4fv(curSS.h_uNormalMatrix, glmatrix);
 }
 
+struct FrustumShaderState{
+    
+    GlProgram program;
+    
+    GLuint matrix_mvp_;
+
+    
+    FrustumShaderState() {
+        static std::string vsfn = "./shaders/SimpleVertex.glsl";
+        static std::string fsfn = "./shaders/SimpleFragment.glsl";
+        
+        readAndCompileShader(program, vsfn.c_str(), fsfn.c_str());
+        
+        // Retrieve handles to uniform variables
+        matrix_mvp_ = safe_glGetUniformLocation(program, "uMVPMatrix");
+        
+        checkGlError(__FUNCTION__);
+    }
+    
+};
+
 struct TeapotShaderState{
     
     GlProgram program;

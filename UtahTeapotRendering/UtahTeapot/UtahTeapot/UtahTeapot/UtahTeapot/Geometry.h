@@ -156,6 +156,15 @@ struct Geometry {
         
     }
     
+    Geometry(VertexPN *vtx, int vboLen) {
+        this->vboLen = vboLen;
+        
+        // Now create the VBO and IBO
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(VertexPN) * vboLen, vtx, GL_STATIC_DRAW);
+        
+    }
+    
     Sphere computeBoundingSphere(VertexPNX *vtx,int vboLen){
         Sphere sphere;
         vector<Cvec3> vertices;

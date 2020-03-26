@@ -14,7 +14,16 @@
 #include "matrix4.h"
 #include "Geometry.h"
 
+#if defined(__APPLE__) && defined(__MACH__)
+#include <TargetConditionals.h>
+#if TARGET_OS_OSX   //定位OSX系统的macro
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#elif TARGET_OS_IPHONE //用于定位IPHONE系统的macro
+#include <OpenGLES/ES3/gl.h>
+#include <OpenGLES/ES3/glext.h>
+#endif
+#endif
 
 #include <map>
 

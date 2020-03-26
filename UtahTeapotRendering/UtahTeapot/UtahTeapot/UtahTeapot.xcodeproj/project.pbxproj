@@ -33,6 +33,12 @@
 		5C234B6A2413E8AE00B3F073 /* Ray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C234B642413E8AD00B3F073 /* Ray.cpp */; };
 		5C234B6B2413E8AE00B3F073 /* RayCaster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C234B652413E8AD00B3F073 /* RayCaster.cpp */; };
 		5C234B6C2413E8AE00B3F073 /* Box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C234B682413E8AD00B3F073 /* Box.cpp */; };
+		5C25938B242B6A3D00784596 /* FrustumGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C259389242B6A3D00784596 /* FrustumGeometry.cpp */; };
+		5C25938C242B6A3D00784596 /* FrustumGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C259389242B6A3D00784596 /* FrustumGeometry.cpp */; };
+		5C25938D242B6A3D00784596 /* FrustumGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C259389242B6A3D00784596 /* FrustumGeometry.cpp */; };
+		5C259390242C3DF200784596 /* FrustumModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C25938E242C3DF100784596 /* FrustumModel.cpp */; };
+		5C259393242C482700784596 /* SimpleFragment.glsl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C259392242C3ED200784596 /* SimpleFragment.glsl */; };
+		5C259394242C482700784596 /* SimpleVertex.glsl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C259391242C3ED200784596 /* SimpleVertex.glsl */; };
 		5C278EC72415CAC500D53A67 /* ShaderPlain.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C278EC62415CA7300D53A67 /* ShaderPlain.fsh */; };
 		5C278EC82415CAC500D53A67 /* ShaderPlain.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C278EC42415CA7300D53A67 /* ShaderPlain.vsh */; };
 		5C7B788A2414D79E0027CBB4 /* perfMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C7B78882414D79E0027CBB4 /* perfMonitor.cpp */; };
@@ -140,6 +146,8 @@
 			dstPath = ./shaders;
 			dstSubfolderSpec = 16;
 			files = (
+				5C259393242C482700784596 /* SimpleFragment.glsl in CopyFiles */,
+				5C259394242C482700784596 /* SimpleVertex.glsl in CopyFiles */,
 				5CA558BF241CFDFA00ABA6E5 /* PhongShader.fsh in CopyFiles */,
 				5CA558C0241CFDFA00ABA6E5 /* PhongShader.vsh in CopyFiles */,
 				5C278EC72415CAC500D53A67 /* ShaderPlain.fsh in CopyFiles */,
@@ -158,6 +166,7 @@
 		5C1C7712241689460047B11B /* moreteapots_main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = moreteapots_main.cpp; sourceTree = "<group>"; };
 		5C1C7717241718D80047B11B /* InstancedPhongShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = InstancedPhongShader.fsh; sourceTree = "<group>"; };
 		5C1C7718241718D90047B11B /* InstancedPhongShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = InstancedPhongShader.vsh; sourceTree = "<group>"; };
+		5C234483242C9B5400EE5D0C /* tiny_obj_loader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tiny_obj_loader.h; path = tinyobj/tiny_obj_loader.h; sourceTree = "<group>"; };
 		5C234B612413E8AD00B3F073 /* Sphere.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sphere.cpp; sourceTree = "<group>"; };
 		5C234B622413E8AD00B3F073 /* Sphere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sphere.h; sourceTree = "<group>"; };
 		5C234B632413E8AD00B3F073 /* Ray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ray.h; sourceTree = "<group>"; };
@@ -166,6 +175,12 @@
 		5C234B662413E8AD00B3F073 /* Box.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Box.h; sourceTree = "<group>"; };
 		5C234B672413E8AD00B3F073 /* RayCaster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RayCaster.h; sourceTree = "<group>"; };
 		5C234B682413E8AD00B3F073 /* Box.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Box.cpp; sourceTree = "<group>"; };
+		5C259389242B6A3D00784596 /* FrustumGeometry.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FrustumGeometry.cpp; sourceTree = "<group>"; };
+		5C25938A242B6A3D00784596 /* FrustumGeometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FrustumGeometry.h; sourceTree = "<group>"; };
+		5C25938E242C3DF100784596 /* FrustumModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrustumModel.cpp; sourceTree = "<group>"; };
+		5C25938F242C3DF100784596 /* FrustumModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrustumModel.h; sourceTree = "<group>"; };
+		5C259391242C3ED200784596 /* SimpleVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SimpleVertex.glsl; sourceTree = "<group>"; };
+		5C259392242C3ED200784596 /* SimpleFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SimpleFragment.glsl; sourceTree = "<group>"; };
 		5C278EC32415CA7300D53A67 /* PhongShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PhongShader.vsh; sourceTree = "<group>"; };
 		5C278EC42415CA7300D53A67 /* ShaderPlain.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ShaderPlain.vsh; sourceTree = "<group>"; };
 		5C278EC52415CA7300D53A67 /* PhongShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PhongShader.fsh; sourceTree = "<group>"; };
@@ -282,6 +297,8 @@
 		5C800CBC21FA81C200DB8452 /* shaders */ = {
 			isa = PBXGroup;
 			children = (
+				5C259392242C3ED200784596 /* SimpleFragment.glsl */,
+				5C259391242C3ED200784596 /* SimpleVertex.glsl */,
 				5CA558AA241A1C6C00ABA6E5 /* EyeFrameCubemap.fsh */,
 				5CA558A9241A1C6C00ABA6E5 /* EyeFrameCubemap.vsh */,
 				5C9E4BF32418E34000BB9AE4 /* Cubemap.fsh */,
@@ -372,6 +389,7 @@
 				5C9E4BD62418DE1600BB9AE4 /* Texture.h */,
 				5C7B78922414D80A0027CBB4 /* glsupport.cpp */,
 				5C7B78932414D80A0027CBB4 /* glsupport.h */,
+				5C234483242C9B5400EE5D0C /* tiny_obj_loader.h */,
 				5C7B78952414D82A0027CBB4 /* ppm.cpp */,
 				5C7B78962414D82A0027CBB4 /* ppm.h */,
 				5C9E4BE12418DFFC00BB9AE4 /* Textures */,
@@ -382,6 +400,10 @@
 				5CA6586221F0CA790087B7F8 /* drawer.h */,
 				5C9DB477240FA99600EDF81C /* raycast */,
 				5CA6586121F0CA790087B7F8 /* scenegraph.cpp */,
+				5C25938E242C3DF100784596 /* FrustumModel.cpp */,
+				5C25938F242C3DF100784596 /* FrustumModel.h */,
+				5C259389242B6A3D00784596 /* FrustumGeometry.cpp */,
+				5C25938A242B6A3D00784596 /* FrustumGeometry.h */,
 				5CA6586821F0CA790087B7F8 /* scenegraph.h */,
 				5CDA259321EF72CB00F2A6D1 /* main.cpp */,
 				5C7B789A2414DA7B0027CBB4 /* teapot.inl */,
@@ -516,6 +538,7 @@
 			files = (
 				5CA558BE241CFACC00ABA6E5 /* MoreTeapotsModel.h in Sources */,
 				5CA558BC241B68A400ABA6E5 /* MotionControl.cpp in Sources */,
+				5C25938C242B6A3D00784596 /* FrustumGeometry.cpp in Sources */,
 				5C1C77162416970A0047B11B /* MoreTeapotsModel.cpp in Sources */,
 				5C1C76F22416888F0047B11B /* Ray.cpp in Sources */,
 				5C1C76F32416888F0047B11B /* Box.cpp in Sources */,
@@ -540,6 +563,7 @@
 				5C9E4BDF2418DE5600BB9AE4 /* texturedteapot_main.cpp in Sources */,
 				5C9E4BBD2418DC9900BB9AE4 /* glsupport.cpp in Sources */,
 				5C9E4BBF2418DC9900BB9AE4 /* Sphere.cpp in Sources */,
+				5C25938D242B6A3D00784596 /* FrustumGeometry.cpp in Sources */,
 				5C9E4BC02418DC9900BB9AE4 /* RayCastPicker.cpp in Sources */,
 				5CA558A42419C06400ABA6E5 /* TexturedTeapotObjModel.cpp in Sources */,
 				5C9E4BD72418DE1600BB9AE4 /* Texture.cpp in Sources */,
@@ -555,6 +579,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C25938B242B6A3D00784596 /* FrustumGeometry.cpp in Sources */,
 				5C234B6A2413E8AE00B3F073 /* Ray.cpp in Sources */,
 				5C234B6C2413E8AE00B3F073 /* Box.cpp in Sources */,
 				5C7B78942414D80A0027CBB4 /* glsupport.cpp in Sources */,
@@ -566,6 +591,7 @@
 				5C7B78972414D82A0027CBB4 /* ppm.cpp in Sources */,
 				5C7B788A2414D79E0027CBB4 /* perfMonitor.cpp in Sources */,
 				5C234B6B2413E8AE00B3F073 /* RayCaster.cpp in Sources */,
+				5C259390242C3DF200784596 /* FrustumModel.cpp in Sources */,
 				5CA6586921F0CA790087B7F8 /* scenegraph.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
