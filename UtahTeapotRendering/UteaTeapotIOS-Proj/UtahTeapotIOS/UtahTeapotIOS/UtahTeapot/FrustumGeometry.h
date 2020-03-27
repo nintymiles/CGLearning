@@ -34,8 +34,11 @@ class FrustumGeometry{
     
     
 public:
+    //FrustumGeometry(){FrustumGeometry(Matrix4());};
     FrustumGeometry(Matrix4 projMat);
     ~FrustumGeometry(){};
+    
+    void updateWithProjMat(Matrix4 proj);
     
     friend vector<VertexPN> makeFrustVertexPNData(const FrustumGeometry&);
 };

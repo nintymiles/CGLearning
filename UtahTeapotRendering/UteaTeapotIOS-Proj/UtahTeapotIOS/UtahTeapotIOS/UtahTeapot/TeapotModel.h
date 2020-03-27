@@ -8,6 +8,7 @@
 #include "shadersasst.h"
 
 #include "Geometry.h"
+#include "Camera.h"
 
 
 #define BUFFER_OFFSET(i) ((char*)NULL + (i))
@@ -41,9 +42,11 @@ class TeapotModel{
     
     std::shared_ptr<TeapotShaderState> teapotShaderState_;
     
+    std::shared_ptr<PerspectiveCamera> perspectiveCamera_;
+    
     Matrix4 mat_projection_;
     Matrix4 mat_view_;
-    Matrix4 mat_model_;
+    
     
 public:
     TeapotModel();
@@ -53,6 +56,9 @@ public:
     void Update(double time);
     void Unload();
     void UpdateViewport();
+    void setPerspectiveCamera(std::shared_ptr<PerspectiveCamera> camera);
+    
+    Matrix4 mat_model_;
     
 };
 

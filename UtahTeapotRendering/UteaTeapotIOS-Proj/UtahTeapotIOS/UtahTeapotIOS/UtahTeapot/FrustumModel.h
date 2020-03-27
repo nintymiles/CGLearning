@@ -8,6 +8,8 @@
 #include "shadersasst.h"
 
 #include "Geometry.h"
+#include "Camera.h"
+#include "FrustumGeometry.h"
 
 
 #define BUFFER_OFFSET(i) ((char*)NULL + (i))
@@ -27,9 +29,17 @@ class FrustumModel{
     
     std::shared_ptr<FrustumShaderState> frustumShaderState_;
     
+    std::shared_ptr<PerspectiveCamera> perspectiveCamera_;
+    std::shared_ptr<PerspectiveCamera> frustumCamera_;
+    
+    FrustumGeometry fg_;
+    
+    Matrix4 mat_frustum_projection_;
     Matrix4 mat_projection_;
     Matrix4 mat_view_;
     Matrix4 mat_model_;
+    
+    
     
 public:
     FrustumModel();
@@ -39,6 +49,10 @@ public:
     void Update(double time);
     void Unload();
     void UpdateViewport();
+    void setPerspectiveCamera(std::shared_ptr<PerspectiveCamera> camera);
+    void setFrustumCamera(std::shared_ptr<PerspectiveCamera> camera);
+    
+    bool visible;
     
 };
 

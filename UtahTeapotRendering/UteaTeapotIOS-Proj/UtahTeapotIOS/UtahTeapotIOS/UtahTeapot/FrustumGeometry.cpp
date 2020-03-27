@@ -115,8 +115,8 @@ void FrustumGeometry::setPoint(string p,float x,float y,float z){
     //先将ndc坐标投射为eye coordinate
     Cvec4 eyeP4 = inv(projMat) * Cvec4(x,y,z,1.0);
     //点的同质坐标需要转换为标准仿射坐标
-    eyeP4 = eyeP4/eyeP4[3];
-    Cvec3 eyePos = Cvec3(eyeP4);
+    Cvec4 eyeP4Affine = eyeP4/eyeP4[3];
+    Cvec3 eyePos = Cvec3(eyeP4Affine);
     
     vector<int> points = pointMap[p];
     
@@ -177,3 +177,8 @@ void FrustumGeometry::update(){
     setPoint( "cn4", 0, h, 1 );
         
 };
+
+void FrustumGeometry::updateWithProjMat(Matrix4 proj){
+    this->projMat = proj;
+    update();
+}

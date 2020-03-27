@@ -42,7 +42,9 @@
 {
     [EAGLContext setCurrentContext:self.context];
     
-    float scaleFactor = self.view.layer.contentsScale;
+//    //  not accurate
+//    float scaleFactor = self.view.layer.contentsScale;
+    float scaleFactor = [UIScreen mainScreen].nativeScale;
     
     GraphicsResize(self.view.bounds.size.width * scaleFactor, self.view.bounds.size.height * scaleFactor);
     

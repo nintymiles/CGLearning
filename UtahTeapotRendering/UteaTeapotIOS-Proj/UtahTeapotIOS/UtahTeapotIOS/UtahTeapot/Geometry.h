@@ -165,6 +165,23 @@ struct Geometry {
         
     }
     
+    void updateVBO(VertexPN *vtx, int vboLen){
+        // Update VBO
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        //glBufferData ( GL_ARRAY_BUFFER, sizeof(VertexPN) * vboLen, NULL, GL_STATIC_DRAW );
+        float* p = (float*)glMapBufferRange(
+                                            GL_ARRAY_BUFFER, 0, sizeof(VertexPN) * vboLen,
+                                            GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_RANGE_BIT);
+        checkGlError("glMapBufferRange");
+        //vbo整体更新
+        if(p!=NULL)
+            memcpy(p,vtx,sizeof(VertexPN) * vboLen);
+        
+        glUnmapBuffer(GL_ARRAY_BUFFER);
+        
+        checkGlError("unMapbuffer");
+    }
+    
     Sphere computeBoundingSphere(VertexPNX *vtx,int vboLen){
         Sphere sphere;
         vector<Cvec3> vertices;

@@ -13,7 +13,7 @@
 #include "matrix4.h"
 #include "Geometry.h"
 
-#include "FrustumGeometry.h"
+
 
 #include <OpenGLES/ES3/gl.h>
 #include <OpenGLES/ES3/glext.h>
@@ -22,7 +22,7 @@
 //--------------------------------------------------------------------------------
 // Ctor
 //--------------------------------------------------------------------------------
-FrustumModel::FrustumModel() {}
+FrustumModel::FrustumModel():fg_(FrustumGeometry(Matrix4())),visible(true){}
 
 //--------------------------------------------------------------------------------
 // Dtor
@@ -32,44 +32,8 @@ FrustumModel::~FrustumModel(){
 }
 
 void FrustumModel::Init() {
-    // Settings
-    glFrontFace(GL_CCW);
-    
     // populate mat_project_
-    
-    
-    
-    //  UpdateViewport();
-//    mat_model_ = Matrix4::makeTranslation(Cvec3(0, -10.f, -80.f));
-//
-//    mat_model_ =  mat_model_ * Matrix4::makeXRotation(-60);
-//
-    mat_view_ = Matrix4::makeTranslation(Cvec3(0,0,.5f));
-    mat_view_ = inv(mat_view_);
-    
-//    UpdateViewport();
-}
-
-void FrustumModel::UpdateViewport() {
-    
-    int32_t viewport[4];
-    glGetIntegerv(GL_VIEWPORT, viewport);
-    
-    glViewport(static_cast<float>(viewport[2])/2,static_cast<float>(viewport[3])/2,static_cast<float>(viewport[2])/2,static_cast<float>(viewport[3])/2);
-    
-    const float CAM_NEAR = -0.1f;
-    const float CAM_FAR = -10.f;
-    
-    
-    float fov = 15;
-    float aspect = static_cast<float>(viewport[2]) / static_cast<float>(viewport[3]);
-    mat_projection_ =Matrix4::makeProjection(fov, aspect, CAM_NEAR, CAM_FAR);
-    
-    
-    
-    FrustumGeometry fg=FrustumGeometry(mat_projection_);
-    vector<VertexPN> vData = makeFrustVertexPNData(fg);
-    
+    vector<VertexPN> vData = makeFrustVertexPNData(fg_);
     
     // Load shader
     frustumShaderState_.reset(new FrustumShaderState());
@@ -100,7 +64,32 @@ void FrustumModel::UpdateViewport() {
     glBindVertexArray(0);
     
 
-    mat_projection_ =Matrix4::makeProjection(90, aspect, CAM_NEAR, -1000);
+    mat_model_ =  Matrix4::makeTranslation(Cvec3(0.2, -0.5f, 3.6f));
+    mat_model_ =  mat_model_ * Matrix4::makeXRotation(45);
+    mat_model_ =  mat_model_ * Matrix4::makeYRotation(15);
+    mat_model_ =  mat_model_ * Matrix4::makeZRotation(75);
+    
+    mat_view_ = Matrix4::makeTranslation(Cvec3(0,0,4.0f));
+    mat_view_ = inv(mat_view_);
+    
+//    UpdateViewport();
+}
+
+void FrustumModel::UpdateViewport() {
+    
+    int32_t viewport[4];
+    glGetIntegerv(GL_VIEWPORT, viewport);
+    
+    glViewport(static_cast<float>(viewport[2])/2,static_cast<float>(viewport[3])/2,static_cast<float>(viewport[2])/2,static_cast<float>(viewport[3])/2);
+    
+    const float CAM_NEAR = -0.1f;
+    const float CAM_FAR = -10.f;
+    
+    
+    float fov = 15;
+    float aspect = static_cast<float>(viewport[2]) / static_cast<float>(viewport[3]);
+    mat_projection_ =Matrix4::makeProjection(fov, aspect, CAM_NEAR, CAM_FAR);
+    
 }
 
 void FrustumModel::Unload() {
@@ -112,26 +101,48 @@ void FrustumModel::Unload() {
 }
 
 void FrustumModel::Update(double time) {
-    
+    mat_projection_ = perspectiveCamera_->projMat;
     
 }
 
+void FrustumModel::setPerspectiveCamera(std::shared_ptr<PerspectiveCamera> camera){
+    this->perspectiveCamera_ = camera;
+    
+    Update(0);
+}
+
+void FrustumModel::setFrustumCamera(std::shared_ptr<PerspectiveCamera> camera){
+    this->frustumCamera_ = camera;
+    
+    fg_.updateWithProjMat(frustumCamera_->projMat);
+    vector<VertexPN> vData = makeFrustVertexPNData(fg_);
+    geometry_->updateVBO(&vData[0], (int)vData.size());
+    
+    //Update(0);
+}
+
 void FrustumModel::Render() {
-    mat_model_ = mat_model_ * Matrix4::makeYRotation(1);
+    if(!visible)
+        return;
+    
+//    mat_model_ = mat_model_ * Matrix4::makeYRotation(1);
 //    // Feed Projection and Model View matrices to the shaders
     Matrix4 mat_mvp_ = mat_projection_ * mat_view_ * mat_model_;
     
-    
-    
     glUseProgram(frustumShaderState_->program);
     
+    checkGlError("before binding matrix mvp");
     GLfloat glmatrix[16];
     mat_mvp_.writeToColumnMajorMatrix(glmatrix);
     glUniformMatrix4fv(frustumShaderState_->matrix_mvp_, 1, GL_FALSE,
                        glmatrix);
     
+    checkGlError("before binding vao_");
     glBindVertexArray(vao_);
+    checkGlError("before drawing lines");
     glDrawArrays(GL_LINES,0,num_vertices_);
+    
+    checkGlError("after drawing lines");
     
     glBindVertexArray(0);
 }

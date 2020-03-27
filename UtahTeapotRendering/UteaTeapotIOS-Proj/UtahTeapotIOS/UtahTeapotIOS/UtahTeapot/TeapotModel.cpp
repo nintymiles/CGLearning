@@ -88,8 +88,7 @@ void TeapotModel::Init() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry_->ibo);
     glBindVertexArray(0);
     
-    //  UpdateViewport();
-    mat_model_ = Matrix4::makeTranslation(Cvec3(0, -10.f, -80.f));
+    mat_model_ = Matrix4::makeTranslation(Cvec3(0, -10.f, -100.f));
     
     mat_model_ =  mat_model_ * Matrix4::makeXRotation(-60);
     
@@ -130,13 +129,19 @@ void TeapotModel::Unload() {
 }
 
 void TeapotModel::Update(double time) {
+    mat_projection_ = perspectiveCamera_->projMat;
     
+}
+
+void TeapotModel::setPerspectiveCamera(std::shared_ptr<PerspectiveCamera> camera){
+    this->perspectiveCamera_ = camera;
     
+    Update(0);
 }
 
 void TeapotModel::Render(float r, float g, float b) {
     
-    mat_model_ = mat_model_ * Matrix4::makeZRotation(1);
+    //mat_model_ = mat_model_ * Matrix4::makeZRotation(1);
     // Feed Projection and Model View matrices to the shaders
     Matrix4 mat_vp = mat_projection_ * mat_view_ * mat_model_;
     

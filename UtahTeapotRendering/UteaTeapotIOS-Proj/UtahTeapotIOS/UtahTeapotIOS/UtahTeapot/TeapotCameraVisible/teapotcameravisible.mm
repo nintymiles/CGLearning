@@ -27,9 +27,11 @@
 
 #include "shadersasst.h"
 #include "Geometry.h"
-#include "TeapotModel.h"
-#include "Camera.h"
 
+#include "TeapotModel.h"
+#include "FrustumModel.h"
+
+#include "Camera.h"
 
 
 
@@ -38,11 +40,11 @@ using namespace std;      // for string, vector, iostream, and other standard C+
 // G L O B A L S ///////////////////////////////////////////////////
 
 
-static const float g_frustMinFov = 50.0;  // A minimal of 60 degree field of view
+static  float g_frustMinFov = 60.0;  // A minimal of 60 degree field of view
 static float g_frustFovY = g_frustMinFov; // FOV in y direction (updated by updateFrustFovY)
 
 static const float g_frustNear = -0.1;    // near plane
-static const float g_frustFar = -1000.0;    // far plane
+static const float g_frustFar = -500.0;    // far plane
 
 static int g_windowWidth = 512;
 static int g_windowHeight = 512;
@@ -67,7 +69,10 @@ static const Cvec3 g_objectFrameOrigin = Cvec3(0,-0.25,-4.0);
 
 ///////////////// END OF G L O B A L S //////////////////////////////////////////////////
 shared_ptr<TeapotModel> teapotModel;
+shared_ptr<FrustumModel> frustumModel;
+
 shared_ptr<PerspectiveCamera> mainCamera;
+shared_ptr<PerspectiveCamera> visibleCamera;
 
 //--------------------------------------------------------------------------------
 //  touch event variables
@@ -100,10 +105,55 @@ static Matrix4 makeProjectionMatrix() {
 }
 
 static void drawStuff() {
-//    teapotModel->UpdateViewport();
-    teapotModel->setPerspectiveCamera(mainCamera);
-    teapotModel->mat_model_ = teapotModel->mat_model_ * Matrix4::makeZRotation(1);
+    glViewport(0, 0, g_windowWidth/2, g_windowHeight);
+    float aspect = g_windowWidth / static_cast <double> (g_windowHeight);
+    mainCamera->aspect = 0.5 * aspect;
+    mainCamera->fov = g_frustMinFov;
+    mainCamera->far = g_frustFar;
+    mainCamera->near = g_frustNear;
+    mainCamera->updatePorjectonMatrix();
+    
+    visibleCamera->aspect = 0.5 * aspect;;
+    visibleCamera->fov = 15;
+    visibleCamera->far = -100;
+    visibleCamera->near = g_frustNear;
+    visibleCamera->updatePorjectonMatrix();
+    
+    //teapotModel->UpdateViewport();
+    teapotModel->setPerspectiveCamera(visibleCamera);
     teapotModel->Render(1.0, 0.055, 0.027);
+    
+    //frustumModel->UpdateViewport();
+//    frustumModel->visible=false;
+//    frustumModel->setFrustumCamera(visibleCamera);
+//    frustumModel->setPerspectiveCamera(visibleCamera);
+//    frustumModel->Render();
+    
+    glViewport(g_windowWidth/2, 0, g_windowWidth/2, g_windowHeight);
+//    mainCamera->aspect = 0.5 * aspect;
+//    mainCamera->fov = g_frustMinFov;
+//    mainCamera->far = g_frustFar;
+//    mainCamera->near = g_frustNear;
+//    mainCamera->updatePorjectonMatrix();
+//
+
+    
+    //teapotModel->UpdateViewport();
+    teapotModel->setPerspectiveCamera(mainCamera);
+    teapotModel->Render(1.0, 0.055, 0.027);
+    
+//        visibleCamera->aspect = 0.5 * aspect;;
+//        visibleCamera->fov = 45;
+        visibleCamera->far = -0.6;
+//        visibleCamera->near = g_frustNear;
+        visibleCamera->updatePorjectonMatrix();
+    
+    //frustumModel->UpdateViewport();
+    frustumModel->visible=true;
+    frustumModel->setFrustumCamera(visibleCamera);
+    frustumModel->setPerspectiveCamera(mainCamera);
+    frustumModel->Render();
+    
 }
 
 static void display() {
@@ -124,13 +174,6 @@ static void reshape(const int w, const int h) {
     glViewport(0, 0, w, h);
     cerr << "Size of window is now " << w << "x" << h << endl;
     updateFrustFovY();
-    
-    float aspect = g_windowWidth / static_cast <double> (g_windowHeight);
-    mainCamera->aspect = aspect;
-    mainCamera->fov = g_frustFovY;
-    mainCamera->far = g_frustFar;
-    mainCamera->near = g_frustNear;
-    mainCamera->updatePorjectonMatrix();
     
 }
 
@@ -161,52 +204,6 @@ static void motion(const float x, const float y) {
         RigTForm auxiliaryRbt = makeMixedFrame(g_objectRbt[0], g_skyRbt);
         g_objectRbt[0] = doQtoOwrtA(m, g_objectRbt[0], auxiliaryRbt);
     }
-    
-    //旋转角度的匀速累加是通过每次施加一个固定角度的变换，而以角度值累加的方式进行选择，则意味着，每次都要从初始点进行变换。
-//    rotation_angle += .02f;
-//    if(rotation_angle >= 360.f)
-//        rotation_angle = 0.f;
-    
-//    GLfloat angular_value_per_time=3.f;
-//    Matrix4 eyeRbt = g_skyRbt;
-//    Matrix4 aRbt = makeMixedFrame(g_objectRbt[0],eyeRbt);
-//    //如果要一直围绕原点运动，则在3个轴的方向都要保持匀速的相同角度值的同步运动
-//
-//    Matrix4 q1RbtByQuat = quatToMatrix(Quat::makeYRotation(angular_value_per_time));
-//    Matrix4 q1Rbt = Matrix4::makeYRotation(angular_value_per_time) ;
-//    Matrix4 q2Rbt = Matrix4::makeXRotation(angular_value_per_time) ;
-//    Matrix4 q3Rbt = Matrix4::makeZRotation(angular_value_per_time) ;
-//    //针对auxiliary frame施加固定角度的旋转值
-//    g_objectRbt[1] = doQtoOwrtA(q1RbtByQuat*q2Rbt*q3Rbt, g_objectRbt[1], aRbt);
-    
-//    GLfloat angular_value_per_time=3.f;
-//    RigTForm eyeRbt = g_skyRbt;
-//    RigTForm aRbt = makeMixedFrame(g_objectRbt[0],eyeRbt);
-//    //如果要一直围绕原点运动，则在3个轴的方向都要保持匀速的相同角度值的同步运动
-//
-//    RigTForm q1Rbt = RigTForm::makeYRotation(angular_value_per_time) ;
-//    RigTForm q2Rbt = RigTForm::makeXRotation(angular_value_per_time) ;
-//    RigTForm q3Rbt = RigTForm::makeZRotation(angular_value_per_time) ;
-//    //针对auxiliary frame施加固定角度的旋转值
-//    g_objectRbt[1] = doQtoOwrtA(q1Rbt*q2Rbt*q3Rbt, g_objectRbt[1], aRbt);
-  
-    
-    //--------------------------------------------------------------------------------
-    //  Slerp between rotation 1(rotate 5 degree about x axis) and rotation 2(rotate 155 degree about x axis)
-    //--------------------------------------------------------------------------------
-//    rotation_angle_alpha += .02f;
-//    if(rotation_angle_alpha >= 1.f)
-//        rotation_angle_alpha = 0.f;
-//    
-//    RigTForm eyeRbt = g_skyRbt;
-//    RigTForm aRbt = makeMixedFrame(g_objectRbt[0],eyeRbt);
-//    
-//    Quat q1Quat = Quat::makeYRotation(rotation_angle_slerp_start) ;
-//    Quat q2Quat = Quat::makeYRotation(rotation_angle_slerp_end) ;
-//    //examine orientation interoperation by slerp and lerp
-//    Quat slerpQuat = slerp(q1Quat, q2Quat, rotation_angle_alpha);
-//    //若要插值动画循环播放，每次施加在base object frame（g_slerpBaseRbt)
-//    g_objectRbt[1] = doQtoOwrtA(RigTForm(slerpQuat), g_slerpBaseRbt, aRbt);
     
     g_mouseClickX = x;
     g_mouseClickY = g_windowHeight - y - 1;
@@ -279,12 +276,17 @@ static void initGLState() {
 }
 
 static void initGeometry() {
+    teapotModel.reset(new TeapotModel());
+    teapotModel->Init();
+    
+    frustumModel.reset(new FrustumModel());
+    frustumModel->Init();
+    
     mainCamera.reset(new PerspectiveCamera());
     mainCamera->updatePorjectonMatrix();
     
-    teapotModel.reset(new TeapotModel());
-    teapotModel->setPerspectiveCamera(mainCamera);
-    teapotModel->Init();
+    visibleCamera.reset(new PerspectiveCamera());
+    visibleCamera->updatePorjectonMatrix();
 }
 
 bool GraphicsInit()
