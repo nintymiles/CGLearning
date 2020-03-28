@@ -38,8 +38,7 @@
     //    [super dealloc];
 }
 
-- (BOOL) shouldAutorotate
-{
+- (BOOL)shouldAutorotate{
     [EAGLContext setCurrentContext:self.context];
     
 //    //  not accurate

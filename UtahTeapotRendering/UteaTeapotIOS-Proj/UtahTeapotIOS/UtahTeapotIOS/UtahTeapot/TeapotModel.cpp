@@ -21,7 +21,12 @@
 //--------------------------------------------------------------------------------
 // Ctor
 //--------------------------------------------------------------------------------
-TeapotModel::TeapotModel() {}
+TeapotModel::TeapotModel() {
+    //vao_为何必须要显示初始化？没有显示初始化为何出现异常值导致vao_生成紊乱？
+    vao_ = 0;
+    vbo_ = 0;
+    ibo_ = 0;
+}
 
 //--------------------------------------------------------------------------------
 // Dtor
@@ -88,7 +93,7 @@ void TeapotModel::Init() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry_->ibo);
     glBindVertexArray(0);
     
-    mat_model_ = Matrix4::makeTranslation(Cvec3(0, -10.f, -100.f));
+    mat_model_ = Matrix4::makeTranslation(Cvec3(0, -10.f, -80.f));
     
     mat_model_ =  mat_model_ * Matrix4::makeXRotation(-60);
     

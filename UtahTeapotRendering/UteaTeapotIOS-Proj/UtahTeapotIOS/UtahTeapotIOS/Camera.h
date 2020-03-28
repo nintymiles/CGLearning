@@ -18,16 +18,27 @@ struct Camera{
     Matrix4 unProjMat;
 };
 
+//sub view port参数，使用比例设置
+struct SubViewPort
+{
+    float x;
+    float y;
+    float width;
+    float height;
+    
+    SubViewPort(float x,float y,float width,float height):x(x),y(y),width(width),height(height){};
+};
+
 class PerspectiveCamera:public Camera{
 public:
     float aspect;
     float fov;
     float near;
     float far;
+    SubViewPort subview;
     
 public:
-    PerspectiveCamera(float aspect=1.0,float fov=50.0,float near=-0.1,float far=-10000.0):aspect(aspect),fov(fov),near(near),far(far){
-        
+    PerspectiveCamera(float aspect=1.0,float fov=50.0,float near=-0.1,float far=-10000.0):aspect(aspect),fov(fov),near(near),far(far),subview(SubViewPort(0.,0.,0.,0.)){
 
         updatePorjectonMatrix();
     };

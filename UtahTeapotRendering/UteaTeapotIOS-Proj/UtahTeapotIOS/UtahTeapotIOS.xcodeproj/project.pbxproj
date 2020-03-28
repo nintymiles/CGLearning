@@ -107,6 +107,35 @@
 		5CC378A4242DD9FE00140E91 /* TeapotModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CAF3E952415EDA500D4D4D9 /* TeapotModel.cpp */; };
 		5CC378A7242DDF6500140E91 /* TexturedUtahTeapotsIOS.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5CC378A6242DDF6500140E91 /* TexturedUtahTeapotsIOS.plist */; };
 		5CC378A9242DDFB500140E91 /* MoreUtahTeapotIOS.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5CC378A8242DDFB500140E91 /* MoreUtahTeapotIOS.plist */; };
+		5CC378AC242F5B0700140E91 /* ppm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CAF3E902415ED1B00D4D4D9 /* ppm.cpp */; };
+		5CC378AD242F5B0700140E91 /* MotionControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C23445F242C91AC00EE5D0C /* MotionControl.cpp */; };
+		5CC378AE242F5B0700140E91 /* Box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CAF3E9C2415EE4500D4D4D9 /* Box.cpp */; };
+		5CC378AF242F5B0700140E91 /* FileWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC4A21E83842003B5B50 /* FileWrapper.mm */; };
+		5CC378B0242F5B0700140E91 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C234487242CF1C200EE5D0C /* Camera.cpp */; };
+		5CC378B1242F5B0700140E91 /* TeapotModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CAF3E952415EDA500D4D4D9 /* TeapotModel.cpp */; };
+		5CC378B2242F5B0700140E91 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC2F21E836AB003B5B50 /* ViewController.mm */; };
+		5CC378B3242F5B0700140E91 /* FrustumGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C2593A1242C502C00784596 /* FrustumGeometry.cpp */; };
+		5CC378B4242F5B0700140E91 /* FrustumModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C2593A0242C502C00784596 /* FrustumModel.cpp */; };
+		5CC378B5242F5B0700140E91 /* glsupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CAF3E8C2415EC7000D4D4D9 /* glsupport.cpp */; };
+		5CC378B6242F5B0700140E91 /* perfMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CAF3E852415EC1500D4D4D9 /* perfMonitor.cpp */; };
+		5CC378B7242F5B0700140E91 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC3A21E836AC003B5B50 /* main.m */; };
+		5CC378B9242F5B0700140E91 /* NativeTemplate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC4921E83842003B5B50 /* NativeTemplate.cpp */; };
+		5CC378BA242F5B0700140E91 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC2C21E836AB003B5B50 /* AppDelegate.m */; };
+		5CC378BB242F5B0700140E91 /* Sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CAF3E9E2415EE4500D4D4D9 /* Sphere.cpp */; };
+		5CC378BE242F5B0700140E91 /* PhongShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 5CAF3EA32415F0E200D4D4D9 /* PhongShader.vsh */; };
+		5CC378BF242F5B0700140E91 /* SimpleVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 5C2593AA242C510C00784596 /* SimpleVertex.glsl */; };
+		5CC378C1242F5B0700140E91 /* SimpleFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 5C2593A9242C510C00784596 /* SimpleFragment.glsl */; };
+		5CC378C2242F5B0700140E91 /* PhongShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 5CAF3EA22415F0E200D4D4D9 /* PhongShader.fsh */; };
+		5CC378C3242F5B0700140E91 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5CE2BC7121E84197003B5B50 /* LaunchScreen.storyboard */; };
+		5CC378C4242F5B0700140E91 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CE2BC3421E836AC003B5B50 /* Assets.xcassets */; };
+		5CC378C5242F5B0700140E91 /* teapot.inl in Resources */ = {isa = PBXBuildFile; fileRef = 5CAF3E962415EDA500D4D4D9 /* teapot.inl */; };
+		5CC378CD242F5B0900140E91 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5CC378CC242F5B0900140E91 /* ViewController.xib */; };
+		5CC378CF242F5C8B00140E91 /* ArrayCameraRenderingWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5CC378CE242F5C8B00140E91 /* ArrayCameraRenderingWrapper.mm */; };
+		5CC378D2242F79BC00140E91 /* PlaneModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CC378D0242F79BC00140E91 /* PlaneModel.cpp */; };
+		5CC378D5242F7B5A00140E91 /* SimpleTextureFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 5CC378D3242F7B5A00140E91 /* SimpleTextureFragment.glsl */; };
+		5CC378D6242F7B5A00140E91 /* SimpleTextureVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 5CC378D4242F7B5A00140E91 /* SimpleTextureVertex.glsl */; };
+		5CC378D7242F841A00140E91 /* greenleaves.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C234478242C957700EE5D0C /* greenleaves.png */; };
+		5CC378D8242F86C000140E91 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5C9E4B982418B84100BB9AE4 /* Texture.cpp */; };
 		5CE2BC2D21E836AB003B5B50 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC2C21E836AB003B5B50 /* AppDelegate.m */; };
 		5CE2BC3021E836AB003B5B50 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2BC2F21E836AB003B5B50 /* ViewController.mm */; };
 		5CE2BC3521E836AC003B5B50 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CE2BC3421E836AC003B5B50 /* Assets.xcassets */; };
@@ -188,6 +217,14 @@
 		5CAF3EA32415F0E200D4D4D9 /* PhongShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PhongShader.vsh; sourceTree = "<group>"; };
 		5CC378A6242DDF6500140E91 /* TexturedUtahTeapotsIOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = TexturedUtahTeapotsIOS.plist; sourceTree = "<group>"; };
 		5CC378A8242DDFB500140E91 /* MoreUtahTeapotIOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MoreUtahTeapotIOS.plist; sourceTree = "<group>"; };
+		5CC378C9242F5B0700140E91 /* UtahTeapotIOS-iPad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "UtahTeapotIOS-iPad.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5CC378CB242F5B0800140E91 /* ArrayCameraUtahTeapotIOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = ArrayCameraUtahTeapotIOS.plist; path = "/Users/afighter/Documents/Github_Projects/CGLearning/UtahTeapotRendering/UteaTeapotIOS-Proj/UtahTeapotIOS/ArrayCameraUtahTeapotIOS.plist"; sourceTree = "<absolute>"; };
+		5CC378CC242F5B0900140E91 /* ViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ViewController.xib; path = "Resources-iPad/UtahTeapotIOS/ViewController.xib"; sourceTree = "<group>"; };
+		5CC378CE242F5C8B00140E91 /* ArrayCameraRenderingWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ArrayCameraRenderingWrapper.mm; path = UtahTeapot/ArrayCameraRenderingWrapper.mm; sourceTree = "<group>"; };
+		5CC378D0242F79BC00140E91 /* PlaneModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlaneModel.cpp; path = UtahTeapot/PlaneModel.cpp; sourceTree = "<group>"; };
+		5CC378D1242F79BC00140E91 /* PlaneModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlaneModel.h; path = UtahTeapot/PlaneModel.h; sourceTree = "<group>"; };
+		5CC378D3242F7B5A00140E91 /* SimpleTextureFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SimpleTextureFragment.glsl; sourceTree = "<group>"; };
+		5CC378D4242F7B5A00140E91 /* SimpleTextureVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SimpleTextureVertex.glsl; sourceTree = "<group>"; };
 		5CE2BC2821E836AB003B5B50 /* UtahTeapotIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UtahTeapotIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CE2BC2B21E836AB003B5B50 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5CE2BC2C21E836AB003B5B50 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -220,6 +257,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		5C9E4B832418A75B00BB9AE4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5CC378BC242F5B0700140E91 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -285,14 +329,24 @@
 			path = Textures;
 			sourceTree = "<group>";
 		};
+		5CC378CA242F5B0700140E91 /* Resources-iPad */ = {
+			isa = PBXGroup;
+			children = (
+				5CC378CC242F5B0900140E91 /* ViewController.xib */,
+			);
+			name = "Resources-iPad";
+			sourceTree = "<group>";
+		};
 		5CE2BC1F21E836AB003B5B50 = {
 			isa = PBXGroup;
 			children = (
+				5CC378CA242F5B0700140E91 /* Resources-iPad */,
 				5CE2BC2A21E836AB003B5B50 /* UtahTeapotIOS */,
 				5CE2BC2921E836AB003B5B50 /* Products */,
 				5CC378A8242DDFB500140E91 /* MoreUtahTeapotIOS.plist */,
 				5CC378A6242DDF6500140E91 /* TexturedUtahTeapotsIOS.plist */,
 				5C2344AA242CF4FF00EE5D0C /* UtahTeapotCameraVisibleIOS.plist */,
+				5CC378CB242F5B0800140E91 /* ArrayCameraUtahTeapotIOS.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -303,6 +357,7 @@
 				5C1C77372417452C0047B11B /* MoreUtahTeapotsIOS.app */,
 				5C9E4B902418A75B00BB9AE4 /* TexturedUtahTeapotIOS.app */,
 				5C2344A9242CF4FF00EE5D0C /* UtahTeapotCameraVisibleIOS.app */,
+				5CC378C9242F5B0700140E91 /* UtahTeapotIOS-iPad.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -344,7 +399,10 @@
 				5CAF3E962415EDA500D4D4D9 /* teapot.inl */,
 				5CAF3E952415EDA500D4D4D9 /* TeapotModel.cpp */,
 				5CAF3E982415EDA500D4D4D9 /* TeapotModel.h */,
+				5CC378D0242F79BC00140E91 /* PlaneModel.cpp */,
+				5CC378D1242F79BC00140E91 /* PlaneModel.h */,
 				5CA558A7241A156400ABA6E5 /* teapotrenderwrapper.mm */,
+				5CC378CE242F5C8B00140E91 /* ArrayCameraRenderingWrapper.mm */,
 				5C2344AB242CF5A800EE5D0C /* TeapotCameraVisible */,
 				5C9E4B922418A7ED00BB9AE4 /* TexturedTeapot */,
 				5C1C7739241745AB0047B11B /* MoreTeapots */,
@@ -369,6 +427,8 @@
 		5CE2BC6A21E83FDE003B5B50 /* shaders */ = {
 			isa = PBXGroup;
 			children = (
+				5CC378D3242F7B5A00140E91 /* SimpleTextureFragment.glsl */,
+				5CC378D4242F7B5A00140E91 /* SimpleTextureVertex.glsl */,
 				5C2593A9242C510C00784596 /* SimpleFragment.glsl */,
 				5C2593AA242C510C00784596 /* SimpleVertex.glsl */,
 				5C234465242C927000EE5D0C /* EyeFrameCubemap.fsh */,
@@ -439,6 +499,23 @@
 			productReference = 5C9E4B902418A75B00BB9AE4 /* TexturedUtahTeapotIOS.app */;
 			productType = "com.apple.product-type.application";
 		};
+		5CC378AA242F5B0700140E91 /* ArrayCameraUtahTeapotIOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5CC378C6242F5B0700140E91 /* Build configuration list for PBXNativeTarget "ArrayCameraUtahTeapotIOS" */;
+			buildPhases = (
+				5CC378AB242F5B0700140E91 /* Sources */,
+				5CC378BC242F5B0700140E91 /* Frameworks */,
+				5CC378BD242F5B0700140E91 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ArrayCameraUtahTeapotIOS;
+			productName = ArcballProj;
+			productReference = 5CC378C9242F5B0700140E91 /* UtahTeapotIOS-iPad.app */;
+			productType = "com.apple.product-type.application";
+		};
 		5CE2BC2721E836AB003B5B50 /* UtahTeapotIOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5CE2BC3E21E836AC003B5B50 /* Build configuration list for PBXNativeTarget "UtahTeapotIOS" */;
@@ -474,6 +551,9 @@
 					5C9E4B752418A75B00BB9AE4 = {
 						ProvisioningStyle = Automatic;
 					};
+					5CC378AA242F5B0700140E91 = {
+						ProvisioningStyle = Automatic;
+					};
 					5CE2BC2721E836AB003B5B50 = {
 						CreatedOnToolsVersion = 10.0;
 						ProvisioningStyle = Automatic;
@@ -497,6 +577,7 @@
 				5C1C771B2417452C0047B11B /* MoreUtahTeapotsIOS */,
 				5C9E4B752418A75B00BB9AE4 /* TexturedUtahTeapotIOS */,
 				5C23448A242CF4FF00EE5D0C /* UtahTeapotCameraVisibleIOS */,
+				5CC378AA242F5B0700140E91 /* ArrayCameraUtahTeapotIOS */,
 			);
 		};
 /* End PBXProject section */
@@ -560,6 +641,24 @@
 				5C9E4B8B2418A75B00BB9AE4 /* Assets.xcassets in Resources */,
 				5C9E4B8C2418A75B00BB9AE4 /* teapot.inl in Resources */,
 				5C23446A242C927100EE5D0C /* EyeFrameCubemap.vsh in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5CC378BD242F5B0700140E91 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5CC378BE242F5B0700140E91 /* PhongShader.vsh in Resources */,
+				5CC378BF242F5B0700140E91 /* SimpleVertex.glsl in Resources */,
+				5CC378CD242F5B0900140E91 /* ViewController.xib in Resources */,
+				5CC378D7242F841A00140E91 /* greenleaves.png in Resources */,
+				5CC378D6242F7B5A00140E91 /* SimpleTextureVertex.glsl in Resources */,
+				5CC378C1242F5B0700140E91 /* SimpleFragment.glsl in Resources */,
+				5CC378C2242F5B0700140E91 /* PhongShader.fsh in Resources */,
+				5CC378D5242F7B5A00140E91 /* SimpleTextureFragment.glsl in Resources */,
+				5CC378C3242F5B0700140E91 /* LaunchScreen.storyboard in Resources */,
+				5CC378C4242F5B0700140E91 /* Assets.xcassets in Resources */,
+				5CC378C5242F5B0700140E91 /* teapot.inl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -643,6 +742,31 @@
 				5C9E4B812418A75B00BB9AE4 /* AppDelegate.m in Sources */,
 				5C9E4B972418A7ED00BB9AE4 /* TeaturedTeapot.mm in Sources */,
 				5C9E4B822418A75B00BB9AE4 /* Sphere.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5CC378AB242F5B0700140E91 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5CC378AC242F5B0700140E91 /* ppm.cpp in Sources */,
+				5CC378D2242F79BC00140E91 /* PlaneModel.cpp in Sources */,
+				5CC378AD242F5B0700140E91 /* MotionControl.cpp in Sources */,
+				5CC378D8242F86C000140E91 /* Texture.cpp in Sources */,
+				5CC378AE242F5B0700140E91 /* Box.cpp in Sources */,
+				5CC378AF242F5B0700140E91 /* FileWrapper.mm in Sources */,
+				5CC378B0242F5B0700140E91 /* Camera.cpp in Sources */,
+				5CC378B1242F5B0700140E91 /* TeapotModel.cpp in Sources */,
+				5CC378B2242F5B0700140E91 /* ViewController.mm in Sources */,
+				5CC378B3242F5B0700140E91 /* FrustumGeometry.cpp in Sources */,
+				5CC378B4242F5B0700140E91 /* FrustumModel.cpp in Sources */,
+				5CC378B5242F5B0700140E91 /* glsupport.cpp in Sources */,
+				5CC378CF242F5C8B00140E91 /* ArrayCameraRenderingWrapper.mm in Sources */,
+				5CC378B6242F5B0700140E91 /* perfMonitor.cpp in Sources */,
+				5CC378B7242F5B0700140E91 /* main.m in Sources */,
+				5CC378B9242F5B0700140E91 /* NativeTemplate.cpp in Sources */,
+				5CC378BA242F5B0700140E91 /* AppDelegate.m in Sources */,
+				5CC378BB242F5B0700140E91 /* Sphere.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -770,6 +894,38 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.zxtech.UtahTeapotIOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		5CC378C7242F5B0700140E91 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9KVM264T66;
+				INFOPLIST_FILE = ArrayCameraUtahTeapotIOS.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zxtech.UtahTeapotIOS;
+				PRODUCT_NAME = "UtahTeapotIOS-iPad";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5CC378C8242F5B0700140E91 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9KVM264T66;
+				INFOPLIST_FILE = ArrayCameraUtahTeapotIOS.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zxtech.UtahTeapotIOS;
+				PRODUCT_NAME = "UtahTeapotIOS-iPad";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -941,6 +1097,15 @@
 			buildConfigurations = (
 				5C9E4B8E2418A75B00BB9AE4 /* Debug */,
 				5C9E4B8F2418A75B00BB9AE4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5CC378C6242F5B0700140E91 /* Build configuration list for PBXNativeTarget "ArrayCameraUtahTeapotIOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5CC378C7242F5B0700140E91 /* Debug */,
+				5CC378C8242F5B0700140E91 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

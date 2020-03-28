@@ -87,6 +87,27 @@ struct FrustumShaderState{
     
 };
 
+struct SimpleTextureShaderState{
+    
+    GlProgram program;
+    
+    GLuint matrix_mvp_;
+    
+    SimpleTextureShaderState() {
+        static std::string vsfn = "SimpleTextureVertex.glsl";
+        static std::string fsfn = "SimpleTextureFragment.glsl";
+        
+        
+        readAndCompileShader(program, GetBundleFileName(vsfn.c_str()), GetBundleFileName(fsfn.c_str()));
+        
+        // Retrieve handles to uniform variables
+        matrix_mvp_ = safe_glGetUniformLocation(program, "uMVPMatrix");
+        
+        checkGlError(__FUNCTION__);
+    }
+    
+};
+
 struct TeapotShaderState{
     
     GlProgram program;
