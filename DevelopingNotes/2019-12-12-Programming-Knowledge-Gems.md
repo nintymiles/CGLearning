@@ -164,3 +164,8 @@ Threejs相对于webgl来说就如同OpenGL中的一个封装了material（当然
 ### 关于Materials
 Materials目录中封装了各种material的参数，目前看来不涉及各类shader以及shading算法的封装。
 
+
+
+
+
+
