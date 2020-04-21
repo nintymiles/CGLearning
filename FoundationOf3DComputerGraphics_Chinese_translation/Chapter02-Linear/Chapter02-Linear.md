@@ -57,9 +57,9 @@ $$\large{ \vec{v} = \vec{\mathbf{b}}^t\mathbf{c} }$$
 
 ## 2.3 线性变换和$3\times3$矩阵（Linear Transformations and 3 by 3 Matrices）
 线性变换$\mathcal{L}$只是从线性空间V到线性空间V的一种变换，满足下列两个属性。
-$$\large{
-\mathcal{L}(\vec{v}+\vec{u}) = \mathcal{L}(\vec{v})+\mathcal{L}(\vec{u}) \\ \mathcal{L}(\alpha\vec{v}) =\alpha\mathcal{L}(\vec{v})
-}$$
+$$\begin{array}{rl}
+\mathcal{L}(\vec{v}+\vec{u})  &=& \mathcal{L}(\vec{v})+\mathcal{L}(\vec{u}) \\ \mathcal{L}(\alpha\vec{v}) &=& \alpha\mathcal{L}(\vec{v})
+\end{array}$$
 我们借用标记$\vec{v} \Rightarrow \mathcal{L}(\vec{v})$表示矢量$\vec{v}$通过$\mathcal{L}$被变换为矢量$\mathcal{L}(\vec{v})$。
 
 线性变换所对应的变换完全就是可用矩阵表达的这类变换。这是因为线性变换可以完全通过告知其在基矢量上的效果被指定。让我们考察一下这是如何起作用的：
@@ -146,7 +146,7 @@ $$\large{ \begin{array}{r}
 $$\large{ \vec{v}=\vec{\mathbf{b}}^t\mathbf{c}=\vec{\mathbf{a}}^tM^{-1}\mathbf{c} }$$
 这个表达不是一个变换（变换会使用$\Rightarrow$标注），而是一个相等关系（使用$=$标注）。我们只是借助两个基写了相同的矢量。坐标矢量$\mathbf{c}$关联于$\vec{\mathbf{b}}^t$表示矢量$\vec{v}$，而坐标矢量$M^{-1}\mathbf{c}$关联于$\vec{\mathbf{a}}^t$表示了完全相同的矢量$\vec{v}$。
 
-## 2.4 附加的结构计算（Extra Structure）
+## 2.4 附加结构（Extra Structure）
 3D空间中的矢量也装备了点积（dot product）操作
 $$\large{ \vec{v}.\vec{w} }$$
 其接收两个矢量然后返回一个实数。这种点积运算允许我们定义一个矢量的平方长（squared lengh），也被称作平方态（squared norm）

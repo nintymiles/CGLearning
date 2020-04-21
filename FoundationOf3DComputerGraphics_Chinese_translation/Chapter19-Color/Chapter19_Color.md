@@ -194,7 +194,7 @@ $$\begin{bmatrix} k_1(\lambda) \\ k_2(\lambda) \\ k_3(\lambda) \end{bmatrix} = M
 
 $$\qquad \large{l(\lambda) = i(\lambda)r(\lambda)}$$
 
-（注意：这种方式没有建模光和表面之间的所有类型的交互，例如光闪耀（florescence）。另外，这个讨论中，我们没有让我们注意$r(\lambda)$的对于光进入和逃离（出射）角度的依赖，这点将会在第21章完成。） 这种乘法发生在每波长的基础上，同时在3D线性空间中不能被精确模拟。确实，两种在一种光源下可能反射出条件等色光束的材料，但是在另一种光源下却可能产生两种有区别的光束。
+（注意：这种方式没有建模光和表面之间的所有类型的交互，例如光闪耀（florescence）。另外，这个讨论中，我们没有关注$r(\lambda)$对于光进入和逃离（出射）角度的依赖，这点将会在第21章完成。） 这种乘法发生在每波长的基础上，同时在3D线性空间中不能被精确模拟。确实，两种在一种光源下可能反射出条件等色光束的材料，但是在另一种光源下却可能产生两种有区别的光束。
 
 $$\qquad \large{ \vec{c}(i_1(\lambda)r_a(\lambda)) = \vec{c}(i_1(\lambda)r_b(\lambda)) \nLeftrightarrow \vec{c}(i_2(\lambda)r_a(\lambda)) = \vec{c}(i_2(\lambda)r_b(\lambda))}$$
 
