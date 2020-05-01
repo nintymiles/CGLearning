@@ -14,7 +14,7 @@
 
 针对场景中的每个物体，我们为其关联一个右手性的正交标准物体帧（right handed orthonormal object frame） $\vec{o}^t$。现在我们可以借助关联于物体坐标系（object‘s coordinate system）的坐标表示物体各个部分的地址。这些坐标被称为物体坐标（object coordinates）并且会被存储在计算机程序中。要移动整个物体，我们只要更新$\vec{o}^t$即可，不需要更改物体上对应点的任何物体坐标（object coordinates）。
 
-物体坐标系（object‘s coordinate system）和世界帧（world frame）之间的关系通过并行的（affine）$4 \times 4$矩阵O表达。也即是
+物体坐标系（object‘s coordinate system）和世界帧（world frame）之间的关系通过仿射的（affine）$4 \times 4$矩阵O表达。也即是
 
 $$\Large{ \vec{o}^t = \vec{w}^tO }$$
 
@@ -47,7 +47,7 @@ $$ \Large{ \begin{bmatrix} x_e \\ y_e \\ z_e \\ 1 \end{bmatrix}
 ### 5.2.1 移动一个物体（Moving an Object）
 我们通过恰当地更新物体所对应的帧（frame）的方式移动一个物体，这可以通过更新其矩阵O的方式被表示。
 
-让我们讲，我们希望关联于某种帧（frame）$\vec{\mathbf{a}}^t = \vec{\mathbf{w}}^tA$对一个物体帧（object frame）$\vec{\mathbf{o}}^t$应用变换M，就如在方程（4.1）中所示，我们有如下推导
+当我们希望关联于某种帧（frame）$\vec{\mathbf{a}}^t = \vec{\mathbf{w}}^tA$对一个物体帧（object frame）$\vec{\mathbf{o}}^t$应用变换M，就如在方程（4.1）中所示，我们有如下推导
 
 $$ \Large{
 \quad\;\; \vec{\mathbf{o}}^t \qquad\qquad\qquad\qquad\;\;\;\;\; (5.1) \\
@@ -92,7 +92,7 @@ $$\Large{
 
 一种选择是使用和上面相同的辅助坐标系。在这种情形中，眼睛会围着物体的中心环绕运动。
 
-另一种有效的选择是关联于眼睛自身的帧（frame）变换$\vec{\mathbf{e}}^t$。这会建模自我运动（ego-motion），就如转动你的头部。这通常被用于控制第一人称（first-person）运动。在这种情形中矩阵E会被更新为$E \leftarrow EM$
+另一种有效的选择是关联于眼睛自身的帧（frame）变换$\vec{\mathbf{e}}^t$。这会建模自我运动（ego-motion），就如转动你的头部。这通常被用于控制第一人称（first-person）运动。在这种情形中矩阵$E$会被更新为$E \leftarrow EM$。
 
 ### 5.2.3 Lookat（盯着看）
 > 本节有一些错误，已经根据本书的errata改正。
@@ -128,7 +128,7 @@ x_3 & y_3 & z_3 & p_3 \\
 例如，当建模带有移动肢体的机器人时，我们可以借助一个物体帧（object）和伸缩物体帧（scaled object frame）表达躯干，一个子-物体帧（sub-object frame）表达一个可以转动的肩膀，还有一个子-子-物体帧（sub-sub-object frame）表达上臂（其和肩膀一起运动）。（参考图示$\text{Figure 5.4}$）。
 
 ![Figure5.4](media/Figure5.4.png)
-**Figure 5.4:** 在本例中，绿色的帧（frame）为物体帧（object frame） $\vec{\mathbf{o}}^t = \vec{\mathbf{w}}^tO$，灰色的帧$t'$为伸缩物体帧（scaled object frame）$\vec{\mathbf{o}}'^t = \vec{\mathbf{o}}^tO'$。一个单位立方体（unit cube）的坐标在$\vec{\mathbf{o}}'^t$中被绘制从而形成一个矩型（长方形）的躯干。矩阵$O$可以被改变用于移动整个机器人。青色的帧$\vec{\mathbf{a}}^t = \vec{\mathbf{o}}^tA$为右肩帧（right shoulder frame）。矩阵A中的旋转因子可以被改变用于旋转整个右臂。浅蓝色帧$\vec{\mathbf{b}}^t = \vec{\mathbf{a}}^tB$为右上臂帧（right upper arm frame）。红色帧$\vec{\mathbf{b}}'^t = \vec{\mathbf{b}}^tB'$为伸缩（scaled）右上臂帧。一个单位球体的坐标在$\vec{\mathbf{b}}'^t$中绘制形成了椭球体形状的右上臂。$\vec{\mathbf{c}}^t = \vec{\mathbf{b}}^tC$为右肘帧（right elbow frame）。矩阵C中的旋转因子可以被改变用于旋转右下臂（right lower-arm）。$\vec{\mathbf{d}}^t = \vec{\mathbf{c}}^tD$和$\vec{\mathbf{d}}'^t = \vec{\mathbf{d}}^tD'$分别为正交标准和伸缩的右下臂帧用于绘制下臂。帧$\vec{\mathbf{f}}^t = \vec{\mathbf{o}}^tF$为左肩帧（left shoulder frame）。臂。帧$\vec{\mathbf{f}}^t = \vec{\mathbf{o}}^tF$为左肩帧（left shoulder frame）。
+**Figure 5.4:** 在本例中，绿色的帧（frame）为物体帧（object frame） $\vec{\mathbf{o}}^t = \vec{\mathbf{w}}^tO$，灰色的帧$t'$为伸缩物体帧（scaled object frame）$\vec{\mathbf{o}}'^t = \vec{\mathbf{o}}^tO'$。一个单位立方体（unit cube）的坐标在$\vec{\mathbf{o}}'^t$中被绘制从而形成一个矩型（长方形）的躯干。矩阵$O$可以被改变用于移动整个机器人。青色的帧$\vec{\mathbf{a}}^t = \vec{\mathbf{o}}^tA$为右肩帧（right shoulder frame）。矩阵A中的旋转因子可以被改变用于旋转整个右臂。浅蓝色帧$\vec{\mathbf{b}}^t = \vec{\mathbf{a}}^tB$为右上臂帧（right upper arm frame）。红色帧$\vec{\mathbf{b}}'^t = \vec{\mathbf{b}}^tB'$为伸缩（scaled）右上臂帧。一个单位球体的坐标在$\vec{\mathbf{b}}'^t$中绘制形成了椭球体形状的右上臂。$\vec{\mathbf{c}}^t = \vec{\mathbf{b}}^tC$为右肘帧（right elbow frame）。矩阵C中的旋转因子可以被改变用于旋转右下臂（right lower-arm）。$\vec{\mathbf{d}}^t = \vec{\mathbf{c}}^tD$和$\vec{\mathbf{d}}'^t = \vec{\mathbf{d}}^tD'$分别为正交标准和伸缩的右下臂帧用于绘制下臂。帧$\vec{\mathbf{f}}^t = \vec{\mathbf{o}}^tF$为左肩帧（left shoulder frame）。
 
 当我们通过更新矩阵$O$移动整个物体，我们想让所有的物体（组件）更加协调一致（参考图示$\text{Figure 5.5}$）。要获得这种行为，我们借助一个将其和物体帧（object’s frame）联系在一起的刚体矩阵表达了子物体帧（sub-object‘s frame）。因此，我们存储了一个刚体矩阵（rigid body matrix）$A$，我们将其解读为定义了这种关系：$\vec{\mathbf{a}}^t = \vec{\mathbf{o}}^tA$，同时还有一个伸缩矩阵$A'$，其定义了伸缩的子物体帧（sub-object frame）为$\vec{\mathbf{a}}’^t = \vec{\mathbf{a}}^tA'$。要重新定位在这个物体内的子-物体（sub-object），所有我们需要做的就是更新矩阵$A$。要绘制子-物体（sub-object），我们使用矩阵$E^{-1}OAA'$，其变换“伸缩的子-物体坐标”为眼睛坐标（eye coordinates）。很清晰地，这种思路可以被递归嵌套，同时我们可以表达一个子-子-物体（sub-sub-object）为$\vec{\mathbf{b}}^t = \vec{\mathbf{a}}^tB$，以及一个伸缩的子-子-物体为$\vec{\mathbf{b}}'^t = \vec{\mathbf{b}}^tB'$。
 
