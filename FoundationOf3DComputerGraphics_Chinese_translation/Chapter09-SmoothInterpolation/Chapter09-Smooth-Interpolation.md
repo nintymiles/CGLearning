@@ -1,5 +1,5 @@
 # Note
-这是对**Foundation of 3D Computer Graphics**第9章的翻译，本章讲解了平滑插值的基本概念以及贝塞尔函数和样条函数的使用。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教<ninetymiles@icloud.com>。r 
+这是对**Foundation of 3D Computer Graphics**第9章的翻译，本章讲解了平滑插值的基本概念以及贝塞尔函数和样条函数的使用。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教<ninetymiles@icloud.com>。
 
 > 注：文章中相关内容归原作者所有，翻译内容仅供学习参考。
 > 另：Github项目[CGLearning](https://github.com/nintymiles/CGLearning)中拥有相关翻译的完整资料、内容整理、课程项目实现。
@@ -62,7 +62,7 @@ c(t) &=& (1 − t +i)m + (t-i)n & (9.12) \\
 ## 9.2 Catmull-Rom样条函数（Catmull-Rom Splines）
 让我们返回在一系列具体值$c_i,i \in -1..n+1$上插值的最初问题。做这个事情的简单方式是借助Catmull-Rom样条函数（Catmull-Rom Splines）。这个方法定义了一个针对变量$t \in [0..n]$的函数$c(t)$。这个函数被$n$个立方函数定义，每个在$t \in [i..i+1]$的单位区间上被支持。块函数（piece）被选定在$c_i$值上插值，同时满足它们的第一推导。
 
-每个块函数在其贝塞尔表达（Bezier represesntation）方式中，借助4个控制值：$c_i,d_i,e_i和c_{i+1}$被确定。根据我们的输入值。要设置$d_i$和$e_i$的值，我们施加约束$c′(t)|_i = \frac{1}{2} (c_{i+1} − c_{i−1} )$。换句话说，我们向前和向后各寻找一个样例以决定t=i处的斜率；这是为什么我们需要额外的边缘值（extreme values）$c_{-1}$和$c_{n+1}$的原因。因为在贝塞尔表达（Bezier representation）中$c'(i) = 3(d_i-c_i) = 3(c_i-e_{i-1}) $，这其实告诉我们需要做如下设置：
+每个块函数在其贝塞尔表达（Bezier represesntation）方式中，借助4个控制值：$c_i,d_i,e_i$和$c_{i+1}$被确定。根据我们的输入值。要设置$d_i$和$e_i$的值，我们施加约束$c′(t)|_i = \frac{1}{2} (c_{i+1} − c_{i−1} )$。换句话说，我们向前和向后各寻找一个样例以决定t=i处的斜率；这是为什么我们需要额外的边缘值（extreme values）$c_{-1}$和$c_{n+1}$的原因。因为在贝塞尔表达（Bezier representation）中$c'(i) = 3(d_i-c_i) = 3(c_i-e_{i-1}) $，这其实告诉我们需要做如下设置：
 
 $$\begin{array}{rcl}
 d_i &=& ((c_{i+1}c_{i−1}^{−1} )^\frac{1}{6})c_i  & (9.13)\\
@@ -83,8 +83,10 @@ $$r = (1 − t)p + tq$$
 $$r = slerp(p, q, t)$$
 同时 $d_i$和$e_i$四元数（quaternion）的值被定义如下：
 $$ 
-d_i = ((c_{i+1}c_{i−1}^{−1} )^\frac{1}{6})c_i \\
-e_i = ((c_{i+2}c_{i}^{−1} )^\frac{-1}{6})c_{i+1}
+\begin{array}{rl}  
+d_i &=& ((c_{i+1}c_{i−1}^{−1} )^\frac{1}{6})c_i \\ 
+e_i &=& ((c_{i+2}c_{i}^{−1} )^\frac{-1}{6})c_{i+1}  
+\end{array}
 $$
 
 正如在小节7.4中所述，为了在“短路径”上插值，如果四元数（quaternion）$c_{i+1}c_{i-1}^{-1}$的第一个坐标值为负，在应用幂操作符之前，我们先将其负化。
