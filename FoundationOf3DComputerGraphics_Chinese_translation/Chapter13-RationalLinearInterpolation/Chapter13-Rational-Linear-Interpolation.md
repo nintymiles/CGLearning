@@ -27,7 +27,7 @@ OpenGL是如何获得这种正确图像呢？假设我们尝试在屏幕上通�
 
 要指出插值这种数据的正确方式，让我们推理如下：
 
-回忆这种情形，假定给出我们模型视图矩阵（modelview matrix）$M$，还有投射矩阵（projection matrix）$P$，针对三角形上的每个点，标准化设备坐标（normalized device coordinate）通过下列关系和物体坐标（object coordinates）关联
+回忆这种情形，假定给出我们模型视图矩阵（model view matrix）$M$，还有投射矩阵（projection matrix）$P$，针对三角形上的每个点，标准化设备坐标（normalized device coordinate）通过下列关系和物体坐标（object coordinates）关联
 
 $$\large{ 
 	\begin{bmatrix} x_nw_n \\ y_nw_n \\ z_nw_n \\ w_n \end{bmatrix} 
