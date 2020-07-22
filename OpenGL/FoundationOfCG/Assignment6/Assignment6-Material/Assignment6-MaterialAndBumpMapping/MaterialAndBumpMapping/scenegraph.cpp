@@ -4,8 +4,11 @@
 
 using namespace std;
 
-//一直迭代直到最终找到对应子节点，visit步骤执行完毕，程序return false（意味着压stack完毕）；
-//否则一直执行到子步骤执行完毕，最后执行到postVisit。也意味着没有子节点，则当前stack压入后直接再pop出去。
+//每个accept方法，对应着visitor方法的visit和postVisit方法，节点和子节点都会都会被这些visitor的
+//对应方法访问。
+//在父子体系中，从父节点到单一的叶子节点的路径中，每个节点首先被visit方法访问，然后再依次
+//从叶子节点返回到父亲节点执行postVisit方法。
+//visit和postVisit方法只要有方法返回false则accept方法结束执行，返回false。
 bool SgTransformNode::accept(SgNodeVisitor& visitor) {
     //本节点是否允许请求和访问
     if (!visitor.visit(*this))
@@ -35,6 +38,10 @@ bool SgShapeNode::accept(SgNodeVisitor& visitor) {
     return visitor.postVisit(*this);
 }
 
+//RbtAccumVisitor会一直迭代访问TransformNode节点，首先执行visit函数。
+//直到最终找到对应子节点，此时visit函数return false（意味着压栈完毕）；
+//否则一直执行到子节点遍历完毕，最后开始从子节点到父级节点反向执行postVisit方法。
+//对当前的stack依次执行pop动作直到出栈完毕。
 class RbtAccumVisitor : public SgNodeVisitor {
 protected:
     vector<RigTForm> rbtStack_;
