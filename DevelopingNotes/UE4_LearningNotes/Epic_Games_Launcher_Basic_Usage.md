@@ -7,7 +7,8 @@
 注册登录Epic Games Launcher之后，可以从左侧“虚幻引擎”菜单，然后到顶部“库”标签点击来到引擎管理页。从这里可以下载到虚幻引擎发行的最新版本，当然还可以下载到之前发行的各个主历史版本的最后版本。选定版本之后，可以点击右上角的“启动”按钮启动对应版本的虚幻引擎环境。
 当然，也可以在此处，删除对应虚幻引擎版本，只要点击引擎版本左上角的叉号即可。
 
-![](./media/egl_engine_library_engine_choose_main.png)
+![](./media/egl_engien_library_engine_choose_main.png)
+
 _选择引擎版本并下载_
 
 ![](./media/egl_engine_library_engine_choose_history.png "引擎历史版本选择")
@@ -55,3 +56,5 @@ Epic提供了很多制作精良的样例。比如放风筝的小男孩，渗透�
 ![](media/egl_setting_vault_path_manage.png)
 
 *Epic Games Launcher本地缓存目录管理*
+
+
