@@ -1,5 +1,5 @@
 # Note
-这是对**Foundation of 3D Computer Graphics**第5章的翻译，本章讲解了图形中坐标系的应用，涵盖了使用变换矩阵操纵物体和变化视角的基本技术。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教<ninetymiles@icloud.com>。 
+这是对**Foundation of 3D Computer Graphics**第5章的翻译，本章讲解了图形中坐标系的应用，涵盖了使用变换矩阵操纵物体和变化视角的基本技术。本书内容仍在不断的学习中，因此本文内容会不断的改进。若有任何建议，请不吝赐教<nintymiles@icloud.com>。 
 
 > 注：文章中相关内容归原作者所有，翻译内容仅供学习参考。
 > 另：Github项目[CGLearning](https://github.com/nintymiles/CGLearning)中拥有相关翻译的完整资料、内容整理、课程项目实现。
