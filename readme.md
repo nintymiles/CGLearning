@@ -1,6 +1,20 @@
 # CG Learning
 首先从**Foundation of 3D Computer Graphics**开始学习Computer Graphics（CG）基础知识，这是是一本非常合适的Computer Graphics入门书籍，值得一遍又一遍的阅读。内容深浅适中，解读十分到位。
 
+## Three.cpp基于three.js的cpp跨平台渲染框架
+有感于three.js基于图形学的知识在web上几乎从头开始搭建了一个优秀的图形学框架，并且提供了无数的精彩例子。[three.pp](https://github.com/nintymiles/three.cpp)，基于google angle opengl es实现，以three.js为蓝本，使用cpp语言学习实现跨平台的本地渲染框架，目前已经实现的功能：
+
+- [x] 完成渲染引擎部分功能的移植
+- [x] 基于mac apple silicon平台的运行
+- [x] 基于win64 系统的运行 
+- [x] 实现了2个线段绘制例子
+- [x] 迁移了obj/mtl loader，实现了obj/mtl解析加载功能，并实现一个例子
+- [x] 实现了一个buffer geometry，无顶点数据绘制例子
+
+| ![Lines-Sphere demo](DevelopingNotes/media/three/ScreenShot2023-11-07-11-31.png) | ![Lines-Dashed demo](DevelopingNotes/media/three/ScreenShot2023-11-07-12-49.png) |
+| :----------------------------------------------------------- | :----------------------------------------------------------- |
+| ![Loader-Obj-Mtl demo](DevelopingNotes/media/three/ScreenShot2023-11-09-14-53.png) | ![Buffer-geometry-attributes-none demo](DevelopingNotes/media/three/ScreenShot2023-11-10-14-55.png) |
+
 ## Solar System Simulation Project
 [太阳系3D模拟项目](https://github.com/nintymiles/SolarSystemSimulation)，目前已经实现的功能：
 
@@ -36,8 +50,8 @@
 | Assignment7 Meshes and Subdivision Surfaces| 初步完成，Catmull-clark规则的实现需要改进 |    |
 | Assignment8 Furry Animation| 初步完成，Furry效果需要改进 |   |
 
-## 正在进行的3D计算机图形基础（**Foundation of 3D Computer Graphics**）的翻译
-已经完成的章节
+## 3D计算机图形学基础（**Foundation of 3D Computer Graphics**）翻译
+完成的章节
 
 - [第一章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter01-Introduction.pdf)
 - [第二章](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Chapter02-Linear.pdf)
@@ -65,6 +79,15 @@
 - [附录B](FoundationOf3DComputerGraphics_Chinese_translation/PDF/Appendix-B.pdf)
 - [PDF文件目录](FoundationOf3DComputerGraphics_Chinese_translation/PDF/)
 
+## CS248图形学课程（Computer Graphics: Rendering, Geometry, and Image Manipulation Stanford CS248A, Winter 2023）翻译
+已经完成的章节：
+- [第一讲]()
+- [第二讲]()
+- [第三讲]()
+- [x] [第四讲](CS248_LearningNotes/Course_CN_Translation/PDF/04_texture_cn.pdf)
+- [x] [第五讲](CS248_LearningNotes/Course_CN_Translation/PDF/05_pipeline_cn.pdf)
+- [x] [第六讲](CS248_LearningNotes/Course_CN_Translation/PDF/06_geometry_cn.pdf)
+
 ## 总结文字
 ### OpenGL
 
@@ -75,14 +98,10 @@
 - [在GLFW中实现定时器](DevelopingNotes/about_glfw_timer_and_vertice_animation.md)
 - [关于在Windows上使用OpenGLES 3.0进行开发的环境设置](DevelopingNotes/OpenGLES_Development_Environment_Setting_Issues.md)
 
-### 其它
-- [extern关键字的使用](cpp-the-use-of-extern-keyword-2019-12-19.md)
-
-## File Structures
+## Folder Structures
 
 - BaseFramework为通用代码目录。
 - 针对OpenGL ES和OpenGL平台的assignments项目代码分别位于FoundationOfCG-MIT和OpenGL目录
 - 本书的中文翻译位于FoundationOf3DComputerGraphics_Chinese_translation目录
 - 学习及开发过程中的记录文字位于DevelopingNotes目录
-
 
