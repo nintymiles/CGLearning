@@ -2,10 +2,10 @@
 首先从**Foundation of 3D Computer Graphics**开始学习Computer Graphics（CG）基础知识，这是是一本非常合适的Computer Graphics入门书籍，值得一遍又一遍的阅读。内容深浅适中，解读十分到位。
 
 ## Three.cpp基于three.js的cpp跨平台渲染框架
-有感于three.js基于图形学的知识在web上几乎从头开始搭建了一个优秀的图形学框架，并且提供了无数的精彩例子。[three.pp](https://github.com/nintymiles/three.cpp)，基于google angle opengl es实现，以three.js为蓝本，使用cpp语言学习实现跨平台的本地渲染框架，目前已经实现的功能：
+有感于three.js基于图形学的知识在web上几乎从头开始搭建了一个优秀的图形学框架，并且提供了无数的精彩例子。[three.cpp](https://github.com/nintymiles/three.cpp)，基于google angle实现，以three.js为蓝本，使用cpp语言学习实现跨平台的本地渲染框架，目前已经实现的功能：
 
 - [x] 完成渲染引擎部分功能的移植
-- [x] 基于mac apple silicon平台的运行
+- [x] 基于MacOS Apple Silicon系统的运行
 - [x] 基于win64 系统的运行 
 - [x] 实现了2个线段绘制例子
 - [x] 迁移了obj/mtl loader，实现了obj/mtl解析加载功能，并实现一个例子
