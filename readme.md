@@ -10,10 +10,12 @@
 - [x] 实现了2个线段绘制例子
 - [x] 迁移了obj/mtl loader，实现了obj/mtl解析加载功能，并实现一个例子
 - [x] 实现了一个buffer geometry，无顶点数据绘制例子
+- [x] 实现基于光源的物理真实（PBR）渲染例子
 
 | ![Lines-Sphere demo](DevelopingNotes/media/three/ScreenShot2023-11-07-11-31.png) | ![Lines-Dashed demo](DevelopingNotes/media/three/ScreenShot2023-11-07-12-49.png) |
 | :----------------------------------------------------------- | :----------------------------------------------------------- |
 | ![Loader-Obj-Mtl demo](DevelopingNotes/media/three/ScreenShot2023-11-09-14-53.png) | ![Buffer-geometry-attributes-none demo](DevelopingNotes/media/three/ScreenShot2023-11-10-14-55.png) |
+| ![Lights-pointLights](DevelopingNotes/media/three/20231117165351.jpg)   |  | 
 
 ## Solar System Simulation Project
 [太阳系3D模拟项目](https://github.com/nintymiles/SolarSystemSimulation)，目前已经实现的功能：
