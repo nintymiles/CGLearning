@@ -16,6 +16,8 @@
 | :----------------------------------------------------------- | :----------------------------------------------------------- |
 | ![Loader-Obj-Mtl demo](DevelopingNotes/media/three/ScreenShot2023-11-09-14-53.png) | ![Buffer-geometry-attributes-none demo](DevelopingNotes/media/three/ScreenShot2023-11-10-14-55.png) |
 | ![Lights-pointLights](DevelopingNotes/media/three/20231117165351.jpg)   |  ![Materials-Channels](DevelopingNotes/media/three/20231130173421.png)  | 
+| ![Shader_demo](DevelopingNotes/media/three/202312371003.jpg)   |  ![Shader_lava](DevelopingNotes/media/three/202312371004.jpg)  | 
+                                
 
 ## Solar System Simulation Project
 [太阳系3D模拟项目](https://github.com/nintymiles/SolarSystemSimulation)，目前已经实现的功能：
